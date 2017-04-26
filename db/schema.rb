@@ -10,11 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170426125924) do
+ActiveRecord::Schema.define(version: 20170426134158) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pgcrypto"
+
+  create_table "allocations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid     "subscription_id"
+    t.string   "organization_ein"
+    t.integer  "percentage"
+    t.datetime "deactivated_at"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["organization_ein"], name: "index_allocations_on_organization_ein", using: :btree
+    t.index ["subscription_id"], name: "index_allocations_on_subscription_id", using: :btree
+  end
 
   create_table "donors", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string   "first_name"
@@ -61,6 +72,8 @@ ActiveRecord::Schema.define(version: 20170426125924) do
     t.index ["donor_id"], name: "index_subscriptions_on_donor_id", using: :btree
   end
 
+  add_foreign_key "allocations", "organizations", column: "organization_ein", primary_key: "ein"
+  add_foreign_key "allocations", "subscriptions"
   add_foreign_key "pay_ins", "subscriptions"
   add_foreign_key "payouts", "organizations", column: "organization_ein", primary_key: "ein"
   add_foreign_key "subscriptions", "donors"
