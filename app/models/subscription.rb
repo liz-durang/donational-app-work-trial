@@ -1,6 +1,9 @@
 class Subscription < ApplicationRecord
   belongs_to :donor
   has_many :pay_ins
+  has_many :allocations
+  has_many :active_allocations, -> { where(deactivated_at: nil) }, class_name: 'Allocation'
+  has_many :donations
 
   scope :active, -> { where.not(deactivated_at: nil) }
   scope :archived, -> { where(deactivated_at: nil) }
