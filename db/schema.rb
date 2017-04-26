@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170426115949) do
+ActiveRecord::Schema.define(version: 20170426125924) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,15 @@ ActiveRecord::Schema.define(version: 20170426115949) do
     t.index ["subscription_id"], name: "index_pay_ins_on_subscription_id", using: :btree
   end
 
+  create_table "payouts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string   "organization_ein"
+    t.integer  "amount_cents"
+    t.json     "receipt"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["organization_ein"], name: "index_payouts_on_organization_ein", using: :btree
+  end
+
   create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid     "donor_id"
     t.integer  "annual_income_cents"
@@ -53,5 +62,6 @@ ActiveRecord::Schema.define(version: 20170426115949) do
   end
 
   add_foreign_key "pay_ins", "subscriptions"
+  add_foreign_key "payouts", "organizations", column: "organization_ein", primary_key: "ein"
   add_foreign_key "subscriptions", "donors"
 end
