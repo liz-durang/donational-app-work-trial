@@ -1,0 +1,18 @@
+<div id='auth0-login'>
+<script src="https://cdn.auth0.com/js/lock/10.15/lock.min.js"></script>
+<script>
+  var options = {
+    container: 'auth0-login',
+    auth: {
+      redirectUrl: '<%= auth_oauth2_callback_url %>',
+      responseType: 'code',
+      params: {
+        scope: 'openid email',
+        state: $('meta[name="state"]').attr('content')
+      }
+    }
+  };
+
+  var lock = new Auth0Lock('<%= ENV['AUTH0_CLIENT_ID'] %>', '<%= ENV['AUTH0_DOMAIN'] %>', options);
+  lock.show();
+</script>
