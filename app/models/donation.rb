@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: donations
+#
+#  id               :uuid             not null, primary key
+#  subscription_id  :uuid             not null
+#  organization_ein :string           not null
+#  allocation_id    :uuid             not null
+#  pay_in_id        :uuid             not null
+#  payout_id        :uuid
+#  amount_cents     :integer
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#
+
 class Donation < ApplicationRecord
   belongs_to :subscription
   has_one :donor, through: :subscription
