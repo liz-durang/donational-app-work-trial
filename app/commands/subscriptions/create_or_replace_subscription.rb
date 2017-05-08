@@ -11,8 +11,11 @@ module Subscriptions
     end
 
     def execute
-      deactivate_existing_subscriptions!
-      Subscription.create!(inputs)
+      Subscription.transaction do
+        deactivate_existing_subscriptions!
+        Subscription.create!(inputs)
+      end
+      nil
     end
 
     private
