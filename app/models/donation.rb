@@ -21,8 +21,8 @@ class Donation < ApplicationRecord
   belongs_to :pay_in
   belongs_to :payout
 
-  scope :unpaid, -> { where(payout: nil) }
-  scope :paid, -> { where.not(payout: nil) }
+  scope(:unpaid, -> { where(payout: nil) })
+  scope(:paid, -> { where.not(payout: nil) })
 
   validates :pay_in, :allocation, :organization, :subscription, presence: true
 end
