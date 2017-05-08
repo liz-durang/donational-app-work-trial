@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Subscriptions::ActiveQuery do
+RSpec.describe Subscriptions::GetActiveSubscription do
   let(:other_donor) { create(:donor) }
   let(:donor) { create(:donor) }
 
@@ -8,7 +8,7 @@ RSpec.describe Subscriptions::ActiveQuery do
     before { create(:subscription, donor: other_donor) }
 
     it 'returns nil' do
-      expect(Subscriptions::ActiveQuery.call(donor: donor)).to be_nil
+      expect(Subscriptions::GetActiveSubscription.call(donor: donor)).to be_nil
     end
   end
 
@@ -19,7 +19,7 @@ RSpec.describe Subscriptions::ActiveQuery do
     end
 
     it 'returns nil' do
-      expect(Subscriptions::ActiveQuery.call(donor: donor)).to be_nil
+      expect(Subscriptions::GetActiveSubscription.call(donor: donor)).to be_nil
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.describe Subscriptions::ActiveQuery do
     end
 
     it 'returns the active subscription' do
-      expect(Subscriptions::ActiveQuery.call(donor: donor)).to eq subscription
+      expect(Subscriptions::GetActiveSubscription.call(donor: donor)).to eq subscription
     end
   end
 end

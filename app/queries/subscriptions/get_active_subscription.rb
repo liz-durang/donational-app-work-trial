@@ -1,5 +1,5 @@
 module Subscriptions
-  class ActiveQuery
+  class GetActiveSubscription
     class << self
       delegate :call, to: :new
     end
