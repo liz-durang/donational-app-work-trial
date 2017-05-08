@@ -1,14 +1,16 @@
 require 'rails_helper'
 
-RSpec.describe Subscriptions::GetActiveSubscription do
+RSpec.describe Subscriptions::GetActiveSubscriptions do
   let(:other_donor) { create(:donor) }
   let(:donor) { create(:donor) }
+
+  subject { Subscriptions::GetActiveSubscriptions.call(donor: donor) }
 
   context 'when there are no subscriptions for the donor' do
     before { create(:subscription, donor: other_donor) }
 
-    it 'returns nil' do
-      expect(Subscriptions::GetActiveSubscription.call(donor: donor)).to be_nil
+    it 'returns an empty relation' do
+      expect(subject).to be_empty
     end
   end
 
@@ -18,8 +20,8 @@ RSpec.describe Subscriptions::GetActiveSubscription do
       create(:subscription, donor: donor, deactivated_at: 1.day.ago)
     end
 
-    it 'returns nil' do
-      expect(Subscriptions::GetActiveSubscription.call(donor: donor)).to be_nil
+    it 'returns an empty relation' do
+      expect(subject).to be_empty
     end
   end
 
@@ -34,7 +36,8 @@ RSpec.describe Subscriptions::GetActiveSubscription do
     end
 
     it 'returns the active subscription' do
-      expect(Subscriptions::GetActiveSubscription.call(donor: donor)).to eq subscription
+      expect(subject).to be_a ActiveRecord::Relation
+      expect(subject).to eq [subscription]
     end
   end
 end

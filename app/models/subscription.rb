@@ -28,4 +28,8 @@ class Subscription < ApplicationRecord
   enumerize :pay_in_frequency,
             in: %w[monthly quarterly annually],
             predicates: true
+
+  def active?
+    deactivated_at.blank?
+  end
 end

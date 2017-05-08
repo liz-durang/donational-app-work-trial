@@ -1,5 +1,5 @@
 module Subscriptions
-  class GetActiveSubscription
+  class GetActiveSubscriptions
     class << self
       delegate :call, to: :new
     end
@@ -9,9 +9,7 @@ module Subscriptions
     end
 
     def call(donor:)
-      @relation
-        .where(donor: donor, deactivated_at: nil)
-        .first
+      @relation.where(donor: donor, deactivated_at: nil)
     end
   end
 end
