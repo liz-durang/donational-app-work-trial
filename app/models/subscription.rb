@@ -14,6 +14,7 @@
 
 class Subscription < ApplicationRecord
   belongs_to :donor
+
   has_many :pay_ins
   has_many :allocations
   has_many :active_allocations,
@@ -21,8 +22,7 @@ class Subscription < ApplicationRecord
            class_name: 'Allocation'
   has_many :donations
 
-  scope(:active, -> { where.not(deactivated_at: nil) })
-  scope(:archived, -> { where(deactivated_at: nil) })
+  scope :active, Subscriptions::GetActiveSubscriptions
 
   extend Enumerize
   enumerize :pay_in_frequency,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170426135142) do
+ActiveRecord::Schema.define(version: 20170508153913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20170426135142) do
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.index ["organization_ein"], name: "index_allocations_on_organization_ein", using: :btree
+    t.index ["subscription_id"], name: "index_active_allocations_on_subscription_id", where: "(deactivated_at IS NULL)", using: :btree
     t.index ["subscription_id"], name: "index_allocations_on_subscription_id", using: :btree
   end
 
@@ -85,6 +86,7 @@ ActiveRecord::Schema.define(version: 20170426135142) do
     t.datetime "deactivated_at"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
+    t.index ["donor_id"], name: "index_active_subscriptions_on_donor_id", where: "(deactivated_at IS NULL)", using: :btree
     t.index ["donor_id"], name: "index_subscriptions_on_donor_id", using: :btree
   end
 

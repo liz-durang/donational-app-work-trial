@@ -14,7 +14,8 @@ RSpec.describe Subscriptions::CreateOrReplaceSubscription do
   context 'when there are no existing subscriptions for the donor' do
     it 'creates a new active subscription' do
       expect { subject }.to change { Subscription.count }.from(0).to(1)
-      subscription = subject.result
+
+      subscription = Subscriptions::GetActiveSubscription.call(donor: donor)
 
       expect(subscription).to be_active
       expect(subscription.donation_rate).to eq 0.01
@@ -40,7 +41,7 @@ RSpec.describe Subscriptions::CreateOrReplaceSubscription do
     it 'creates a new active subscription for the donor' do
       expect { subject }.to change { Subscription.count }.from(2).to(3)
 
-      subscription = subject.result.reload
+      subscription = Subscriptions::GetActiveSubscription.call(donor: donor)
       expect(subscription).to be_active
       expect(subscription.donor).to eq donor
     end
