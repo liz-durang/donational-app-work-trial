@@ -12,8 +12,11 @@
 #  processed_at    :datetime
 #
 
-class PayIn < ApplicationRecord
-  belongs_to :subscription
-  has_one :donor, through: :subscription
-  has_many :donations
+FactoryGirl.define do
+  factory :pay_in do
+    subscription
+    amount_cents 123
+    scheduled_at 1.day.ago
+    processed_at nil
+  end
 end

@@ -33,7 +33,7 @@ RSpec.describe Subscriptions::CreateOrReplaceSubscription do
     end
 
     it 'deactivates the previous subscriptions for the donor' do
-      expect { subject }.not_to change { subscription_for_other_donor.active? }
+      expect { subject }.not_to(change { subscription_for_other_donor.active? })
 
       expect(existing_subscription.reload).not_to be_active
     end
