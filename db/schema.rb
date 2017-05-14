@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170508153913) do
+ActiveRecord::Schema.define(version: 20170511125351) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,8 @@ ActiveRecord::Schema.define(version: 20170508153913) do
     t.json     "receipt"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.datetime "scheduled_at"
+    t.datetime "processed_at"
     t.index ["subscription_id"], name: "index_pay_ins_on_subscription_id", using: :btree
   end
 
