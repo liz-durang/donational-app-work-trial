@@ -35,7 +35,7 @@ module Allocations
 
     def deactivate_existing_allocations!
       Allocations::GetActiveAllocations.call(subscription: subscription)
-        .update_all(deactivated_at: Time.zone.now)
+                                       .update_all(deactivated_at: Time.zone.now)
     end
 
     def ensure_allocations_add_to_one_hundred_percent!

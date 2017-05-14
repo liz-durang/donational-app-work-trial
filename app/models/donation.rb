@@ -19,7 +19,7 @@ class Donation < ApplicationRecord
   belongs_to :organization, foreign_key: 'organization_ein'
   belongs_to :allocation
   belongs_to :pay_in
-  belongs_to :payout
+  belongs_to :payout, optional: true
 
   scope(:unpaid, -> { where(payout: nil) })
   scope(:paid, -> { where.not(payout: nil) })

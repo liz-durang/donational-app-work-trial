@@ -21,12 +21,25 @@ module PayIns
       )
 
       # TODO: if payment fails, persist the receipt but leave processed_at blank
-      pay_in.update!(
-        receipt: receipt,
-        processed_at: Time.zone.now
-      )
+      pay_in.update!(receipt: receipt, processed_at: Time.zone.now)
+
+      create_donations_based_on_active_allocations
 
       nil
+    end
+
+    private
+
+    def create_donations_based_on_active_allocations
+      Allocations::GetActiveAllocations.call(subscription: pay_in.subscription).each do |a|
+        Donation.create!(
+          allocation: a,
+          pay_in: pay_in,
+          subscription: a.subscription,
+          organization: a.organization,
+          amount_cents: (pay_in.amount_cents * a.percentage / 100.0).floor
+        )
+      end
     end
   end
 end
