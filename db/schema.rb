@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170511125351) do
+ActiveRecord::Schema.define(version: 20170515094401) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,14 +33,14 @@ ActiveRecord::Schema.define(version: 20170511125351) do
     t.string   "organization_ein", null: false
     t.uuid     "allocation_id",    null: false
     t.uuid     "pay_in_id",        null: false
-    t.uuid     "payout_id"
+    t.uuid     "pay_out_id"
     t.integer  "amount_cents"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.index ["allocation_id"], name: "index_donations_on_allocation_id", using: :btree
     t.index ["organization_ein"], name: "index_donations_on_organization_ein", using: :btree
     t.index ["pay_in_id"], name: "index_donations_on_pay_in_id", using: :btree
-    t.index ["payout_id"], name: "index_donations_on_payout_id", using: :btree
+    t.index ["pay_out_id"], name: "index_donations_on_pay_out_id", using: :btree
     t.index ["subscription_id"], name: "index_donations_on_subscription_id", using: :btree
   end
 
@@ -71,13 +71,13 @@ ActiveRecord::Schema.define(version: 20170511125351) do
     t.index ["subscription_id"], name: "index_pay_ins_on_subscription_id", using: :btree
   end
 
-  create_table "payouts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "pay_outs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string   "organization_ein"
     t.integer  "amount_cents"
     t.json     "receipt"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
-    t.index ["organization_ein"], name: "index_payouts_on_organization_ein", using: :btree
+    t.index ["organization_ein"], name: "index_pay_outs_on_organization_ein", using: :btree
   end
 
   create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -97,9 +97,9 @@ ActiveRecord::Schema.define(version: 20170511125351) do
   add_foreign_key "donations", "allocations"
   add_foreign_key "donations", "organizations", column: "organization_ein", primary_key: "ein"
   add_foreign_key "donations", "pay_ins"
-  add_foreign_key "donations", "payouts"
+  add_foreign_key "donations", "pay_outs"
   add_foreign_key "donations", "subscriptions"
   add_foreign_key "pay_ins", "subscriptions"
-  add_foreign_key "payouts", "organizations", column: "organization_ein", primary_key: "ein"
+  add_foreign_key "pay_outs", "organizations", column: "organization_ein", primary_key: "ein"
   add_foreign_key "subscriptions", "donors"
 end
