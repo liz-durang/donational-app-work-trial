@@ -20,10 +20,12 @@ module PayIns
         amount_cents: pay_in.amount_cents
       )
 
-      # TODO: if payment fails, persist the receipt but leave processed_at blank
-      pay_in.update!(receipt: receipt, processed_at: Time.zone.now)
+      PayIn.transaction do
+        # TODO: if payment fails, persist the receipt but leave processed_at blank
+        pay_in.update!(receipt: receipt, processed_at: Time.zone.now)
 
-      create_donations_based_on_active_allocations
+        create_donations_based_on_active_allocations
+      end
 
       nil
     end

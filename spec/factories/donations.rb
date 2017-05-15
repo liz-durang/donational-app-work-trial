@@ -13,16 +13,13 @@
 #  updated_at       :datetime         not null
 #
 
-class Donation < ApplicationRecord
-  belongs_to :subscription
-  has_one :donor, through: :subscription
-  belongs_to :organization, foreign_key: 'organization_ein'
-  belongs_to :allocation
-  belongs_to :pay_in
-  belongs_to :pay_out, optional: true
-
-  scope(:unpaid, -> { where(pay_out: nil) })
-  scope(:paid, -> { where.not(pay_out: nil) })
-
-  validates :pay_in, :allocation, :organization, :subscription, presence: true
+FactoryGirl.define do
+  factory :donation do
+    subscription
+    organization
+    allocation
+    pay_in
+    pay_out nil
+    amount_cents 1
+  end
 end

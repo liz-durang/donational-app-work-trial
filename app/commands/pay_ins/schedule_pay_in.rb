@@ -9,7 +9,7 @@ module PayIns
       monthly_income = subscription.annual_income_cents / 12.0
       contribution_amount_cents = (monthly_income * subscription.donation_rate).to_i
 
-      PayIn.create(
+      PayIn.create!(
         subscription: subscription,
         amount_cents: contribution_amount_cents,
         scheduled_at: scheduled_at

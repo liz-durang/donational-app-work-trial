@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: payouts
+# Table name: pay_outs
 #
 #  id               :uuid             not null, primary key
 #  organization_ein :string
@@ -8,9 +8,11 @@
 #  receipt          :json
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
+#  scheduled_at     :datetime
+#  processed_at     :datetime
 #
 
-class Payout < ApplicationRecord
+class PayOut < ApplicationRecord
   belongs_to :organization, foreign_key: 'organization_ein'
   has_many :donations
 end

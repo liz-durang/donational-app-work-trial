@@ -21,7 +21,7 @@ RSpec.describe PayIns::SchedulePayIn do
 
     it 'creates a scheduled PayIn for the subscription with the rounded down monthly donation' do
       expect(PayIn)
-        .to receive(:create)
+        .to receive(:create!)
         .with(subscription: subscription, amount_cents: 4_416, scheduled_at: scheduled_at)
 
       outcome = PayIns::SchedulePayIn.run(subscription: subscription, scheduled_at: scheduled_at)
