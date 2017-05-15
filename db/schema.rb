@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170515094401) do
+ActiveRecord::Schema.define(version: 20170515105202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,6 +77,8 @@ ActiveRecord::Schema.define(version: 20170515094401) do
     t.json     "receipt"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.datetime "scheduled_at"
+    t.datetime "processed_at"
     t.index ["organization_ein"], name: "index_pay_outs_on_organization_ein", using: :btree
   end
 

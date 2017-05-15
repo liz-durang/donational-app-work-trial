@@ -12,7 +12,11 @@
 #  processed_at     :datetime
 #
 
-class PayOut < ApplicationRecord
-  belongs_to :organization, foreign_key: 'organization_ein'
-  has_many :donations
+FactoryGirl.define do
+  factory :pay_out do
+    organization
+    amount_cents 123
+    scheduled_at 1.day.ago
+    processed_at nil
+  end
 end
