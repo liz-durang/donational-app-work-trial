@@ -1,17 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe PayIns::ProcessPayIn do
-  let(:fake_payment_processor) do
-    double(:fake_payment_processor)
-  end
-
   context 'when the PayIn has already been processed' do
     let(:pay_in) { create(:pay_in, processed_at: 1.day.ago) }
 
     it 'does not process any payments' do
-      expect(fake_payment_processor).not_to receive(:withdraw_from_donor!)
+      expect(Withdrawals::WithdrawFromDonor).not_to receive(:run)
 
-      outcome = PayIns::ProcessPayIn.run(pay_in: pay_in, payment_processor: fake_payment_processor)
+      outcome = PayIns::ProcessPayIn.run(pay_in: pay_in)
 
       expect(outcome).not_to be_success
       expect(outcome.errors.symbolic).to include(pay_in: :already_processed)
@@ -47,12 +43,12 @@ RSpec.describe PayIns::ProcessPayIn do
     it "withdraws the pay in amount from the donor's account" do
       payment_receipt_json = '{ "some": "receipt" }'
 
-      expect(fake_payment_processor)
-        .to receive(:withdraw_from_donor!)
+      expect(Withdrawals::WithdrawFromDonor)
+        .to receive(:run)
         .with(donor: donor, amount_cents: 123)
         .and_return(payment_receipt_json)
 
-      outcome = PayIns::ProcessPayIn.run(pay_in: pay_in, payment_processor: fake_payment_processor)
+      outcome = PayIns::ProcessPayIn.run(pay_in: pay_in)
 
       expect(outcome).to be_success
 
@@ -62,11 +58,9 @@ RSpec.describe PayIns::ProcessPayIn do
     end
 
     it "creates donations based on the donor's allocations" do
-      allow(fake_payment_processor).to receive(:withdraw_from_donor!)
+      allow(Withdrawals::WithdrawFromDonor).to receive(:run)
 
-      expect {
-        PayIns::ProcessPayIn.run(pay_in: pay_in, payment_processor: fake_payment_processor)
-      }.to change { Donation.count }.by(2)
+      expect { PayIns::ProcessPayIn.run(pay_in: pay_in) }.to change { Donation.count }.by(2)
 
       expect(Donation.where(organization: org_1).first)
         .to have_attributes(pay_in: pay_in, subscription_id: subscription.id, amount_cents: 73)
