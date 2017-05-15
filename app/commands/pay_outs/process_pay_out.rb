@@ -18,6 +18,8 @@ module PayOuts
 
         pay_out.update!(processed_at: Time.zone.now)
       end
+
+      nil
     end
   end
 end

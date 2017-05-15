@@ -8,8 +8,8 @@ module Checks
     def execute
       # address = Organizations::GetOrganizationAddress.run(organization: organization)
 
-      # @lob = Lob::Client.new(...)
-      # @lob.checks.create(
+      # lob = Lob::Client.new(...)
+      # lob.checks.create(
       #   description: "Demo Check",
       #   bank_account: "bank_8cad8df5354d33f",
       #   to: {
