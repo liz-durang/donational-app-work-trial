@@ -4,11 +4,20 @@
     <title>DonateDeliberately</title>
     <%= csrf_meta_tags %>
     <%= state_meta_tag %>
+    <%= action_cable_meta_tag %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
+    <div id='conversational-form'>
+      <div class='history'></div>
+      <div class='staging-area'></div>
+      <div class='question'></div>
+      <hr>
+      <div class='responses'></div>
+    </div>
     <%= yield %>
+
   </body>
 </html>
