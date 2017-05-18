@@ -12,10 +12,14 @@
   <body>
     <div id='conversational-form'>
       <div class='history'></div>
-      <div class='staging-area'></div>
-      <div class='question'></div>
-      <hr>
-      <div class='responses'></div>
+      <div class='staging'>
+        <div class='question' style='color: blue'></div>
+        <div class='response'></div>
+      </div>
+      <div class='current'>
+        <div class='question' style='color: blue'></div>
+        <div class='response'></div>
+      </div>
     </div>
     <%= yield %>
 
