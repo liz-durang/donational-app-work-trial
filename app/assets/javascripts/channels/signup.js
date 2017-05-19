@@ -7,34 +7,23 @@ App.signup = App.cable.subscriptions.create('SignupChannel', {
   },
 
   received: function(data) {
-    console.log(data)
-    // Called when there's incoming data on the websocket for this channel
-    if (data['success'] == true) {
-      if (data['previous_question_html'] !== null) {
-        $('.history').append('<p style="color: blue">' + data['previous_question_html'] + '</p>');
-      }
-      if (data['previous_answer_html'] !== null) {
-        $('.history').append('<p>' + data['previous_answer_html'] + '</p>');
-      }
-      $('.staging .response, .staging .question').html('');
-      $('.current .question').html('<p>' + data['question_html'].join('<p></p>') + '</p>');
-      $('.current .response').html(data['responses_html']);
-    }
+    $('.history').append(data.previous_question);
+    $('.staging').html('');
+    $('.current').html(data.question);
   },
 
-  submit_answer: function(answer, questionId) {
-    $('.staging .question').html($('.current .question').html())
-    $('.current .question').html('...');
-    $('.staging .response').html('<p>' + answer + '</p>');
-    $('.current .response').html('');
+  respond: function(response) {
+    $('.current .response').html(response);
+    $('.staging').html($('.current').html());
+    $('.current').html('<p style="color: blue">&hellip;</p>');
 
-    return this.perform('submit_question', { answer: answer, question_id: questionId });
+    return this.perform('respond', { response: response });
   }
 });
 
-$(document).on('keypress', '.current .response', function(event) {
+$(document).on('keypress', '[data-conversation-response]', function(event) {
   if (event.keyCode === 13) {
-    App.signup.submit_answer(event.target.value, $(event.target).data('questionId'));
+    App.signup.respond(event.target.value);
     return event.preventDefault();
   }
 });

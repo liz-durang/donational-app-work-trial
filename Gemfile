@@ -8,7 +8,7 @@ end
 # Base stack
 gem 'pg'
 gem 'puma', '~> 3.0'
-gem 'rails', '~> 5.0.2'
+gem 'rails', '~> 5.1.0'
 
 # Models
 gem 'enumerize', '~> 2.1'
@@ -19,6 +19,7 @@ gem 'omniauth-auth0'
 
 # Assets
 gem 'jquery-rails'
+gem 'bulma-rails'
 gem 'sass-rails', '~> 5.0'
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
