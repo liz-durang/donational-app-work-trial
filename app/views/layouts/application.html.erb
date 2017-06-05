@@ -6,15 +6,11 @@
     <%= state_meta_tag %>
     <%= action_cable_meta_tag %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <!-- <%= stylesheet_link_tag    'https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css' %> -->
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
-    <div id='conversational-form'>
-      <div class='history'></div>
-      <div class='staging'></div>
-      <div class='current'></div>
-    </div>
     <%= yield %>
   </body>
 </html>

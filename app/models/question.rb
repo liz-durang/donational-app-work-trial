@@ -3,13 +3,21 @@ class Question
 
   attr_accessor :preamble,
                 :title,
-                :allowed_responses,
+                :type,
                 :on_save,
                 :answer
 
   def save(response)
-    self.answer = response
-    on_save.call(response)
+    return false unless valid?(response)
+
+    self.answer = response if on_save.call(response)
+  end
+
+  def valid?(response)
     true
+  end
+
+  def answered?
+    answer.present?
   end
 end

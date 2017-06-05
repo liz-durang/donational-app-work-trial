@@ -11,13 +11,13 @@ module ApplicationCable
       # Any cleanup work needed when the cable connection is cut.
     end
 
+    protected
+
     def session
       cookies
         .encrypted[Rails.application.config.session_options[:key]]
         .with_indifferent_access
     end
-
-    protected
 
     def find_verified_donor
       Donors::FindOrCreateDonorFromAuth.run!(session[:userinfo])

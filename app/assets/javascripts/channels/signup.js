@@ -27,3 +27,8 @@ $(document).on('keypress', '[data-conversation-response]', function(event) {
     return event.preventDefault();
   }
 });
+
+$(document).on('click', '[data-conversation-predefined-response]', function(event) {
+  App.signup.respond(event.target.dataset.conversationPredefinedResponse);
+  return event.preventDefault();
+});
