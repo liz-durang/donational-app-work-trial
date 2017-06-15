@@ -7,17 +7,25 @@ App.signup = App.cable.subscriptions.create('SignupChannel', {
   },
 
   received: function(data) {
-    $('.history').append(data.previous_question);
-    $('.staging').html('');
-    $('.current').html(data.question);
+    // Simulate conversational delay
+    setTimeout(
+      function() {
+        $('.history').append(data.previous_question);
+        $('.current').html(data.question);
+        $('.responses').html(data.possible_responses);
+      },
+      1000
+    );
   },
 
   respond: function(response) {
-    $('.current .response').html(response);
-    $('.staging').html($('.current').html());
-    $('.current').html('<p style="color: blue">&hellip;</p>');
+    $('.current').append('<p class="has-text-right"><span class="tag is-info is-medium">' + response + '</span></p>');
+    $('.current').append('<p><span class="tag is-primary is-medium">&hellip;</span></p>');
+    $('.responses').html('<a class="card-footer-item is-disabled">&nbsp;</a>');
 
-    return this.perform('respond', { response: response });
+    this.perform('respond', { response: response });
+
+    return;
   }
 });
 

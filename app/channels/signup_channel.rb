@@ -32,16 +32,26 @@ class SignupChannel < ApplicationCable::Channel
   def broadcast_question(question:, previous_question: nil)
     self.class.broadcast_to(
       current_donor,
-      question: render(question),
-      previous_question: render(previous_question)
+      question: render_question(question),
+      possible_responses: render_responses(question),
+      previous_question: render_question(previous_question)
     )
   end
 
-  def render(question)
+  def render_question(question)
     return '' unless question
 
     ApplicationController.renderer.render(
       partial: 'conversations/question',
+      locals: { question: question }
+    )
+  end
+
+  def render_responses(question)
+    return '' unless question
+
+    ApplicationController.renderer.render(
+      partial: 'conversations/responses',
       locals: { question: question }
     )
   end

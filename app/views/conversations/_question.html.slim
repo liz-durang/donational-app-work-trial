@@ -5,10 +5,3 @@
 
 - if question.answered?
   = conversation_bubble_tag question.answer, from_user: true
-- else 
-  .response.field
-    - if question.is_a? MultipleChoiceQuestion
-      - question.allowed_responses.each do |choice|
-        a.is-medium.is-info.is-outlined.button data-conversation-predefined-response=choice = choice
-    - else
-      input.input.is-info type="text" data-conversation-response=true
