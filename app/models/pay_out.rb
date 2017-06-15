@@ -12,6 +12,7 @@
 #  processed_at     :datetime
 #
 
+# Funds distributed from Donational to an Organization
 class PayOut < ApplicationRecord
   belongs_to :organization, foreign_key: 'organization_ein'
   has_many :donations

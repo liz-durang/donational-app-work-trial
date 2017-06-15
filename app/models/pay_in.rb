@@ -12,6 +12,7 @@
 #  processed_at    :datetime
 #
 
+# Funds withdrawn from a Donor and transferred to Donational
 class PayIn < ApplicationRecord
   belongs_to :subscription
   has_one :donor, through: :subscription

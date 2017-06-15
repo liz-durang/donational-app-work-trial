@@ -1,3 +1,4 @@
+# Onboarding wizard to collect a users contribution preferences
 class ContributionWizard
   def initialize
     @current_question_id = 0

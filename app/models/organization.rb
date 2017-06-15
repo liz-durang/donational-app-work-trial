@@ -8,6 +8,7 @@
 #  updated_at :datetime         not null
 #
 
+# A charity of non-profit organization
 class Organization < ApplicationRecord
   self.primary_key = 'ein'
 

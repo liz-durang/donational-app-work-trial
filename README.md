@@ -1,24 +1,38 @@
-# README
+# Donational
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Donational encourages people to be deliberate about their charitable donations, and streamlines how funds are transferred to reduce complexity and fees.
 
-Things you may want to cover:
+In the same way that there are tools and “robo-advisors” to help people manage their retirement savings and their investment portfolios online, we are building a platform that helps donors to plan and to manage their impact on the world.
 
-* Ruby version
+## How it works
 
-* System dependencies
+Donational assists donors in two main areas:
 
-* Configuration
+### Select a portfolio of high impact charities
 
-* Database creation
+Instead of donating to whichever charity approaches you on the street or reaches you by phone, donors select charities that:
 
-* Database initialization
+1. align with their values
+2. make the greatest possible impact per each dollar donated
 
-* How to run the test suite
+We give users access to information, research and recommendations from industry-experts that help guide a donor to select effective charities that will have positive impact on causes that are important to the them.
 
-* Services (job queues, cache servers, search engines, etc.)
+### Give what you ought to
 
-* Deployment instructions
+Most charitable contributions are piecemeal, with amounts that fluctuate based on one's mood and that are unlikely to be tied to any sort of financial plan.
 
-* ...
+Donational asks people to reflect on how much an individual in our society ought to donate, and - with a single recurring payment - follow through to give what they believe they should.
+
+By pooling pay outs to organizations, and avoiding credit card fees, we help ensure that giving with Donational is at-least as cost-efficient as other online donation methods.
+
+# Developers
+
+### Running the app (for the first time)
+
+1. Run `bin/setup`
+2. Populate `.env` with the relevant API Keys
+3. Run `bin/start`
+
+### Running tests
+
+1. Run `bin/test`

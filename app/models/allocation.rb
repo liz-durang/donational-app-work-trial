@@ -11,6 +11,7 @@
 #  updated_at       :datetime         not null
 #
 
+# The percentage of a donor's contribution that is to be distributed to an organization per cycle
 class Allocation < ApplicationRecord
   belongs_to :subscription
   has_one :donor, through: :subscription

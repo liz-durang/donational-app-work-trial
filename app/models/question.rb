@@ -1,3 +1,16 @@
+# A question in a conversational form
+#
+# Responses to the question can be processed/persisted by providing an `on_save` Proc
+#
+# Example:
+#     Question.new(
+#       preamble: ['Hi', 'Welcome to Donational'],
+#       title: 'What is your name?',
+#       on_save: lambda do |response|
+#         # do_some_pre_processing
+#         Donor.update(first_name: response)
+#       end
+#     )
 class Question
   include ActiveModel::Model
 

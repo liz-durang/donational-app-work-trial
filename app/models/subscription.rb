@@ -12,6 +12,11 @@
 #  updated_at          :datetime         not null
 #
 
+# The recurring contribution from a donor
+#
+# Note:
+#   Subscriptions are never updated nor destroyed when the donation rate or amount changes.
+#   Instead, we deactivate it and create a new subscription which helps to keep a clear audit trail
 class Subscription < ApplicationRecord
   belongs_to :donor
 
