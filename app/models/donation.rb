@@ -13,6 +13,7 @@
 #  updated_at       :datetime         not null
 #
 
+# Tracks a single contribution from a donor to an organization.
 class Donation < ApplicationRecord
   belongs_to :subscription
   has_one :donor, through: :subscription
