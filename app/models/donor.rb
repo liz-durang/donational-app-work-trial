@@ -16,4 +16,8 @@ class Donor < ApplicationRecord
   has_many :pay_ins, through: :subscriptions
   has_many :donations, through: :subscriptions
   has_many :active_allocations, through: :active_subscription
+
+  def name
+    [first_name, last_name].compact.join(' ')
+  end
 end

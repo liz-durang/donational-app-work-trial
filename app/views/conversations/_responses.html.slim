@@ -1,0 +1,6 @@
+- if question.is_a? MultipleChoiceQuestion
+  - question.allowed_responses.each do |choice|
+    a.card-footer-item data-conversation-predefined-response=choice = choice
+- else
+  .card-footer-item
+    input.input.is-info type="text" data-conversation-response=true

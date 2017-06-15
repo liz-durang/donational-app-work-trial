@@ -4,4 +4,6 @@ Rails.application.routes.draw do
   get '/auth/failure' => 'auth0#failure'
 
   get 'dashboard' => 'dashboard#show'
+
+  mount ActionCable.server => '/cable'
 end

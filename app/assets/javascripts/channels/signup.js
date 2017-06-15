@@ -1,0 +1,42 @@
+App.signup = App.cable.subscriptions.create('SignupChannel', {
+  connected: function() {
+    return this.perform('start');
+  },
+
+  disconnected: function() {
+  },
+
+  received: function(data) {
+    // Simulate conversational delay
+    setTimeout(
+      function() {
+        $('.history').append(data.previous_question);
+        $('.current').html(data.question);
+        $('.responses').html(data.possible_responses);
+      },
+      1000
+    );
+  },
+
+  respond: function(response) {
+    $('.current').append('<p class="has-text-right"><span class="tag is-info is-medium">' + response + '</span></p>');
+    $('.current').append('<p><span class="tag is-primary is-medium">&hellip;</span></p>');
+    $('.responses').html('<a class="card-footer-item is-disabled">&nbsp;</a>');
+
+    this.perform('respond', { response: response });
+
+    return;
+  }
+});
+
+$(document).on('keypress', '[data-conversation-response]', function(event) {
+  if (event.keyCode === 13) {
+    App.signup.respond(event.target.value);
+    return event.preventDefault();
+  }
+});
+
+$(document).on('click', '[data-conversation-predefined-response]', function(event) {
+  App.signup.respond(event.target.dataset.conversationPredefinedResponse);
+  return event.preventDefault();
+});

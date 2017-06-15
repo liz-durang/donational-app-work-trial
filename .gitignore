@@ -21,3 +21,5 @@
 .byebug_history
 
 spec/examples.txt
+/public/packs
+/node_modules
