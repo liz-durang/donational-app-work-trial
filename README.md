@@ -36,3 +36,13 @@ By pooling pay outs to organizations, and avoiding credit card fees, we help ens
 ### Running tests
 
 1. Run `bin/test`
+
+## Code guidelines
+
+1. *Do* follow bbatsov's [ruby style guide](https://github.com/bbatsov/ruby-style-guide) and [rails style guide](https://github.com/bbatsov/rails-style-guide)
+2. *Do* use soft-delete on models (eg `Subscription#deactivated_at`)
+	- Since we deal with financial transactions, we need a clean audit trail
+3. *Avoid* interacting directly with Models from a Controller (use a **Command** or **Query** object instead)
+4. *Do* use **Command** objects whenever you want to mutate data (you can find them in `app/commands`)
+	- We make use of the [`mutations gem`](https://github.com/cypriss/mutations) to help sanitize and validate input before executing the command
+5. *Do* use **Query** objects for retrieving data (you can find them in `app/queries`)
