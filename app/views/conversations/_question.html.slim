@@ -1,7 +1,0 @@
-- (question.preamble || []).each do |message|
-  = conversation_bubble_tag message
-
-= conversation_bubble_tag question.title
-
-- if question.answered?
-  = conversation_bubble_tag question.answer, from_user: true
