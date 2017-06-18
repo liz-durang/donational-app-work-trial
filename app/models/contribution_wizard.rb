@@ -31,13 +31,13 @@ class ContributionWizard
     @questions ||=
       [
         MultipleChoiceQuestion.new(
-          preamble: [
+          messages: [
             "Hi! You've just taken the first step to be more deliberate about how you donate to charity!!!",
             "Awesome!",
             "I'll be guiding you through the rest of the steps. \
-             It's a simple process, and I'll ask some questions that help you uncover what type of impact (and how much!) you want to make on the world."
+             It's a simple process, and I'll ask some questions that help you uncover what type of impact (and how much!) you want to make on the world.",
+             "Are you ready to get started?"
           ],
-          title: "Are you ready to get started?",
           allowed_responses: ['Yes!', 'Of course!'],
           on_save: lambda do |response|
             Rails.logger.info(response)
@@ -45,13 +45,13 @@ class ContributionWizard
           end
         ),
         MultipleChoiceQuestion.new(
-          preamble: [
+          messages: [
             "Great!",
             "Being deliberate is about aligning our actions with what we actually believe.",
             "We'll be exploring some questions to uncover what is important to you.",
-            "First up, let's think about the obligations that we have as individuals in our society"
+            "First up, let's think about the obligations that we have as individuals in our society",
+            'As a percentage of pre-tax income, how much do you believe an individual should give to charity?'
           ],
-          title: 'As a percentage of pre-tax income, how much do you believe an individual should give to charity?',
           allowed_responses: %w(0.5% 1% 1.5% 2% 2.5% 3% 3.5% 4% 4.5% 5% 10%),
           on_save: lambda do |response|
             Rails.logger.info(response)
@@ -59,8 +59,10 @@ class ContributionWizard
           end
         ),
         MultipleChoiceQuestion.new(
-          preamble: ['Did you know that the average American gives 2.8% of their pretax annual income to charity?'],
-          title: 'Does that surprise you?',
+          messages: [
+            'Did you know that the average American gives 2.8% of their pretax annual income to charity?',
+            'Does that surprise you?'
+          ],
           allowed_responses: ['Yes', 'A little bit', 'Not at all!'],
           on_save: lambda do |response|
             Rails.logger.info(response)
@@ -68,10 +70,10 @@ class ContributionWizard
           end
         ),
         MultipleChoiceQuestion.new(
-          preamble: [
+          messages: [
             "You're doing great, but now for a harder question:",
+            'As a percentage of your pre-tax income, how much do YOU want to contribute?'
           ],
-          title: 'As a percentage of your pre-tax income, how much do YOU want to contribute?',
           allowed_responses: %w(0.5% 1% 1.5% 2% 2.5% 3% 3.5% 4% 4.5% 5% 10%),
           on_save: lambda do |response|
             Rails.logger.info(response)
@@ -79,10 +81,10 @@ class ContributionWizard
           end
         ),
         Question.new(
-          preamble: [
+          messages: [
             "There's one more thing we'll need to help you make regular contributions that match what you think you *ought* to give.",
+            "What's your (pre-tax) annual income?"
           ],
-          title: "What's your (pre-tax) annual income?",
           on_save: lambda do |response|
             Rails.logger.info(response)
             true

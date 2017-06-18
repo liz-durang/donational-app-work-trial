@@ -14,14 +14,10 @@ class SignupChannel < ApplicationCable::Channel
   end
 
   def respond(data)
-    # outcome = Question.find(data: form_id).save(data[:form_data])
-    # if outcome.success?
-    #   prev_response_html = render: 'answers/answer', locals: { type: form.type, success: true }
-    #   current_question_html = render_next_question
     question = @wizard.current_question
 
     if question.save(data['response'])
-      broadcast_question(question: @wizard.next_question, previous_question: question)
+      broadcast_question(question: @wizard.next_question, previous_response: question.response)
     else
       broadcast_question(question: question)
     end
@@ -29,21 +25,12 @@ class SignupChannel < ApplicationCable::Channel
 
   private
 
-  def broadcast_question(question:, previous_question: nil)
+  def broadcast_question(question:, previous_response: nil)
     self.class.broadcast_to(
       current_donor,
-      question: render_question(question),
-      possible_responses: render_responses(question),
-      previous_question: render_question(previous_question)
-    )
-  end
-
-  def render_question(question)
-    return '' unless question
-
-    ApplicationController.renderer.render(
-      partial: 'conversations/question',
-      locals: { question: question }
+      messages: question.messages,
+      previous_response: previous_response,
+      possible_responses: render_responses(question)
     )
   end
 

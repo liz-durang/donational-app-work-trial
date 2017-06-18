@@ -7,21 +7,42 @@ App.signup = App.cable.subscriptions.create('SignupChannel', {
   },
 
   received: function(data) {
-    // Simulate conversational delay
-    setTimeout(
-      function() {
-        $('.history').append(data.previous_question);
-        $('.current').html(data.question);
-        $('.responses').html(data.possible_responses);
-      },
-      1000
-    );
+    $('.pending').remove();
+
+    if (data.previous_response) {
+      $('.messages').append('<li><span class="message is-response">' + data.previous_response + '</span></li>');
+    }
+
+    $('.messages').append('<li><span class="message typing"></span></li>');
+
+    var cumulativeDelay = 0;
+
+    data.messages.forEach(function(message, index, messages) {
+      var previousOrFirstMessage = (index == 0) ? message : messages[index - 1];
+      // Take the average length of the current message and the previous message (to give the user time to read)
+      var readingDelay = 10 * (previousOrFirstMessage.length + message.length / 2);
+
+      setTimeout(
+        function() {
+          $('.typing').text(message).removeClass("typing");
+          if (index == messages.length - 1) {
+            $('.responses').html(data.possible_responses);
+            $('[data-conversation-response]').focus();
+          } else {
+            $('.messages').append('<li><span class="message typing"></span></li>');
+          }
+        },
+        cumulativeDelay + readingDelay
+      );
+
+      cumulativeDelay += readingDelay;
+    });
   },
 
   respond: function(response) {
-    $('.current').append('<p class="has-text-right"><span class="tag is-info is-medium">' + response + '</span></p>');
-    $('.current').append('<p><span class="tag is-primary is-medium">&hellip;</span></p>');
-    $('.responses').html('<a class="card-footer-item is-disabled">&nbsp;</a>');
+    $('.messages').append('<li class="pending"><span class="pending message is-response">' + response + '</span></li>');
+    $('.responses').html('');
+    window.scrollTo(0, document.body.scrollHeight);
 
     this.perform('respond', { response: response });
 

@@ -1,6 +1,8 @@
-- if question.is_a? MultipleChoiceQuestion
-  - question.allowed_responses.each do |choice|
-    a.card-footer-item data-conversation-predefined-response=choice = choice
-- else
-  .card-footer-item
-    input.input.is-info type="text" data-conversation-response=true
+.tabs.is-toggle.is-centered.is-info
+  ul
+    - if question.is_a? MultipleChoiceQuestion
+        - question.allowed_responses.each do |choice|
+          li: a data-conversation-predefined-response=choice = choice
+    - else
+      li
+        input.input.is-info type="text" data-conversation-response=true
