@@ -2,7 +2,13 @@ class SignupChannel < ApplicationCable::Channel
   def subscribed
     stream_for current_donor
 
-    @wizard = ContributionWizard.new
+    @wizard = Wizard.new([
+      Questions::AreYouReady.new,
+      Questions::HowMuchShouldAnIndividualGive.new,
+      Questions::DoYouKnowTheAverageContribution.new,
+      Questions::HowMuchWillYouContribute.new,
+      Questions::WhatIsYourPreTaxIncome.new
+    ])
   end
 
   def unsubscribed
@@ -10,36 +16,36 @@ class SignupChannel < ApplicationCable::Channel
   end
 
   def start
-    broadcast_question(question: @wizard.first_question)
+    broadcast_step(step: @wizard.first_step)
   end
 
   def respond(data)
-    question = @wizard.current_question
+    step = @wizard.current_step
 
-    if question.save(data['response'])
-      broadcast_question(question: @wizard.next_question, previous_response: question.response)
+    if step.process!(data['response'])
+      broadcast_step(step: @wizard.next_step!, previous_response: step.response)
     else
-      broadcast_question(question: question)
+      broadcast_step(step: step)
     end
   end
 
   private
 
-  def broadcast_question(question:, previous_response: nil)
+  def broadcast_step(step:, previous_response: nil)
     self.class.broadcast_to(
       current_donor,
-      messages: question.messages,
+      messages: step.messages,
       previous_response: previous_response,
-      possible_responses: render_responses(question)
+      possible_responses: render_responses(step)
     )
   end
 
-  def render_responses(question)
-    return '' unless question
+  def render_responses(step)
+    return '' unless step
 
     ApplicationController.renderer.render(
       partial: 'conversations/responses',
-      locals: { question: question }
+      locals: { step: step }
     )
   end
 end

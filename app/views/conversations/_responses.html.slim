@@ -1,7 +1,7 @@
 .tabs.is-toggle.is-centered.is-info
   ul
-    - if question.is_a? MultipleChoiceQuestion
-        - question.allowed_responses.each do |choice|
+    - if step.is_a? MultipleChoiceQuestion
+        - step.allowed_responses.each do |choice|
           li: a data-conversation-predefined-response=choice = choice
     - else
       li
