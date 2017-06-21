@@ -7,7 +7,7 @@ App.signup = App.cable.subscriptions.create('SignupChannel', {
   },
 
   received: function(data) {
-    $('.chat-messages').html('<li class="chat-message"><span class="typing"></span></li>');
+    $('.chat-messages').html('<li><span class="chat-message typing"></span></li>');
 
     var cumulativeDelay = 0;
 
@@ -23,7 +23,7 @@ App.signup = App.cable.subscriptions.create('SignupChannel', {
             $('.chat-responses').html(data.possible_responses);
             $('.chat-responses input:first-of-type').focus();
           } else {
-            $('.chat-messages').append('<li class="chat-message"><span class="typing"></span></li>');
+            $('.chat-messages').append('<li><span class="chat-message typing"></span></li>');
           }
         },
         cumulativeDelay + readingDelay

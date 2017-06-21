@@ -3,8 +3,8 @@ module ApplicationCable
     identified_by :current_donor
 
     def connect
-      self.current_donor = find_verified_donor || reject_unauthorized_connection
-      logger.add_tags current_donor.id
+      self.current_donor = find_verified_donor
+      logger.add_tags current_donor.id if current_donor
     end
 
     def disconnect
