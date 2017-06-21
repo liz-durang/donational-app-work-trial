@@ -7,29 +7,23 @@ App.signup = App.cable.subscriptions.create('SignupChannel', {
   },
 
   received: function(data) {
-    $('.pending').remove();
-
-    if (data.previous_response) {
-      $('.messages').append('<li><span class="message is-response">' + data.previous_response + '</span></li>');
-    }
-
-    $('.messages').append('<li><span class="message typing"></span></li>');
+    $('.messages').html('<li class="chat-message"><span class="typing"></span></li>');
 
     var cumulativeDelay = 0;
 
     data.messages.forEach(function(message, index, messages) {
       var previousOrFirstMessage = (index == 0) ? message : messages[index - 1];
       // Take the average length of the current message and the previous message (to give the user time to read)
-      var readingDelay = 10 * (previousOrFirstMessage.length + message.length / 2);
+      var readingDelay = 1 * (previousOrFirstMessage.length + message.length / 2);
 
       setTimeout(
         function() {
-          $('.typing').text(message).removeClass("typing");
+          $('.typing').text(message).removeClass('typing');
           if (index == messages.length - 1) {
-            $('.responses').html(data.possible_responses);
-            $('[data-conversation-response]').focus();
+            $('.chat-responses').html(data.possible_responses);
+            $('.chat-responses input:first-of-type').focus();
           } else {
-            $('.messages').append('<li><span class="message typing"></span></li>');
+            $('.chat-messages').append('<li class="chat-message"><span class="typing"></span></li>');
           }
         },
         cumulativeDelay + readingDelay
@@ -40,9 +34,8 @@ App.signup = App.cable.subscriptions.create('SignupChannel', {
   },
 
   respond: function(response) {
-    $('.messages').append('<li class="pending"><span class="pending message is-response">' + response + '</span></li>');
-    $('.responses').html('');
-    window.scrollTo(0, document.body.scrollHeight);
+    $('.chat-messages').html('');
+    $('.chat-responses').html('');
 
     this.perform('respond', { response: response });
 

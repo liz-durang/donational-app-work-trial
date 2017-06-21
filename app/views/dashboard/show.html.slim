@@ -1,89 +1,11 @@
-css:
-  .messages {
-      position: relative;
-      margin: 0
-  }
-
-  .messages, .messages * {
-      -webkit-tap-highlight-color: transparent;
-      box-sizing: border-box;
-      outline: none
-  }
-
-  .message {
-      box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
-      background: #fafafa;
-      display: inline-block;
-      line-height: 1.45em;
-      border-radius: 3px;
-      margin: 0 0 1em 0;
-      text-align: left;
-      position: relative;
-      padding: 6px 12px;
-      font-size: 16px;
-      border: none;
-      max-width: 90%;
-      min-width: 44px;
-      min-height: 12px
-  }
-
-  .message.is-response {
-      background: #008ABC;
-      float: right;
-      color: #fff
-  }
-
-  .message > span {
-      display: block
-  }
-
-  .typing > * {
-      display: none !important
-  }
-
-  .typing:before {
-      content: '...';
-      color: #000
-  }
-
-  .typing:after {
-      animation: loading 1s infinite;
-      color: rgba(255, 255, 255, 0.5);
-      content: '.';
-      position: absolute;
-      left: 0px
-  }
-
-  .messages {
-      list-style: none;
-      padding: 0;
-      margin-bottom: 15em;
-  }
-
-  .messages > li {
-      margin: 0;
-      overflow: hidden
-  }
-
-  .responses {
-      text-align: center;
-      position: fixed;
-      bottom: 0px;
-      left: 0;
-      right: 0;
-      margin: 0
-  }
-
-  .responses li {
-      margin: 12px 6px;
-      cursor: pointer;
-      float: none
-  }
+= render 'breadcrumbs'
 
 section.section
   .container
-    h2.title Let's get started
+    .columns
+      .column.is-8.is-offset-2
+        h2.title Let's get started
 
-    #conversational-form
-      ol.messages
-      .responses
+        #conversational-form
+          ol.chat-messages
+          .chat-responses

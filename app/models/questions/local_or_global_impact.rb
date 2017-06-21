@@ -8,8 +8,8 @@ module Questions
 
     allowed_response 1, 'Local'
     allowed_response 2, 'Mostly local'
-    allowed_response 3, 'Mostly global'
-    allowed_response 4, 'Global'
+    allowed_response 4, 'Mostly global'
+    allowed_response 5, 'Global'
 
     def save(response)
       Rails.logger.info(response)

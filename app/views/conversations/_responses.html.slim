@@ -1,12 +1,12 @@
 form data-behavior-auto-submit=true
-  .tabs.is-toggle.is-centered
-    ul
-      - if step.is_a? MultipleChoiceQuestion
-          - step.allowed_responses.each do |value, name|
-            li
-              label.button.is-info.is-outlined for="response-#{name.parameterize}"
-                input.is-hidden type='radio' value=value id="response-#{name.parameterize}"
-                = name
-      - else
-        li
-          input.input.is-info type='text'
+  - if step.is_a? MultipleChoiceQuestion
+    - step.allowed_responses.each do |value, name|
+      label.button.is-medium.is-info.is-outlined> for="response-#{name.parameterize}"
+        input.is-hidden type='radio' value=value id="response-#{name.parameterize}"
+        = name
+  - else
+    .column.is-6.is-offset-3
+      .field
+        p.control.has-icons-left
+          input.input.is-info.is-medium type='text' placeholder='type and hit enter or return'
+          span.icon.is-left.is-medium $
