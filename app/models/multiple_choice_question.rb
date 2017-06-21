@@ -1,8 +1,9 @@
 class MultipleChoiceQuestion < Question
   # DSL method
-  def self.allowed_response(m)
-    @allowed_responses ||= []
-    @allowed_responses << m
+  def self.allowed_response(value, text=nil)
+    text ||= value.to_s
+    @allowed_responses ||= {}
+    @allowed_responses[value] = text
   end
 
   def self.allowed_responses
@@ -13,8 +14,12 @@ class MultipleChoiceQuestion < Question
     self.class.allowed_responses
   end
 
-  def valid?(response)
-    return false unless allowed_responses.include?(response)
+  def valid?(value)
+    return false unless allowed_responses.keys.include?(value)
     super
+  end
+
+  def formatted_response
+    allowed_responses[response]
   end
 end

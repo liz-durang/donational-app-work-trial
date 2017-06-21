@@ -7,7 +7,26 @@ class SignupChannel < ApplicationCable::Channel
       Questions::HowMuchShouldAnIndividualGive.new,
       Questions::DoYouKnowTheAverageContribution.new,
       Questions::HowMuchWillYouContribute.new,
-      Questions::WhatIsYourPreTaxIncome.new
+      Questions::WhatIsYourPreTaxIncome.new,
+      Questions::LocalOrGlobalImpact.new
+      # Immediate vs long term
+      # Large vs Small charities
+      # Proven effectiveness vs high risk high reward projects
+      # Cause areas
+        #! We'll go through and choose causes that are important to you to add to your charity portfolio
+        #! You'll be able to adjust how much to allocate to each cause area, but first,
+        #! let's get an idea of which causes resonate with you
+        # Climate change and the Environment
+        # Education
+        # Poverty action
+        # Health related causes
+        # Disaster relief
+        # Clean water
+        # Human rights
+      # Any specific health related causes (cancer research, alzheimers)
+      # Any specific causes that want to add to your portfolio
+        # Donational chooses highly impact charities, but we know there are pet-causes
+      # Self-actualization/autonomy (charities that promote... in contrast to just )
     ])
   end
 
@@ -23,7 +42,7 @@ class SignupChannel < ApplicationCable::Channel
     step = @wizard.current_step
 
     if step.process!(data['response'])
-      broadcast_step(step: @wizard.next_step!, previous_response: step.response)
+      broadcast_step(step: @wizard.next_step!, previous_response: step.formatted_response)
     else
       broadcast_step(step: step)
     end

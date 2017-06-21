@@ -1,8 +1,12 @@
-.tabs.is-toggle.is-centered.is-info
-  ul
-    - if step.is_a? MultipleChoiceQuestion
-        - step.allowed_responses.each do |choice|
-          li: a data-conversation-predefined-response=choice = choice
-    - else
-      li
-        input.input.is-info type="text" data-conversation-response=true
+form data-behavior-auto-submit=true
+  .tabs.is-toggle.is-centered
+    ul
+      - if step.is_a? MultipleChoiceQuestion
+          - step.allowed_responses.each do |value, name|
+            li
+              label.button.is-info.is-outlined for="response-#{name.parameterize}"
+                input.is-hidden type='radio' value=value id="response-#{name.parameterize}"
+                = name
+      - else
+        li
+          input.input.is-info type='text'

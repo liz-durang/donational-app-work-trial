@@ -7,5 +7,9 @@ module Questions
       Rails.logger.info(response)
       true
     end
+
+    def coerce(raw_value)
+      raw_value.gsub(/[^0-9\.]/, '')
+    end
   end
 end

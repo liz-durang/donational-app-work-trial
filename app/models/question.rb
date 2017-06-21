@@ -29,14 +29,23 @@ class Question
     self.class.messages
   end
 
-  def process!(response)
-    return false unless valid?(response)
+  def process!(raw_value)
+    value = coerce(raw_value)
+    return false unless valid?(value)
 
-    self.response = response if save(response)
+    self.response = value if save(value)
   end
 
-  def valid?(response)
+  def valid?(value)
     true
+  end
+
+  def coerce(raw_value)
+    raw_value
+  end
+
+  def formatted_response
+    response
   end
 
   def responded?

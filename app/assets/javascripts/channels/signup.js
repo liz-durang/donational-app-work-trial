@@ -50,14 +50,14 @@ App.signup = App.cable.subscriptions.create('SignupChannel', {
   }
 });
 
-$(document).on('keypress', '[data-conversation-response]', function(event) {
+$(document).on('keypress', '[data-behavior-auto-submit] input[type=text]', function(event) {
   if (event.keyCode === 13) {
     App.signup.respond(event.target.value);
     return event.preventDefault();
   }
 });
 
-$(document).on('click', '[data-conversation-predefined-response]', function(event) {
-  App.signup.respond(event.target.dataset.conversationPredefinedResponse);
+$(document).on('click', '[data-behavior-auto-submit] input[type=radio]', function(event) {
+  App.signup.respond(event.target.value);
   return event.preventDefault();
 });
