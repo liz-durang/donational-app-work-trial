@@ -7,7 +7,7 @@ App.signup = App.cable.subscriptions.create('SignupChannel', {
   },
 
   received: function(data) {
-    $('.messages').html('<li class="chat-message"><span class="typing"></span></li>');
+    $('.chat-messages').html('<li class="chat-message"><span class="typing"></span></li>');
 
     var cumulativeDelay = 0;
 
