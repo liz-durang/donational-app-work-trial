@@ -1,0 +1,13 @@
+doctype html
+html
+  head
+    title Donational | The more deliberate way to donate
+    = render 'shared/head'
+    
+  body
+    = render 'shared/nav'
+      
+    main = yield
+      
+    = render 'shared/analytics'
+    = render 'shared/footer'

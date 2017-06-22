@@ -2,10 +2,13 @@ nav.nav.has-shadow
   .container
     .nav-left
       .nav-item
-        a href="/" Donational
+        a href="/"
+          h1.is-5.title Donational
 
     .nav-right
-      - if logged_in?
-         .nav-item = link_to 'Logout', sessions_path, method: :delete, data: { confirm: 'Are you sure you want to logout?' }
-      - else
-        .nav-item = link_to 'Login', new_sessions_path, class: 'button is-outlined'
+      .nav-item: a href="#benefits" Benefits
+      .nav-item: a href="#" Philosophy
+      .nav-item: a href="#" Charities
+      .nav-item: a href="#" About
+      .nav-item = sign_in_or_out_button 
+      .nav-item = link_to 'Donate now', dashboard_path, class: 'button is-primary'

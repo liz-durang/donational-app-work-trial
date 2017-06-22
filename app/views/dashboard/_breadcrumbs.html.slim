@@ -1,24 +1,38 @@
 scss:
   .breadcrumbs {
-    .nav-item.is-active {
+    list-style: none;
+    display: flex;
+  } 
+     
+  .breadcrumb-item {
+    align-items: center;
+    display: flex;
+    flex-grow: 0;
+    flex-shrink: 0;
+    font-size: 1rem;
+    justify-content: center;
+    line-height: 1.5;
+    padding: 0.5rem 0.75rem;
+    cursor: default;
+    
+    &.is-active {
       font-weight: 400;
     }
+  }
     
-    .nav-item:after {
-      content: '>';
-      padding-left: 0.75rem;
-      margin-right: -0.75rem;
-    }
-    
-    .nav-item:last-of-type:after {
-      display: none;
-    }
+  .breadcrumb-item:after {
+    content: '>';
+    padding-left: 0.75rem;
+    margin-right: -0.75rem;
+  }
+  
+  .breadcrumb-item:last-of-type:after {
+    display: none;
   }
 
 .hero.is-light
-  nav.nav.breadcrumbs
-    .container
-      .nav-left
-        a.nav-item.is-disabled.is-active Establish your values
-        a.nav-item.is-disabled View your charity portfolio
-        a.nav-item.is-disabled Create an account
+  .container
+    ul.breadcrumbs
+      li.breadcrumb-item.is-active Establish your values
+      li.breadcrumb-item View your charity portfolio
+      li.breadcrumb-item Create an account
