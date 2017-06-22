@@ -1,31 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>DonateDeliberately</title>
+    <title>Donational | The more deliberate way to donate</title>
     <%= csrf_meta_tags %>
     <%= state_meta_tag %>
     <%= action_cable_meta_tag %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <!-- <%= stylesheet_link_tag    'https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css' %> -->
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'https://use.fontawesome.com/e46cc92d1d.js' %>
   </head>
 
   <body>
-    <nav class="nav has-shadow">
-      <div class="container">
-        <div class="nav-left">
-          <a class="nav-item">
-            Donational
-          </a>
-        </div>
-
-        <div class="nav-right">
-          <% if logged_in? %>
-            <%= link_to 'Logout', sessions_path, class: 'nav-item', method: :delete, data: { confirm: 'Are you sure you want to logout?' } %>
-          <% end %>
-        </div>
-      </div>
-    </nav>
+    <section class="hero is-primary">
+        <%= render 'shared/nav' %>
+    </section>
 
     <main>
       <%= yield %>

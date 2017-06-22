@@ -1,0 +1,24 @@
+scss:
+  .breadcrumbs {
+    .nav-item.is-active {
+      font-weight: 400;
+    }
+    
+    .nav-item:after {
+      content: '>';
+      padding-left: 0.75rem;
+      margin-right: -0.75rem;
+    }
+    
+    .nav-item:last-of-type:after {
+      display: none;
+    }
+  }
+
+.hero.is-light
+  nav.nav.breadcrumbs
+    .container
+      .nav-left
+        a.nav-item.is-disabled.is-active Establish your values
+        a.nav-item.is-disabled View your charity portfolio
+        a.nav-item.is-disabled Create an account

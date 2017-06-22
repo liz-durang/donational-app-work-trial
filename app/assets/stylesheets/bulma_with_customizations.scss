@@ -1,0 +1,22 @@
+// Font resources
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400|Lora|Raleway:300');
+
+// Initial Variables for Bulma
+$family-sans-serif: "Source Sans Pro", Helvetica, Arial, sans-serif;
+$family-serif: 'Lora', serif;
+$family-primary: $family-sans-serif;
+
+$primary: #1aa7a0;
+$primary-invert: white;
+
+$control-radius: 0px;
+// Bulma
+@import "bulma";
+
+// Overrides
+body {
+  font-weight: $weight-light
+}
+h1, h2, h3, h4, h5, h6, .title {
+  font-family: $family-serif;
+}

@@ -1,8 +1,25 @@
 class MultipleChoiceQuestion < Question
-  attr_accessor :allowed_responses
+  # DSL method
+  def self.allowed_response(value, text=nil)
+    text ||= value.to_s
+    @allowed_responses ||= {}
+    @allowed_responses[value] = text
+  end
 
-  def valid?(response)
-    return false unless allowed_responses.include?(response)
+  def self.allowed_responses
+    @allowed_responses
+  end
+
+  def allowed_responses
+    self.class.allowed_responses
+  end
+
+  def valid?(value)
+    return false unless allowed_responses.keys.include?(value)
     super
+  end
+
+  def formatted_response
+    allowed_responses[response]
   end
 end
