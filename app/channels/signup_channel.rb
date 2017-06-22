@@ -4,6 +4,7 @@ class SignupChannel < ApplicationCable::Channel
 
     @wizard = Wizard.new([
       Questions::AreYouReady.new,
+      Questions::ComingSoon.new,
       Questions::HowMuchShouldAnIndividualGive.new,
       Questions::DoYouKnowTheAverageContribution.new,
       Questions::HowMuchWillYouContribute.new,

@@ -4,7 +4,14 @@ form data-behavior-auto-submit=true
       label.button.is-medium.is-info.is-outlined> for="response-#{name.parameterize}"
         input.is-hidden type='radio' value=value id="response-#{name.parameterize}"
         = name
-  - else
+  - elsif step.is_a? EmailQuestion
+    .column.is-6.is-offset-3
+      .field
+        p.control.has-icons-left
+          input.input.is-info.is-medium type='text' placeholder='type and hit enter or return'
+          span.icon.is-left.is-medium
+            i.fa.fa-envelope
+  - elsif step.is_a? CurrencyQuestion
     .column.is-6.is-offset-3
       .field
         p.control.has-icons-left

@@ -1,6 +1,9 @@
 module Questions
-  class WhatIsYourPreTaxIncome < Question
-    message "There's one more thing we'll need to help you make regular contributions that match what you think you *ought* to give."
+  class WhatIsYourPreTaxIncome < CurrencyQuestion
+    message "By making regular contributions that are tied to your income"
+    message "a) you can feel great knowing that you're always giving exactly as much as you believe you *ought* to give."
+    message "b) charities receive donations regularly (as opposed to larger lump sum payments), which helps them to manage their cash flow and plan more efficiently"
+    message "To calculate your monthly contribution, we'll need to know about how much you earn."
     message "What's your (pre-tax) annual income?"
 
     def save(response)
@@ -8,8 +11,5 @@ module Questions
       true
     end
 
-    def coerce(raw_value)
-      raw_value.gsub(/[^0-9\.]/, '')
-    end
   end
 end
