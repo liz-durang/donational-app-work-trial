@@ -1,16 +1,11 @@
 .chat-messages {
   list-style: none;
   padding: 0;
-  margin-bottom: 15em;
 }
 
 .chat-responses {
   text-align: center;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: 1em 20px;
+  padding: 1em 20px;
 }
 
 .chat-message {
@@ -28,12 +23,6 @@
   max-width: 90%;
   min-width: 44px;
   min-height: 12px;
-
-  &.is-response {
-      background: #008ABC;
-      float: right;
-      color: #fff;
-  }
 }
 
 .typing {
