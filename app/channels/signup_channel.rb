@@ -4,12 +4,12 @@ class SignupChannel < ApplicationCable::Channel
 
     @wizard = Wizard.new([
       Questions::AreYouReady.new,
-      Questions::ComingSoon.new,
       Questions::HowMuchShouldAnIndividualGive.new,
       Questions::DoYouKnowTheAverageContribution.new,
       Questions::HowMuchWillYouContribute.new,
       Questions::WhatIsYourPreTaxIncome.new,
-      Questions::LocalOrGlobalImpact.new
+      Questions::LocalOrGlobalImpact.new,
+      Questions::ComingSoon.new
       # Immediate vs long term
       # Large vs Small charities
       # Proven effectiveness vs high risk high reward projects

@@ -5,7 +5,7 @@ module Questions
     message "If you'd like to be kept up to date with our progress, let us know your email address"
 
     def save(response)
-      ComingSoonNotificationMailer.test(response.to_s).deliver_now
+      ComingSoonNotificationMailer.test(response.to_s).deliver_later
     end
 
     class ComingSoonNotificationMailer < ActionMailer::Base
@@ -14,7 +14,7 @@ module Questions
           from: 'no-reply@donational.org',
           to: 'hello@donational.org',
           subject: "#{email} Completed onboarding",
-          body: 'A user completed the coming soon'
+          body: 'A user completed the coming-soon question'
         )
       end
     end
