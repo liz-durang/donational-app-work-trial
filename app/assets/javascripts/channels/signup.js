@@ -14,7 +14,7 @@ App.signup = App.cable.subscriptions.create('SignupChannel', {
     data.messages.forEach(function(message, index, messages) {
       var previousOrFirstMessage = (index == 0) ? message : messages[index - 1];
       // Take the average length of the current message and the previous message (to give the user time to read)
-      var readingDelay = 1 * (previousOrFirstMessage.length + message.length / 2);
+      var readingDelay = 10 * (previousOrFirstMessage.length + message.length / 2);
 
       setTimeout(
         function() {
