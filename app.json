@@ -1,0 +1,58 @@
+{
+  "name": "donational-app",
+  "scripts": {
+  },
+  "env": {
+    "AUTH0_CLIENT_ID": {
+      "required": true
+    },
+    "AUTH0_CLIENT_SECRET": {
+      "required": true
+    },
+    "AUTH0_DOMAIN": {
+      "required": true
+    },
+    "DEFAULT_HOST": {
+      "required": true
+    },
+    "LANG": {
+      "required": true
+    },
+    "RACK_ENV": {
+      "required": true
+    },
+    "RAILS_ENV": {
+      "required": true
+    },
+    "RAILS_LOG_TO_STDOUT": {
+      "required": true
+    },
+    "RAILS_SERVE_STATIC_FILES": {
+      "required": true
+    },
+    "REDISTOGO_URL": {
+      "required": true
+    },
+    "SECRET_KEY_BASE": {
+      "generator": "secret"
+    },
+    "SENDGRID_PASSWORD": {
+      "required": true
+    },
+    "SENDGRID_USERNAME": {
+      "required": true
+    }
+  },
+  "formation": {
+  },
+  "addons": [
+    "heroku-postgresql",
+    "redistogo",
+    "sendgrid"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/ruby"
+    }
+  ]
+}
