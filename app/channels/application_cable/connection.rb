@@ -3,7 +3,7 @@ module ApplicationCable
     identified_by :current_donor
 
     def connect
-      self.current_donor = find_verified_donor
+      self.current_donor = find_verified_donor || anonymous_donor
       logger.add_tags current_donor.id if current_donor
     end
 
@@ -21,6 +21,10 @@ module ApplicationCable
 
     def find_verified_donor
       Donors::FindOrCreateDonorFromAuth.run!(session[:userinfo])
+    end
+
+    def anonymous_donor
+      OpenStruct.new(id: SecureRandom.hex(24))
     end
   end
 end
