@@ -10,3 +10,60 @@
 .hero-foot
   .container
     .chat-responses.is-text-centered
+    
+javascript:
+  App.signup = App.cable.subscriptions.create('SignupChannel', {
+    connected: function() {
+      return this.perform('start');
+    },
+
+    disconnected: function() { },
+
+    received: function(data) {
+      $('.chat-messages').html('<li><span class="chat-message typing"></span></li>');
+
+      var cumulativeDelay = 0;
+
+      data.messages.forEach(function(message, index, messages) {
+        var previousOrFirstMessage = (index == 0) ? message : messages[index - 1];
+        // Take the average length of the current message and the previous message (to give the user time to read)
+        var readingDelay = 10 * (previousOrFirstMessage.length + message.length / 2);
+
+        setTimeout(
+          function() {
+            $('.typing').text(message).removeClass('typing');
+            if (index == messages.length - 1) {
+              $('.chat-responses').html(data.possible_responses);
+              $('.chat-responses input:first-of-type').focus();
+            } else {
+              $('.chat-messages').append('<li><span class="chat-message typing"></span></li>');
+            }
+          },
+          cumulativeDelay + readingDelay
+        );
+
+        cumulativeDelay += readingDelay;
+      });
+    },
+
+    respond: function(response) {
+      $('.chat-messages').html('');
+      $('.chat-responses').html('');
+
+      this.perform('respond', { response: response });
+
+      return;
+    }
+  });
+
+  $(document).on('keypress', '[data-behavior-auto-submit] input[type=text]', function(event) {
+    if (event.keyCode === 13) {
+      App.signup.respond(event.target.value);
+      return event.preventDefault();
+    }
+  });
+
+  $(document).on('click', '[data-behavior-auto-submit] input[type=radio]', function(event) {
+    App.signup.respond(event.target.value);
+    return event.preventDefault();
+  });
