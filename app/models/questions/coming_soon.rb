@@ -1,8 +1,10 @@
 module Questions
   class ComingSoon < EmailQuestion
-    message "Thanks for taking a look"
-    message "We're still working on getting this platform ready for launch."
-    message "If you'd like to be kept up to date with our progress, let us know your email address"
+    message "Thanks for making it this far!"
+    message "There are a few more things we'd need to ask you, such as which cause areas matter to you most? (eg Poverty Action, Clean Water, Disaster Relief, Education, Environment & Climate Change, Animal Welfare)"
+    message "However, we're still working on getting this platform ready for launch"
+    message "If you'd like some one-on-one advice about your charitable giving plans, you can reach out to ian@donational.org"
+    message "and to be kept up to date with our progress, let us know your email address below!"
 
     def save(response)
       ComingSoonNotificationMailer.test(response.to_s).deliver_later

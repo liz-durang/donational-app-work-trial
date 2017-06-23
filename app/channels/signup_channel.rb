@@ -4,15 +4,16 @@ class SignupChannel < ApplicationCable::Channel
 
     @wizard = Wizard.new([
       Questions::AreYouReady.new,
+      Questions::DidYouDonateLastYear.new,
+      Questions::SatisfiedWithAmountDonatedLastYear.new,
       Questions::HowMuchShouldAnIndividualGive.new,
       Questions::DoYouKnowTheAverageContribution.new,
       Questions::HowMuchWillYouContribute.new,
       Questions::WhatIsYourPreTaxIncome.new,
       Questions::LocalOrGlobalImpact.new,
+      Questions::ImmediateOrLongTerm.new,
       Questions::ComingSoon.new
-      # Immediate vs long term
       # Large vs Small charities
-      # Proven effectiveness vs high risk high reward projects
       # Cause areas
         #! We'll go through and choose causes that are important to you to add to your charity portfolio
         #! You'll be able to adjust how much to allocate to each cause area, but first,
