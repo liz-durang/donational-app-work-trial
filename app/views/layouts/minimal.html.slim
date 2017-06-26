@@ -3,10 +3,12 @@ html
   head
     title Donational | The more deliberate way to donate
     = render 'shared/head'
-    
+
   body
     section.hero.is-fullheight
-      .hero-head = render 'shared/minimal_nav'
+      .hero-head
+        = render 'shared/minimal_nav'
+
       = yield
-      
+
     = render 'shared/analytics'

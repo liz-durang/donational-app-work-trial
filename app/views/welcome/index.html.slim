@@ -1,47 +1,35 @@
-section.hero.is-light.is-medium
+section#learn-more.hero.is-light
   .hero-body
     .container.has-text-centered
-      h1.title.is-1 The more deliberate way to donate
-      h2.subtitle Simple tools to guide you towards more effective giving.
-      p
-        a.button.is-outlined> href='#learn-more'
-          span.icon.is-small: i.fa.fa-file-text-o
-          span Learn more
-        = link_to dashboard_path, class: 'button is-primary'
-          span Start donating more effectively
-          span.icon.is-small: i.fa.fa-angle-right
+      .columns
+        .column
+          .box
+            h3.title Support charities with impact
+            p
+              ' Instead of donating to whichever charity solicits you on the street or appears in your social media feed,
+              ' we believe that you ought to donate to causes that are aligned with
+              strong> your values
+              ' and that have the
+              strong> greatest impact
+              | per each dollar that you donate.
+        .column.is-offset-1
+          .box
+            h3.title Donate the right amount
+            p
+              ' As a percentage of income, how much do you think an individual in our society
+              em> should
+              ' give to charity?
+              ' We makes it easy for you to give the amount you believe that you ought to, with a
+              strong> single contribution
+              ' that you allocate to
+              strong> causes that matter
+              | to you.
 
-section#learn-more.section
-  .container.has-text-centered
-    .columns
-      .column
-        .box
-          h3.title Support charities with impact
-          p
-            ' Instead of donating to whichever charity reaches you by phone, or approaches you on the street,
-            ' we believe that you ought to donate to causes that are aligned with
-            strong> your values
-            ' and that have the
-            strong> greatest impact
-            | per each dollar that you donate.
-      .column.is-offset-1
-        .box
-          h3.title Donate the right amount
-          p
-            ' As a percentage of income, how much do you think an individual in our society
-            em> should
-            ' give to charity?
-            ' We makes it easy for you to give the amount you believe that you ought to, with a
-            strong> single contribution
-            ' that you allocate to
-            strong> causes that matter
-            | to you.
-hr
+hr.is-marginless
 
 section.section
   .container.has-text-centered
-    p.title.is-4
-      ' We'll help you setup a portfolio of charities that have been vetted by experts to have high impact.
+    p.title.is-4 We'll help you setup a portfolio of charities that have been vetted by experts to have high impact.
     p
       ' By pooling donations and avoiding credit card fees, we ensure that
       strong> more
@@ -49,7 +37,7 @@ section.section
       strong> more
       | with it.
 
-hr
+hr.is-marginless
 
 section#benefits.section
   .container
@@ -76,7 +64,7 @@ section.section
   .container
     .columns
       .column.is-10.is-offset-1
-        p.title.is-3 Giving to charity is one of the most powerful things that we as humans can do. But all too often, we neglect to give as much or as often as we intend.
+        p.title.is-3 Giving to charity is one of the most powerful things that we do. And all too often, we neglect to give as much or as often as we intend.
 
 hr
 
@@ -88,7 +76,10 @@ section.section
         .box
           .card-content
             .content
-              p.title.is-4 "I'm finally giving what I ought to!"
+              p.title.is-4
+                | &ldquo;
+                | I'm finally giving what I ought to!
+                | &rdquo;
               p
                 ' The amount that I donated used to depend on how I was feeling the day when I was asked.
                 | Now I'm giving an amount that I think is appropriate, and one that fits in with the rest of my finances.
@@ -97,7 +88,10 @@ section.section
         .box
           .card-content
             .content
-              p.title.is-4 "It helped me realize what I care about"
+              p.title.is-4
+                | &ldquo;
+                | It helped me realize what I care about
+                | &rdquo;
               p
                 ' I'd often try to research which charities were most efficient, only to get lost in all the details.
                 | Now it's like having a personal advisor to guide me through a shortlist of highly effective causes.
@@ -106,7 +100,10 @@ section.section
         .box
           .card-content
             .content
-              p.title.is-4 "It's like an auto-pilot for my giving!"
+              p.title.is-4
+                | &ldquo;
+                | It's like an auto-pilot for my giving!
+                | &rdquo;
               p
                 ' I don't need to remember to mail in a bunch of checks or
                 ' separately itemize handfuls of donations at tax time.
@@ -117,7 +114,7 @@ hr
 
 section.section
   .container.has-text-centered
-    p.title.is-3> Make the kind of impact you expect from yourself!
-    = link_to dashboard_path, class: 'button is-primary'
+    p.title.is-3> Make the impact you believe you can!
+    a.button.is-primary.is-medium href=dashboard_path
       span Start donating effectively now
       span.icon.is-small: i.fa.fa-angle-right
