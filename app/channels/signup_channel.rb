@@ -2,16 +2,15 @@ class SignupChannel < ApplicationCable::Channel
   def subscribed
     stream_for current_donor
 
-    @wizard = Wizard.new([
-      Questions::AreYouReady.new,
-      Questions::DidYouDonateLastYear.new,
-      Questions::SatisfiedWithAmountDonatedLastYear.new,
-      Questions::HowMuchShouldAnIndividualGive.new,
-      Questions::DoYouKnowTheAverageContribution.new,
-      Questions::HowMuchWillYouContribute.new,
-      Questions::WhatIsYourPreTaxIncome.new,
-      Questions::LocalOrGlobalImpact.new,
-      Questions::ImmediateOrLongTerm.new,
+    steps = begin
+      Questions::AreYouReady.new <<
+      Questions::DidYouDonateLastYear.new <<
+      Questions::HowMuchShouldAnIndividualGive.new <<
+      Questions::DoYouKnowTheAverageContribution.new <<
+      Questions::HowMuchWillYouContribute.new <<
+      Questions::WhatIsYourPreTaxIncome.new <<
+      Questions::LocalOrGlobalImpact.new <<
+      Questions::ImmediateOrLongTerm.new <<
       Questions::ComingSoon.new
       # Large vs Small charities
       # Cause areas
@@ -29,34 +28,38 @@ class SignupChannel < ApplicationCable::Channel
       # Any specific causes that want to add to your portfolio
         # Donational chooses highly impact charities, but we know there are pet-causes
       # Self-actualization/autonomy (charities that promote... in contrast to just )
-    ])
+    end
+    @current_step = steps
   end
 
   def unsubscribed
-    # Any cleanup needed when channel is unsubscribed
+    @current_step = nil
   end
 
   def start
-    broadcast_step(step: @wizard.first_step)
+    broadcast_step(step: @current_step)
   end
 
   def respond(data)
-    step = @wizard.current_step
+    step = @current_step
 
     if step.process!(data['response'])
-      broadcast_step(step: @wizard.next_step!, previous_response: step.formatted_response)
+      @current_step = @current_step.next_node
+      broadcast_step(step: @current_step, previous_step: step)
     else
-      broadcast_step(step: step)
+      broadcast_step(step: step, previous_step: Questions::ErrorStep.new)
     end
   end
 
   private
 
-  def broadcast_step(step:, previous_response: nil)
+  def broadcast_step(step:, previous_step: nil)
+    step ||= Questions::NullStep.new
+    previous_step ||= Questions::NullStep.new
+
     self.class.broadcast_to(
       current_donor,
-      messages: step.messages,
-      previous_response: previous_response,
+      messages: Array(previous_step.follow_up_message) + step.messages,
       possible_responses: render_responses(step)
     )
   end

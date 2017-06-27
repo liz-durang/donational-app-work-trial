@@ -18,8 +18,4 @@ class MultipleChoiceQuestion < Question
     return false unless allowed_responses.keys.include?(value)
     super
   end
-
-  def formatted_response
-    allowed_responses[response]
-  end
 end

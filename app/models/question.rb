@@ -10,9 +10,7 @@
 #         Donor.update(first_name: response)
 #       end
 #     end
-class Question
-  include ActiveModel::Model
-
+class Question < Node
   attr_accessor :response
 
   # DSL method
@@ -44,11 +42,6 @@ class Question
     raw_value
   end
 
-  def formatted_response
-    response
-  end
-
-  def responded?
-    response.present?
+  def follow_up_message
   end
 end
