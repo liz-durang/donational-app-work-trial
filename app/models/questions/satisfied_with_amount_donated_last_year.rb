@@ -6,13 +6,9 @@ module Questions
     allowed_response :gave_too_much, 'No, I gave more than I could afford'
     allowed_response :not_enough, "No, I didn't give as much as I should have"
 
-    def save(response)
+    def save
       Rails.logger.info(response)
       true
-    end
-
-    def coerce(raw_value)
-      raw_value.to_sym if raw_value.in?(allowed_responses.keys.map(&:to_s))
     end
 
     def follow_up_message

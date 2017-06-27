@@ -6,6 +6,8 @@ module Questions
     message "Now for a harder question..."
     message 'As a percentage of your pre-tax income, how much do YOU want to contribute?'
 
+    response_type :float
+
     allowed_response 0.005, '0.5%'
     allowed_response 0.01, '1%'
     allowed_response 0.015, '1.5%'
@@ -18,13 +20,9 @@ module Questions
     allowed_response 0.05, '5%'
     allowed_response 0.1, '10%'
 
-    def save(response)
+    def save
       Rails.logger.info(response)
       true
-    end
-
-    def coerce(raw_value)
-      raw_value.to_f
     end
   end
 end

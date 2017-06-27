@@ -6,17 +6,13 @@ module Questions
     message 'For example, a single visit an emergency room in the USA costs upwards of $1000, whereas just $50 can fund an operation to restore sight to a blind person in a developing country.'
     message 'Knowing that your money goes further overseas, where would you like to focus the impact of your portfolio of charities?'
 
-    allowed_response 1, 'Local (USA only)'
-    allowed_response 3, 'Local and Global'
-    allowed_response 5, 'Global'
+    allowed_response :local, 'Local (USA only)'
+    allowed_response :both, 'Local and Global'
+    allowed_response :global, 'Global'
 
-    def save(response)
+    def save
       Rails.logger.info(response)
       true
-    end
-
-    def coerce(raw_value)
-      raw_value.to_i
     end
   end
 end

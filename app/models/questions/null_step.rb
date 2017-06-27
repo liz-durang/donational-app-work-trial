@@ -1,6 +1,6 @@
 module Questions
   class NullStep < Question
-    def save(response)
+    def save
       true
     end
   end

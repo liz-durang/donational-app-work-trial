@@ -53,13 +53,12 @@ class SignupChannel < ApplicationCable::Channel
 
   private
 
-  def broadcast_step(step:, previous_step: nil)
-    step ||= Questions::NullStep.new
-    previous_step ||= Questions::NullStep.new
+  def broadcast_step(step: Questions::NullStep.new, previous_step: Questions::NullStep.new)
+    messages = Array(previous_step.follow_up_message) + Array(step.errors) + step.messages
 
     self.class.broadcast_to(
       current_donor,
-      messages: Array(previous_step.follow_up_message) + step.messages,
+      messages: messages,
       possible_responses: render_responses(step)
     )
   end

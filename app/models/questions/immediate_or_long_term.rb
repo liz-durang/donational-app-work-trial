@@ -6,17 +6,13 @@ module Questions
     message 'e.g. cancer research, poverty awareness'
     message 'For the charities that you support, would you prefer them to have an immediate or a long term impact?'
 
-    allowed_response 1, 'Immediate'
-    allowed_response 3, 'Both (a mix of immediate and long-term impact)'
-    allowed_response 5, 'Long-Term'
+    allowed_response :immediate, 'Immediate'
+    allowed_response :both, 'Both (a mix of immediate and long-term impact)'
+    allowed_response :long_term, 'Long-Term'
 
-    def save(response)
+    def save
       Rails.logger.info(response)
       true
-    end
-
-    def coerce(raw_value)
-      raw_value.to_i
     end
   end
 end
