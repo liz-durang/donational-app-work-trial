@@ -1,19 +1,24 @@
 form data-behavior-auto-submit=true
-  - if step.is_a? MultipleChoiceQuestion
+  - if step.is_a? MultipleChoiceQuestion 
     - step.allowed_responses.each do |value, name|
       label.button.is-medium.is-info.is-outlined> for="response-#{name.parameterize}"
         input.is-hidden type='radio' value=value id="response-#{name.parameterize}"
         = name
-  - elsif step.is_a? EmailQuestion
+  - elsif step.response_type == :email
     .column.is-6.is-offset-3
       .field
         p.control.has-icons-left
           input.input.is-info.is-medium type='text' placeholder='type and hit enter or return'
           span.icon.is-left.is-medium
             i.fa.fa-envelope
-  - elsif step.is_a? CurrencyQuestion
+  - elsif step.response_type == :currency
     .column.is-6.is-offset-3
       .field
         p.control.has-icons-left
           input.input.is-info.is-medium type='text' placeholder='type and hit enter or return'
           span.icon.is-left.is-medium $
+  - else
+    .column.is-6.is-offset-3
+      .field
+        p.control
+          input.input.is-info.is-medium type='text' placeholder='type and hit enter or return'

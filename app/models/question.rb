@@ -5,15 +5,15 @@
 #       message 'Hi'
 #       message 'What is your name?'
 #
-#       def save(response)
+#       def save
 #         # do_some_pre_processing
 #         Donor.update(first_name: response)
 #       end
 #     end
-class Question
-  include ActiveModel::Model
+class Question < Node
+  attr_reader :response
 
-  attr_accessor :response
+  include ActiveModel::Model
 
   # DSL method
   def self.message(m)
@@ -29,26 +29,49 @@ class Question
     self.class.messages
   end
 
+  def self.follow_up_message(proc_or_string)
+    @follow_up_message = proc_or_string
+  end
+
+  def self.follow_up_message_for(response)
+    return @follow_up_message.call(response) if @follow_up_message.respond_to?(:call)
+
+    @follow_up_message
+  end
+
+  def follow_up_message
+    self.class.follow_up_message_for(response)
+  end
+
   def process!(raw_value)
-    value = coerce(raw_value)
-    return false unless valid?(value)
+    response_for_rollback = response
+    self.response = raw_value
 
-    self.response = value if save(value)
+    if valid?
+      save
+    else
+      @response = response_for_rollback
+    end
   end
 
-  def valid?(value)
-    true
+  def self.response_type(type)
+    define_method :response_type do
+      type
+    end
   end
 
-  def coerce(raw_value)
-    raw_value
-  end
-
-  def formatted_response
-    response
-  end
-
-  def responded?
-    response.present?
+  def response=(raw_value)
+    @response = case response_type
+                when :integer
+                  raw_value.to_i
+                when :float
+                  raw_value.to_f
+                when :currency
+                  raw_value.gsub(/[^0-9\.]/, '').to_f
+                when :symbol
+                  raw_value.to_s.to_sym
+                else
+                  raw_value
+                end
   end
 end
