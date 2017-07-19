@@ -13,7 +13,7 @@
     .chat-responses.is-text-centered
 
 javascript:
-  App.signup = App.cable.subscriptions.create('SignupChannel', {
+  App.signup = App.signup || App.cable.subscriptions.create('SignupChannel', {
     connected: function() {
       return this.perform('start');
     },
