@@ -3,15 +3,15 @@ class SignupChannel < ApplicationCable::Channel
     stream_for current_donor
 
     steps = begin
-      Questions::AreYouReady.new <<
-      Questions::DidYouDonateLastYear.new <<
-      Questions::HowMuchShouldAnIndividualGive.new <<
-      Questions::DoYouKnowTheAverageContribution.new <<
-      Questions::HowMuchWillYouContribute.new <<
-      Questions::WhatIsYourPreTaxIncome.new <<
-      Questions::LocalOrGlobalImpact.new <<
-      Questions::ImmediateOrLongTerm.new <<
-      Questions::ComingSoon.new
+      Onboarding::AreYouReady.new <<
+      Onboarding::DidYouDonateLastYear.new <<
+      Onboarding::HowMuchShouldAnIndividualGive.new <<
+      Onboarding::DoYouKnowTheAverageContribution.new <<
+      Onboarding::HowMuchWillYouContribute.new <<
+      Onboarding::WhatIsYourPreTaxIncome.new <<
+      Onboarding::LocalOrGlobalImpact.new <<
+      Onboarding::ImmediateOrLongTerm.new <<
+      Onboarding::ComingSoon.new
       # Large vs Small charities
       # Cause areas
         #! We'll go through and choose causes that are important to you to add to your charity portfolio
@@ -49,13 +49,13 @@ class SignupChannel < ApplicationCable::Channel
       @current_step = @current_step.next_node
       broadcast_step(step: @current_step, previous_step: step)
     else
-      broadcast_step(step: step, previous_step: Questions::ErrorStep.new)
+      broadcast_step(step: step, previous_step: ErrorStep.new)
     end
   end
 
   private
 
-  def broadcast_step(step: Questions::NullStep.new, previous_step: Questions::NullStep.new)
+  def broadcast_step(step: NullStep.new, previous_step: NullStep.new)
     messages = Array(previous_step.follow_up_message) + Array(step.errors) + step.messages
 
     self.class.broadcast_to(

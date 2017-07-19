@@ -1,4 +1,4 @@
-module Questions
+module Onboarding
   class SatisfiedWithAmountDonatedLastYear < MultipleChoiceQuestion
     message 'Were you satisfied with how much you gave?'
 

@@ -1,4 +1,4 @@
-module Questions
+module Onboarding
   class AreYouReady < MultipleChoiceQuestion
     message "Hi!"
     message "You've just taken the first step to be more deliberate about how you donate to charity!!!"

@@ -1,4 +1,4 @@
-module Questions
+module Onboarding
   class HowMuchShouldAnIndividualGive < MultipleChoiceQuestion
     message "Being deliberate is about aligning our actions with what we actually believe. " +
       "We'll be exploring some questions to uncover what is important to you."

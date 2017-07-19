@@ -1,4 +1,4 @@
-module Questions
+module Onboarding
   class DoYouKnowTheAverageContribution < MultipleChoiceQuestion
     message 'Did you know that the average American gives 2.8% of their pretax annual income to charity?'
     message 'Does that surprise you?'

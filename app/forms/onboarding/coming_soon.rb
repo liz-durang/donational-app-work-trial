@@ -1,4 +1,4 @@
-module Questions
+module Onboarding
   class ComingSoon < Question
     message "Thanks for making it this far!"
     message "There are a few more things we'd need to ask you, such as which cause areas matter to you most? (eg Poverty Action, Clean Water, Disaster Relief, Education, Environment & Climate Change, Animal Welfare)"

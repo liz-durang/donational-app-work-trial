@@ -1,4 +1,4 @@
-module Questions
+module Onboarding
   class WhatIsYourPreTaxIncome < Question
     message "By making regular contributions that are tied to your income"
     message "a) you can feel great knowing that you're always giving exactly as much as you believe you *ought* to give."

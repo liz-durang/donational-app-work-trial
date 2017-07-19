@@ -1,4 +1,4 @@
-module Questions
+module Onboarding
   class DidYouDonateLastYear < MultipleChoiceQuestion
     message "Did you make any donations to charity within the last 12 months?"
 

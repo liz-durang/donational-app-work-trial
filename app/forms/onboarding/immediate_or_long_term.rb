@@ -1,4 +1,4 @@
-module Questions
+module Onboarding
   class ImmediateOrLongTerm < MultipleChoiceQuestion
     message 'Some organizations focus on making an immediate impact.'
     message 'e.g. disaster relief, providing food and clean drinking water, life saving health interventions'
