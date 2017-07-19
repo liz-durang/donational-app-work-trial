@@ -2,13 +2,23 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   helper_method :logged_in?
+  helper_method :current_donor
+
   private
 
   def current_donor
-    @current_donor ||= Donors::FindOrCreateDonorFromAuth.run!(session[:userinfo])
+    @current_donor ||= Donors::FindDonorById.run!(session[:donor_id])
+  end
+
+  def log_out!
+    reset_session
+  end
+
+  def log_in!(donor)
+    session[:donor_id] = donor.id
   end
 
   def logged_in?
-    session[:userinfo].present?
+    current_donor.present? && current_donor.account_holder?
   end
 end

@@ -43,6 +43,8 @@ class SignupChannel < ApplicationCable::Channel
   def respond(data)
     step = @current_step
 
+    Rails.logger.info(data['response'])
+
     if step.process!(data['response'])
       @current_step = @current_step.next_node
       broadcast_step(step: @current_step, previous_step: step)

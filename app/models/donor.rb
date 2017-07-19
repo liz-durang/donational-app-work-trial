@@ -20,4 +20,8 @@ class Donor < ApplicationRecord
   def name
     [first_name, last_name].compact.join(' ')
   end
+
+  def account_holder?
+    email.present?
+  end
 end

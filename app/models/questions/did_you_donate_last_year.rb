@@ -19,7 +19,6 @@ module Questions
     end
 
     def save
-      Rails.logger.info(response)
       true
     end
 

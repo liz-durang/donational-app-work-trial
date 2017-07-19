@@ -9,7 +9,6 @@ module Questions
     allowed_response :of_course, 'Of course!'
 
     def save
-      Rails.logger.info(response)
       true
     end
   end
