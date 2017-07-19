@@ -19,13 +19,18 @@ module Onboarding
     end
 
     def save
-      true
+      case response
+      when :yes
+        donor.update(donated_prior_year: true)
+      when :no
+        donor.update(donated_prior_year: false)
+      end
     end
 
     def children
       case response
       when :yes
-        [Questions::SatisfiedWithAmountDonatedLastYear.new]
+        [Onboarding::SatisfiedWithAmountDonatedLastYear.new(donor)]
       else
         []
       end

@@ -22,9 +22,13 @@
 #       end
 #     end
 class Question < Node
-  attr_reader :response
+  attr_reader :response, :donor
 
   include ActiveModel::Model
+
+  def initialize(donor)
+    @donor = donor
+  end
 
   # DSL method
   def self.message(m)

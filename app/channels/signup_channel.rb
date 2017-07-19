@@ -3,15 +3,15 @@ class SignupChannel < ApplicationCable::Channel
     stream_for current_donor
 
     steps = begin
-      Onboarding::AreYouReady.new <<
-      Onboarding::DidYouDonateLastYear.new <<
-      Onboarding::HowMuchShouldAnIndividualGive.new <<
-      Onboarding::DoYouKnowTheAverageContribution.new <<
-      Onboarding::HowMuchWillYouContribute.new <<
-      Onboarding::WhatIsYourPreTaxIncome.new <<
-      Onboarding::LocalOrGlobalImpact.new <<
-      Onboarding::ImmediateOrLongTerm.new <<
-      Onboarding::ComingSoon.new
+      Onboarding::AreYouReady.new(current_donor) <<
+      Onboarding::DidYouDonateLastYear.new(current_donor) <<
+      Onboarding::HowMuchShouldAnIndividualGive.new(current_donor) <<
+      Onboarding::DoYouKnowTheAverageContribution.new(current_donor) <<
+      Onboarding::HowMuchWillYouContribute.new(current_donor) <<
+      Onboarding::WhatIsYourPreTaxIncome.new(current_donor) <<
+      Onboarding::LocalOrGlobalImpact.new(current_donor) <<
+      Onboarding::ImmediateOrLongTerm.new(current_donor) <<
+      Onboarding::ComingSoon.new(current_donor)
       # Large vs Small charities
       # Cause areas
         #! We'll go through and choose causes that are important to you to add to your charity portfolio
