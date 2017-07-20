@@ -57,14 +57,12 @@ javascript:
     }
   });
 
-  $(document).on('keypress', '[data-behavior-auto-submit] input[type=text]', function(event) {
-    if (event.keyCode === 13) {
-      App.signup.respond(event.target.value);
-      return event.preventDefault();
-    }
+  $(document).on('submit', 'form[data-behavior-auto-submit]', function(event) {
+    event.preventDefault();
+    var response = this.elements['response'].value;
+    App.signup.respond(response);
   });
 
-  $(document).on('click', '[data-behavior-auto-submit] input[type=radio]', function(event) {
-    App.signup.respond(event.target.value);
-    return event.preventDefault();
+  $(document).on('change', '[data-behavior-auto-submit] input[type=radio]', function(event) {
+    $(event.target.form).trigger('submit');
   });
