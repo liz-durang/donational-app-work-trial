@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe PayOuts::ProcessPayOut do
+  include ActiveSupport::Testing::TimeHelpers
+
   context 'when the PayOut has already been processed' do
     let(:pay_out) { create(:pay_out, processed_at: 1.day.ago) }
 
@@ -21,7 +23,9 @@ RSpec.describe PayOuts::ProcessPayOut do
     end
 
     around do |spec|
-      Timecop.freeze { spec.run }
+      travel_to(Time.now) do
+        spec.run
+      end
     end
 
     it "sends a check to the organization and persists the processed at time" do
