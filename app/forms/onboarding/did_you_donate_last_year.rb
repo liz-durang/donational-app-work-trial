@@ -19,12 +19,16 @@ module Onboarding
     end
 
     def save
-      case response
-      when :yes
-        donor.update(donated_prior_year: true)
-      when :no
-        donor.update(donated_prior_year: false)
-      end
+      Donors::UpdateDonor.run!(
+        donor,
+        donated_prior_year:
+          case response
+          when :yes
+            true
+          when :no
+            false
+          end
+      )
     end
 
     def children

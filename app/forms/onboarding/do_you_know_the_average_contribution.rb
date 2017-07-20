@@ -8,8 +8,7 @@ module Onboarding
     allowed_response :no, 'Not at all!'
 
     def save
-      Rails.logger.info(response)
-      true
+      Donors::UpdateDonor.run!(donor, surprised_by_average_american_donation_rate: response)
     end
   end
 end

@@ -21,8 +21,7 @@ module Onboarding
     allowed_response 0.1, '10%'
 
     def save
-      Rails.logger.info(response)
-      true
+      Donors::UpdateDonor.run!(donor, donation_rate: response)
     end
   end
 end

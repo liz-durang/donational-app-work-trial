@@ -10,6 +10,7 @@ module Onboarding
     validates :response, presence: true, email: true
 
     def save
+      Donors::UpdateDonor.run!(donor, email: response)
       ComingSoonNotificationMailer.test(response.to_s).deliver_later
     end
 

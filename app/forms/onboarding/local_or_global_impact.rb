@@ -11,8 +11,26 @@ module Onboarding
     allowed_response :global, 'Global'
 
     def save
-      Rails.logger.info(response)
-      true
+      case response
+      when :local
+        Donors::UpdateDonor.run!(
+          donor,
+          include_local_organizations: true,
+          include_global_organizations: false
+        )
+      when :both
+        Donors::UpdateDonor.run!(
+          donor,
+          include_local_organizations: true,
+          include_global_organizations: true
+        )
+      when :global
+        Donors::UpdateDonor.run!(
+          donor,
+          include_local_organizations: false,
+          include_global_organizations: true
+        )
+      end
     end
   end
 end

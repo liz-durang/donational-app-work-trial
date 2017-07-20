@@ -8,7 +8,9 @@ RSpec.describe Onboarding::DidYouDonateLastYear, type: :model do
   describe '#process!' do
     context "when the response is 'yes'" do
       it "sets the Donor's #donated_prior_year to true" do
-        expect(donor).to receive(:update).with(donated_prior_year: true)
+        expect(Donors::UpdateDonor)
+          .to receive(:run!)
+          .with(donor, donated_prior_year: true)
 
         step.process!('yes')
       end
@@ -16,7 +18,9 @@ RSpec.describe Onboarding::DidYouDonateLastYear, type: :model do
 
     context "when the response is 'no'" do
       it "sets the Donor's #donated_prior_year to false" do
-        expect(donor).to receive(:update).with(donated_prior_year: false)
+        expect(Donors::UpdateDonor)
+          .to receive(:run!)
+          .with(donor, donated_prior_year: false)
 
         step.process!('no')
       end
@@ -30,7 +34,7 @@ RSpec.describe Onboarding::DidYouDonateLastYear, type: :model do
       end
 
       it "doesn't touch the Donor" do
-        expect(donor).not_to receive(:update)
+        expect(Donors::UpdateDonor).not_to receive(:run!)
 
         step.process!(true)
       end

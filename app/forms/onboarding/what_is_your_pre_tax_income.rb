@@ -8,9 +8,10 @@ module Onboarding
 
     response_type :currency
 
+    validates :response, numericality: { greater_than_or_equal_to: 0, only_integer: true }
+
     def save
-      Rails.logger.info(response)
-      true
+      Donors::UpdateDonor.run!(donor, annual_income_cents: response)
     end
   end
 end

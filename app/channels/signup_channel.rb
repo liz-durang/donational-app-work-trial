@@ -41,15 +41,14 @@ class SignupChannel < ApplicationCable::Channel
   end
 
   def respond(data)
-    step = @current_step
-
     Rails.logger.info(data['response'])
 
-    if step.process!(data['response'])
-      @current_step = @current_step.next_node
-      broadcast_step(step: @current_step, previous_step: step)
+    if @current_step.process!(data['response'])
+      next_step = @current_step.next_node
+      broadcast_step(step: next_step, previous_step: @current_step)
+      @current_step = next_step
     else
-      broadcast_step(step: step, previous_step: ErrorStep.new)
+      broadcast_step(step: @current_step, previous_step: ErrorStep.new)
     end
   end
 

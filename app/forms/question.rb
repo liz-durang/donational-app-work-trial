@@ -18,7 +18,7 @@
 #       end
 #
 #       def save
-#         Donor.update(year_of_birth: response)
+#         Donors::UpdateDonor.run!(donor, year_of_birth: response)
 #       end
 #     end
 class Question < Node
@@ -82,7 +82,7 @@ class Question < Node
                 when :float
                   raw_value.to_f
                 when :currency
-                  raw_value.gsub(/[^0-9\.]/, '').to_f
+                  (raw_value.gsub(/[^0-9\.-]/, '').to_f * 100).to_i
                 when :symbol
                   raw_value.to_s.to_sym
                 when :string
