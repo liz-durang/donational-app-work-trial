@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe PayIns::ProcessPayIn do
+  include ActiveSupport::Testing::TimeHelpers
+
   context 'when the PayIn has already been processed' do
     let(:pay_in) { create(:pay_in, processed_at: 1.day.ago) }
 
@@ -37,7 +39,9 @@ RSpec.describe PayIns::ProcessPayIn do
     end
 
     around do |spec|
-      Timecop.freeze { spec.run }
+      travel_to(Time.now) do
+        spec.run
+      end
     end
 
     it "withdraws the pay in amount from the donor's account" do
@@ -54,7 +58,7 @@ RSpec.describe PayIns::ProcessPayIn do
 
       pay_in.reload
       expect(pay_in.receipt).to eq payment_receipt_json
-      expect(pay_in.processed_at).to eq Time.zone.now
+      expect(pay_in.processed_at).to eq Time.zone.now.change(usec: 0)
     end
 
     it "creates donations based on the donor's allocations" do
