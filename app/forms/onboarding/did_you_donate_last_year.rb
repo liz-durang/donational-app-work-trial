@@ -1,4 +1,4 @@
-module Questions
+module Onboarding
   class DidYouDonateLastYear < MultipleChoiceQuestion
     message "Did you make any donations to charity within the last 12 months?"
 
@@ -19,14 +19,22 @@ module Questions
     end
 
     def save
-      Rails.logger.info(response)
-      true
+      Donors::UpdateDonor.run!(
+        donor,
+        donated_prior_year:
+          case response
+          when :yes
+            true
+          when :no
+            false
+          end
+      )
     end
 
     def children
       case response
       when :yes
-        [Questions::SatisfiedWithAmountDonatedLastYear.new]
+        [Onboarding::SatisfiedWithAmountDonatedLastYear.new(donor)]
       else
         []
       end

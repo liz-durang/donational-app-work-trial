@@ -1,4 +1,4 @@
-module Questions
+module Onboarding
   class WhatIsYourPreTaxIncome < Question
     message "By making regular contributions that are tied to your income"
     message "a) you can feel great knowing that you're always giving exactly as much as you believe you *ought* to give."
@@ -8,9 +8,10 @@ module Questions
 
     response_type :currency
 
+    validates :response, numericality: { greater_than_or_equal_to: 0, only_integer: true }
+
     def save
-      Rails.logger.info(response)
-      true
+      Donors::UpdateDonor.run!(donor, annual_income_cents: response)
     end
   end
 end

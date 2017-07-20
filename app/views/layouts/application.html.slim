@@ -6,19 +6,7 @@ html
     
   body
     = render 'shared/nav'
-    section.hero.is-primary.is-medium
-      .hero-body
-        .container.has-text-centered
-          h1.title.is-1 The deliberate way to donate
-          h2.subtitle Simple tools to guide you towards more effective giving.
-          br
-          p
-            a.button.is-outlined.is-white.is-medium> href='#learn-more'
-              span.icon.is-small: i.fa.fa-file-text-o
-              span Learn more
-            a.button.is-dark.is-medium href=dashboard_path
-              span Start donating more effectively
-              span.icon.is-small &rarr;
+    = yield :hero
 
     main = yield
       

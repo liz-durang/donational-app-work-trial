@@ -1,0 +1,30 @@
+.breadcrumbs {
+  list-style: none;
+  display: flex;
+}
+
+.breadcrumb-item {
+  align-items: center;
+  display: flex;
+  flex-grow: 0;
+  flex-shrink: 0;
+  font-size: 1rem;
+  justify-content: center;
+  line-height: 1.5;
+  padding: 0.5rem 0.75rem;
+  cursor: default;
+
+  &.is-active {
+    font-weight: 400;
+  }
+}
+
+.breadcrumb-item:after {
+  content: '>';
+  padding-left: 0.75rem;
+  margin-right: -0.75rem;
+}
+
+.breadcrumb-item:last-of-type:after {
+  display: none;
+}

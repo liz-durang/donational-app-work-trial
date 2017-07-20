@@ -1,4 +1,4 @@
-module Questions
+module Onboarding
   class AreYouReady < MultipleChoiceQuestion
     message "Hi!"
     message "You've just taken the first step to be more deliberate about how you donate to charity!!!"
@@ -9,7 +9,6 @@ module Questions
     allowed_response :of_course, 'Of course!'
 
     def save
-      Rails.logger.info(response)
       true
     end
   end

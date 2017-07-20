@@ -1,4 +1,4 @@
-module Questions
+module Onboarding
   class HowMuchWillYouContribute < MultipleChoiceQuestion
     message "With a single monthly donation, you'll ensure that you meet your own expectations about how much you should contribute to charity."
     message 'Your donation will be split up between the charities and cause areas that are important to you.'
@@ -21,8 +21,7 @@ module Questions
     allowed_response 0.1, '10%'
 
     def save
-      Rails.logger.info(response)
-      true
+      Donors::UpdateDonor.run!(donor, donation_rate: response)
     end
   end
 end

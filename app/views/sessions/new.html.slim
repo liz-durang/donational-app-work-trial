@@ -1,20 +1,16 @@
-.hero.is-primary
-  .hero-body
-    .container
-      .columns.is-vcentered
-        .column
-          h1.title Let's get started
-          p.subtitle All we need is your email address
-        .column
-          #auth0-login
-
-script src="https://cdn.auth0.com/js/lock-passwordless-2.2.min.js"
+section.section
+  #auth0-login
 
 javascript:
-  var lock = new Auth0LockPasswordless('#{ENV.fetch('AUTH0_CLIENT_ID')}', '#{ENV.fetch('AUTH0_DOMAIN')}');
-  lock.socialOrMagiclink({
-    authParams: { state: $('meta[name="state"]').attr('content') },
-    container: 'auth0-login',
-    callbackURL: '#{auth_oauth2_callback_url}',
-    connections: ['google-oauth2', 'facebook']
+  loadjs('https://cdn.auth0.com/js/lock-passwordless-2.2.min.js', {
+    success: function() {
+      var lock = new Auth0LockPasswordless('#{ENV.fetch('AUTH0_CLIENT_ID')}', '#{ENV.fetch('AUTH0_DOMAIN')}');
+
+      lock.socialOrMagiclink({
+        authParams: { state: $('meta[name="state"]').attr('content') },
+        container: 'auth0-login',
+        callbackURL: '#{auth_oauth2_callback_url}',
+        connections: ['google-oauth2', 'facebook']
+      });
+    }
   });

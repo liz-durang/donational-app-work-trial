@@ -1,19 +1,34 @@
 # A question in a conversational form
 #
 # Example:
-#     class WhatIsYourName < Question
+#     class HowOldAreYou < Question
 #       message 'Hi'
-#       message 'What is your name?'
+#       message 'What year were you born?'
+#
+#       response_type :integer
+#
+#       validates :response, numericality: { greater_than: 1900, less_than: Time.zone.now.year }
+#
+#       follow_up_message -> (response) do
+#         if repsonse > 1980
+#           "We <3 millenials!"
+#         else
+#           "#{response} was a good year!"
+#         end
+#       end
 #
 #       def save
-#         # do_some_pre_processing
-#         Donor.update(first_name: response)
+#         Donors::UpdateDonor.run!(donor, year_of_birth: response)
 #       end
 #     end
 class Question < Node
-  attr_reader :response
+  attr_reader :response, :donor
 
   include ActiveModel::Model
+
+  def initialize(donor)
+    @donor = donor
+  end
 
   # DSL method
   def self.message(m)
@@ -67,9 +82,11 @@ class Question < Node
                 when :float
                   raw_value.to_f
                 when :currency
-                  raw_value.gsub(/[^0-9\.]/, '').to_f
+                  (raw_value.gsub(/[^0-9\.-]/, '').to_f * 100).to_i
                 when :symbol
                   raw_value.to_s.to_sym
+                when :string
+                  raw_value.to_s
                 else
                   raw_value
                 end

@@ -1,4 +1,4 @@
-module Questions
+module Onboarding
   class LocalOrGlobalImpact < MultipleChoiceQuestion
     message 'Individuals in high-income countries have the ability to do an incredible amount of good.'
     message 'The decision to give globally or locally is personal, but has strong implications on the *effectiveness* of every dollar donated.'
@@ -11,8 +11,26 @@ module Questions
     allowed_response :global, 'Global'
 
     def save
-      Rails.logger.info(response)
-      true
+      case response
+      when :local
+        Donors::UpdateDonor.run!(
+          donor,
+          include_local_organizations: true,
+          include_global_organizations: false
+        )
+      when :both
+        Donors::UpdateDonor.run!(
+          donor,
+          include_local_organizations: true,
+          include_global_organizations: true
+        )
+      when :global
+        Donors::UpdateDonor.run!(
+          donor,
+          include_local_organizations: false,
+          include_global_organizations: true
+        )
+      end
     end
   end
 end

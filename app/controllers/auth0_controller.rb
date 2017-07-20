@@ -1,7 +1,6 @@
 class Auth0Controller < ApplicationController
   def callback
-    # This stores all the user information that came from Auth0 and the IdP
-    session[:userinfo] = request.env['omniauth.auth']
+    log_in! Donors::FindOrCreateDonorFromAuth.run!(request.env['omniauth.auth'])
 
     redirect_to dashboard_path
   end

@@ -1,4 +1,4 @@
-module Questions
+module Onboarding
   class HowMuchShouldAnIndividualGive < MultipleChoiceQuestion
     message "Being deliberate is about aligning our actions with what we actually believe. " +
       "We'll be exploring some questions to uncover what is important to you."
@@ -20,8 +20,7 @@ module Questions
     allowed_response 0.1, '10%'
 
     def save
-      Rails.logger.info(response)
-      true
+      Donors::UpdateDonor.run!(donor, donation_rate_expected_from_individuals: response)
     end
   end
 end
