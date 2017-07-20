@@ -15,6 +15,10 @@ test:
   <<: *default
   database: donate-deliberately-test
 
+staging:
+  <<: *default
+  database: donate-deliberately-staging
+
 production:
   <<: *default
   database: donate-deliberately
