@@ -21,6 +21,11 @@ javascript:
     disconnected: function() { },
 
     received: function(data) {
+      if(data.redirect_to) {
+        Turbolinks.visit(data.redirect_to);
+        return;
+      }
+      
       $('.chat-messages').html('<li><span class="chat-message typing"></span></li>');
 
       var cumulativeDelay = 0;
@@ -28,13 +33,13 @@ javascript:
       data.messages.forEach(function(message, index, messages) {
         var previousOrFirstMessage = (index == 0) ? message : messages[index - 1];
         // Take the average length of the current message and the previous message (to give the user time to read)
-        var readingDelay = 10 * (previousOrFirstMessage.length + message.length / 2);
+        var readingDelay = #{ENV.fetch('TYPING_SPEED', 10).to_i} * (previousOrFirstMessage.length + message.length / 2);
 
         setTimeout(
           function() {
             $('.typing').text(message).removeClass('typing');
             if (index == messages.length - 1) {
-              $('.chat-responses').html(data.possible_responses);
+              $('.chat-responses').html(data.responses);
               $('.chat-responses input:first-of-type').focus();
             } else {
               $('.chat-messages').append('<li><span class="chat-message typing"></span></li>');
