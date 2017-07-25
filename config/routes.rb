@@ -6,8 +6,9 @@ Rails.application.routes.draw do
   get '/auth/failure' => 'auth0#failure'
 
   get 'dashboard' => 'dashboard#show'
+  get 'subscription' => 'subscriptions#show'
 
   root 'welcome#index'
-  
+
   mount ActionCable.server => '/cable'
 end

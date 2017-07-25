@@ -7,6 +7,9 @@ class DashboardController < ApplicationController
 
   def ensure_current_donor!
     return if current_donor
-    log_in! Donor.create!
+
+    new_donor = Donors::Create.run!
+
+    log_in! new_donor
   end
 end

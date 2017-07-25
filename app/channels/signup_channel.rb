@@ -11,7 +11,7 @@ class SignupChannel < ApplicationCable::Channel
       Onboarding::WhatIsYourPreTaxIncome.new(current_donor) <<
       Onboarding::LocalOrGlobalImpact.new(current_donor) <<
       Onboarding::ImmediateOrLongTerm.new(current_donor) <<
-      Onboarding::ComingSoon.new(current_donor)
+      Onboarding::ComingSoon.new(current_donor) <<
       Onboarding::LastStep.new(current_donor)
       # Large vs Small charities
       # Cause areas
@@ -61,7 +61,10 @@ class SignupChannel < ApplicationCable::Channel
   private
 
   def broadcast_completion
-    self.class.broadcast_to(current_donor, redirect_to: '/onboarding')
+    self.class.broadcast_to(
+      current_donor,
+      redirect_to: Rails.application.routes.url_helpers.subscription_path
+    )
   end
 
   def broadcast_step(step: NullStep.new, previous_step: NullStep.new)

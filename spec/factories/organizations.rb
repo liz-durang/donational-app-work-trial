@@ -2,10 +2,14 @@
 #
 # Table name: organizations
 #
-#  ein        :string           not null, primary key
-#  name       :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  ein              :string           not null, primary key
+#  name             :string
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  local_impact     :boolean
+#  global_impact    :boolean
+#  immediate_impact :boolean
+#  long_term_impact :boolean
 #
 
 FactoryGirl.define do

@@ -22,7 +22,7 @@ javascript:
 
     received: function(data) {
       if(data.redirect_to) {
-        Turbolinks.visit(data.redirect_to);
+        window.location.href = data.redirect_to;
         return;
       }
       
@@ -57,8 +57,6 @@ javascript:
       $('.chat-responses').html('');
 
       this.perform('respond', { response: response });
-
-      return;
     }
   });
 

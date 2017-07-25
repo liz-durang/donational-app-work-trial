@@ -1,9 +1,5 @@
 module Subscriptions
-  class GetActiveSubscriptions
-    class << self
-      delegate :call, to: :new
-    end
-
+  class GetActiveSubscriptions < ApplicationQuery
     def initialize(relation = Subscription.all)
       @relation = relation
     end

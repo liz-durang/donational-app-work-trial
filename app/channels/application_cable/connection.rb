@@ -20,7 +20,7 @@ module ApplicationCable
     end
 
     def find_verified_donor
-      Donors::FindDonorById.run!(session[:donor_id])
+      Donors::GetDonorById.call(id: session[:donor_id])
     end
   end
 end
