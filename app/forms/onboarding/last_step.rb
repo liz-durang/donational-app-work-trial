@@ -5,11 +5,6 @@ module Onboarding
     allowed_response :create, 'Create my portfolio'
 
     def save
-      Subscriptions::CreateOrReplaceSubscription.run!(
-        donor: donor,
-        donation_rate: donor.donation_rate,
-        annual_income_cents: donor.annual_income_cents
-      )
       true
     end
   end

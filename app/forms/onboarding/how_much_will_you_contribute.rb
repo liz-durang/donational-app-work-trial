@@ -6,7 +6,7 @@ module Onboarding
     message "Now for a harder question..."
     message 'As a percentage of your pre-tax income, how much do YOU want to contribute?'
 
-    response_type :float
+    response_type :decimal
 
     allowed_response 0.005, '0.5%'
     allowed_response 0.01, '1%'

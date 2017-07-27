@@ -11,7 +11,7 @@ module Organizations
       orgs = orgs.where(global_impact: false) unless donor.include_global_organizations?
       orgs = orgs.where(immediate_impact: false) unless donor.include_immediate_impact_organizations?
       orgs = orgs.where(long_term_impact: false) unless donor.include_long_term_impact_organizations?
-      orgs.to_a
+      orgs
     end
   end
 end

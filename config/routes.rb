@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get '/auth/failure' => 'auth0#failure'
 
   get 'dashboard' => 'dashboard#show'
-  get 'subscription' => 'subscriptions#show'
+  resource :subscription
 
   root 'welcome#index'
 

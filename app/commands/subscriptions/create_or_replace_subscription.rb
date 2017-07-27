@@ -1,3 +1,5 @@
+require Rails.root.join('lib','mutations','decimal_filter')
+
 module Subscriptions
   class CreateOrReplaceSubscription < Mutations::Command
     required do
@@ -6,7 +8,7 @@ module Subscriptions
     end
 
     optional do
-      float :donation_rate, min: 0, max: 1
+      decimal :donation_rate, min: 0, max: 1
       integer :annual_income_cents, min: 0
     end
 

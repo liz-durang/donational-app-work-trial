@@ -79,10 +79,10 @@ class Question < Node
     @response = case response_type
                 when :integer
                   raw_value.to_i
-                when :float
-                  raw_value.to_f
+                when :decimal
+                  raw_value.to_d
                 when :currency
-                  (raw_value.gsub(/[^0-9\.-]/, '').to_f * 100).to_i
+                  (raw_value.gsub(/[^0-9\.-]/, '').to_d * 100).to_i
                 when :symbol
                   raw_value.to_s.to_sym
                 when :string
