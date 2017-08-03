@@ -1,5 +1,5 @@
 module Donors
-  class CreateDonor
+  class CreateAnonymousDonor
     def self.run!
       Donor.create!
     end
