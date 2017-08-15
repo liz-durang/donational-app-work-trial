@@ -40,6 +40,7 @@ gem 'jbuilder', '~> 2.5'
 
 group :development, :test do
   gem 'byebug', platform: :mri
+  gem 'pry'
   gem 'dotenv-rails'
   gem 'factory_girl_rails'
   gem 'rspec-rails'

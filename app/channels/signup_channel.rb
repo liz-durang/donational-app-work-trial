@@ -4,6 +4,7 @@ class SignupChannel < ApplicationCable::Channel
 
     steps = begin
       Onboarding::AreYouReady.new(current_donor) <<
+      Onboarding::PrimaryReason.new(current_donor) <<
       Onboarding::DidYouDonateLastYear.new(current_donor) <<
       Onboarding::HowMuchShouldAnIndividualGive.new(current_donor) <<
       Onboarding::DoYouKnowTheAverageContribution.new(current_donor) <<
@@ -42,9 +43,14 @@ class SignupChannel < ApplicationCable::Channel
   end
 
   def respond(data)
-    Rails.logger.info(data['response'])
+    Rails.logger.info(data)
 
-    if @current_step.process!(data['response'])
+    params = Rack::Utils.parse_nested_query(data['payload'])
+    response = params['response']
+
+    Rails.logger.info("Processing #{@current_step.class} with #{response}")
+
+    if @current_step.process!(response)
       next_step = @current_step.next_node
 
       if next_step
@@ -81,7 +87,7 @@ class SignupChannel < ApplicationCable::Channel
     return '' unless step
 
     ApplicationController.renderer.render(
-      partial: 'conversations/responses',
+      partial: "conversations/#{step.display_as}",
       locals: { step: step }
     )
   end

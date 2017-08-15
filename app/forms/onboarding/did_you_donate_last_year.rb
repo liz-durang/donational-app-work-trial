@@ -1,20 +1,18 @@
 module Onboarding
-  class DidYouDonateLastYear < MultipleChoiceQuestion
+  class DidYouDonateLastYear < QuickResponseStep
     message "Did you make any donations to charity within the last 12 months?"
 
     allowed_response :yes, 'Yes'
     allowed_response :no, 'No'
 
-    response_type :symbol
+    display_as :radio_buttons
 
     follow_up_message -> (response) do
       case response
       when :yes
         "That's great!"
       when :no
-        "That's okay, now is the perfect time to start. We'll help you select charities " +
-        "that do the most good, and decide on an amount to donate that fits in with your " +
-        "budget and financial plans."
+        "That's okay, now is the perfect time to start."
       end
     end
 

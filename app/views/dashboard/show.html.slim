@@ -10,7 +10,9 @@
         ol.chat-messages
 .hero-foot
   .container
-    .chat-responses.is-text-centered
+    .columns
+      .column.is-8.is-offset-2
+        .chat-responses
 
 javascript:
   App.signup = App.signup || App.cable.subscriptions.create('SignupChannel', {
@@ -31,9 +33,9 @@ javascript:
       var cumulativeDelay = 0;
 
       data.messages.forEach(function(message, index, messages) {
-        var previousOrFirstMessage = (index == 0) ? message : messages[index - 1];
+        const previousOrFirstMessage = (index == 0) ? message : messages[index - 1];
         // Take the average length of the current message and the previous message (to give the user time to read)
-        var readingDelay = #{ENV.fetch('TYPING_SPEED', 10).to_i} * (previousOrFirstMessage.length + message.length / 2);
+        const readingDelay = #{ENV.fetch('TYPING_SPEED', 10).to_i} * (previousOrFirstMessage.length + message.length / 2);
 
         setTimeout(
           function() {
@@ -52,18 +54,18 @@ javascript:
       });
     },
 
-    respond: function(response) {
+    respond: function(serializedFormData) {
       $('.chat-messages').html('');
       $('.chat-responses').html('');
 
-      this.perform('respond', { response: response });
+      this.perform('respond', { payload: serializedFormData });
     }
   });
 
   $(document).on('submit', 'form[data-behavior-auto-submit]', function(event) {
     event.preventDefault();
-    var response = this.elements['response'].value;
-    App.signup.respond(response);
+    const formData = $(this).serialize();
+    App.signup.respond(formData);
   });
 
   $(document).on('change', '[data-behavior-auto-submit] input[type=radio]', function(event) {
