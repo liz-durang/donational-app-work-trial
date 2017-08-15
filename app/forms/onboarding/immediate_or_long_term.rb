@@ -1,5 +1,5 @@
 module Onboarding
-  class ImmediateOrLongTerm < MultipleChoiceQuestion
+  class ImmediateOrLongTerm < QuickResponseStep
     message 'Some organizations focus on making an immediate impact.'
     message 'e.g. disaster relief, providing food and clean drinking water, life saving health interventions'
     message 'Other organizations focus on longer term research and policy change'
@@ -9,6 +9,8 @@ module Onboarding
     allowed_response :immediate, 'Immediate'
     allowed_response :both, 'Both (a mix of immediate and long-term impact)'
     allowed_response :long_term, 'Long-Term'
+
+    display_as :radio_buttons
 
     def save
       case response

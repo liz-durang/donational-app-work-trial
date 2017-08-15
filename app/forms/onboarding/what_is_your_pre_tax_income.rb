@@ -6,7 +6,7 @@ module Onboarding
     message "To calculate your monthly contribution, we'll need to know about how much you earn."
     message "What's your (pre-tax) annual income?"
 
-    response_type :currency
+    display_as :currency
 
     validates :response, numericality: { greater_than_or_equal_to: 0, only_integer: true }
 

@@ -1,9 +1,5 @@
 module Allocations
-  class GetActiveAllocations
-    class << self
-      delegate :call, to: :new
-    end
-
+  class GetActiveAllocations < ApplicationQuery
     def initialize(relation = Allocation.all)
       @relation = relation
     end

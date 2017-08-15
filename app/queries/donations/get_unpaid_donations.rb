@@ -1,9 +1,5 @@
 module Donations
-  class GetUnpaidDonations
-    class << self
-      delegate :call, to: :new
-    end
-
+  class GetUnpaidDonations < ApplicationQuery
     def initialize(relation = Donation.all)
       @relation = relation
     end

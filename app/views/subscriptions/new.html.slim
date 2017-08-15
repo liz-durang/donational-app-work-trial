@@ -1,0 +1,9 @@
+section.section
+  = form_with scope: 'allocations', url: subscription_path, action: :post, class: 'form' do |f|
+    - @allocations.each_with_index do |allocation, index|
+      .field
+        h3 = allocation.organization.name
+        = f.fields index.to_s, model: allocation do |allocation_field|
+          = allocation_field.text_field :organization_ein
+          = allocation_field.number_field :percentage
+    = f.submit class: 'button is-primary', value: 'Finish'

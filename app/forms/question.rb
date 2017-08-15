@@ -5,7 +5,7 @@
 #       message 'Hi'
 #       message 'What year were you born?'
 #
-#       response_type :integer
+#       display_as :integer
 #
 #       validates :response, numericality: { greater_than: 1900, less_than: Time.zone.now.year }
 #
@@ -69,22 +69,24 @@ class Question < Node
     end
   end
 
-  def self.response_type(type)
-    define_method :response_type do
+  def self.display_as(type)
+    define_method :display_as do
       type
     end
   end
 
   def response=(raw_value)
-    @response = case response_type
+    @response = case display_as
                 when :integer
                   raw_value.to_i
-                when :float
-                  raw_value.to_f
+                when :slider
+                  raw_value.to_d
                 when :currency
-                  (raw_value.gsub(/[^0-9\.-]/, '').to_f * 100).to_i
-                when :symbol
+                  (raw_value.gsub(/[^0-9\.-]/, '').to_d * 100).to_i
+                when :radio_buttons
                   raw_value.to_s.to_sym
+                when :checkboxes
+                  raw_value.map(&:to_sym)
                 when :string
                   raw_value.to_s
                 else

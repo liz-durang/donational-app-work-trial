@@ -6,7 +6,7 @@ module Onboarding
     message "If you'd like some one-on-one advice about your charitable giving plans, you can reach out to ian@donational.org"
     message "and to be kept up to date with our progress, let us know your email address below!"
 
-    response_type :email
+    display_as :email
     validates :response, presence: true, email: true
 
     def save

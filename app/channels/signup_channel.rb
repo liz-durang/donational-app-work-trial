@@ -4,6 +4,7 @@ class SignupChannel < ApplicationCable::Channel
 
     steps = begin
       Onboarding::AreYouReady.new(current_donor) <<
+      Onboarding::PrimaryReason.new(current_donor) <<
       Onboarding::DidYouDonateLastYear.new(current_donor) <<
       Onboarding::HowMuchShouldAnIndividualGive.new(current_donor) <<
       Onboarding::DoYouKnowTheAverageContribution.new(current_donor) <<
@@ -11,7 +12,8 @@ class SignupChannel < ApplicationCable::Channel
       Onboarding::WhatIsYourPreTaxIncome.new(current_donor) <<
       Onboarding::LocalOrGlobalImpact.new(current_donor) <<
       Onboarding::ImmediateOrLongTerm.new(current_donor) <<
-      Onboarding::ComingSoon.new(current_donor)
+      Onboarding::ComingSoon.new(current_donor) <<
+      Onboarding::LastStep.new(current_donor)
       # Large vs Small charities
       # Cause areas
         #! We'll go through and choose causes that are important to you to add to your charity portfolio
@@ -41,12 +43,22 @@ class SignupChannel < ApplicationCable::Channel
   end
 
   def respond(data)
-    Rails.logger.info(data['response'])
+    Rails.logger.info(data)
 
-    if @current_step.process!(data['response'])
+    params = Rack::Utils.parse_nested_query(data['payload'])
+    response = params['response']
+
+    Rails.logger.info("Processing #{@current_step.class} with #{response}")
+
+    if @current_step.process!(response)
       next_step = @current_step.next_node
-      broadcast_step(step: next_step, previous_step: @current_step)
-      @current_step = next_step
+
+      if next_step
+        broadcast_step(step: next_step, previous_step: @current_step)
+        @current_step = next_step
+      else
+        broadcast_completion
+      end
     else
       broadcast_step(step: @current_step, previous_step: ErrorStep.new)
     end
@@ -54,13 +66,20 @@ class SignupChannel < ApplicationCable::Channel
 
   private
 
+  def broadcast_completion
+    self.class.broadcast_to(
+      current_donor,
+      redirect_to: Rails.application.routes.url_helpers.new_subscription_path
+    )
+  end
+
   def broadcast_step(step: NullStep.new, previous_step: NullStep.new)
     messages = Array(previous_step.follow_up_message) + Array(step.errors) + step.messages
 
     self.class.broadcast_to(
       current_donor,
       messages: messages,
-      possible_responses: render_responses(step)
+      responses: render_responses(step)
     )
   end
 
@@ -68,7 +87,7 @@ class SignupChannel < ApplicationCable::Channel
     return '' unless step
 
     ApplicationController.renderer.render(
-      partial: 'conversations/responses',
+      partial: "conversations/#{step.display_as}",
       locals: { step: step }
     )
   end

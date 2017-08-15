@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   private
 
   def current_donor
-    @current_donor ||= Donors::FindDonorById.run!(session[:donor_id])
+    @current_donor ||= Donors::GetDonorById.call(id: session[:donor_id])
   end
 
   def log_out!

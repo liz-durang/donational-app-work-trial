@@ -1,0 +1,11 @@
+= form_for step.donor, url: '/', html: { "data-behavior-auto-submit" => true }
+    .field
+      - step.allowed_responses.each do |response|
+        .control
+          label for="response-#{response.to_param}"
+            input type='checkbox' name='response[]' value=response.value id="response-#{response.to_param}"
+            p = response.title
+            - if response.description
+              small = response.description
+    .field
+      button.button.is-medium.is-info.is-outlined type='submit' Next
