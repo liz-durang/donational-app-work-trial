@@ -43,3 +43,33 @@
     left: 0px;
   }
 }
+
+.checkbox-list {
+  list-style-type: none;
+  border-bottom: 1px solid #eee;
+
+  label {
+    padding: 1rem 0 1rem 3rem;
+    border-top: 1px solid #eee;
+    display: block;
+    position: relative;
+    transition: height 0.26s ease;
+  }
+
+  input[type=checkbox] {
+    margin: 0.25rem 0 0 -3rem;
+    position: absolute;
+  }
+
+  input:checked ~ .hide-when-unchecked {
+    display: block;
+  }
+  .hide-when-unchecked {
+    display: none;
+  }
+
+  small {
+    padding-top: 1rem;
+    color: #ddd;
+  }
+}
