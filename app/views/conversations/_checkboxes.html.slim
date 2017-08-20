@@ -1,12 +1,13 @@
 = form_for step.donor, url: '/', html: { "data-behavior-auto-submit" => true }
-    .field
-      ul.checkbox-list
-        - step.allowed_responses.each do |response|
-          li.control
-            label.checkbox for="response-#{response.to_param}"
-              input.checkbox type='checkbox' name='response[]' value=response.value id="response-#{response.to_param}"
-              = response.title
-              - if response.description
-                small.hide-when-unchecked = response.description
-    .field
-      button.button.is-medium.is-info.is-outlined type='submit' Next
+  .field
+    label.label Check all that apply:
+    ul.checkbox-list
+      - step.allowed_responses.each do |response|
+        li.control
+          label.checkbox for="response-#{response.to_param}"
+            input.checkbox type='checkbox' name='response[]' value=response.value id="response-#{response.to_param}"
+            = response.title
+            - if response.description
+              small.help.hide-when-unchecked = response.description
+  .field
+    button.button.is-medium.is-info.is-outlined type='submit' Next

@@ -1,28 +1,45 @@
 .chat-messages {
   list-style: none;
   padding: 0;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
 }
 
-.chat-responses {
-  padding-bottom: 1em;
-  padding-top: 1em;
+.hero.is-fullheight .hero-foot {
+  padding: 1rem 1.5rem;
 }
 
 .chat-message {
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
   background: #fafafa;
-  display: inline-block;
-  line-height: 1.45em;
+  align-self: flex-start;
   border-radius: 3px;
   margin: 0 0 1em 0;
   text-align: left;
   position: relative;
-  padding: 6px 12px;
-  font-size: 16px;
+  padding: 0.5rem 1rem;
   border: none;
   max-width: 90%;
-  min-width: 44px;
-  min-height: 12px;
+}
+
+.chat-message:not(.typing) span {
+  opacity: 0;
+  animation: fadeIn ease-in 1;
+  animation-fill-mode: forwards;
+  animation-duration: 500ms;
+}
+
+.appear-in {
+  opacity: 0;
+  animation: fadeIn ease-in 1;
+  animation-fill-mode: forwards;
+  animation-duration: 500ms;
+}
+
+@keyframes fadeIn {
+  from { opacity:0; }
+  to { opacity:1; }
 }
 
 .typing {
@@ -32,16 +49,15 @@
 
   &:before {
     content: '...';
-    color: #000;
+    animation: blink 4s infinite;
   }
-
-  &:after {
-    animation: loading 1s infinite;
-    color: rgba(255, 255, 255, 0.5);
-    content: '.';
-    position: absolute;
-    left: 0px;
-  }
+}
+@keyframes blink {
+  0% { color: inherit }
+  10% { color: inherit }
+  50% { color: transparent }
+  90% { color: inherit }
+  100% { color: inherit }
 }
 
 .checkbox-list {
@@ -53,7 +69,6 @@
     border-top: 1px solid #eee;
     display: block;
     position: relative;
-    transition: height 0.26s ease;
   }
 
   input[type=checkbox] {
@@ -70,6 +85,6 @@
 
   small {
     padding-top: 1rem;
-    color: #ddd;
+    color: #666;
   }
 }

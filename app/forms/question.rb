@@ -86,7 +86,7 @@ class Question < Node
                 when :radio_buttons
                   raw_value.to_s.to_sym
                 when :checkboxes
-                  raw_value.map(&:to_sym)
+                  Array(raw_value).map(&:to_sym)
                 when :string
                   raw_value.to_s
                 else

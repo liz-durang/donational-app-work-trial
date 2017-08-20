@@ -8,7 +8,6 @@ module Onboarding
       "We've consulted with experts to select charities that do the most with each dollar donated."
     allowed_response :give_what_i_should, 'I want to give the amount that I think I should (no more, no less!)'
     allowed_response :manage_donations, 'I want to manage all of my donations from one place (and make my life simpler at tax-time)'
-    allowed_response :lower_fees, 'I want to reduce the amount that charities spend on processing my donations'
 
     display_as :checkboxes
 
