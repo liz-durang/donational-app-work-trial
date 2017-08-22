@@ -18,7 +18,9 @@ RSpec.describe PayOuts::SchedulePayOut do
     let(:scheduled_at) { 1.day.from_now }
 
     let(:donations) { double(:donations) }
-    let(:pay_out) { instance_double(PayOut) }
+    let(:donation_1) { instance_double(Donation, update: true) }
+    let(:donation_2) { instance_double(Donation, update: true) }
+    let(:pay_out) { instance_double(PayOut, id: 'some_id') }
 
     before do
       allow(Donations::GetUnpaidDonations)
@@ -27,9 +29,13 @@ RSpec.describe PayOuts::SchedulePayOut do
         .and_return(donations)
 
       allow(donations)
-        .to receive(:sum)
-        .with(:amount_cents)
-        .and_return(543)
+       .to receive(:sum)
+       .with(:amount_cents)
+       .and_return(543)
+
+      allow(donations).to receive(:each).and_yield(donation_1).and_yield(donation_2)
+
+      allow(Donations::MarkDonationAsProcessed).to receive(:run!)
     end
 
     it 'creates a scheduled PayOut to the organization for any unpaid donations' do
@@ -37,8 +43,6 @@ RSpec.describe PayOuts::SchedulePayOut do
         .to receive(:create!)
         .with(organization: organization, amount_cents: 543, scheduled_at: scheduled_at)
         .and_return(pay_out)
-
-      allow(donations).to receive(:update_all)
 
       outcome = PayOuts::SchedulePayOut.run(organization: organization, scheduled_at: scheduled_at)
 
@@ -48,7 +52,12 @@ RSpec.describe PayOuts::SchedulePayOut do
     it 'marks the donations as paid by associating them with the pay_out' do
       allow(PayOut).to receive(:create!).and_return(pay_out)
 
-      expect(donations).to receive(:update_all).with(pay_out: pay_out)
+      expect(Donations::MarkDonationAsProcessed)
+        .to receive(:run!)
+        .with(donation: donation_1, processed_by: pay_out)
+      expect(Donations::MarkDonationAsProcessed)
+        .to receive(:run!)
+        .with(donation: donation_2, processed_by: pay_out)
 
       outcome = PayOuts::SchedulePayOut.run(organization: organization, scheduled_at: scheduled_at)
 

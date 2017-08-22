@@ -15,7 +15,9 @@ module PayOuts
           scheduled_at: scheduled_at
         )
 
-        unpaid_donations.update_all(pay_out: pay_out)
+        unpaid_donations.each do |donation|
+          Donations::MarkDonationAsProcessed.run!(donation: donation, processed_by: pay_out)
+        end
       end
 
       nil
