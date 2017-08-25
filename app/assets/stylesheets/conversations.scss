@@ -6,8 +6,8 @@
   flex-direction: column;
 }
 
-.hero.is-fullheight .hero-foot {
-  padding: 1rem 1.5rem;
+.chat-responses {
+  padding-top: 1rem;
 }
 
 .chat-message {
@@ -20,7 +20,7 @@
   position: relative;
   padding: 0.5rem 1rem;
   border: none;
-  max-width: 90%;
+  max-width: 30em;
 }
 
 .chat-message:not(.typing) span {

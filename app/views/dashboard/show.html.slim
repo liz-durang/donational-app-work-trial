@@ -1,21 +1,18 @@
 - content_for :breadcrumbs do
   = render 'breadcrumbs'
 
-.hero-body style='align-items: start;'
+section.section
   .container
     .columns
       .column.is-8.is-offset-2
-        h2.title Let's get started
+        h2.title#question-heading Loading&hellip;
 
         ol.chat-messages
-.hero-foot
-  .container
-    .columns
-      .column.is-8.is-offset-2
+        
         .chat-responses
 
 javascript:
-  App.signup = App.signup || App.cable.subscriptions.create('SignupChannel', {
+  App.signup = App.signup || App.cable.subscriptions.create('OnboardingChannel', {
     connected: function() {
       return this.perform('start');
     },
@@ -28,10 +25,12 @@ javascript:
         return;
       }
 
+      $('#question-heading').text(data.heading);
+      
       const chatMessages = $('.chat-messages');
 
       let cumulativeDelay = 0;
-      const readingSpeed = #{ENV.fetch('TYPING_SPEED', 10).to_i};
+      const readingSpeed = #{params['typing_speed'] || ENV.fetch('TYPING_SPEED', 10).to_i};
 
       data.messages.forEach(function(message, index, messages) {
         if (index > 0) {

@@ -1,6 +1,6 @@
 = form_for step.donor, url: '/', html: { "data-behavior-auto-submit" => true }
   .field
-    label.label Check all that apply:
+    label.label Select all that apply:
     ul.checkbox-list
       - step.allowed_responses.each do |response|
         li.control
