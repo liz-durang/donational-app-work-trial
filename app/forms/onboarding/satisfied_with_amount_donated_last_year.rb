@@ -1,5 +1,7 @@
 module Onboarding
   class SatisfiedWithAmountDonatedLastYear < QuickResponseStep
+    section "Your giving history"
+
     message 'Were you satisfied with how much you gave?'
 
     allowed_response :satisfied, 'Yes'

@@ -1,5 +1,7 @@
 module Onboarding
   class DidYouDonateLastYear < QuickResponseStep
+    section "Your giving history"
+
     message "Did you make any donations to charity within the last 12 months?"
 
     allowed_response :yes, 'Yes'

@@ -1,4 +1,4 @@
-class SignupChannel < ApplicationCable::Channel
+class OnboardingChannel < ApplicationCable::Channel
   def subscribed
     stream_for current_donor
 
@@ -6,14 +6,16 @@ class SignupChannel < ApplicationCable::Channel
       Onboarding::AreYouReady.new(current_donor) <<
       Onboarding::PrimaryReason.new(current_donor) <<
       Onboarding::DidYouDonateLastYear.new(current_donor) <<
-      Onboarding::HowMuchShouldAnIndividualGive.new(current_donor) <<
       Onboarding::DoYouKnowTheAverageContribution.new(current_donor) <<
-      Onboarding::HowMuchWillYouContribute.new(current_donor) <<
-      Onboarding::WhatIsYourPreTaxIncome.new(current_donor) <<
-      Onboarding::LocalOrGlobalImpact.new(current_donor) <<
+      Onboarding::SupportExtremePovertyAlleviation.new(current_donor) <<
+      Onboarding::SupportLifeSavingHealthInterventions.new(current_donor) <<
+      Onboarding::SupportAnimalSufferingPrevention.new(current_donor) <<
       Onboarding::ImmediateOrLongTerm.new(current_donor) <<
-      Onboarding::ComingSoon.new(current_donor) <<
-      Onboarding::LastStep.new(current_donor)
+      # Onboarding::LocalOrGlobalImpact.new(current_donor) <<
+      Onboarding::WhatIsYourEmail.new(current_donor)
+      # Onboarding::WhatIsYourPreTaxIncome.new(current_donor) <<
+      # Onboarding::HowMuchShouldAnIndividualGive.new(current_donor) <<
+      # Onboarding::HowMuchWillYouContribute.new(current_donor) <<
       # Large vs Small charities
       # Cause areas
         #! We'll go through and choose causes that are important to you to add to your charity portfolio
@@ -79,6 +81,7 @@ class SignupChannel < ApplicationCable::Channel
     self.class.broadcast_to(
       current_donor,
       messages: messages,
+      heading: step.heading,
       responses: render_responses(step)
     )
   end

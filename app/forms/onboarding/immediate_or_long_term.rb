@@ -1,14 +1,16 @@
 module Onboarding
   class ImmediateOrLongTerm < QuickResponseStep
-    message 'Some organizations focus on making an immediate impact.'
-    message 'e.g. disaster relief, providing food and clean drinking water, life saving health interventions'
-    message 'Other organizations focus on longer term research and policy change'
-    message 'e.g. cancer research, poverty awareness'
-    message 'For the charities that you support, would you prefer them to have an immediate or a long term impact?'
+    section 'Your values: Immediate vs Long-term'
 
-    allowed_response :immediate, 'Immediate'
-    allowed_response :both, 'Both (a mix of immediate and long-term impact)'
-    allowed_response :long_term, 'Long-Term'
+    message 'We have carefully selected charities that have a high impact. The lives of those who need it most *will* be changed through your contributions, but we need your help to choose when.'
+    message 'Some charities have an immediate impact, for example:'
+    message 'disaster relief, providing food and clean drinking water, or life saving health interventions'
+    message 'Other organizations focus on research and policy change, which if successful are likely to have a large impact in the long-term.'
+    message 'When it comes to your portfolio, how would you like to focus the impact?'
+
+    allowed_response :immediate, 'Immediate impact'
+    allowed_response :both, 'A mix of immediate and long-term impact'
+    allowed_response :long_term, 'Long-Term impact'
 
     display_as :radio_buttons
 

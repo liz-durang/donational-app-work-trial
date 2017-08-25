@@ -39,8 +39,8 @@ class Node
 
   def first_child
     children
-      .inject { |memo, next_child| memo.add_sibling << next_child }
-      .tap { |first_child| first_child.parent = self }
+      .tap { |children| children.first.parent = self }
+      .inject { |memo, next_child| memo.add_sibling! next_child }
   end
 
   def add_sibling!(node)
