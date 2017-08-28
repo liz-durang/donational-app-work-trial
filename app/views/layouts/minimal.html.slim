@@ -5,10 +5,8 @@ html
     = render 'shared/head'
 
   body
-    section.hero.is-fullheight
-      .hero-head
-        = render 'shared/minimal_nav'
+    = render 'shared/minimal_nav'
 
-      = yield
+    = yield
 
     = render 'shared/analytics'

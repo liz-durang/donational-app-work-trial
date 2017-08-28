@@ -1,0 +1,29 @@
+.card.is-full-height
+  header.card-header
+    .card-header-title = allocation.organization.name
+  .card-content
+    - if allocation.organization.local_impact?
+      p
+        => icon_tag('fa-street-view', size: 'small')
+        | Local Impact
+    - if allocation.organization.global_impact?
+      p
+        => icon_tag('fa-globe', size: 'small')
+        | Global Impact
+    - if allocation.organization.immediate_impact?
+      p
+        => icon_tag('fa-bolt', size: 'small')
+        | Immediate Impact
+    - if allocation.organization.long_term_impact?
+      p
+        => icon_tag('fa-flask', size: 'small')
+        | Long Term Impact
+  .card-footer
+      = form.hidden_field :organization_ein
+      .card-footer-item
+        | -
+      .card-footer-item
+        h3 = form.number_field :percentage
+        small %
+      .card-footer-item
+        | +

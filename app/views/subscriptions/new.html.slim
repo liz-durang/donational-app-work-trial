@@ -1,9 +1,15 @@
 section.section
+  .content
+    h4 We've selected a charity portfolio that matches your values
+    p 
+      | Every charity that we recommend has been vetted by experts.
+      ' These organizations have high impact,
+      ' are transparent about how they use donor contributions and
+      ' solve important and immediate world problems.
+
   = form_with scope: 'allocations', url: subscription_path, action: :post, class: 'form' do |f|
-    - @allocations.each_with_index do |allocation, index|
-      .field
-        h3 = allocation.organization.name
-        = f.fields index.to_s, model: allocation do |allocation_field|
-          = allocation_field.text_field :organization_ein
-          = allocation_field.number_field :percentage
+    .columns.is-multiline
+      - @allocations.each_with_index do |allocation, index|
+        = f.fields index.to_s, model: allocation do |allocation_form|
+          .column.is-4 = render 'allocations/card', allocation: allocation, form: allocation_form
     = f.submit class: 'button is-primary', value: 'Finish'

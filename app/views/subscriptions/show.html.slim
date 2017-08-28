@@ -1,33 +1,7 @@
 section.section
-  .columns
-    - @allocations.each do |a|
-      .column
-        .card
-          header.card-header
-            .card-header-title = a.organization.name
-          .card-content
-            - if a.organization.local_impact?
-              p
-                => icon_tag('fa-street-view', size: 'small')
-                | Local Impact
-            - if a.organization.global_impact?
-              p
-                => icon_tag('fa-globe', size: 'small')
-                | Global Impact
-            - if a.organization.immediate_impact?
-              p
-                => icon_tag('fa-bolt', size: 'small')
-                | Immediate Impact
-            - if a.organization.long_term_impact?
-              p
-                => icon_tag('fa-flask', size: 'small')
-                | Long Term Impact
-          .card-footer
-            .card-footer-item
-              | -
-            .card-footer-item
-              h3
-                = a.percentage
-              small %
-            .card-footer-item
-              | +
+  = form_with scope: 'allocations', url: subscription_path, action: :patch, class: 'form' do |f|
+    .columns.is-multiline
+      - @allocations.each_with_index do |allocation, index|
+        = f.fields index.to_s, model: allocation do |allocation_form|
+          .column.is-4 = render 'allocations/card', allocation: allocation, form: allocation_form
+    = f.submit class: 'button is-primary', value: 'Finish'

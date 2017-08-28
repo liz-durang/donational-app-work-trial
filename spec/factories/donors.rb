@@ -14,10 +14,10 @@
 #  satisfaction_with_prior_donation            :string
 #  donation_rate_expected_from_individuals     :decimal(, )
 #  surprised_by_average_american_donation_rate :string
-#  include_immediate_impact_organizations      :boolean
-#  include_long_term_impact_organizations      :boolean
-#  include_local_organizations                 :boolean
-#  include_global_organizations                :boolean
+#  include_immediate_impact_organizations      :boolean          default(TRUE)
+#  include_long_term_impact_organizations      :boolean          default(TRUE)
+#  include_local_organizations                 :boolean          default(TRUE)
+#  include_global_organizations                :boolean          default(TRUE)
 #
 
 FactoryGirl.define do

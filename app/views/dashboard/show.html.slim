@@ -1,21 +1,18 @@
 - content_for :breadcrumbs do
   = render 'breadcrumbs'
 
-.hero-body style='align-items: start;'
+section.section
   .container
     .columns
       .column.is-8.is-offset-2
-        h2.title Let's get started
+        h2.title#question-heading Loading&hellip;
 
         ol.chat-messages
-.hero-foot
-  .container
-    .columns
-      .column.is-8.is-offset-2
+        
         .chat-responses
 
 javascript:
-  App.signup = App.signup || App.cable.subscriptions.create('SignupChannel', {
+  App.signup = App.signup || App.cable.subscriptions.create('OnboardingChannel', {
     connected: function() {
       return this.perform('start');
     },
@@ -27,31 +24,38 @@ javascript:
         window.location.href = data.redirect_to;
         return;
       }
-      
-      $('.chat-messages').html('<li><span class="chat-message typing"></span></li>');
 
-      var cumulativeDelay = 0;
+      $('#question-heading').text(data.heading);
+      
+      const chatMessages = $('.chat-messages');
+
+      let cumulativeDelay = 0;
+      const readingSpeed = #{params['typing_speed'] || ENV.fetch('TYPING_SPEED', 10).to_i};
 
       data.messages.forEach(function(message, index, messages) {
-        const previousOrFirstMessage = (index == 0) ? message : messages[index - 1];
-        // Take the average length of the current message and the previous message (to give the user time to read)
-        const readingDelay = #{ENV.fetch('TYPING_SPEED', 10).to_i} * (previousOrFirstMessage.length + message.length / 2);
+        if (index > 0) {
+          // Give the user time to read the previous message
+          cumulativeDelay += readingSpeed * (messages[index - 1].length);
+        }
 
-        setTimeout(
-          function() {
-            $('.typing').text(message).removeClass('typing');
-            if (index == messages.length - 1) {
-              $('.chat-responses').html(data.responses);
-              $('.chat-responses input:first-of-type').focus();
-            } else {
-              $('.chat-messages').append('<li><span class="chat-message typing"></span></li>');
-            }
-          },
-          cumulativeDelay + readingDelay
-        );
+        let pendingMessage = $('<li class="chat-message typing appear-in"></li>')
+          .css({ 'animation-delay': cumulativeDelay + 'ms'})
+          .appendTo(chatMessages);
 
-        cumulativeDelay += readingDelay;
+        let messageText = $('<span>').text(message).appendTo(pendingMessage);
+
+        // Give the user time to read the current message
+        cumulativeDelay += readingSpeed * message.length;
+
+        setTimeout(function() { pendingMessage.removeClass('typing'); }, cumulativeDelay);
       });
+
+      $(data.responses)
+        .css({ 'animation-delay': cumulativeDelay + 500 + 'ms'})
+        .addClass('appear-in')
+        .appendTo('.chat-responses')
+        .find('input:first-of-type')
+        .focus();
     },
 
     respond: function(serializedFormData) {

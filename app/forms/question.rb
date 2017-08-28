@@ -30,7 +30,18 @@ class Question < Node
     @donor = donor
   end
 
-  # DSL method
+  def self.section(text)
+    @heading = text
+  end
+
+  def self.heading
+    @heading
+  end
+
+  def heading
+    self.class.heading
+  end
+
   def self.message(m)
     @messages ||= []
     @messages << m
@@ -86,7 +97,7 @@ class Question < Node
                 when :radio_buttons
                   raw_value.to_s.to_sym
                 when :checkboxes
-                  raw_value.map(&:to_sym)
+                  Array(raw_value).map(&:to_sym)
                 when :string
                   raw_value.to_s
                 else

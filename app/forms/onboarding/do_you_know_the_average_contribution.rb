@@ -1,5 +1,7 @@
 module Onboarding
   class DoYouKnowTheAverageContribution < QuickResponseStep
+    section 'Your giving history'
+
     message 'Did you know that the average American gives 2.8% of their pretax annual income to charity?'
     message 'Does that surprise you?'
 
@@ -11,6 +13,10 @@ module Onboarding
 
     def save
       Donors::UpdateDonor.run!(donor, surprised_by_average_american_donation_rate: response)
+    end
+
+    def follow_up_message
+      'Our aim is to make sure that your whatever you give, it is directed toward organizations that have the most impact.'
     end
   end
 end
