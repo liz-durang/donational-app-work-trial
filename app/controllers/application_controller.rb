@@ -21,4 +21,8 @@ class ApplicationController < ActionController::Base
   def logged_in?
     current_donor.present? && current_donor.account_holder?
   end
+
+  def not_found
+    raise ActionController::RoutingError.new('Not found')
+  end
 end
