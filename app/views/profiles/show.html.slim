@@ -1,5 +1,150 @@
 section.section
-  .content
-    h1
-      = @profile.name
-      | 's Values
+  .container
+    .columns
+      .column.is-8
+        h1.title
+          = @profile.name
+          | 's Portfolio of Giving
+    .columns
+      .column.is-8
+        .content
+          img src="https://via.placeholder.com/600x300" width="100%"
+      .column.is-3.is-offset-1
+        .content
+          h3.subtitle
+            ' Support this portfolio
+          p
+            ' Be one of
+            = @profile.first_name
+            ' 's top backers by donating towards the charities in this portfolio.
+          progress.progress.is-primary.is-marginless value="30" max="100" 30%
+          p
+            small
+              strong> 3 backers
+              ' have already shown their support for
+              = @profile.first_name
+              | 's values
+              
+              
+          a.button.is-primary.action.modal-button.is-fullwidth.is-medium data-target="payment"
+            | Donate to Ian's portfolio
+          p.help.has-text-centered
+            ' No fees! Every dollar you donate goes to the charities in
+            = @profile.first_name
+            | 's portfolio
+
+/ main
+  / .tabs.is-centered.is-boxed.is-sticky.is-medium
+  /   ul
+  /     li.is-active data-target='causes'
+  /       a My Cause Areas
+  /     li data-target='charities'
+  /       a Charities in my portfolio
+  / section.section
+    / .container
+section.hero.is-light
+  .hero-body
+    .container
+      #causes
+        h3.title.is-spaced My cause areas
+        p.subtitle These are my priorities for how I am making an impact on the world.
+        .carousel data-flickity='{ "cellAlign": "left" }' style='margin: 0 -1rem 3rem'
+          - 6.times do
+            .carousel-cell style='width: 25rem; padding: 1rem; max-width: 100%'
+              .card
+                .card-content
+                  p.subtitle Global Poverty Eradication
+                  p
+                    ' Makes direct cash transfers to people living below the poverty line in Kenya, Uganda and Rwanda.
+                    | Independently verified studies have demonstrated that this is amongst the most efficient ways to improve lives and lift families out of extreme poverty.
+        p.has-text-centered: small Donational helps you find cause areas that you are passionate about, creating a portfolio of high impact charities
+
+section.hero
+  .hero-body
+    .container
+      #charities
+        h3.title Charities in my portfolio
+        p.subtitle
+          ' All of the charities in my portfolio make real impact in cause areas that are important to me.
+        .carousel data-flickity='{ "cellAlign": "left" }' style='margin: 0 -1rem 3rem'
+          - 6.times do
+            .carousel-cell style='width: 25rem; padding: 1rem; max-width: 100%'
+              .card
+                .card-content
+                  p.subtitle GiveDirectly
+                  p
+                    ' GiveDirectly makes direct cash transfers to people living below the poverty line in Kenya, Uganda and Rwanda.
+                    | Independently verified studies have demonstrated that this is amongst the most efficient ways to improve lives and lift families out of extreme poverty.
+                footer.card-footer
+                  .card-footer-item
+                    .tags.has-addons
+                      .tag.is-info Poverty Eradication
+                  .card-footer-item
+                    .tag.is-light Recommended by GiveWell.org
+        p.has-text-centered: small
+          ' The charities in my portfolio have been 
+          strong vetted by industry experts
+          ' , are
+          strong> transparent
+          ' about their financials, and rate amonst the
+          strong> most efficient
+          ' organizations for
+          strong> improving
+          ' and for 
+          strong saving lives.
+
+hr
+
+section.section
+  .container
+
+section.hero
+  .container
+    h1.title Get involved
+    .columns
+      .column
+        p Become a supporter
+      .is-divider-vertical data-content="OR" 
+      .column.has-text-right
+        p Create and share your own portfolio
+    
+section.hero.is-light
+  .hero-body
+    .container
+      p.title New to donational?
+      p.subtitle We'll help you setup a portfolio of charities that have been vetted by experts to have high impact.
+      .columns
+        .column
+          h3 1. Identify your values
+          p We help you identify which causes are important to you
+        .column
+          h3 2. Choose from expert recommended charities
+          p We recommend a portfolio of high impact, transparent and efficient charities that align with your values
+        .column 
+          h3 3. Donate efficiently
+          p 
+            ' Your monthly donation is distributed to your charities, making use of  smart features like donation pooling to
+            | ensure that charities spend more on making an impact, and less on fundraising and processing donations.
+        .column
+          h3 4. Encourage others
+          p
+            ' Boost your impact by asking others to make a contribution to your portfolio,
+            | or to be more deliberate in their own giving, by creating a portfolio of their own
+          
+section.hero.is-primary
+  .hero-body
+    .container
+      .columns.is-vcentered
+        .column.is-half
+          p.title.is-spaced Want your own portfolio?
+          p.subtitle
+            strong> = @profile.name 
+            ' created this portfolio to be more deliberate aligning one's giving with one's values.
+            | Start a portfolio today to align your giving with causes that you care about.
+        .column.is-half.has-text-centered
+          p: a.button.is-white.is-outlined.is-medium Start your own charity porfolio!
+#payment.modal
+  .modal-background
+  .modal-content
+    = render 'donation_form'
+  .modal-close.is-large aria-label="close"

@@ -5,7 +5,8 @@ class ProfilesController < ApplicationController
     not_found unless donor
 
     @profile = OpenStruct.new(
-      name: donor.first_name,
+      name: donor.name,
+      first_name: donor.first_name,
       video_url: "/path_to_video/#{donor.name.parameterize}"
     )
   end
