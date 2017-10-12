@@ -13,10 +13,6 @@ section.section
         .content
           h3.subtitle
             ' Support this portfolio
-          p
-            ' Be one of
-            = @profile.first_name
-            ' 's top backers by donating towards the charities in this portfolio.
           progress.progress.is-primary.is-marginless value="30" max="100" 30%
           p
             small
@@ -24,15 +20,16 @@ section.section
               ' have already shown their support for
               = @profile.first_name
               | 's values
-              
-              
-          a.button.is-primary.action.modal-button.is-fullwidth.is-medium data-target="payment"
-            | Donate to Ian's portfolio
-          p.help.has-text-centered
-            ' No fees! Every dollar you donate goes to the charities in
+          p
+            ' Be one of
             = @profile.first_name
-            | 's portfolio
-
+            ' 's top backers by donating towards the charities in this portfolio.    
+          p
+            | Every dollar you donate goes directly to the charities in the portfolio
+          p: a.button.is-primary.action.modal-button.is-fullwidth.is-medium data-target="payment"
+              | Donate to Ian's portfolio
+          p: a.button.is-light.is-fullwidth I have other values, I want my own portfolio!
+hr
 / main
   / .tabs.is-centered.is-boxed.is-sticky.is-medium
   /   ul
@@ -42,58 +39,66 @@ section.section
   /       a Charities in my portfolio
   / section.section
     / .container
+section.hero
+  .hero-body
+    .container
+      #causes.columns.is-vcentered
+        .column.is-4
+          h3.title.is-spaced My cause areas
+          p.subtitle These are my priorities for how I am making an impact on the world.
+        .column.is-8
+          .carousel data-flickity='{ "cellAlign": "left" }' style='margin: 0 -1rem 1rem'
+            - 6.times do
+              .carousel-cell style='width: 25rem; padding: 1rem; max-width: 100%'
+                .card
+                  .card-content
+                    p.subtitle Global Poverty Eradication
+                    p
+                      ' Makes direct cash transfers to people living below the poverty line in Kenya, Uganda and Rwanda.
+                      | Independently verified studies have demonstrated that this is amongst the most efficient ways to improve lives and lift families out of extreme poverty.
 section.hero.is-light
   .hero-body
     .container
-      #causes
-        h3.title.is-spaced My cause areas
-        p.subtitle These are my priorities for how I am making an impact on the world.
-        .carousel data-flickity='{ "cellAlign": "left" }' style='margin: 0 -1rem 3rem'
-          - 6.times do
-            .carousel-cell style='width: 25rem; padding: 1rem; max-width: 100%'
-              .card
-                .card-content
-                  p.subtitle Global Poverty Eradication
-                  p
-                    ' Makes direct cash transfers to people living below the poverty line in Kenya, Uganda and Rwanda.
-                    | Independently verified studies have demonstrated that this is amongst the most efficient ways to improve lives and lift families out of extreme poverty.
-        p.has-text-centered: small Donational helps you find cause areas that you are passionate about, creating a portfolio of high impact charities
+      p.subtitle Donational helps you find cause areas that you are passionate about, creating a portfolio of high impact charities
 
 section.hero
   .hero-body
     .container
-      #charities
-        h3.title Charities in my portfolio
-        p.subtitle
-          ' All of the charities in my portfolio make real impact in cause areas that are important to me.
-        .carousel data-flickity='{ "cellAlign": "left" }' style='margin: 0 -1rem 3rem'
-          - 6.times do
-            .carousel-cell style='width: 25rem; padding: 1rem; max-width: 100%'
-              .card
-                .card-content
-                  p.subtitle GiveDirectly
-                  p
-                    ' GiveDirectly makes direct cash transfers to people living below the poverty line in Kenya, Uganda and Rwanda.
-                    | Independently verified studies have demonstrated that this is amongst the most efficient ways to improve lives and lift families out of extreme poverty.
-                footer.card-footer
-                  .card-footer-item
-                    .tags.has-addons
-                      .tag.is-info Poverty Eradication
-                  .card-footer-item
-                    .tag.is-light Recommended by GiveWell.org
-        p.has-text-centered: small
-          ' The charities in my portfolio have been 
-          strong vetted by industry experts
-          ' , are
-          strong> transparent
-          ' about their financials, and rate amonst the
-          strong> most efficient
-          ' organizations for
-          strong> improving
-          ' and for 
-          strong saving lives.
-
-hr
+      #charities.columns.is-vcentered
+        .column.is-4
+          h3.title.is-spaced Charities in my portfolio
+          p.subtitle
+            ' All of the charities in my portfolio make real impact in cause areas that are important to me.
+        .column.is-8
+          .carousel data-flickity='{ "cellAlign": "left" }' style='margin: 0 -1rem 1rem'
+            - 6.times do
+              .carousel-cell style='width: 25rem; padding: 1rem; max-width: 100%'
+                .card
+                  .card-content
+                    p.subtitle GiveDirectly
+                    p
+                      ' GiveDirectly makes direct cash transfers to people living below the poverty line in Kenya, Uganda and Rwanda.
+                      | Independently verified studies have demonstrated that this is amongst the most efficient ways to improve lives and lift families out of extreme poverty.
+                  footer.card-footer
+                    .card-footer-item
+                      .tags.has-addons
+                        .tag.is-info Poverty Eradication
+                    .card-footer-item
+                      .tag.is-light Recommended by GiveWell.org
+section.hero.is-light
+  .hero-body
+    .container
+      p.subtitle
+        ' The charities in my portfolio have been 
+        strong vetted by industry experts
+        ' , are
+        strong> transparent
+        ' about their financials, and rate amonst the
+        strong> most efficient
+        ' organizations for
+        strong> improving
+        ' and for 
+        strong saving lives.
 
 section.section
   .container
@@ -108,7 +113,7 @@ section.hero
       .column.has-text-right
         p Create and share your own portfolio
     
-section.hero.is-light
+section.hero.is-dark
   .hero-body
     .container
       p.title New to donational?
