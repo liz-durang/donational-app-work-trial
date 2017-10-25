@@ -32,19 +32,27 @@ form#panda_cc_form.form
           input.input type="text" data-panda="cvv" placeholder="CVV" size=4
           span.icon.is-left.is-small: i.fa.fa-lock
 
-    .field
-      label.label Email
-      .control.has-icons-left
-        input.input id="email" type="email" value="ian+test@donational.org"
-        span.icon.is-left.is-small: i.fa.fa-envelope
-      p.help This is where we'll send your tax-deductible receipt
+    .field.columns
+      .column.is-8
+        .field
+          label.label Email
+          .control.has-icons-left.is-expanded
+            input.input id="email" type="email" value="ian+test@donational.org"
+            span.icon.is-left.is-small: i.fa.fa-envelope
+          p.help This is where we'll send your tax-deductible receipt
 
-    #tokenize.field.has-addons.is-large
-      .control.has-icons-left
-        input.input#amount type="number" value="5" size=5
-        span.icon.is-left: i.fa.fa-dollar
+      .column.is-4
+        .field
+          label.label Donation amount
+          #tokenize.control.has-icons-left
+            input.input#amount type="number" value="5"
+            span.icon.is-left: i.fa.fa-dollar
+          p.help
+            | Every dollar you donate goes directly to the charities in the portfolio
+          
+    .field
       .control
-        button.button.is-primary type="submit" Donate
+        button.button.is-large.is-primary type="submit" Donate
 
 javascript:
 	new Card({

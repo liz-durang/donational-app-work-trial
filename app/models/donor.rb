@@ -18,6 +18,7 @@
 #  include_long_term_impact_organizations      :boolean          default(TRUE)
 #  include_local_organizations                 :boolean          default(TRUE)
 #  include_global_organizations                :boolean          default(TRUE)
+#  username                                    :string
 #
 
 class Donor < ApplicationRecord

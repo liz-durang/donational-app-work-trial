@@ -1,3 +1,4 @@
+- cause_areas = @profile.cause_areas
 section.section
   .container
     .columns
@@ -9,6 +10,30 @@ section.section
       .column.is-8
         .content
           img src="https://via.placeholder.com/600x300" width="100%"
+          blockquote
+            p.subtitle 
+              | &ldquo;
+              ' I pledge to support high-impact charities, that are making a real difference to save and improve lives.
+              ' I make sure that my donations are to charities that align with my values, in cause areas that matter to me:
+              small = cause_areas.map { |c| link_to(c.title, anchor: c.id) }.join(', ').html_safe
+              | &rdquo;
+            / p 
+            /   ' I ask you to
+            /   a.modal-button> data-target="payment" support my values
+            /   ' or
+            /   a> href="#" create a charity portfolio with yours
+            
+            / to The charities in my portfolio have been 
+            / strong vetted by industry experts
+            / ' , are
+            / strong> transparent
+            / ' about their financials, and rate amonst the
+            / strong> most efficient
+            / ' organizations for
+            / strong> improving
+            / ' and for 
+            / strong saving lives.
+
       .column.is-3.is-offset-1
         .content
           h3.subtitle
@@ -24,94 +49,81 @@ section.section
             ' Be one of
             = @profile.first_name
             ' 's top backers by donating towards the charities in this portfolio.    
-          p
-            | Every dollar you donate goes directly to the charities in the portfolio
-          p: a.button.is-primary.action.modal-button.is-fullwidth.is-medium data-target="payment"
-              | Donate to Ian's portfolio
-          p: a.button.is-light.is-fullwidth I have other values, I want my own portfolio!
-hr
-/ main
-  / .tabs.is-centered.is-boxed.is-sticky.is-medium
-  /   ul
-  /     li.is-active data-target='causes'
-  /       a My Cause Areas
-  /     li data-target='charities'
-  /       a Charities in my portfolio
-  / section.section
-    / .container
-section.hero
-  .hero-body
+          p.has-text-centered
+            a.button.is-primary.action.modal-button.is-fullwidth.is-medium data-target="payment"
+              ' Donate to
+              = @profile.first_name
+              ' 's portfolio
+            | or
+            br
+            a Build a portfolio with my values!
+  
+- cause_areas.each do |cause_area|
+  section.section id=cause_area.id
     .container
-      #causes.columns.is-vcentered
-        .column.is-4
-          h3.title.is-spaced My cause areas
-          p.subtitle These are my priorities for how I am making an impact on the world.
-        .column.is-8
-          .carousel data-flickity='{ "cellAlign": "left" }' style='margin: 0 -1rem 1rem'
-            - 6.times do
-              .carousel-cell style='width: 25rem; padding: 1rem; max-width: 100%'
+      h3.title.is-spaced = cause_area.title
+      .columns
+        .column.is-6.has-text-left
+          p.subtitle = cause_area.description
+        
+          p: small
+            = @profile.first_name
+            ' 's portfolio contains
+            => pluralize(cause_area.organizations.count, 'high impact charity')
+            | in this cause area
+          / .carousel data-flickity='{ "contain": true }' style='margin: 0 0 1rem; padding: 0 3rem'
+        .column.is-6
+            
+          / - cause_area.organizations.each do |organization|
+          /   nav.panel data-behavior="accordion"
+          /     a.panel-block data-target="organization_#{organization.id}"
+          /       span.panel-icon: i.fa.fa-book
+          /       = organization.name
+          /     .panel-block.is-hidden id="organization_#{organization.id}"
+          /       .content
+          /         p = organization.description
+          /         p
+          /           - if organization.immediate_impact?
+          /             .tag.is-info> Direct and immediate impact
+          /           - if organization.long_term_impact?
+          /             .tag.is-warning> Research, policy and advocacy
+          /           .tag.is-light Recommended by GiveWell.org
+                / .carousel data-flickity='{ "contain": true }' style='margin: 0 0 1rem; padding: 0 3rem'
+          div data-behavior="accordion"
+            - cause_area.organizations.each do |organization|
+              .carousel-cell style='width: 100%; padding: 1px 1rem 4px;'
                 .card
-                  .card-content
-                    p.subtitle Global Poverty Eradication
-                    p
-                      ' Makes direct cash transfers to people living below the poverty line in Kenya, Uganda and Rwanda.
-                      | Independently verified studies have demonstrated that this is amongst the most efficient ways to improve lives and lift families out of extreme poverty.
+                  header.card-header data-target="organization_#{organization.id}"
+                    .card-header-icon
+                      span.icon
+                        i.fa.fa-book
+                    p.card-header-title = organization.name
+                    a.card-header-icon
+                      span.icon
+                        i.fa.fa-angle-down
+                  .card-content.is-hidden id="organization_#{organization.id}"
+                    .content
+                      p = organization.description
+                      p
+                        - if organization.immediate_impact?
+                          .tag.is-info> Direct and immediate impact
+                        - if organization.long_term_impact?
+                          .tag.is-warning> Research, policy and advocacy
+                        .tag.is-light Recommended by GiveWell.org
 section.hero.is-light
   .hero-body
     .container
       p.subtitle Donational helps you find cause areas that you are passionate about, creating a portfolio of high impact charities
 
-section.hero
-  .hero-body
-    .container
-      #charities.columns.is-vcentered
-        .column.is-4
-          h3.title.is-spaced Charities in my portfolio
-          p.subtitle
-            ' All of the charities in my portfolio make real impact in cause areas that are important to me.
-        .column.is-8
-          .carousel data-flickity='{ "cellAlign": "left" }' style='margin: 0 -1rem 1rem'
-            - 6.times do
-              .carousel-cell style='width: 25rem; padding: 1rem; max-width: 100%'
-                .card
-                  .card-content
-                    p.subtitle GiveDirectly
-                    p
-                      ' GiveDirectly makes direct cash transfers to people living below the poverty line in Kenya, Uganda and Rwanda.
-                      | Independently verified studies have demonstrated that this is amongst the most efficient ways to improve lives and lift families out of extreme poverty.
-                  footer.card-footer
-                    .card-footer-item
-                      .tags.has-addons
-                        .tag.is-info Poverty Eradication
-                    .card-footer-item
-                      .tag.is-light Recommended by GiveWell.org
-section.hero.is-light
-  .hero-body
-    .container
-      p.subtitle
-        ' The charities in my portfolio have been 
-        strong vetted by industry experts
-        ' , are
-        strong> transparent
-        ' about their financials, and rate amonst the
-        strong> most efficient
-        ' organizations for
-        strong> improving
-        ' and for 
-        strong saving lives.
-
-section.section
-  .container
-
-section.hero
-  .container
-    h1.title Get involved
-    .columns
-      .column
-        p Become a supporter
-      .is-divider-vertical data-content="OR" 
-      .column.has-text-right
-        p Create and share your own portfolio
+/ section.hero
+/   .container
+/     h1.title Get involved
+/     .columns
+/       .column
+/         p Become a supporter
+/       .is-divider-vertical data-content="OR" 
+/       .column.has-text-right
+/         p Create and share your own portfolio
     
 section.hero.is-dark
   .hero-body

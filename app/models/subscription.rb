@@ -12,7 +12,7 @@
 #  updated_at          :datetime         not null
 #
 
-# The recurring contribution from a donor
+# A donor's portfolio of charities
 #
 # Note:
 #   Subscriptions are never updated nor destroyed when the donation rate or amount changes.
