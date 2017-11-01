@@ -56,3 +56,11 @@ en:
       title: Cyber Security
       description: |
         Globally, 783 million people do not have access to clean water, and 2.5 billion people have no water-based sanitation resources such as toilets or clean bathing facilities. A lack of clean water isn’t just an inconvenience; for millions around the world, it’s fatal. Each year, between 6 to 8 million people die from drinking contaminated water and from other water-related hygiene issues.
+    climate_and_environment:
+      title: Climate and the Environment
+      description: |
+        Globally, 783 million people do not have access to clean water, and 2.5 billion people have no water-based sanitation resources such as toilets or clean bathing facilities. A lack of clean water isn’t just an inconvenience; for millions around the world, it’s fatal. Each year, between 6 to 8 million people die from drinking contaminated water and from other water-related hygiene issues.
+    us_tax_policy:
+      title: US Tax Policy
+      description: |
+        Globally, 783 million people do not have access to clean water, and 2.5 billion people have no water-based sanitation resources such as toilets or clean bathing facilities. A lack of clean water isn’t just an inconvenience; for millions around the world, it’s fatal. Each year, between 6 to 8 million people die from drinking contaminated water and from other water-related hygiene issues.
