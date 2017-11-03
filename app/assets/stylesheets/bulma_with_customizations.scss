@@ -6,10 +6,11 @@ $family-sans-serif: "Source Sans Pro", Helvetica, Arial, sans-serif;
 $family-serif: 'Lora', serif;
 $family-primary: $family-sans-serif;
 
-$primary: #84bdf6;
+$primary: #8600ED;
 $primary-invert: white;
 
 $control-radius: 0px;
+
 // Bulma
 @import "bulma";
 
@@ -27,3 +28,14 @@ h1, h2, h3, h4, h5, h6, .title {
   font-family: 'Raleway', $family-sans-serif;
   font-weight: 300;
 }
+
+.tabs.is-sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: white;
+  padding-top: 1px;
+}
+
+@import "bulma_divider";

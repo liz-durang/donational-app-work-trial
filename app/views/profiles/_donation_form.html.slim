@@ -1,0 +1,100 @@
+form#panda_cc_form.form
+  .box
+    .card-wrapper
+    .field
+      label.label Credit card details
+      
+      .field.is-grouped
+        .control.is-expanded.has-icons-left
+          input.input type="text" data-panda="credit_card" placeholder="Credit Card Number"
+          span.icon.is-left.is-small: i.fa.fa-credit-card
+        .control
+          .select
+            select data-panda="month"
+              option selected=true disabled=true mm
+              - (1..12).each do |i|
+                option value=i
+                  = i
+        .control
+          .select
+            select data-panda="year"
+              option selected=true disabled=true yyyy
+              - (2017..2030).each do |i|
+                option value=i
+                  = i
+      .field.is-grouped
+        p.control.is-expanded.has-icons-left
+          input.input type="text" data-panda="first_name" placeholder="First name"
+          span.icon.is-left.is-small: i.fa.fa-user
+        p.control.is-expanded
+          input.input type="text" data-panda="last_name" placeholder="Last name"
+        p.control.has-icons-left
+          input.input type="text" data-panda="cvv" placeholder="CVV" size=4
+          span.icon.is-left.is-small: i.fa.fa-lock
+
+    .field.columns
+      .column.is-8
+        .field
+          label.label Email
+          .control.has-icons-left.is-expanded
+            input.input id="email" type="email" value="ian+test@donational.org"
+            span.icon.is-left.is-small: i.fa.fa-envelope
+          p.help This is where we'll send your tax-deductible receipt
+
+      .column.is-4
+        .field
+          label.label Donation amount
+          #tokenize.control.has-icons-left
+            input.input#amount type="number" value="5"
+            span.icon.is-left: i.fa.fa-dollar
+          p.help
+            | Every dollar you donate goes directly to the charities in the portfolio
+          
+    .field
+      .control
+        button.button.is-large.is-primary type="submit" Donate
+
+javascript:
+	new Card({
+    form: 'form',
+    container: '.card-wrapper',
+    formSelectors: {
+        nameInput: 'input[data-panda="first_name"], input[data-panda="last_name"]',
+        numberInput: 'input[data-panda="credit_card"]',
+        expiryInput: 'input[data-panda="month"], input[data-panda="year"]',
+        cvcInput: 'input[data-panda="cvv"]'
+    }
+	});
+
+	Panda.init("#{ENV.fetch('PANDAPAY_PUBLIC_KEY')}", 'panda_cc_form');
+
+  Panda.on('success', function(cardToken) {
+    const data = {
+      cardToken: cardToken,
+    	amountCents: Number(document.getElementById('amount').value) * 100,
+      receiptEmail: document.getElementById('email').value
+    };
+    
+    var request = new XMLHttpRequest();
+    request.open('POST', 'https://wt-c9556c8242328ab5150dd9ae8003790d-0.run.webtask.io/donation', true);
+    request.onload = function() {
+      if (request.status === 200) {
+        document.getElementById('panda_cc_form').innerHTML = "<p>Thanks for your support!</p>";
+      } else {
+        paymentError([JSON.parse(request.responseText)]);
+      }
+    };
+    request.onerror = function() { paymentError(JSON.parse(request.responseText).errors) };
+    request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+    request.send(JSON.stringify(data));
+  });
+
+  Panda.on('error', paymentError);
+  
+  function paymentError(errors) {
+    var message = "";
+    errors.forEach(function(error) {
+      message += "\n" + error.message;
+    })
+    alert("There was an error processing your payment: " + message);
+  }

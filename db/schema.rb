@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170825192947) do
+ActiveRecord::Schema.define(version: 20171030021858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 20170825192947) do
     t.boolean "include_long_term_impact_organizations", default: true
     t.boolean "include_local_organizations", default: true
     t.boolean "include_global_organizations", default: true
+    t.string "username"
   end
 
   create_table "organizations", id: false, force: :cascade do |t|
@@ -71,6 +72,8 @@ ActiveRecord::Schema.define(version: 20170825192947) do
     t.boolean "global_impact"
     t.boolean "immediate_impact"
     t.boolean "long_term_impact"
+    t.text "description"
+    t.string "cause_area"
     t.index ["ein"], name: "index_organizations_on_ein", unique: true
   end
 

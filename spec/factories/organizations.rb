@@ -10,6 +10,8 @@
 #  global_impact    :boolean
 #  immediate_impact :boolean
 #  long_term_impact :boolean
+#  description      :text
+#  cause_area       :string
 #
 
 FactoryGirl.define do

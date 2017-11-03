@@ -29,7 +29,9 @@
     },
     "HEROKU_PARENT_APP_NAME": {
       "required": true
-    }
+    },
+    "PANDAPAY_SECRET_KEY": "sk_test_F6XU6b5IKNfJRjHEi-XMeQ",
+    "PANDAPAY_PUBLIC_KEY": "pk_test_5suAzK7SjOWHudXvZ_04CA"
   },
   "environments": {
     "test": {
