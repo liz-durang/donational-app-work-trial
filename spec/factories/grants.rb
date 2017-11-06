@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: pay_outs
+# Table name: grants
 #
 #  id               :uuid             not null, primary key
 #  organization_ein :string
@@ -12,8 +12,11 @@
 #  processed_at     :datetime
 #
 
-# Funds distributed from Donational to an Organization
-class PayOut < ApplicationRecord
-  belongs_to :organization, foreign_key: 'organization_ein'
-  has_many :donations
+FactoryGirl.define do
+  factory :grant do
+    organization
+    amount_cents 123
+    scheduled_at 1.day.ago
+    processed_at nil
+  end
 end

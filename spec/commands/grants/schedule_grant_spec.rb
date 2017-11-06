@@ -1,13 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe PayOuts::SchedulePayOut do
+RSpec.describe Grants::ScheduleGrant do
   let(:organization) { create(:organization) }
 
   context 'when the scheduled pay out date is in the past' do
     let(:scheduled_at) { 1.day.ago }
 
     it 'does not run, and includes an error' do
-      outcome = PayOuts::SchedulePayOut.run(organization: organization, scheduled_at: scheduled_at)
+      outcome = Grants::ScheduleGrant.run(organization: organization, scheduled_at: scheduled_at)
 
       expect(outcome).not_to be_success
       expect(outcome.errors.symbolic).to include(scheduled_at: :after)
@@ -20,7 +20,7 @@ RSpec.describe PayOuts::SchedulePayOut do
     let(:donations) { double(:donations) }
     let(:donation_1) { instance_double(Donation, update: true) }
     let(:donation_2) { instance_double(Donation, update: true) }
-    let(:pay_out) { instance_double(PayOut, id: 'some_id') }
+    let(:grant) { instance_double(Grant, id: 'some_id') }
 
     before do
       allow(Donations::GetUnpaidDonations)
@@ -38,28 +38,28 @@ RSpec.describe PayOuts::SchedulePayOut do
       allow(Donations::MarkDonationAsProcessed).to receive(:run!)
     end
 
-    it 'creates a scheduled PayOut to the organization for any unpaid donations' do
-      expect(PayOut)
+    it 'creates a scheduled Grant to the organization for any unpaid donations' do
+      expect(Grant)
         .to receive(:create!)
         .with(organization: organization, amount_cents: 543, scheduled_at: scheduled_at)
-        .and_return(pay_out)
+        .and_return(grant)
 
-      outcome = PayOuts::SchedulePayOut.run(organization: organization, scheduled_at: scheduled_at)
+      outcome = Grants::ScheduleGrant.run(organization: organization, scheduled_at: scheduled_at)
 
       expect(outcome).to be_success
     end
 
-    it 'marks the donations as paid by associating them with the pay_out' do
-      allow(PayOut).to receive(:create!).and_return(pay_out)
+    it 'marks the donations as paid by associating them with the grant' do
+      allow(Grant).to receive(:create!).and_return(grant)
 
       expect(Donations::MarkDonationAsProcessed)
         .to receive(:run!)
-        .with(donation: donation_1, processed_by: pay_out)
+        .with(donation: donation_1, processed_by: grant)
       expect(Donations::MarkDonationAsProcessed)
         .to receive(:run!)
-        .with(donation: donation_2, processed_by: pay_out)
+        .with(donation: donation_2, processed_by: grant)
 
-      outcome = PayOuts::SchedulePayOut.run(organization: organization, scheduled_at: scheduled_at)
+      outcome = Grants::ScheduleGrant.run(organization: organization, scheduled_at: scheduled_at)
 
       expect(outcome).to be_success
     end

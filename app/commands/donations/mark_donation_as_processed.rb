@@ -2,11 +2,11 @@ module Donations
   class MarkDonationAsProcessed < Mutations::Command
     required do
       model :donation
-      model :processed_by, class: PayOut
+      model :processed_by, class: Grant
     end
 
     def execute
-      donation.update(pay_out: processed_by)
+      donation.update(grant: processed_by)
       nil
     end
   end

@@ -1,25 +1,25 @@
 require 'rails_helper'
 
-RSpec.describe PayOuts::ProcessPayOut do
+RSpec.describe Grants::ProcessGrant do
   include ActiveSupport::Testing::TimeHelpers
 
-  context 'when the PayOut has already been processed' do
-    let(:pay_out) { create(:pay_out, processed_at: 1.day.ago) }
+  context 'when the Grant has already been processed' do
+    let(:grant) { create(:grant, processed_at: 1.day.ago) }
 
     it 'does not process any payments' do
       expect(Checks::SendCheck).not_to receive(:run)
 
-      outcome = PayOuts::ProcessPayOut.run(pay_out: pay_out)
+      outcome = Grants::ProcessGrant.run(grant: grant)
 
       expect(outcome).not_to be_success
-      expect(outcome.errors.symbolic).to include(pay_out: :already_processed)
+      expect(outcome.errors.symbolic).to include(grant: :already_processed)
     end
   end
 
-  context 'when the PayOut has not been processed' do
+  context 'when the Grant has not been processed' do
     let(:organization) { create(:organization) }
-    let(:pay_out) do
-      create(:pay_out, organization: organization, amount_cents: 123, processed_at: nil)
+    let(:grant) do
+      create(:grant, organization: organization, amount_cents: 123, processed_at: nil)
     end
 
     around do |spec|
@@ -33,10 +33,10 @@ RSpec.describe PayOuts::ProcessPayOut do
         .to receive(:run)
         .with(organization: organization, amount_cents: 123)
 
-      outcome = PayOuts::ProcessPayOut.run(pay_out: pay_out)
+      outcome = Grants::ProcessGrant.run(grant: grant)
 
       expect(outcome).to be_success
-      expect(pay_out.reload.processed_at).to eq Time.zone.now
+      expect(grant.reload.processed_at).to eq Time.zone.now
     end
   end
 end

@@ -7,7 +7,7 @@ RSpec.describe Donations::GetUnpaidDonations do
 
   context 'when there are no donations for the organization' do
     let(:other_organization) { create(:organization) }
-    before { create(:donation, organization: other_organization, pay_out: nil) }
+    before { create(:donation, organization: other_organization, grant: nil) }
 
     it 'returns an empty relation' do
       expect(subject).to be_empty
@@ -15,10 +15,10 @@ RSpec.describe Donations::GetUnpaidDonations do
   end
 
   context "when all of the organization's donations have been paid" do
-    let(:pay_out) { create(:pay_out) }
+    let(:grant) { create(:grant) }
     before do
-      create(:donation, organization: organization, pay_out: pay_out)
-      create(:donation, organization: organization, pay_out: pay_out)
+      create(:donation, organization: organization, grant: grant)
+      create(:donation, organization: organization, grant: grant)
     end
 
     it 'returns an empty relation' do
@@ -28,7 +28,7 @@ RSpec.describe Donations::GetUnpaidDonations do
 
   context 'when there is an unpaid donation' do
     let!(:unpaid_donation) do
-      create(:donation, organization: organization, pay_out: nil)
+      create(:donation, organization: organization, grant: nil)
     end
 
     it 'returns the active allocation' do

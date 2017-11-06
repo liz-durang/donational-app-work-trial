@@ -7,7 +7,7 @@
 #  organization_ein :string           not null
 #  allocation_id    :uuid             not null
 #  contribution_id        :uuid             not null
-#  pay_out_id       :uuid
+#  grant_id       :uuid
 #  amount_cents     :integer
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
@@ -20,10 +20,10 @@ class Donation < ApplicationRecord
   belongs_to :organization, foreign_key: 'organization_ein'
   belongs_to :allocation
   belongs_to :contribution
-  belongs_to :pay_out, optional: true
+  belongs_to :grant, optional: true
 
-  scope(:unpaid, -> { where(pay_out: nil) })
-  scope(:paid, -> { where.not(pay_out: nil) })
+  scope(:unpaid, -> { where(grant: nil) })
+  scope(:paid, -> { where.not(grant: nil) })
 
   validates :contribution, :allocation, :organization, :subscription, presence: true
 end
