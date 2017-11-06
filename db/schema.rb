@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171030021858) do
+ActiveRecord::Schema.define(version: 20171106053318) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,18 +28,29 @@ ActiveRecord::Schema.define(version: 20171030021858) do
     t.index ["subscription_id"], name: "index_allocations_on_subscription_id"
   end
 
+  create_table "contributions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "subscription_id"
+    t.integer "amount_cents"
+    t.json "receipt"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "scheduled_at"
+    t.datetime "processed_at"
+    t.index ["subscription_id"], name: "index_contributions_on_subscription_id"
+  end
+
   create_table "donations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "subscription_id", null: false
     t.string "organization_ein", null: false
     t.uuid "allocation_id", null: false
-    t.uuid "pay_in_id", null: false
+    t.uuid "contribution_id", null: false
     t.uuid "pay_out_id"
     t.integer "amount_cents"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["allocation_id"], name: "index_donations_on_allocation_id"
+    t.index ["contribution_id"], name: "index_donations_on_contribution_id"
     t.index ["organization_ein"], name: "index_donations_on_organization_ein"
-    t.index ["pay_in_id"], name: "index_donations_on_pay_in_id"
     t.index ["pay_out_id"], name: "index_donations_on_pay_out_id"
     t.index ["subscription_id"], name: "index_donations_on_subscription_id"
   end
@@ -77,17 +88,6 @@ ActiveRecord::Schema.define(version: 20171030021858) do
     t.index ["ein"], name: "index_organizations_on_ein", unique: true
   end
 
-  create_table "pay_ins", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "subscription_id"
-    t.integer "amount_cents"
-    t.json "receipt"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "scheduled_at"
-    t.datetime "processed_at"
-    t.index ["subscription_id"], name: "index_pay_ins_on_subscription_id"
-  end
-
   create_table "pay_outs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "organization_ein"
     t.integer "amount_cents"
@@ -103,7 +103,7 @@ ActiveRecord::Schema.define(version: 20171030021858) do
     t.uuid "donor_id"
     t.integer "annual_income_cents"
     t.decimal "donation_rate"
-    t.string "pay_in_frequency"
+    t.string "contribution_frequency"
     t.datetime "deactivated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -113,12 +113,12 @@ ActiveRecord::Schema.define(version: 20171030021858) do
 
   add_foreign_key "allocations", "organizations", column: "organization_ein", primary_key: "ein"
   add_foreign_key "allocations", "subscriptions"
+  add_foreign_key "contributions", "subscriptions"
   add_foreign_key "donations", "allocations"
+  add_foreign_key "donations", "contributions"
   add_foreign_key "donations", "organizations", column: "organization_ein", primary_key: "ein"
-  add_foreign_key "donations", "pay_ins"
   add_foreign_key "donations", "pay_outs"
   add_foreign_key "donations", "subscriptions"
-  add_foreign_key "pay_ins", "subscriptions"
   add_foreign_key "pay_outs", "organizations", column: "organization_ein", primary_key: "ein"
   add_foreign_key "subscriptions", "donors"
 end

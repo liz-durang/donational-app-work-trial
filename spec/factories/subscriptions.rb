@@ -6,7 +6,7 @@
 #  donor_id            :uuid
 #  annual_income_cents :integer
 #  donation_rate       :decimal(, )
-#  pay_in_frequency    :string
+#  contribution_frequency    :string
 #  deactivated_at      :datetime
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null

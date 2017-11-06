@@ -6,24 +6,24 @@
 #  subscription_id  :uuid             not null
 #  organization_ein :string           not null
 #  allocation_id    :uuid             not null
-#  pay_in_id        :uuid             not null
+#  contribution_id        :uuid             not null
 #  pay_out_id       :uuid
 #  amount_cents     :integer
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #
 
-# Tracks a single contribution from a donor to an organization.
+# Tracks the part of a donor's contribution that was distributed to an organization.
 class Donation < ApplicationRecord
   belongs_to :subscription
   has_one :donor, through: :subscription
   belongs_to :organization, foreign_key: 'organization_ein'
   belongs_to :allocation
-  belongs_to :pay_in
+  belongs_to :contribution
   belongs_to :pay_out, optional: true
 
   scope(:unpaid, -> { where(pay_out: nil) })
   scope(:paid, -> { where.not(pay_out: nil) })
 
-  validates :pay_in, :allocation, :organization, :subscription, presence: true
+  validates :contribution, :allocation, :organization, :subscription, presence: true
 end

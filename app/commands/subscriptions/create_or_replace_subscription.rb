@@ -4,7 +4,7 @@ module Subscriptions
   class CreateOrReplaceSubscription < Mutations::Command
     required do
       model :donor
-      string :pay_in_frequency, default: 'monthly'
+      string :contribution_frequency, default: 'monthly'
     end
 
     optional do

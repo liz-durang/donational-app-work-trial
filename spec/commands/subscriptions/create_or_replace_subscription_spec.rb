@@ -19,7 +19,7 @@ RSpec.describe Subscriptions::CreateOrReplaceSubscription do
 
       expect(subscription).to be_active
       expect(subscription.donation_rate).to eq 0.01
-      expect(subscription.pay_in_frequency).to eq 'monthly'
+      expect(subscription.contribution_frequency).to eq 'monthly'
     end
   end
 

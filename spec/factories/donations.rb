@@ -6,7 +6,7 @@
 #  subscription_id  :uuid             not null
 #  organization_ein :string           not null
 #  allocation_id    :uuid             not null
-#  pay_in_id        :uuid             not null
+#  contribution_id        :uuid             not null
 #  pay_out_id       :uuid
 #  amount_cents     :integer
 #  created_at       :datetime         not null
@@ -18,7 +18,7 @@ FactoryGirl.define do
     subscription
     organization
     allocation
-    pay_in
+    contribution
     pay_out nil
     amount_cents 1
   end

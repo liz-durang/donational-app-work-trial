@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: pay_ins
+# Table name: contributions
 #
 #  id              :uuid             not null, primary key
 #  subscription_id :uuid
@@ -12,9 +12,11 @@
 #  processed_at    :datetime
 #
 
-# Funds withdrawn from a Donor and transferred to Donational
-class PayIn < ApplicationRecord
-  belongs_to :subscription
-  has_one :donor, through: :subscription
-  has_many :donations
+FactoryGirl.define do
+  factory :contribution do
+    subscription
+    amount_cents 123
+    scheduled_at 1.day.ago
+    processed_at nil
+  end
 end

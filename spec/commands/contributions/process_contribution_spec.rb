@@ -1,26 +1,26 @@
 require 'rails_helper'
 
-RSpec.describe PayIns::ProcessPayIn do
+RSpec.describe Contributions::ProcessContribution do
   include ActiveSupport::Testing::TimeHelpers
 
-  context 'when the PayIn has already been processed' do
-    let(:pay_in) { create(:pay_in, processed_at: 1.day.ago) }
+  context 'when the Contribution has already been processed' do
+    let(:contribution) { create(:contribution, processed_at: 1.day.ago) }
 
     it 'does not process any payments' do
       expect(Withdrawals::WithdrawFromDonor).not_to receive(:run)
 
-      outcome = PayIns::ProcessPayIn.run(pay_in: pay_in)
+      outcome = Contributions::ProcessContribution.run(contribution: contribution)
 
       expect(outcome).not_to be_success
-      expect(outcome.errors.symbolic).to include(pay_in: :already_processed)
+      expect(outcome.errors.symbolic).to include(contribution: :already_processed)
     end
   end
 
-  context 'when the PayIn has not been processed' do
+  context 'when the Contribution has not been processed' do
     let(:donor) { create(:donor) }
     let(:subscription) { create(:subscription, donor: donor) }
-    let(:pay_in) do
-      create(:pay_in, subscription: subscription, amount_cents: 123, processed_at: nil)
+    let(:contribution) do
+      create(:contribution, subscription: subscription, amount_cents: 123, processed_at: nil)
     end
     let(:org_1) { create(:organization, ein: 'org1') }
     let(:org_2) { create(:organization, ein: 'org2') }
@@ -52,24 +52,24 @@ RSpec.describe PayIns::ProcessPayIn do
         .with(donor: donor, amount_cents: 123)
         .and_return(payment_receipt_json)
 
-      outcome = PayIns::ProcessPayIn.run(pay_in: pay_in)
+      outcome = Contributions::ProcessContribution.run(contribution: contribution)
 
       expect(outcome).to be_success
 
-      pay_in.reload
-      expect(pay_in.receipt).to eq payment_receipt_json
-      expect(pay_in.processed_at).to eq Time.zone.now.change(usec: 0)
+      contribution.reload
+      expect(contribution.receipt).to eq payment_receipt_json
+      expect(contribution.processed_at).to eq Time.zone.now.change(usec: 0)
     end
 
     it "creates donations based on the donor's allocations" do
       allow(Withdrawals::WithdrawFromDonor).to receive(:run)
 
-      expect { PayIns::ProcessPayIn.run(pay_in: pay_in) }.to change { Donation.count }.by(2)
+      expect { Contributions::ProcessContribution.run(contribution: contribution) }.to change { Donation.count }.by(2)
 
       expect(Donation.where(organization: org_1).first)
-        .to have_attributes(pay_in: pay_in, subscription_id: subscription.id, amount_cents: 73)
+        .to have_attributes(contribution: contribution, subscription_id: subscription.id, amount_cents: 73)
       expect(Donation.where(organization: org_2).first)
-        .to have_attributes(pay_in: pay_in, subscription_id: subscription.id, amount_cents: 49)
+        .to have_attributes(contribution: contribution, subscription_id: subscription.id, amount_cents: 49)
     end
   end
 end
