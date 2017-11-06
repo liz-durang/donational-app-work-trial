@@ -3,7 +3,7 @@
 # Table name: donations
 #
 #  id               :uuid             not null, primary key
-#  subscription_id  :uuid             not null
+#  portfolio_id  :uuid             not null
 #  organization_ein :string           not null
 #  allocation_id    :uuid             not null
 #  contribution_id        :uuid             not null
@@ -15,7 +15,7 @@
 
 FactoryGirl.define do
   factory :donation do
-    subscription
+    portfolio
     organization
     allocation
     contribution

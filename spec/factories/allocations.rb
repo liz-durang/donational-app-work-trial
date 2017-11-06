@@ -3,7 +3,7 @@
 # Table name: allocations
 #
 #  id               :uuid             not null, primary key
-#  subscription_id  :uuid
+#  portfolio_id  :uuid
 #  organization_ein :string
 #  percentage       :integer
 #  deactivated_at   :datetime
@@ -13,7 +13,7 @@
 
 FactoryGirl.define do
   factory :allocation do
-    subscription
+    portfolio
     organization
     percentage 0
   end

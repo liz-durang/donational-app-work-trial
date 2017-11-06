@@ -22,11 +22,11 @@
 #
 
 class Donor < ApplicationRecord
-  has_many :subscriptions
-  has_one :active_subscription, -> { where(deactivated_at: nil) }, class_name: 'Subscription'
-  has_many :contributions, through: :subscriptions
-  has_many :donations, through: :subscriptions
-  has_many :active_allocations, through: :active_subscription
+  has_many :portfolios
+  has_one :active_portfolio, -> { where(deactivated_at: nil) }, class_name: 'Portfolio'
+  has_many :contributions, through: :portfolios
+  has_many :donations, through: :portfolios
+  has_many :active_allocations, through: :active_portfolio
 
   def name
     [first_name, last_name].compact.join(' ')

@@ -1,4 +1,4 @@
-class SubscriptionsController < ApplicationController
+class PortfoliosController < ApplicationController
   include Secured
 
   def new
@@ -6,27 +6,27 @@ class SubscriptionsController < ApplicationController
   end
 
   def create
-    Subscriptions::CreateOrReplaceSubscription.run!(
+    Portfolios::CreateOrReplacePortfolio.run!(
       donor: current_donor,
       donation_rate: current_donor.donation_rate,
       annual_income_cents: current_donor.annual_income_cents
     )
 
     Allocations::UpdateAllocations.run!(
-      subscription: active_subscription,
+      portfolio: active_portfolio,
       allocations: params[:allocations].values
     )
 
-    redirect_to subscription_path
+    redirect_to portfolio_path
   end
 
   def show
-    @allocations = Allocations::GetActiveAllocations.call(subscription: active_subscription)
+    @allocations = Allocations::GetActiveAllocations.call(portfolio: active_portfolio)
   end
 
   private
 
-  def active_subscription
-    @active_subscription ||= Subscriptions::GetActiveSubscription.call(donor: current_donor)
+  def active_portfolio
+    @active_portfolio ||= Portfolios::GetActivePortfolio.call(donor: current_donor)
   end
 end

@@ -18,23 +18,23 @@ RSpec.describe Contributions::ProcessContribution do
 
   context 'when the Contribution has not been processed' do
     let(:donor) { create(:donor) }
-    let(:subscription) { create(:subscription, donor: donor) }
+    let(:portfolio) { create(:portfolio, donor: donor) }
     let(:contribution) do
-      create(:contribution, subscription: subscription, amount_cents: 123, processed_at: nil)
+      create(:contribution, portfolio: portfolio, amount_cents: 123, processed_at: nil)
     end
     let(:org_1) { create(:organization, ein: 'org1') }
     let(:org_2) { create(:organization, ein: 'org2') }
     let(:allocation_1) do
-      build(:allocation, subscription: subscription, organization: org_1, percentage: 60)
+      build(:allocation, portfolio: portfolio, organization: org_1, percentage: 60)
     end
     let(:allocation_2) do
-      build(:allocation, subscription: subscription, organization: org_2, percentage: 40)
+      build(:allocation, portfolio: portfolio, organization: org_2, percentage: 40)
     end
 
     before do
       allow(Allocations::GetActiveAllocations)
         .to receive(:call)
-        .with(subscription: subscription)
+        .with(portfolio: portfolio)
         .and_return([allocation_1, allocation_2])
     end
 
@@ -67,9 +67,9 @@ RSpec.describe Contributions::ProcessContribution do
       expect { Contributions::ProcessContribution.run(contribution: contribution) }.to change { Donation.count }.by(2)
 
       expect(Donation.where(organization: org_1).first)
-        .to have_attributes(contribution: contribution, subscription_id: subscription.id, amount_cents: 73)
+        .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 73)
       expect(Donation.where(organization: org_2).first)
-        .to have_attributes(contribution: contribution, subscription_id: subscription.id, amount_cents: 49)
+        .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 49)
     end
   end
 end

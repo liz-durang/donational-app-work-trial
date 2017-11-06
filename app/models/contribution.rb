@@ -3,7 +3,7 @@
 # Table name: contributions
 #
 #  id              :uuid             not null, primary key
-#  subscription_id :uuid
+#  portfolio_id :uuid
 #  amount_cents    :integer
 #  receipt         :json
 #  created_at      :datetime         not null
@@ -14,7 +14,7 @@
 
 # Funds withdrawn from a Donor and transferred to Donational
 class Contribution < ApplicationRecord
-  belongs_to :subscription
-  has_one :donor, through: :subscription
+  belongs_to :portfolio
+  has_one :donor, through: :portfolio
   has_many :donations
 end

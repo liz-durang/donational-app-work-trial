@@ -3,7 +3,7 @@
 # Table name: donations
 #
 #  id               :uuid             not null, primary key
-#  subscription_id  :uuid             not null
+#  portfolio_id  :uuid             not null
 #  organization_ein :string           not null
 #  allocation_id    :uuid             not null
 #  contribution_id        :uuid             not null
@@ -15,8 +15,8 @@
 
 # Tracks the part of a donor's contribution that was distributed to an organization.
 class Donation < ApplicationRecord
-  belongs_to :subscription
-  has_one :donor, through: :subscription
+  belongs_to :portfolio
+  has_one :donor, through: :portfolio
   belongs_to :organization, foreign_key: 'organization_ein'
   belongs_to :allocation
   belongs_to :contribution
@@ -25,5 +25,5 @@ class Donation < ApplicationRecord
   scope(:unpaid, -> { where(grant: nil) })
   scope(:paid, -> { where.not(grant: nil) })
 
-  validates :contribution, :allocation, :organization, :subscription, presence: true
+  validates :contribution, :allocation, :organization, :portfolio, presence: true
 end

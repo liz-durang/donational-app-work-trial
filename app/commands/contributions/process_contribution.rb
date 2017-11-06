@@ -28,11 +28,11 @@ module Contributions
     private
 
     def create_donations_based_on_active_allocations
-      Allocations::GetActiveAllocations.call(subscription: contribution.subscription).each do |a|
+      Allocations::GetActiveAllocations.call(portfolio: contribution.portfolio).each do |a|
         Donation.create!(
           allocation: a,
           contribution: contribution,
-          subscription: a.subscription,
+          portfolio: a.portfolio,
           organization: a.organization,
           amount_cents: (contribution.amount_cents * a.percentage / 100.0).floor
         )

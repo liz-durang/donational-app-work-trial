@@ -1,5 +1,5 @@
 section.section
-  = form_with scope: 'allocations', url: subscription_path, action: :patch, class: 'form' do |f|
+  = form_with scope: 'allocations', url: portfolio_path, action: :patch, class: 'form' do |f|
     .columns.is-multiline
       - @allocations.each_with_index do |allocation, index|
         = f.fields index.to_s, model: allocation do |allocation_form|

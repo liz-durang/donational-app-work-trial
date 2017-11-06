@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: subscriptions
+# Table name: portfolios
 #
 #  id                  :uuid             not null, primary key
 #  donor_id            :uuid
@@ -15,9 +15,9 @@
 # A donor's portfolio of charities
 #
 # Note:
-#   Subscriptions are never updated nor destroyed when the donation rate or amount changes.
-#   Instead, we deactivate it and create a new subscription which helps to keep a clear audit trail
-class Subscription < ApplicationRecord
+#   Portfolios are never updated nor destroyed when the donation rate or amount changes.
+#   Instead, we deactivate it and create a new portfolio which helps to keep a clear audit trail
+class Portfolio < ApplicationRecord
   belongs_to :donor
 
   has_many :contributions
@@ -27,7 +27,7 @@ class Subscription < ApplicationRecord
            class_name: 'Allocation'
   has_many :donations
 
-  scope :active, Subscriptions::GetActiveSubscriptions
+  scope :active, Portfolios::GetActivePortfolios
 
   extend Enumerize
   enumerize :contribution_frequency,

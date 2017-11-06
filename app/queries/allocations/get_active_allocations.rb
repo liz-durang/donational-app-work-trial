@@ -4,8 +4,8 @@ module Allocations
       @relation = relation
     end
 
-    def call(subscription:)
-      @relation.where(subscription: subscription, deactivated_at: nil)
+    def call(portfolio:)
+      @relation.where(portfolio: portfolio, deactivated_at: nil)
     end
   end
 end

@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: subscriptions
+# Table name: portfolios
 #
 #  id                  :uuid             not null, primary key
 #  donor_id            :uuid
@@ -14,19 +14,19 @@
 
 require 'rails_helper'
 
-RSpec.describe Subscription, type: :model do
+RSpec.describe Portfolio, type: :model do
   describe '#active?' do
     context 'when it has a deactivated_at timestamp' do
       it 'is false' do
-        subscription = Subscription.new(deactivated_at: 1.day.ago)
-        expect(subscription.active?).to be false
+        portfolio = Portfolio.new(deactivated_at: 1.day.ago)
+        expect(portfolio.active?).to be false
       end
     end
 
     context 'when it does not have a deactivated_at timestamp' do
       it 'is true' do
-        subscription = Subscription.new(deactivated_at: nil)
-        expect(subscription.active?).to be true
+        portfolio = Portfolio.new(deactivated_at: nil)
+        expect(portfolio.active?).to be true
       end
     end
   end

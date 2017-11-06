@@ -1,7 +1,7 @@
 require Rails.root.join('lib','mutations','decimal_filter')
 
-module Subscriptions
-  class CreateOrReplaceSubscription < Mutations::Command
+module Portfolios
+  class CreateOrReplacePortfolio < Mutations::Command
     required do
       model :donor
       string :contribution_frequency, default: 'monthly'
@@ -13,17 +13,17 @@ module Subscriptions
     end
 
     def execute
-      Subscription.transaction do
-        deactivate_existing_subscriptions!
-        Subscription.create!(inputs)
+      Portfolio.transaction do
+        deactivate_existing_portfolios!
+        Portfolio.create!(inputs)
       end
       nil
     end
 
     private
 
-    def deactivate_existing_subscriptions!
-      Subscriptions::GetActiveSubscriptions
+    def deactivate_existing_portfolios!
+      Portfolios::GetActivePortfolios
         .call(donor: donor)
         .update_all(deactivated_at: Time.zone.now)
     end

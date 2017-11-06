@@ -1,6 +1,6 @@
-module Subscriptions
-  class GetActiveSubscriptions < ApplicationQuery
-    def initialize(relation = Subscription.all)
+module Portfolios
+  class GetActivePortfolios < ApplicationQuery
+    def initialize(relation = Portfolio.all)
       @relation = relation
     end
 

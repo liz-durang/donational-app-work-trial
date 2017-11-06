@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: subscriptions
+# Table name: portfolios
 #
 #  id                  :uuid             not null, primary key
 #  donor_id            :uuid
@@ -13,7 +13,7 @@
 #
 
 FactoryGirl.define do
-  factory :subscription do
+  factory :portfolio do
     donor
   end
 end

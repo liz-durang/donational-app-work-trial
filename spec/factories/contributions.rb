@@ -3,7 +3,7 @@
 # Table name: contributions
 #
 #  id              :uuid             not null, primary key
-#  subscription_id :uuid
+#  portfolio_id :uuid
 #  amount_cents    :integer
 #  receipt         :json
 #  created_at      :datetime         not null
@@ -14,7 +14,7 @@
 
 FactoryGirl.define do
   factory :contribution do
-    subscription
+    portfolio
     amount_cents 123
     scheduled_at 1.day.ago
     processed_at nil

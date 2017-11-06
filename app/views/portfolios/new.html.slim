@@ -7,7 +7,7 @@ section.section
       ' are transparent about how they use donor contributions and
       ' solve important and immediate world problems.
 
-  = form_with scope: 'allocations', url: subscription_path, action: :post, class: 'form' do |f|
+  = form_with scope: 'allocations', url: portfolio_path, action: :post, class: 'form' do |f|
     .columns.is-multiline
       - @allocations.each_with_index do |allocation, index|
         = f.fields index.to_s, model: allocation do |allocation_form|
