@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171106061059) do
+ActiveRecord::Schema.define(version: 20171108035004) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(version: 20171106061059) do
     t.boolean "include_local_organizations", default: true
     t.boolean "include_global_organizations", default: true
     t.string "username"
+    t.string "payment_processor_customer_id"
   end
 
   create_table "grants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

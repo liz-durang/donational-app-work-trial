@@ -41,6 +41,9 @@ gem 'mutations'
 # API
 gem 'jbuilder', '~> 2.5'
 
+# Payments
+gem 'rest-client'
+
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'pry'
@@ -61,4 +64,5 @@ end
 
 group :test do
   gem 'database_cleaner'
+  gem 'climate_control'
 end
