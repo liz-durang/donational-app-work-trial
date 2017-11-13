@@ -3,7 +3,7 @@
 # Table name: allocations
 #
 #  id               :uuid             not null, primary key
-#  subscription_id  :uuid
+#  portfolio_id  :uuid
 #  organization_ein :string
 #  percentage       :integer
 #  deactivated_at   :datetime
@@ -13,8 +13,8 @@
 
 # The percentage of a donor's contribution that is to be distributed to an organization per cycle
 class Allocation < ApplicationRecord
-  belongs_to :subscription
-  has_one :donor, through: :subscription
+  belongs_to :portfolio
+  has_one :donor, through: :portfolio
   belongs_to :organization, foreign_key: 'organization_ein'
   has_many :donations
 

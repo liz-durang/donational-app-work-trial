@@ -25,12 +25,12 @@ class ProfilesController < ApplicationController
     @donor ||= Donors::GetDonorByUsername.call(username: params[:username])
   end
 
-  def active_subscription
-    @active_subscription ||= Subscriptions::GetActiveSubscription.call(donor: donor)
+  def active_portfolio
+    @active_portfolio ||= Portfolios::GetActivePortfolio.call(donor: donor)
   end
 
   def allocations
-    @allocations ||= Allocations::GetActiveAllocations.call(subscription: active_subscription)
+    @allocations ||= Allocations::GetActiveAllocations.call(portfolio: active_portfolio)
   end
 
   def organizations

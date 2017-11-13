@@ -5,7 +5,7 @@ module Donations
     end
 
     def call(organization:)
-      @relation.where(organization: organization, pay_out: nil)
+      @relation.where(organization: organization, grant: nil)
     end
   end
 end

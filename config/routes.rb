@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get '/auth/failure' => 'auth0#failure'
 
   get 'dashboard' => 'dashboard#show'
-  resource :subscription
+  resource :portfolio
 
   get 'profiles/:username' => 'profiles#show'
 

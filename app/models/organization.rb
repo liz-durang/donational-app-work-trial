@@ -18,7 +18,7 @@
 class Organization < ApplicationRecord
   self.primary_key = 'ein'
 
-  has_many :pay_outs, foreign_key: 'organization_ein'
+  has_many :grants, foreign_key: 'organization_ein'
   has_many :donations
 
   validates :ein, presence: true

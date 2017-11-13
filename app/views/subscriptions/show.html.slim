@@ -1,7 +1,0 @@
-section.section
-  = form_with scope: 'allocations', url: subscription_path, action: :patch, class: 'form' do |f|
-    .columns.is-multiline
-      - @allocations.each_with_index do |allocation, index|
-        = f.fields index.to_s, model: allocation do |allocation_form|
-          .column.is-4 = render 'allocations/card', allocation: allocation, form: allocation_form
-    = f.submit class: 'button is-primary', value: 'Finish'

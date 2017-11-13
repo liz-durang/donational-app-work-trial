@@ -1,0 +1,42 @@
+require 'rails_helper'
+
+RSpec.describe Grants::ProcessGrant do
+  include ActiveSupport::Testing::TimeHelpers
+
+  context 'when the Grant has already been processed' do
+    let(:grant) { create(:grant, processed_at: 1.day.ago) }
+
+    it 'does not process any payments' do
+      expect(Checks::SendCheck).not_to receive(:run)
+
+      outcome = Grants::ProcessGrant.run(grant: grant)
+
+      expect(outcome).not_to be_success
+      expect(outcome.errors.symbolic).to include(grant: :already_processed)
+    end
+  end
+
+  context 'when the Grant has not been processed' do
+    let(:organization) { create(:organization) }
+    let(:grant) do
+      create(:grant, organization: organization, amount_cents: 123, processed_at: nil)
+    end
+
+    around do |spec|
+      travel_to(Time.now) do
+        spec.run
+      end
+    end
+
+    it "sends a check to the organization and persists the processed at time" do
+      expect(Checks::SendCheck)
+        .to receive(:run)
+        .with(organization: organization, amount_cents: 123)
+
+      outcome = Grants::ProcessGrant.run(grant: grant)
+
+      expect(outcome).to be_success
+      expect(grant.reload.processed_at).to eq Time.zone.now
+    end
+  end
+end

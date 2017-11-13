@@ -71,7 +71,7 @@ class OnboardingChannel < ApplicationCable::Channel
   def broadcast_completion
     self.class.broadcast_to(
       current_donor,
-      redirect_to: Rails.application.routes.url_helpers.new_subscription_path
+      redirect_to: Rails.application.routes.url_helpers.new_portfolio_path
     )
   end
 

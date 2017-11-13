@@ -1,7 +1,7 @@
 module Allocations
   class UpdateAllocations < Mutations::Command
     required do
-      model :subscription
+      model :portfolio
       array :allocations do
         hash do
           required do
@@ -22,7 +22,7 @@ module Allocations
 
         allocations.each do |allocation|
           Allocation.create!(
-            subscription: subscription,
+            portfolio: portfolio,
             organization_ein: allocation[:organization_ein],
             percentage: allocation[:percentage]
           )
@@ -34,7 +34,7 @@ module Allocations
     private
 
     def deactivate_existing_allocations!
-      Allocations::GetActiveAllocations.call(subscription: subscription)
+      Allocations::GetActiveAllocations.call(portfolio: portfolio)
                                        .update_all(deactivated_at: Time.zone.now)
     end
 

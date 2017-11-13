@@ -2,12 +2,12 @@ require 'rails_helper'
 
 RSpec.describe Donations::MarkDonationAsProcessed do
   let(:donation) { create(:donation) }
-  let(:pay_out) { create(:pay_out) }
+  let(:grant) { create(:grant) }
 
   it 'associates the donation with the pay out' do
-    outcome = Donations::MarkDonationAsProcessed.run(donation: donation, processed_by: pay_out)
+    outcome = Donations::MarkDonationAsProcessed.run(donation: donation, processed_by: grant)
 
     expect(outcome).to be_success
-    expect(donation.pay_out).to eq pay_out
+    expect(donation.grant).to eq grant
   end
 end
