@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   get 'dashboard' => 'dashboard#show'
   resource :portfolio
+  resource :contributions, only: :create
 
   get 'profiles/:username' => 'profiles#show', as: :profiles
 

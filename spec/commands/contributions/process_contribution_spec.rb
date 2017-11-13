@@ -75,6 +75,7 @@ RSpec.describe Contributions::ProcessContribution do
 
         expect(outcome).to be_success
 
+        contribution.reload
         expect(contribution.receipt).to eq '{ "some": "receipt" }'
         expect(contribution.processed_at).to eq Time.zone.now.change(usec: 0)
       end

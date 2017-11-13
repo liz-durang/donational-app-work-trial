@@ -33,13 +33,13 @@ form#panda_cc_form.form
           span.icon.is-left.is-small: i.fa.fa-lock
 
     .field.columns
-      .column.is-8
-        .field
-          label.label Email
-          .control.has-icons-left.is-expanded
-            input.input id="email" type="email" value="ian+test@donational.org"
-            span.icon.is-left.is-small: i.fa.fa-envelope
-          p.help This is where we'll send your tax-deductible receipt
+      / .column.is-8
+      /   .field
+      /     label.label Email
+      /     .control.has-icons-left.is-expanded
+      /       input.input id="email" type="email" value="ian+test@donational.org"
+      /       span.icon.is-left.is-small: i.fa.fa-envelope
+      /     p.help This is where we'll send your tax-deductible receipt
 
       .column.is-4
         .field
@@ -70,13 +70,13 @@ javascript:
 
   Panda.on('success', function(cardToken) {
     const data = {
-      cardToken: cardToken,
-    	amountCents: Number(document.getElementById('amount').value) * 100,
-      receiptEmail: document.getElementById('email').value
+      payment_token: cardToken,
+      authenticity_token: "#{ form_authenticity_token }",
+    	amount_cents: Number(document.getElementById('amount').value) * 100
     };
     
     var request = new XMLHttpRequest();
-    request.open('POST', 'https://wt-c9556c8242328ab5150dd9ae8003790d-0.run.webtask.io/donation', true);
+    request.open('POST', '/contributions', true);
     request.onload = function() {
       if (request.status === 200) {
         document.getElementById('panda_cc_form').innerHTML = "<p>Thanks for your support!</p>";

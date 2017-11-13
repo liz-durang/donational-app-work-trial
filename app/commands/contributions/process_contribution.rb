@@ -11,11 +11,9 @@ module Contributions
 
     def execute
       Contribution.transaction do
-        donor = contribution.donor
-
         payment = Payments::ChargeCustomer.run(
-          customer_id: donor.payment_processor_customer_id,
-          email: donor.email,
+          customer_id: payment_processor_customer_id,
+          email: contribution.donor.email,
           amount_cents: contribution.amount_cents
         )
 
@@ -43,8 +41,16 @@ module Contributions
     end
 
     def payment_failed!
-      add_error(:contribution, :payment_failed, "Could not charge customer '#{donor.payment_processor_customer_id}'")
+      add_error(
+        :contribution,
+        :payment_failed,
+        "Could not charge customer '#{payment_processor_customer_id}'"
+      )
       nil
+    end
+
+    def payment_processor_customer_id
+      @payment_processor_customer_id ||= contribution.donor.payment_processor_customer_id
     end
   end
 end
