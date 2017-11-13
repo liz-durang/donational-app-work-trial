@@ -42,6 +42,15 @@ RSpec.describe Payments::ChargeCustomer do
         expect(outcome).to be_success
         expect(outcome.result).to eq({ 'some' => 'json_receipt' })
       end
+
+      it "filters out sensitive data (ie payment_token) from the receipt" do
+        unfiltered_json = '{ "payment_token": "this_is_sensitive", "id": 123 }'
+        expect(donations_resource).to receive(:post).and_return(double(body: unfiltered_json))
+
+        outcome = Payments::ChargeCustomer.run(customer_id: customer_id, email: email, amount_cents: 123)
+
+        expect(outcome.result.keys).not_to include('payment_token')
+      end
     end
 
     context 'and the pandapay response is unsuccessful' do
