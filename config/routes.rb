@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   get 'dashboard' => 'dashboard#show'
   resource :portfolio
 
-  get 'profiles/:username' => 'profiles#show'
+  get 'profiles/:username' => 'profiles#show', as: :profiles
 
   root 'welcome#index'
 
