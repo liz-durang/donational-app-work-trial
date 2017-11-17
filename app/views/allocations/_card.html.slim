@@ -1,29 +1,28 @@
-.card.is-full-height
-  header.card-header
-    .card-header-title = allocation.organization.name
-  .card-content
+tr 
+  = form.hidden_field :organization_ein
+  th data-target="allocation-#{allocation.id}" = allocation.organization.name
+  td
     - if allocation.organization.local_impact?
-      p
+      span.tag.is-info>
         => icon_tag('fa-street-view', size: 'small')
         | Local Impact
     - if allocation.organization.global_impact?
-      p
+      span.tag.is-info>
         => icon_tag('fa-globe', size: 'small')
         | Global Impact
     - if allocation.organization.immediate_impact?
-      p
+      span.tag.is-info>
         => icon_tag('fa-bolt', size: 'small')
         | Immediate Impact
     - if allocation.organization.long_term_impact?
-      p
+      span.tag.is-warning
         => icon_tag('fa-flask', size: 'small')
-        | Long Term Impact
-  .card-footer
-      = form.hidden_field :organization_ein
-      .card-footer-item
-        | -
-      .card-footer-item
-        h3 = form.number_field :percentage
-        small %
-      .card-footer-item
-        | +
+        | Research, policy and advocacy
+  td
+    .control.has-icons-right
+      = form.number_field :percentage, class: 'input is-small', width: 4
+      span.icon.is-small.is-right %
+tr.is-hidden id="allocation-#{allocation.id}"
+  td colspan=3
+    p = allocation.organization.description
+    

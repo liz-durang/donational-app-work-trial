@@ -21,6 +21,8 @@ module Allocations
         deactivate_existing_allocations!
 
         allocations.each do |allocation|
+          next unless allocation[:percentage] > 0
+
           Allocation.create!(
             portfolio: portfolio,
             organization_ein: allocation[:organization_ein],

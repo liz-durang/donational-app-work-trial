@@ -3,6 +3,8 @@ class DashboardController < ApplicationController
 
   layout 'minimal'
 
+  def show; end
+
   private
 
   def ensure_current_donor!

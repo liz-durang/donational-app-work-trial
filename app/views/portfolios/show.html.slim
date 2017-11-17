@@ -1,7 +1,22 @@
+
 section.section
-  = form_with scope: 'allocations', url: portfolio_path, action: :patch, class: 'form' do |f|
-    .columns.is-multiline
-      - @allocations.each_with_index do |allocation, index|
-        = f.fields index.to_s, model: allocation do |allocation_form|
-          .column.is-4 = render 'allocations/card', allocation: allocation, form: allocation_form
-    = f.submit class: 'button is-primary', value: 'Finish'
+  .container
+    .columns
+      .column.is-2
+        nav.panel
+          a.panel-block href=portfolio_path
+            span.panel-icon: i.fa.fa-book
+            | Portfolio Allocation
+          a.panel-block href='#'
+            span.panel-icon: i.fa.fa-bank
+            | Payment Details
+          a.panel-block href=profiles_path(current_donor.username)
+            span.panel-icon: i.fa.fa-user
+            | My Public Profile
+      .column.is-10
+        = form_with scope: 'allocations', url: portfolio_path, action: :patch, class: 'form' do |f|
+          table.table.is-hoverable.is-fullwidth data-behavior="accordion"
+            - @allocations.each_with_index do |allocation, index|
+              = f.fields index.to_s, model: allocation do |allocation_form|
+                = render 'allocations/card', allocation: allocation, form: allocation_form
+          = f.submit class: 'button is-primary', value: 'Finish'

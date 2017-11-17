@@ -42,11 +42,13 @@ RSpec.describe Allocations::UpdateAllocations do
   context 'when the allocation percentages add up to 100' do
     let!(:organization_1) { Organization.create!(ein: 'foo', name: 'Foo') }
     let!(:organization_2) { Organization.create!(ein: 'bar', name: 'Bar') }
+    let!(:organization_3) { Organization.create!(ein: 'should_be_excluded', name: 'Baz') }
 
     let(:allocations) do
       [
         { organization_ein: 'foo', percentage: 20 },
-        { organization_ein: 'bar', percentage: 80 }
+        { organization_ein: 'bar', percentage: 80 },
+        { organization_ein: 'should_be_excluded', percentage: 0 }
       ]
     end
 
