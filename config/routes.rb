@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get 'dashboard' => 'dashboard#show'
   resource :portfolio
   resource :contributions, only: :create
+  resource :payment_methods, path: 'payment-methods', only: %i[edit create]
 
   get 'profiles/:username' => 'profiles#show', as: :profiles
 

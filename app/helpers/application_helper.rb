@@ -3,18 +3,24 @@ module ApplicationHelper
     link_to 'Sign in', new_sessions_path, class: 'button is-outlined'
   end
 
-  def sign_out_button
+  def sign_out_link
     link_to(
-      'Sign out',
       sessions_path,
-      class: 'button',
       method: :delete,
       data: { confirm: 'Are you sure you want to sign out?' }
-    )
+    ) do
+      icon_tag('fa-sign-out') + ' Sign out'
+    end
   end
 
-  def sign_in_or_out_button
-    return sign_out_button if logged_in?
+  def link_to_account
+    link_to(portfolio_path) do
+      icon_tag('fa-user') + current_donor.name
+    end
+  end
+
+  def sign_in_button_or_account
+    return link_to_account if logged_in?
     sign_in_button
   end
 

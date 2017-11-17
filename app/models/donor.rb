@@ -28,6 +28,10 @@ class Donor < ApplicationRecord
   has_many :donations, through: :portfolios
   has_many :active_allocations, through: :active_portfolio
 
+  before_create do
+    self.username = name.parameterize if username.blank?
+  end
+
   def name
     [first_name, last_name].compact.join(' ')
   end

@@ -1,28 +1,16 @@
 tr 
   = form.hidden_field :organization_ein
-  th data-target="allocation-#{allocation.id}" = allocation.organization.name
+  td data-target="allocation-#{allocation.id}" = allocation.organization.name
   td
-    - if allocation.organization.local_impact?
-      span.tag.is-info>
-        => icon_tag('fa-street-view', size: 'small')
-        | Local Impact
-    - if allocation.organization.global_impact?
-      span.tag.is-info>
-        => icon_tag('fa-globe', size: 'small')
-        | Global Impact
-    - if allocation.organization.immediate_impact?
-      span.tag.is-info>
-        => icon_tag('fa-bolt', size: 'small')
-        | Immediate Impact
-    - if allocation.organization.long_term_impact?
-      span.tag.is-warning
-        => icon_tag('fa-flask', size: 'small')
-        | Research, policy and advocacy
-  td
-    .control.has-icons-right
-      = form.number_field :percentage, class: 'input is-small', width: 4
-      span.icon.is-small.is-right %
+    = I18n.t('title', scope: ['cause_areas', allocation.organization.cause_area])
+  td width='30%'
+    progress class="progress is-large is-warning" value=allocation.percentage max="100"
+      = allocation.percentage
+  td width='100'
+    / a aria-label="delete" data-behavior="remove-row"
+    /   span.icon 
+    /     i.fa.fa-remove aria-hidden="true"
+    .select.is-small = form.select :percentage, (0..100).map { |n| ["#{n}%", n]}
 tr.is-hidden id="allocation-#{allocation.id}"
-  td colspan=3
-    p = allocation.organization.description
-    
+  td colspan=4 style='padding: 40px'
+    p.content = allocation.organization.description

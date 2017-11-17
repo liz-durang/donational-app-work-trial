@@ -15,6 +15,8 @@ module Donors
 
       if create_customer.success?
         donor.update!(payment_processor_customer_id: create_customer.result)
+      else
+        add_error(:payment_token, :not_saved, 'Payment Method could not be saved')
       end
 
       nil
