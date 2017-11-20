@@ -1,15 +1,18 @@
 require 'panda_pay'
 
 module Payments
-  class CreateCustomer < Mutations::Command
+  class FindCustomerByEmail < Mutations::Command
     required do
-      string :email, empty: false
+      string :email
     end
 
     def execute
-      response = pandapay_customers.post(email: email)
+      customers_json = pandapay_customers.get(params: { email: email }).body
+      customers = JSON.parse(customers_json, symbolize_names: true)[:data]
 
-      JSON.parse(response.body, symbolize_names: true)
+      add_error(:customer, :not_found, 'Customer not found') if customers.empty?
+
+      customers.first
     rescue RestClient::ExceptionWithResponse => e
       PandaPay.errors_from_response(e.response.body).each do |error|
         add_error(:customer, error[:type].to_sym, error[:message])

@@ -1,6 +1,8 @@
+require 'panda_pay'
+
 module Payments
   class ChargeCustomer < Mutations::Command
-    SENSITIVE_PARAMETERS = %w(payment_token)
+    SENSITIVE_PARAMETERS = %i(payment_token)
     PLATFORM_FEE = 0
 
     required do
@@ -18,10 +20,10 @@ module Payments
         receipt_email: email
       )
 
-      JSON.parse(payment.body).except(*SENSITIVE_PARAMETERS)
+      JSON.parse(payment.body, symbolize_names: true).except(*SENSITIVE_PARAMETERS)
     rescue RestClient::ExceptionWithResponse => e
-      JSON.parse(e.response.body)['errors'].each do |error|
-        add_error(:donor, error['type'].to_sym, error['message'])
+      PandaPay.errors_from_response(e.response.body).each do |error|
+        add_error(:customer, error[:type].to_sym, error[:message])
       end
 
       nil

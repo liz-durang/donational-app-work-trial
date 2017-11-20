@@ -33,23 +33,23 @@ RSpec.describe Payments::ChargeCustomer do
             currency: 'usd'
           ).and_return(successful_response)
 
-        outcome = Payments::ChargeCustomer.run(
+        command = Payments::ChargeCustomer.run(
           customer_id: customer_id,
           email: email,
           amount_cents: 123
         )
 
-        expect(outcome).to be_success
-        expect(outcome.result).to eq({ 'some' => 'json_receipt' })
+        expect(command).to be_success
+        expect(command.result).to eq({ some: 'json_receipt' })
       end
 
       it "filters out sensitive data (ie payment_token) from the receipt" do
         unfiltered_json = '{ "payment_token": "this_is_sensitive", "id": 123 }'
         expect(donations_resource).to receive(:post).and_return(double(body: unfiltered_json))
 
-        outcome = Payments::ChargeCustomer.run(customer_id: customer_id, email: email, amount_cents: 123)
+        command = Payments::ChargeCustomer.run(customer_id: customer_id, email: email, amount_cents: 123)
 
-        expect(outcome.result.keys).not_to include('payment_token')
+        expect(command.result.keys).not_to include('payment_token')
       end
     end
 
@@ -68,10 +68,10 @@ RSpec.describe Payments::ChargeCustomer do
       end
 
       it 'fails with errors' do
-        outcome = Payments::ChargeCustomer.run(customer_id: customer_id, email: email, amount_cents: 123)
+        command = Payments::ChargeCustomer.run(customer_id: customer_id, email: email, amount_cents: 123)
 
-        expect(outcome).not_to be_success
-        expect(outcome.errors.symbolic).to include(donor: :some_pandapay_error_type)
+        expect(command).not_to be_success
+        expect(command.errors.symbolic).to include(customer: :some_pandapay_error_type)
       end
     end
   end
@@ -81,11 +81,11 @@ RSpec.describe Payments::ChargeCustomer do
     let(:email) { '' }
 
     it 'fails with errors' do
-      outcome = Payments::ChargeCustomer.run(customer_id: customer_id, email: email, amount_cents: 123)
+      command = Payments::ChargeCustomer.run(customer_id: customer_id, email: email, amount_cents: 123)
 
-      expect(outcome).not_to be_success
-      expect(outcome.errors.symbolic).to include(customer_id: :empty)
-      expect(outcome.errors.symbolic).to include(email: :empty)
+      expect(command).not_to be_success
+      expect(command.errors.symbolic).to include(customer_id: :empty)
+      expect(command.errors.symbolic).to include(email: :empty)
     end
   end
 

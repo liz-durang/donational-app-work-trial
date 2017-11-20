@@ -7,10 +7,10 @@ RSpec.describe Grants::ScheduleGrant do
     let(:scheduled_at) { 1.day.ago }
 
     it 'does not run, and includes an error' do
-      outcome = Grants::ScheduleGrant.run(organization: organization, scheduled_at: scheduled_at)
+      command = Grants::ScheduleGrant.run(organization: organization, scheduled_at: scheduled_at)
 
-      expect(outcome).not_to be_success
-      expect(outcome.errors.symbolic).to include(scheduled_at: :after)
+      expect(command).not_to be_success
+      expect(command.errors.symbolic).to include(scheduled_at: :after)
     end
   end
 
@@ -44,9 +44,9 @@ RSpec.describe Grants::ScheduleGrant do
         .with(organization: organization, amount_cents: 543, scheduled_at: scheduled_at)
         .and_return(grant)
 
-      outcome = Grants::ScheduleGrant.run(organization: organization, scheduled_at: scheduled_at)
+      command = Grants::ScheduleGrant.run(organization: organization, scheduled_at: scheduled_at)
 
-      expect(outcome).to be_success
+      expect(command).to be_success
     end
 
     it 'marks the donations as paid by associating them with the grant' do
@@ -59,9 +59,9 @@ RSpec.describe Grants::ScheduleGrant do
         .to receive(:run!)
         .with(donation: donation_2, processed_by: grant)
 
-      outcome = Grants::ScheduleGrant.run(organization: organization, scheduled_at: scheduled_at)
+      command = Grants::ScheduleGrant.run(organization: organization, scheduled_at: scheduled_at)
 
-      expect(outcome).to be_success
+      expect(command).to be_success
     end
   end
 end

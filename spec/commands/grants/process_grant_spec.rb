@@ -9,10 +9,10 @@ RSpec.describe Grants::ProcessGrant do
     it 'does not process any payments' do
       expect(Checks::SendCheck).not_to receive(:run)
 
-      outcome = Grants::ProcessGrant.run(grant: grant)
+      command = Grants::ProcessGrant.run(grant: grant)
 
-      expect(outcome).not_to be_success
-      expect(outcome.errors.symbolic).to include(grant: :already_processed)
+      expect(command).not_to be_success
+      expect(command.errors.symbolic).to include(grant: :already_processed)
     end
   end
 
@@ -33,9 +33,9 @@ RSpec.describe Grants::ProcessGrant do
         .to receive(:run)
         .with(organization: organization, amount_cents: 123)
 
-      outcome = Grants::ProcessGrant.run(grant: grant)
+      command = Grants::ProcessGrant.run(grant: grant)
 
-      expect(outcome).to be_success
+      expect(command).to be_success
       expect(grant.reload.processed_at).to eq Time.zone.now
     end
   end

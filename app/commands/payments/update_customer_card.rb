@@ -1,15 +1,16 @@
 require 'panda_pay'
 
 module Payments
-  class CreateCustomer < Mutations::Command
+  class UpdateCustomerCard < Mutations::Command
     required do
-      string :email, empty: false
+      string :customer_id
+      string :payment_token
     end
 
     def execute
-      response = pandapay_customers.post(email: email)
+      card_json = pandapay_customers["#{customer_id}/cards"].post(source: payment_token).body
 
-      JSON.parse(response.body, symbolize_names: true)
+      JSON.parse(card_json, symbolize_names: true)
     rescue RestClient::ExceptionWithResponse => e
       PandaPay.errors_from_response(e.response.body).each do |error|
         add_error(:customer, error[:type].to_sym, error[:message])
