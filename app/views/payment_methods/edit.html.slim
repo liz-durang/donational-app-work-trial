@@ -1,0 +1,96 @@
+section.section
+  .container
+    .columns
+      .column.is-3
+        = render 'shared/account_nav'
+      .column.is-9
+        h1.title Payment Details
+        
+        - flash.each do |type, message|
+          article.notification class="is-#{type}"
+            p = message
+
+        - if @payment_method.present?
+          article.notification.is-success
+            .media
+              .media-left: span.icon.is-small: i.fa.fa-credit-card
+              p.media-content
+                ' We have your credit card stored on-file. Thanks!
+          p
+            ' To make changes, please contact
+            a href="mailto:help@donational.org" help@donational.org
+        - else
+          article.notification.is-warning
+            .media
+              .media-left: span.icon.is-large: i.fa.fa-exclamation-triangle
+              p.media-content
+                | We'll need some payment information so that we can make it easier for you to donate to your favorite high-impact charities.
+          = form_with url: payment_methods_path, action: :post, id: 'sanitized_create_payment_method_form' do |f|
+            / This form should remain separate from the credit card details to avoid
+            / accidentally leaking credit card data into our server
+            = f.hidden_field :payment_token, id: 'payment_token'
+          form#panda_cc_form.panda_cc_form.form
+            .columns
+              .column
+                p.subtitle Enter your credit card information
+                
+                .field.is-grouped
+                  .control.is-expanded.has-icons-left
+                    input.input type="text" data-panda="credit_card" placeholder="Credit Card Number"
+                    span.icon.is-left.is-small: i.fa.fa-credit-card
+                  .control
+                    .select
+                      select data-panda="month"
+                        option selected=true disabled=true mm
+                        - (1..12).each do |i|
+                          option value=i
+                            = i
+                  .control
+                    .select
+                      select data-panda="year"
+                        option selected=true disabled=true yyyy
+                        - (2017..2030).each do |i|
+                          option value=i
+                            = i
+                .field.is-grouped
+                  p.control.is-expanded.has-icons-left
+                    input.input type="text" data-panda="first_name" placeholder="First name"
+                    span.icon.is-left.is-small: i.fa.fa-user
+                  p.control.is-expanded
+                    input.input type="text" data-panda="last_name" placeholder="Last name"
+                  p.control.has-icons-left
+                    input.input type="text" data-panda="cvv" placeholder="CVV" size=4
+                    span.icon.is-left.is-small: i.fa.fa-lock
+
+                .field
+                  .control
+                    button.button.is-primary type="submit" Save this card
+                    span.help
+                      | * We use smart and secure online payments to ensure that your donations are simple, secure, and avoid fees.
+              .column.is-5.is-offset-1.is-hidden-mobile
+                .card-wrapper
+
+  javascript:
+  	new Card({
+      form: '#panda_cc_form',
+      container: '.card-wrapper',
+      formSelectors: {
+          nameInput: 'input[data-panda="first_name"], input[data-panda="last_name"]',
+          numberInput: 'input[data-panda="credit_card"]',
+          expiryInput: 'input[data-panda="month"], input[data-panda="year"]',
+          cvcInput: 'input[data-panda="cvv"]'
+      }
+  	});
+
+  	Panda.init("#{ENV.fetch('PANDAPAY_PUBLIC_KEY')}", 'panda_cc_form');
+
+    Panda.on('success', function(cardToken) {
+      document.getElementById('payment_token').value = cardToken;
+      document.getElementById('sanitized_create_payment_method_form').submit();
+    });
+
+    Panda.on('error', function(errors) {
+      var message = "";
+      errors.forEach(function(error) { message += "\n" + error.message; })
+      alert("There was an error processing your payment: " + message);
+    });

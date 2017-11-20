@@ -6,7 +6,7 @@ module Allocations
         hash do
           required do
             string :organization_ein
-            integer :percentage
+            string :percentage
           end
         end
       end
@@ -21,12 +21,12 @@ module Allocations
         deactivate_existing_allocations!
 
         allocations.each do |allocation|
-          next unless allocation[:percentage] > 0
+          next unless allocation[:percentage].to_i > 0
 
           Allocation.create!(
             portfolio: portfolio,
             organization_ein: allocation[:organization_ein],
-            percentage: allocation[:percentage]
+            percentage: allocation[:percentage].to_i
           )
         end
       end
@@ -41,7 +41,7 @@ module Allocations
     end
 
     def ensure_allocations_add_to_one_hundred_percent!
-      return if allocations.sum { |h| h[:percentage] } == 100
+      return if allocations.sum { |h| h[:percentage].to_i } == 100
 
       add_error(
         :allocations,

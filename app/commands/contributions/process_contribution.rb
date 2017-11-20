@@ -11,14 +11,15 @@ module Contributions
 
     def execute
       Contribution.transaction do
-        receipt = Withdrawals::WithdrawFromDonor.run(
-          donor: contribution.donor,
+        payment = Payments::ChargeCustomer.run(
+          customer_id: payment_processor_customer_id,
+          email: contribution.donor.email,
           amount_cents: contribution.amount_cents
         )
 
-        # TODO: if payment fails, persist the receipt but leave processed_at blank
-        contribution.update!(receipt: receipt, processed_at: Time.zone.now)
+        return payment_failed! unless payment.success?
 
+        contribution.update!(receipt: payment.result, processed_at: Time.zone.now)
         create_donations_based_on_active_allocations
       end
 
@@ -37,6 +38,19 @@ module Contributions
           amount_cents: (contribution.amount_cents * a.percentage / 100.0).floor
         )
       end
+    end
+
+    def payment_failed!
+      add_error(
+        :contribution,
+        :payment_failed,
+        "Could not charge customer '#{payment_processor_customer_id}'"
+      )
+      nil
+    end
+
+    def payment_processor_customer_id
+      @payment_processor_customer_id ||= contribution.donor.payment_processor_customer_id
     end
   end
 end

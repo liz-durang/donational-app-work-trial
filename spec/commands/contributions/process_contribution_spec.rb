@@ -7,7 +7,7 @@ RSpec.describe Contributions::ProcessContribution do
     let(:contribution) { create(:contribution, processed_at: 1.day.ago) }
 
     it 'does not process any payments' do
-      expect(Withdrawals::WithdrawFromDonor).not_to receive(:run)
+      expect(Payments::ChargeCustomer).not_to receive(:run)
 
       outcome = Contributions::ProcessContribution.run(contribution: contribution)
 
@@ -17,7 +17,10 @@ RSpec.describe Contributions::ProcessContribution do
   end
 
   context 'when the Contribution has not been processed' do
-    let(:donor) { create(:donor) }
+    let(:donor) do
+      create(:donor, email: 'user@example.com', payment_processor_customer_id: 'cus_123')
+    end
+
     let(:portfolio) { create(:portfolio, donor: donor) }
     let(:contribution) do
       create(:contribution, portfolio: portfolio, amount_cents: 123, processed_at: nil)
@@ -44,32 +47,49 @@ RSpec.describe Contributions::ProcessContribution do
       end
     end
 
-    it "withdraws the pay in amount from the donor's account" do
-      payment_receipt_json = '{ "some": "receipt" }'
+    context 'and the payment is unsuccessful' do
+      let(:unsuccessful_widthdrawal) { double(success?: false) }
 
-      expect(Withdrawals::WithdrawFromDonor)
-        .to receive(:run)
-        .with(donor: donor, amount_cents: 123)
-        .and_return(payment_receipt_json)
+      it 'leaves the contribution as unprocessed' do
+        expect(Payments::ChargeCustomer).to receive(:run).and_return(unsuccessful_widthdrawal)
 
-      outcome = Contributions::ProcessContribution.run(contribution: contribution)
+        outcome = Contributions::ProcessContribution.run(contribution: contribution)
 
-      expect(outcome).to be_success
+        expect(outcome).not_to be_success
 
-      contribution.reload
-      expect(contribution.receipt).to eq payment_receipt_json
-      expect(contribution.processed_at).to eq Time.zone.now.change(usec: 0)
+        expect(contribution.processed_at).to be nil
+      end
     end
 
-    it "creates donations based on the donor's allocations" do
-      allow(Withdrawals::WithdrawFromDonor).to receive(:run)
+    context 'and the payment is successful' do
+      let(:successful_widthdrawal) do
+        double(success?: true, result: '{ "some": "receipt" }')
+      end
+      it 'stores the receipt and marks the contribution as processed' do
+        expect(Payments::ChargeCustomer)
+          .to receive(:run)
+          .with(email: 'user@example.com', customer_id: 'cus_123', amount_cents: 123)
+          .and_return(successful_widthdrawal)
 
-      expect { Contributions::ProcessContribution.run(contribution: contribution) }.to change { Donation.count }.by(2)
+        outcome = Contributions::ProcessContribution.run(contribution: contribution)
 
-      expect(Donation.where(organization: org_1).first)
-        .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 73)
-      expect(Donation.where(organization: org_2).first)
-        .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 49)
+        expect(outcome).to be_success
+
+        contribution.reload
+        expect(contribution.receipt).to eq '{ "some": "receipt" }'
+        expect(contribution.processed_at).to eq Time.zone.now.change(usec: 0)
+      end
+
+      it "creates donations based on the donor's allocations" do
+        allow(Payments::ChargeCustomer).to receive(:run).and_return(successful_widthdrawal)
+
+        expect { Contributions::ProcessContribution.run(contribution: contribution) }.to change { Donation.count }.by(2)
+
+        expect(Donation.where(organization: org_1).first)
+          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 73)
+        expect(Donation.where(organization: org_2).first)
+          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 49)
+      end
     end
   end
 end

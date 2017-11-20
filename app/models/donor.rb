@@ -28,6 +28,20 @@ class Donor < ApplicationRecord
   has_many :donations, through: :portfolios
   has_many :active_allocations, through: :active_portfolio
 
+  before_create :generate_username
+
+  def generate_username(conflict_resolving_suffix: nil)
+    return if username.present?
+
+    candidate_username = [name, conflict_resolving_suffix].join('-').parameterize
+
+    if Donor.exists?(username: candidate_username)
+      generate_username(conflict_resolving_suffix: SecureRandom.uuid[0..3])
+    else
+      self.username = candidate_username
+    end
+  end
+
   def name
     [first_name, last_name].compact.join(' ')
   end

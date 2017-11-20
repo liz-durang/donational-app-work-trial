@@ -105,11 +105,22 @@ section.section
                     .content
                       p = organization.description
                       p
+                        - if organization.local_impact?
+                          span.tag
+                            => icon_tag('fa-street-view', size: 'small')
+                            | Local Impact
+                        - if organization.global_impact?
+                          span.tag
+                            => icon_tag('fa-globe', size: 'small')
+                            | Global Impact
                         - if organization.immediate_impact?
-                          .tag.is-info> Direct and immediate impact
+                          span.tag
+                            => icon_tag('fa-bolt', size: 'small')
+                            | Immediate Impact
                         - if organization.long_term_impact?
-                          .tag.is-warning> Research, policy and advocacy
-                        .tag.is-light Recommended by GiveWell.org
+                          span.tag
+                            => icon_tag('fa-flask', size: 'small')
+                            | Research, policy and advocacy
 section.hero.is-light
   .hero-body
     .container

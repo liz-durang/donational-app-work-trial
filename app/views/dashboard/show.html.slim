@@ -12,7 +12,7 @@ section.section
         .chat-responses
 
 javascript:
-  App.signup = App.signup || App.cable.portfolios.create('OnboardingChannel', {
+  App.signup = App.signup || App.cable.subscriptions.create('OnboardingChannel', {
     connected: function() {
       return this.perform('start');
     },
