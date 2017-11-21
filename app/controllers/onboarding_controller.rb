@@ -1,4 +1,4 @@
-class DashboardController < ApplicationController
+class OnboardingController < ApplicationController
   before_action :ensure_current_donor!, only: :show
 
   layout 'minimal'
