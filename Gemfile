@@ -65,4 +65,5 @@ end
 group :test do
   gem 'database_cleaner'
   gem 'climate_control'
+  gem 'capybara-selenium'
 end
