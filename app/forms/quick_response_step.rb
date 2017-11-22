@@ -1,6 +1,6 @@
 require 'ostruct'
 
-class QuickResponseStep < Question
+class QuickResponseStep < Step
   validate :inclusion_in_allowed_responses
 
   # DSL method

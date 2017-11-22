@@ -1,4 +1,4 @@
-class NullStep < Question
+class NullStep < Step
   def initialize
     super(nil)
   end

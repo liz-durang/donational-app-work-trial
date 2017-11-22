@@ -1,7 +1,7 @@
 # A question in a conversational form
 #
 # Example:
-#     class HowOldAreYou < Question
+#     class HowOldAreYou < Step
 #       message 'Hi'
 #       message 'What year were you born?'
 #
@@ -21,7 +21,7 @@
 #         Donors::UpdateDonor.run!(donor, year_of_birth: response)
 #       end
 #     end
-class Question < Node
+class Step < Node
   attr_reader :response, :donor
 
   include ActiveModel::Model
@@ -79,6 +79,8 @@ class Question < Node
       @response = response_for_rollback
     end
   end
+
+  alias_method :next_step, :next_node
 
   def self.display_as(type)
     define_method :display_as do
