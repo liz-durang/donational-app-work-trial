@@ -1,6 +1,14 @@
 section.section
   #auth0-login
 
+css:
+  .auth0-lock-header-bg { display: none; }
+  .auth0-lock.auth0-lock button.auth0-lock-submit {
+    width: 240px;
+    margin: 0 auto;
+    border-radius: 5px;
+  }
+
 javascript:
   loadjs('https://cdn.auth0.com/js/lock-passwordless-2.2.min.js', {
     success: function() {
@@ -10,7 +18,10 @@ javascript:
         authParams: { state: $('meta[name="state"]').attr('content') },
         container: 'auth0-login',
         callbackURL: '#{auth_oauth2_callback_url}',
-        connections: ['google-oauth2', 'facebook']
+        connections: ['google-oauth2', 'facebook'],
+        icon: 'https://placeholdit.co//i/1x1?&bg=fff',
+        dict: { title: 'Sign in' },
+        primaryColor: '#8600ED'
       });
     }
   });
