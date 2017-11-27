@@ -4,7 +4,7 @@ RSpec.describe 'Visitor signs in', type: :feature do
   scenario 'with valid credentials', js: true do
     visit root_path
     click_on 'Sign in'
-    expect(page).to have_content('Auth0')
+    expect(page).to have_content('LOGIN WITH GOOGLE')
     sign_in_as!(first_name: 'Donny', last_name: 'Donator')
     expect(page).to have_content('Donny Donator')
   end
