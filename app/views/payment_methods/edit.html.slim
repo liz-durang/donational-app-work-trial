@@ -5,7 +5,7 @@ section.section
         = render 'shared/account_nav'
       .column.is-9
         h1.title Payment Details
-        
+
         - flash.each do |type, message|
           article.notification class="is-#{type}"
             p = message
@@ -33,7 +33,7 @@ section.section
             .columns
               .column
                 p.subtitle Enter your credit card information
-                
+
                 .field.is-grouped
                   .control.is-expanded.has-icons-left
                     input.input type="text" data-panda="credit_card" placeholder="Credit Card Number"

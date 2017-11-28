@@ -3,7 +3,7 @@ module Donors
     def self.run!(donor, attributes)
       return nil if donor.blank?
 
-      donor.update(attributes)
+      donor.update!(attributes)
     end
   end
 end

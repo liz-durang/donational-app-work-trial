@@ -9,10 +9,10 @@ RSpec.describe Contributions::ProcessContribution do
     it 'does not process any payments' do
       expect(Payments::ChargeCustomer).not_to receive(:run)
 
-      outcome = Contributions::ProcessContribution.run(contribution: contribution)
+      command = Contributions::ProcessContribution.run(contribution: contribution)
 
-      expect(outcome).not_to be_success
-      expect(outcome.errors.symbolic).to include(contribution: :already_processed)
+      expect(command).not_to be_success
+      expect(command.errors.symbolic).to include(contribution: :already_processed)
     end
   end
 
@@ -53,9 +53,9 @@ RSpec.describe Contributions::ProcessContribution do
       it 'leaves the contribution as unprocessed' do
         expect(Payments::ChargeCustomer).to receive(:run).and_return(unsuccessful_widthdrawal)
 
-        outcome = Contributions::ProcessContribution.run(contribution: contribution)
+        command = Contributions::ProcessContribution.run(contribution: contribution)
 
-        expect(outcome).not_to be_success
+        expect(command).not_to be_success
 
         expect(contribution.processed_at).to be nil
       end
@@ -71,9 +71,9 @@ RSpec.describe Contributions::ProcessContribution do
           .with(email: 'user@example.com', customer_id: 'cus_123', amount_cents: 123)
           .and_return(successful_widthdrawal)
 
-        outcome = Contributions::ProcessContribution.run(contribution: contribution)
+        command = Contributions::ProcessContribution.run(contribution: contribution)
 
-        expect(outcome).to be_success
+        expect(command).to be_success
 
         contribution.reload
         expect(contribution.receipt).to eq '{ "some": "receipt" }'

@@ -7,8 +7,7 @@ RSpec.describe Payments::CreateCustomer do
     end
   end
 
-  context 'when a tokenized credit card and an email are supplied' do
-    let(:payment_token) { 'tokenized_credit_card' }
+  context 'when an email is supplied' do
     let(:email) { 'user@example.com' }
     let(:customers_resource) { instance_double(RestClient::Resource) }
 
@@ -28,13 +27,13 @@ RSpec.describe Payments::CreateCustomer do
       it "returns the id of a newly created customer" do
         expect(customers_resource)
           .to receive(:post)
-          .with(email: 'user@example.com', source: 'tokenized_credit_card')
+          .with(email: 'user@example.com')
           .and_return(successful_response)
 
-        outcome = Payments::CreateCustomer.run(payment_token: payment_token, email: email)
+        command = Payments::CreateCustomer.run(email: email)
 
-        expect(outcome).to be_success
-        expect(outcome.result).to eq('cus_123')
+        expect(command).to be_success
+        expect(command.result).to eq({ id: "cus_123", object: "customer", foo: "bar" })
       end
     end
 
@@ -53,24 +52,22 @@ RSpec.describe Payments::CreateCustomer do
       end
 
       it 'fails with errors' do
-        outcome = Payments::CreateCustomer.run(payment_token: payment_token, email: email)
+        command = Payments::CreateCustomer.run(email: email)
 
-        expect(outcome).not_to be_success
-        expect(outcome.errors.symbolic).to include(donor: :some_pandapay_error_type)
+        expect(command).not_to be_success
+        expect(command.errors.symbolic).to include(customer: :some_pandapay_error_type)
       end
     end
   end
 
-  context 'when the source and email are not supplied' do
-    let(:payment_token) { '' }
+  context 'when the email is not supplied' do
     let(:email) { '' }
 
     it 'fails with errors' do
-      outcome = Payments::CreateCustomer.run(payment_token: payment_token, email: email)
+      command = Payments::CreateCustomer.run(email: email)
 
-      expect(outcome).not_to be_success
-      expect(outcome.errors.symbolic).to include(payment_token: :empty)
-      expect(outcome.errors.symbolic).to include(email: :empty)
+      expect(command).not_to be_success
+      expect(command.errors.symbolic).to include(email: :empty)
     end
   end
 

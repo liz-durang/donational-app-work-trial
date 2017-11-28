@@ -6,10 +6,10 @@ RSpec.describe Contributions::ScheduleContribution do
     let(:scheduled_at) { 1.day.ago }
 
     it 'does not run, and includes an error' do
-      outcome = Contributions::ScheduleContribution.run(portfolio: portfolio, scheduled_at: scheduled_at)
+      command = Contributions::ScheduleContribution.run(portfolio: portfolio, scheduled_at: scheduled_at)
 
-      expect(outcome).not_to be_success
-      expect(outcome.errors.symbolic).to include(scheduled_at: :after)
+      expect(command).not_to be_success
+      expect(command.errors.symbolic).to include(scheduled_at: :after)
     end
   end
 
@@ -24,9 +24,9 @@ RSpec.describe Contributions::ScheduleContribution do
         .to receive(:create!)
         .with(portfolio: portfolio, amount_cents: 4_416, scheduled_at: scheduled_at)
 
-      outcome = Contributions::ScheduleContribution.run(portfolio: portfolio, scheduled_at: scheduled_at)
+      command = Contributions::ScheduleContribution.run(portfolio: portfolio, scheduled_at: scheduled_at)
 
-      expect(outcome).to be_success
+      expect(command).to be_success
     end
   end
 end
