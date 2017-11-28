@@ -1,94 +1,67 @@
 - cause_areas = @profile.cause_areas
-section.section
-  .container
-    .columns
-      .column.is-8
-        h1.title
-          = @profile.name
-          | 's Portfolio of Giving
-    .columns
-      .column.is-8
-        .content
-          img src="https://via.placeholder.com/600x300" width="100%"
-          blockquote
-            p.subtitle 
-              | &ldquo;
-              ' I pledge to support high-impact charities, that are making a real difference to save and improve lives.
-              ' I make sure that my donations are to charities that align with my values, in cause areas that matter to me:
-              small = cause_areas.map { |c| link_to(c.title, anchor: c.id) }.join(', ').html_safe
-              | &rdquo;
-            / p 
-            /   ' I ask you to
-            /   a.modal-button> data-target="payment" support my values
-            /   ' or
-            /   a> href="#" create a charity portfolio with yours
-            
-            / to The charities in my portfolio have been 
-            / strong vetted by industry experts
-            / ' , are
-            / strong> transparent
-            / ' about their financials, and rate amonst the
-            / strong> most efficient
-            / ' organizations for
-            / strong> improving
-            / ' and for 
-            / strong saving lives.
-
-      .column.is-3.is-offset-1
-        .content
-          h3.subtitle
-            ' Support this portfolio
-          progress.progress.is-primary.is-marginless value="30" max="100" 30%
-          p
-            small
-              strong> 3 backers
-              ' have already shown their support for
-              = @profile.first_name
-              | 's values
-          p
-            ' Be one of
-            = @profile.first_name
-            ' 's top backers by donating towards the charities in this portfolio.    
-          p.has-text-centered
-            a.button.is-primary.action.modal-button.is-fullwidth.is-medium data-target="payment"
-              ' Donate to
-              = @profile.first_name
-              ' 's portfolio
-            | or
-            br
-            a Build a portfolio with my values!
-  
+section.hero.is-dark
+  .hero-body
+    .container
+      h1.title
+        = @profile.name
+        | 's Portfolio of Giving
+      p
+        ' All charities in this portfolio have been
+        strong vetted by industry experts
+        ' , are
+        strong> transparent
+        ' about their financials, and rate amonst the
+        strong> most efficient
+        ' organizations for
+        strong> improving
+        ' and for
+        strong saving lives.
+section.hero.is-warning
+  .hero-body
+    .container
+      blockquote
+        p.subtitle
+          | &ldquo;
+          ' I pledge to support high-impact charities, that are making a real difference to save and improve lives.
+          ' I make sure that my donations are to charities that align with my values, in cause areas that matter to me.
+          | &rdquo;
+      / .column.is-3.is-offset-1
+      /   .content
+      /     h3.subtitle
+      /       ' Support this portfolio
+      /     progress.progress.is-primary.is-marginless value="30" max="100" 30%
+      /     p
+      /       small
+      /         strong> 3 backers
+      /         ' have already shown their support for
+      /         = @profile.first_name
+      /         | 's values
+      /     p
+      /       ' Be one of
+      /       = @profile.first_name
+      /       ' 's top backers by donating towards the charities in this portfolio.
+      /     p.has-text-centered
+      /       a.button.is-primary.action.modal-button.is-fullwidth.is-medium data-target="payment"
+      /         ' Donate to
+      /         = @profile.first_name
+      /         ' 's portfolio
+      /       | or
+      /       br
+      /       a Build a portfolio with my values!
 - cause_areas.each do |cause_area|
   section.section id=cause_area.id
     .container
-      h3.title.is-spaced = cause_area.title
       .columns
-        .column.is-6.has-text-left
+        .column.is-6.has-text-left.content
+          h3.title.is-spaced = cause_area.title
           p.subtitle = cause_area.description
-        
+
           p: small
             = @profile.first_name
             ' 's portfolio contains
             => pluralize(cause_area.organizations.count, 'high impact charity')
             | in this cause area
-          / .carousel data-flickity='{ "contain": true }' style='margin: 0 0 1rem; padding: 0 3rem'
         .column.is-6
-            
-          / - cause_area.organizations.each do |organization|
-          /   nav.panel data-behavior="accordion"
-          /     a.panel-block data-target="organization_#{organization.id}"
-          /       span.panel-icon: i.fa.fa-book
-          /       = organization.name
-          /     .panel-block.is-hidden id="organization_#{organization.id}"
-          /       .content
-          /         p = organization.description
-          /         p
-          /           - if organization.immediate_impact?
-          /             .tag.is-info> Direct and immediate impact
-          /           - if organization.long_term_impact?
-          /             .tag.is-warning> Research, policy and advocacy
-          /           .tag.is-light Recommended by GiveWell.org
-                / .carousel data-flickity='{ "contain": true }' style='margin: 0 0 1rem; padding: 0 3rem'
           div data-behavior="accordion"
             - cause_area.organizations.each do |organization|
               .carousel-cell style='width: 100%; padding: 1px 1rem 4px;'
@@ -132,10 +105,10 @@ section.hero.is-light
 /     .columns
 /       .column
 /         p Become a supporter
-/       .is-divider-vertical data-content="OR" 
+/       .is-divider-vertical data-content="OR"
 /       .column.has-text-right
 /         p Create and share your own portfolio
-    
+
 section.hero.is-dark
   .hero-body
     .container
@@ -148,9 +121,9 @@ section.hero.is-dark
         .column
           h3 2. Choose from expert recommended charities
           p We recommend a portfolio of high impact, transparent and efficient charities that align with your values
-        .column 
+        .column
           h3 3. Donate efficiently
-          p 
+          p
             ' Your monthly donation is distributed to your charities, making use of  smart features like donation pooling to
             | ensure that charities spend more on making an impact, and less on fundraising and processing donations.
         .column
@@ -158,7 +131,7 @@ section.hero.is-dark
           p
             ' Boost your impact by asking others to make a contribution to your portfolio,
             | or to be more deliberate in their own giving, by creating a portfolio of their own
-          
+
 section.hero.is-primary
   .hero-body
     .container
@@ -166,7 +139,7 @@ section.hero.is-primary
         .column.is-half
           p.title.is-spaced Want your own portfolio?
           p.subtitle
-            strong> = @profile.name 
+            strong> = @profile.name
             ' created this portfolio to be more deliberate aligning one's giving with one's values.
             | Start a portfolio today to align your giving with causes that you care about.
         .column.is-half.has-text-centered
