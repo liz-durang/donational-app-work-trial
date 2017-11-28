@@ -5,21 +5,26 @@ section.section
         = render 'shared/account_nav'
       .column.is-9
         h1.title Portfolio Allocations
-        .content 
+        .content
           | When you make contribute to your portfolio, we'll distribute the funds the charities according to your selections below.
-          
+
         article.notification
           .media
             .media-left: span.icon.is-medium: i.fa.fa-info
             p.media-content
               strong> Worried that a small donation is inefficient? We've got you covered!
               br
-              ' Charities incur overhead costs whenever they process a donation. We hate unnecessary fees, so 
+              ' Charities incur overhead costs whenever they process a donation. We hate unnecessary fees, so
               ' we pool your donation to a charity with donations by other users on the platform.
               ' By making use of economies of scale charities only have to process a single (big!) donation,
               ' and can put even more of your funds into making an impact.
-              
-        = form_with scope: 'allocations', url: portfolio_path, action: :patch, class: 'form' do |f|
+
+        - flash.each do |type, message|
+          - type = 'danger' if type.in? %w(alert error)
+          article.notification class="is-#{type}"
+            p = message
+
+        = form_with scope: 'allocations', url: portfolio_path, local: true, method: :put, class: 'form' do |f|
           table.table.is-hoverable.is-fullwidth data-behavior="accordion"
             thead
               tr
@@ -31,4 +36,3 @@ section.section
               = f.fields index.to_s, model: allocation do |allocation_form|
                 = render 'allocations/card', allocation: allocation, form: allocation_form
           = f.submit class: 'button is-primary', value: 'Finish'
-      

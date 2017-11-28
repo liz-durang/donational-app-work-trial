@@ -12,12 +12,23 @@ class PortfoliosController < ApplicationController
       annual_income_cents: current_donor.annual_income_cents
     )
 
-    Allocations::UpdateAllocations.run!(
+    redirect_to portfolio_path
+  end
+
+  def update
+    command = Allocations::UpdateAllocations.run(
       portfolio: active_portfolio,
       allocations: params[:allocations].values
     )
 
-    redirect_to portfolio_path
+    if command.success?
+      flash[:success] = 'Allocations saved!'
+      redirect_to portfolio_path
+    else
+      @allocations = params[:allocations].values.map { |a| Allocation.new(a) }
+      flash[:error] = command.errors.message_list.join('\n')
+      render :show
+    end
   end
 
   def show
