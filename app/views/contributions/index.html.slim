@@ -1,0 +1,38 @@
+section.section
+  .container
+    .columns
+      .column.is-3
+        = render 'shared/account_nav'
+      .column.is-9
+        h1.title Donations
+        = render 'shared/contribution_form'
+
+        section
+          - if @contributions.present?
+            h1.subtitle Donation History
+
+            table.table.is-fullwidth data-behavior="accordion"
+              thead
+                th Donation amount
+                th Distributions
+                th Donated at
+                th Transaction id
+              - @contributions.each do |contribution|
+                tr
+                  td = number_to_currency(contribution.amount_cents / 100.0)
+                  td data-target="contribution-#{contribution.id}"
+                    p
+                      a
+                        ' Distributed to
+                        = pluralize(contribution.donations.count, 'charity')
+
+                    .is-hidden id="contribution-#{contribution.id}"
+                      ul
+                        - contribution.donations.each do |donation|
+                          li
+                            strong => donation.organization_ein
+                            = number_to_currency(donation.amount_cents / 100.0)
+                  td
+                    => time_ago_in_words(contribution.processed_at)
+                    | ago
+                  td = contribution.id
