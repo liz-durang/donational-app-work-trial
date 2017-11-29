@@ -63,7 +63,7 @@ section.hero.is-warning
             | in this cause area
         .column.is-6
           div data-behavior="accordion"
-            - cause_area.organizations.each do |organization|
+            - cause_area.organizations.each_with_index do |organization, index|
               .carousel-cell style='width: 100%; padding: 1px 1rem 4px;'
                 .card
                   header.card-header data-target="organization_#{organization.id}"
@@ -74,7 +74,7 @@ section.hero.is-warning
                     a.card-header-icon
                       span.icon
                         i.fa.fa-angle-down
-                  .card-content.is-hidden id="organization_#{organization.id}"
+                  .card-content id="organization_#{organization.id}" class=(index == 0 ? nil : 'is-hidden')
                     .content
                       p = organization.description
                       p
