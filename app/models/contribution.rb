@@ -17,4 +17,5 @@ class Contribution < ApplicationRecord
   belongs_to :portfolio
   has_one :donor, through: :portfolio
   has_many :donations
+  has_many :organizations, through: :donations
 end

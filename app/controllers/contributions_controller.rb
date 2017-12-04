@@ -2,24 +2,18 @@ class ContributionsController < ApplicationController
   include Secured
 
   def index
-    redirect_to edit_payment_methods_path unless active_payment_method?
+    redirect_to edit_payment_methods_path and return unless active_payment_method?
 
-    @contributions = Contribution
-      .where(portfolio: Portfolio.where(donor: current_donor))
-      .where.not(processed_at: nil)
-      .preload(:donations)
-      .order(created_at: :desc)
-
+    @contributions = Contributions::GetProcessedContributions.call(donor: current_donor)
   end
 
   def create
-    contribution = Contribution.create!(
-      portfolio: active_portfolio,
-      amount_cents: params[:amount_dollars].to_i * 100,
-      scheduled_at: Time.zone.now
-    )
+    redirect_to edit_payment_methods_path and return unless active_payment_method?
 
-    Contributions::ProcessContribution.run(contribution: contribution)
+    Contributions::CreateContribution.run!(
+      portfolio: active_portfolio,
+      amount_cents: params[:amount_dollars].to_i * 100
+    )
 
     redirect_to contributions_path
   end

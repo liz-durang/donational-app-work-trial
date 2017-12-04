@@ -6,7 +6,9 @@ section.section
       .column.is-9
         h1.title Portfolio Allocations
         .content
-          | When you make contribute to your portfolio, we'll distribute the funds the charities according to your selections below.
+          ' When you make contribute to your portfolio, we'll distribute the funds to
+          strong => pluralize(@allocations.count, 'charity')
+          | in your portfolio.
 
         article.notification
           .media
@@ -18,6 +20,8 @@ section.section
               ' we pool your donation to a charity with donations by other users on the platform.
               ' By making use of economies of scale charities only have to process a single (big!) donation,
               ' and can put even more of your funds into making an impact.
+
+        = render 'shared/contribution_form'
 
         - flash.each do |type, message|
           - type = 'danger' if type.in? %w(alert error)

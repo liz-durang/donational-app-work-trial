@@ -14,11 +14,14 @@ section.section
           article.notification.is-success
             .media
               .media-left: span.icon.is-small: i.fa.fa-credit-card
-              p.media-content
-                ' We have your credit card stored on-file. Thanks!
-          p
-            ' To make changes, please contact
-            a href="mailto:help@donational.org" help@donational.org
+              .media-content
+                p We have your credit card stored on-file. Thanks!
+                p
+                  ' To make changes, please contact
+                  a href="mailto:help@donational.org" help@donational.org
+
+          h3.subtitle Want to donate now?
+          = render 'shared/contribution_form'
         - else
           article.notification.is-warning
             .media

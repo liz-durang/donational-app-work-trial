@@ -3,8 +3,16 @@ section.section
     .columns
       .column.is-3
         = render 'shared/account_nav'
-      .column.is-9
+      .column.is-9.content
         h1.title Donations
+        - if @contributions.count == 0
+          p Make your first contribution to your portfolio:
+        - else
+          p
+            ' You have made
+            => pluralize(@contributions.count, 'donation')
+            | to your charity portfolio.
+
         = render 'shared/contribution_form'
 
         section
@@ -30,7 +38,7 @@ section.section
                       ul
                         - contribution.donations.each do |donation|
                           li
-                            strong => donation.organization_ein
+                            strong => donation.organization.name
                             = number_to_currency(donation.amount_cents / 100.0)
                   td
                     => time_ago_in_words(contribution.processed_at)
