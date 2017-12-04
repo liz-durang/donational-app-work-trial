@@ -1,0 +1,10 @@
+.box.has-text-centered = form_with url: contributions_path, local: true, method: :post, class: 'form' do |f|
+  label.label Make a tax-deductible donation to your high impact portfolio
+  .field.has-addons.has-addons-centered
+    p.control.has-icons-left
+      = f.number_field :amount_dollars, value: 5, class: 'input is-large'
+      span.icon.is-left: i.fa.fa-dollar
+    p.control
+      button.button.is-large.is-primary type="submit" Donate now
+  p.help
+    | Every dollar you donate goes directly to the charities in the portfolio

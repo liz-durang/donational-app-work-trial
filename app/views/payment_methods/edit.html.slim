@@ -25,7 +25,7 @@ section.section
               .media-left: span.icon.is-large: i.fa.fa-exclamation-triangle
               p.media-content
                 | We'll need some payment information so that we can make it easier for you to donate to your favorite high-impact charities.
-          = form_with url: payment_methods_path, action: :post, id: 'sanitized_create_payment_method_form' do |f|
+          = form_with url: payment_methods_path, method: :post, id: 'sanitized_create_payment_method_form' do |f|
             / This form should remain separate from the credit card details to avoid
             / accidentally leaking credit card data into our server
             = f.hidden_field :payment_token, id: 'payment_token'
