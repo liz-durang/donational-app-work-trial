@@ -32,6 +32,7 @@ class Donor < ApplicationRecord
 
   def generate_username(conflict_resolving_suffix: nil)
     return if username.present?
+    return if name.blank?
 
     candidate_username = [name, conflict_resolving_suffix].join('-').parameterize
 
