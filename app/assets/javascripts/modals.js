@@ -31,7 +31,6 @@ document.addEventListener('turbolinks:load', function() {
     const e = event || window.event;
     if (e.keyCode === 27) {
       closeModals();
-      closeDropdowns();
     }
   });
 
