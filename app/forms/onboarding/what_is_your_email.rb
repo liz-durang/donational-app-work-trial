@@ -1,5 +1,5 @@
 module Onboarding
-  class WhatIsYourEmail < Question
+  class WhatIsYourEmail < Step
     section "Preparing your charity portfolio"
 
     message "We've done the research to ensure that every charity in your portfolio is making measurable impact to problems that are in need, and also can be solved through proven techniques"
