@@ -1,26 +1,22 @@
 en:
   cause_areas:
-    poverty_alleviation:
+    poverty_and_income_inequality:
       title: Poverty Eradication
       description: |
         Give to organizations focused on enabling the poor to create wealth for themselves as a means of ending poverty forever
-    hunger_and_nutrition:
-      title: Hunger and Nutrition
+    hunger_nutrition_and_safe_water:
+      title: Hunger, nutrition and clean water
       description: |
-        Globally, 783 million people do not have access to clean water, and 2.5 billion people have no water-based sanitation resources such as toilets or clean bathing facilities. A lack of clean water isn’t just an inconvenience; for millions around the world, it’s fatal. Each year, between 6 to 8 million people die from drinking contaminated water and from other water-related hygiene issues.
-    clean_water_and_sanitation:
-      title: Clean Water and Sanitation
-      description: |
-        Globally, 783 million people do not have access to clean water, and 2.5 billion people have no water-based sanitation resources such as toilets or clean bathing facilities. A lack of clean water isn’t just an inconvenience; for millions around the world, it’s fatal. Each year, between 6 to 8 million people die from drinking contaminated water and from other water-related hygiene issues.
+        Give to organizations fighting for everyone’s inalienable fundamental rights as human beings like access to food + clean water + sanitation
     global_health:
       title: Global Health
       description: |
         Give to organizations devoted to improving health and achieving equity in health for all
-    animal_suffering:
+    animal_welfare:
       title: Reducing Animal Suffering
       description: |
         Globally, 783 million people do not have access to clean water, and 2.5 billion people have no water-based sanitation resources such as toilets or clean bathing facilities. A lack of clean water isn’t just an inconvenience; for millions around the world, it’s fatal. Each year, between 6 to 8 million people die from drinking contaminated water and from other water-related hygiene issues.
-    women_and_reproductive_rights:
+    women_and_girls:
       title: Women and Reproductive Rights
       description: |
         Give to organizations focused on empowerment and protection of equal rights, women's reproductive issues, and women's health
