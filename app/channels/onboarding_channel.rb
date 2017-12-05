@@ -6,9 +6,9 @@ class OnboardingChannel < ApplicationCable::Channel
       steps: begin
         Onboarding::AreYouReady.new(current_donor) <<
         Onboarding::WhatIsYourFirstName.new(current_donor) <<
-        Onboarding::PrimaryReason.new(current_donor) <<
+        Onboarding::PrimaryReasons.new(current_donor) <<
         Onboarding::DidYouDonateLastYear.new(current_donor) <<
-        Onboarding::DoYouKnowTheAverageContribution.new(current_donor) <<
+        # Onboarding::DoYouKnowTheAverageContribution.new(current_donor) <<
         Onboarding::ImportanceOfGlobalHealth.new(current_donor) <<
         Onboarding::ImportanceOfPovertyAndIncomeInequality.new(current_donor) <<
         Onboarding::ImportanceOfClimateAndEnvironment.new(current_donor) <<
