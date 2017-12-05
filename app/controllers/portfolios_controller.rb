@@ -6,11 +6,18 @@ class PortfoliosController < ApplicationController
   end
 
   def create
-    Portfolios::CreateOrReplacePortfolio.run!(
+    new_portfolio_command = Portfolios::CreateOrReplacePortfolio.run(
       donor: current_donor,
       donation_rate: current_donor.donation_rate,
       annual_income_cents: current_donor.annual_income_cents
     )
+
+    if new_portfolio_command.success?
+      update_allocations_command = Allocations::UpdateAllocations.run(
+        portfolio: active_portfolio,
+        allocations: params[:allocations].values
+      )
+    end
 
     redirect_to portfolio_path
   end
