@@ -13,7 +13,7 @@ RSpec.describe Payments::FindCustomerByEmail do
   before do
     allow(RestClient::Resource)
       .to receive(:new)
-      .with('https://api.pandapay.io/v1/customers', 'sk_test_123')
+      .with('https://api.pandapay.io/v1/customers?email=user@example.com', 'sk_test_123')
       .and_return(customers_resource)
   end
 
@@ -28,7 +28,6 @@ RSpec.describe Payments::FindCustomerByEmail do
       before do
         expect(customers_resource)
           .to receive(:get)
-          .with(params: { email: 'user@example.com' })
           .and_return(customers_response)
       end
 
@@ -44,7 +43,6 @@ RSpec.describe Payments::FindCustomerByEmail do
       before do
         expect(customers_resource)
           .to receive(:get)
-          .with(params: { email: 'user@example.com' })
           .and_return(double(body: '{ "data": [] }'))
       end
 
