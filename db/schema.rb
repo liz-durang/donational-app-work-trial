@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171117113736) do
+ActiveRecord::Schema.define(version: 20171205052706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,22 @@ ActiveRecord::Schema.define(version: 20171117113736) do
     t.index ["organization_ein"], name: "index_allocations_on_organization_ein"
     t.index ["portfolio_id"], name: "index_active_allocations_on_subscription_id", where: "(deactivated_at IS NULL)"
     t.index ["portfolio_id"], name: "index_allocations_on_portfolio_id"
+  end
+
+  create_table "cause_area_relevances", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "donor_id"
+    t.integer "global_health"
+    t.integer "poverty_and_income_inequality"
+    t.integer "climate_and_environment"
+    t.integer "animal_welfare"
+    t.integer "hunger_nutrition_and_safe_water"
+    t.integer "women_and_girls"
+    t.integer "immigration_and_refugees"
+    t.integer "education"
+    t.integer "economic_development"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["donor_id"], name: "index_cause_area_relevances_on_donor_id"
   end
 
   create_table "contributions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -115,6 +131,7 @@ ActiveRecord::Schema.define(version: 20171117113736) do
 
   add_foreign_key "allocations", "organizations", column: "organization_ein", primary_key: "ein"
   add_foreign_key "allocations", "portfolios"
+  add_foreign_key "cause_area_relevances", "donors"
   add_foreign_key "contributions", "portfolios"
   add_foreign_key "donations", "allocations"
   add_foreign_key "donations", "contributions"

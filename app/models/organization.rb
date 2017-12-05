@@ -26,22 +26,19 @@ class Organization < ApplicationRecord
 
   extend Enumerize
   enumerize :cause_area, in: %w[
-    poverty_alleviation
-    hunger_and_nutrition
-    clean_water_and_sanitation
     global_health
-    animal_suffering
-    women_and_reproductive_rights
+    poverty_and_income_inequality
+    climate_and_environment
+    animal_welfare
+    hunger_nutrition_and_safe_water
+    women_and_girls
+    immigration_and_refugees
+    education
     economic_development
     criminal_justice
-    refugees_and_immigration
-    arts_and_community
-    community_development
-    human_rights
-    veterans_affairs
-    ai_and_cyber_security
     us_tax_policy
-    climate_and_environment
+    community_development
+    ai_and_cyber_security
     arts_and_community
     human_rights
     veterans_affairs

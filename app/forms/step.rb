@@ -92,6 +92,8 @@ class Step < Node
     @response = case display_as
                 when :integer
                   raw_value.to_i
+                when :scale
+                  raw_value.to_i
                 when :slider
                   raw_value.to_d
                 when :currency
