@@ -11,7 +11,7 @@ end
 gem 'pg'
 gem 'puma', '~> 3.0'
 gem 'rails', '~> 5.1.0'
-gem 'redis'
+gem 'redis', '~> 3.3.3'
 
 # Models
 gem 'enumerize', '~> 2.1'
