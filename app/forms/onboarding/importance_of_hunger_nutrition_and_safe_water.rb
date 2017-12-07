@@ -2,7 +2,7 @@ module Onboarding
   class ImportanceOfHungerNutritionAndSafeWater < QuickResponseStep
     section "What's important to you"
 
-    message "Hunger, nutrition, and access to safe drinking water"
+    subtitle "Hunger, nutrition, and access to safe drinking water"
 
     allowed_response 1, "Least important"
     allowed_response 2, "Not very important"

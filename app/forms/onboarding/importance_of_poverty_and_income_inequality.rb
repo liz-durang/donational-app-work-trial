@@ -2,7 +2,7 @@ module Onboarding
   class ImportanceOfPovertyAndIncomeInequality < QuickResponseStep
     section "What's important to you"
 
-    message "Poverty and income inequality"
+    subtitle "Poverty and income inequality"
 
     allowed_response 1, "Least important"
     allowed_response 2, "Not very important"

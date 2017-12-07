@@ -65,7 +65,7 @@ class OnboardingChannel < ApplicationCable::Channel
   def broadcast_step(step: NullStep.new, previous_step: NullStep.new)
     self.class.broadcast_to(
       current_donor,
-      messages: Array(previous_step.follow_up_message) + Array(step.errors) + step.messages,
+      messages: previous_step.follow_up_messages + step.error_messages + step.messages,
       heading: step.heading,
       responses: render_responses(step)
     )

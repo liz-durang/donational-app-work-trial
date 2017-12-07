@@ -42,9 +42,15 @@ class Step < Node
     self.class.heading
   end
 
-  def self.message(m)
+  Message = Struct.new(:body, :type)
+
+  def self.subtitle(body)
+    message(body, :subtitle)
+  end
+
+  def self.message(body, type=:note)
     @messages ||= []
-    @messages << m
+    @messages << Message.new(body, type)
   end
 
   def self.messages
@@ -65,8 +71,16 @@ class Step < Node
     @follow_up_message
   end
 
-  def follow_up_message
-    self.class.follow_up_message_for(response)
+  def follow_up_messages
+    body = self.class.follow_up_message_for(response)
+
+    return [] unless body.present?
+
+    [Message.new(body, :follow_up)]
+  end
+
+  def error_messages
+    errors.full_messages.map { |msg| Message.new(msg, :error) }
   end
 
   def process!(raw_value)

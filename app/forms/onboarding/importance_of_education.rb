@@ -2,7 +2,7 @@ module Onboarding
   class ImportanceOfEducation < QuickResponseStep
     section "What's important to you"
 
-    message "Global Education"
+    subtitle "Global Education"
 
     allowed_response 1, "Least important"
     allowed_response 2, "Not very important"

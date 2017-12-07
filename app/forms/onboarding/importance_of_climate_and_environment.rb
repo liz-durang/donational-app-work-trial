@@ -2,7 +2,7 @@ module Onboarding
   class ImportanceOfClimateAndEnvironment < QuickResponseStep
     section "What's important to you"
 
-    message "Climate and the environment"
+    subtitle "Climate and the environment"
 
     allowed_response 1, "Least important"
     allowed_response 2, "Not very important"
@@ -13,7 +13,7 @@ module Onboarding
     display_as :scale
 
     def save
-      Donors::UpdateCauseAreaRelevance.run!(donor, climate_and_environment: response)
+      Donors::UpdateCauseAreaRelevance.run!(donor, global_health: response)
     end
   end
 end

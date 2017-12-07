@@ -2,7 +2,7 @@ module Onboarding
   class ImportanceOfAnimalWelfare < QuickResponseStep
     section "What's important to you"
 
-    message "Animal welfare"
+    subtitle "Animal welfare"
 
     allowed_response 1, "Least important"
     allowed_response 2, "Not very important"

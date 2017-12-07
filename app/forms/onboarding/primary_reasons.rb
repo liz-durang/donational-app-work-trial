@@ -22,12 +22,5 @@ module Onboarding
     def save
       true
     end
-
-    def follow_up_message
-      case response
-      when :todo
-        "Good answer!"
-      end
-    end
   end
 end

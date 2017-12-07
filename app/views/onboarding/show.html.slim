@@ -30,22 +30,23 @@ javascript:
       const chatMessages = $('.chat-messages');
 
       let cumulativeDelay = 0;
-      const readingSpeed = #{params['typing_delay'] || ENV.fetch('TYPING_DELAY', 10).to_i};
+      const readingDelay = #{params['typing_delay'] || ENV.fetch('TYPING_DELAY', 10).to_i};
 
       data.messages.forEach(function(message, index, messages) {
         if (index > 0) {
           // Give the user time to read the previous message
-          cumulativeDelay += readingSpeed * (messages[index - 1].length);
+          cumulativeDelay += readingDelay * messages[index - 1].body.length;
         }
 
         let pendingMessage = $('<li class="chat-message typing appear-in"></li>')
+          .addClass(message.type)
           .css({ 'animation-delay': cumulativeDelay + 'ms'})
           .appendTo(chatMessages);
 
-        let messageText = $('<span>').text(message).appendTo(pendingMessage);
+        let messageText = $('<span>').text(message.body).appendTo(pendingMessage);
 
         // Give the user time to read the current message
-        cumulativeDelay += readingSpeed * message.length;
+        cumulativeDelay += readingDelay * message.body.length;
 
         setTimeout(function() { pendingMessage.removeClass('typing'); }, cumulativeDelay);
       });
