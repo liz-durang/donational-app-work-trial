@@ -32,12 +32,11 @@ class Donor < ApplicationRecord
 
   def generate_username(conflict_resolving_suffix: nil)
     return if username.present?
-    return if name.blank?
 
-    candidate_username = [name, conflict_resolving_suffix].join('-').parameterize
+    candidate_username = [name, conflict_resolving_suffix].compact.join('-').parameterize
 
-    if Donor.exists?(username: candidate_username)
-      generate_username(conflict_resolving_suffix: SecureRandom.uuid[0..3])
+    if candidate_username.blank? || Donor.exists?(username: candidate_username)
+      generate_username(conflict_resolving_suffix: SecureRandom.uuid[0..6])
     else
       self.username = candidate_username
     end

@@ -4,7 +4,7 @@ module Onboarding
 
     message "Hi!"
     message "You've taken the first step to be *deliberate* about the way you donate to charity!!!"
-    message "We'll start by uncovering what type of impact (and how much!) you want to make on the world."
+    message "I'm going to help you build a charitable portfolio based on what matters most to you."
 
     allowed_response :yes, "Let's get started!"
 

@@ -5,13 +5,26 @@ module Organizations
     end
 
     def call(donor:)
-      orgs = @relation
+      @relation.where(cause_area: important_cause_areas_for(donor))
+    end
 
-      orgs = orgs.where(local_impact: false) unless donor.include_local_organizations?
-      orgs = orgs.where(global_impact: false) unless donor.include_global_organizations?
-      orgs = orgs.where(immediate_impact: false) unless donor.include_immediate_impact_organizations?
-      orgs = orgs.where(long_term_impact: false) unless donor.include_long_term_impact_organizations?
-      orgs
+    def important_cause_areas_for(donor)
+      relevance_scores = CauseAreaRelevance.where(donor: donor).first.attributes.slice(*cause_areas)
+      relevance_scores.select { |_, score| score.to_i >= 4 }.keys
+    end
+
+    def cause_areas
+      %w[
+        global_health
+        poverty_and_income_inequality
+        climate_and_environment
+        animal_welfare
+        hunger_nutrition_and_safe_water
+        women_and_girls
+        immigration_and_refugees
+        education
+        economic_development
+      ]
     end
   end
 end

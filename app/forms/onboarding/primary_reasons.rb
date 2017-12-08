@@ -1,5 +1,5 @@
 module Onboarding
-  class PrimaryReason < QuickResponseStep
+  class PrimaryReasons < QuickResponseStep
     section "Let's get started"
 
     message 'What are the main things that you are looking for?'
@@ -21,13 +21,6 @@ module Onboarding
 
     def save
       true
-    end
-
-    def follow_up_message
-      case response
-      when :todo
-        "Good answer!"
-      end
     end
   end
 end

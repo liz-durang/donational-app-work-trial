@@ -5,8 +5,8 @@ module Onboarding
     message 'Were you satisfied with how much you gave?'
 
     allowed_response :satisfied, 'Yes'
-    allowed_response :gave_too_much, 'No, I gave more than I could afford'
-    allowed_response :did_not_give_enough, "No, I didn't give as much as I should have"
+    allowed_response :gave_too_much, 'I gave too much'
+    allowed_response :did_not_give_enough, "I should have given more"
 
     display_as :radio_buttons
 
@@ -14,7 +14,7 @@ module Onboarding
       Donors::UpdateDonor.run!(donor, satisfaction_with_prior_donation: response)
     end
 
-    def follow_up_message
+    follow_up_message -> (response) do
       case response
       when :satisfied
         "Perfect! We'll make sure you keep making the contribution that you feel you ought to"

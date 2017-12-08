@@ -9,14 +9,12 @@ module Onboarding
     allowed_response :somewhat, 'A little bit'
     allowed_response :no, 'Not at all!'
 
+    follow_up_message 'Our aim is to make sure that your whatever you give, it is directed toward organizations that have the most impact.'
+
     display_as :radio_buttons
 
     def save
       Donors::UpdateDonor.run!(donor, surprised_by_average_american_donation_rate: response)
-    end
-
-    def follow_up_message
-      'Our aim is to make sure that your whatever you give, it is directed toward organizations that have the most impact.'
     end
   end
 end

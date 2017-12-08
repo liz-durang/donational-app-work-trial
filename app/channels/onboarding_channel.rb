@@ -5,14 +5,24 @@ class OnboardingChannel < ApplicationCable::Channel
     @wizard = Wizard.new(
       steps: begin
         Onboarding::AreYouReady.new(current_donor) <<
-        Onboarding::PrimaryReason.new(current_donor) <<
+        Onboarding::WhatIsYourFirstName.new(current_donor) <<
+        Onboarding::PrimaryReasons.new(current_donor) <<
         Onboarding::DidYouDonateLastYear.new(current_donor) <<
-        Onboarding::DoYouKnowTheAverageContribution.new(current_donor) <<
-        Onboarding::SupportExtremePovertyAlleviation.new(current_donor) <<
-        Onboarding::SupportLifeSavingHealthInterventions.new(current_donor) <<
-        Onboarding::SupportAnimalSufferingPrevention.new(current_donor) <<
-        Onboarding::ImmediateOrLongTerm.new(current_donor) <<
-        Onboarding::LocalOrGlobalImpact.new(current_donor) <<
+        # Onboarding::DoYouKnowTheAverageContribution.new(current_donor) <<
+        Onboarding::ImportanceOfGlobalHealth.new(current_donor) <<
+        Onboarding::ImportanceOfPovertyAndIncomeInequality.new(current_donor) <<
+        Onboarding::ImportanceOfClimateAndEnvironment.new(current_donor) <<
+        Onboarding::ImportanceOfAnimalWelfare.new(current_donor) <<
+        Onboarding::ImportanceOfHungerNutritionAndSafeWater.new(current_donor) <<
+        Onboarding::ImportanceOfImmigrationAndRefugees.new(current_donor) <<
+        Onboarding::ImportanceOfEconomicDevelopment.new(current_donor) <<
+        Onboarding::ImportanceOfEducation.new(current_donor) <<
+        Onboarding::ImportanceOfWomenAndGirlsIssues.new(current_donor) <<
+        # Onboarding::SupportExtremePovertyAlleviation.new(current_donor) <<
+        # Onboarding::SupportLifeSavingHealthInterventions.new(current_donor) <<
+        # Onboarding::SupportAnimalSufferingPrevention.new(current_donor) <<
+        # Onboarding::ImmediateOrLongTerm.new(current_donor) <<
+        # Onboarding::LocalOrGlobalImpact.new(current_donor) <<
         Onboarding::WhatIsYourEmail.new(current_donor)
         # Onboarding::WhatIsYourPreTaxIncome.new(current_donor) <<
         # Onboarding::HowMuchShouldAnIndividualGive.new(current_donor) <<
@@ -55,7 +65,7 @@ class OnboardingChannel < ApplicationCable::Channel
   def broadcast_step(step: NullStep.new, previous_step: NullStep.new)
     self.class.broadcast_to(
       current_donor,
-      messages: Array(previous_step.follow_up_message) + Array(step.errors) + step.messages,
+      messages: previous_step.follow_up_messages + step.error_messages + step.messages,
       heading: step.heading,
       responses: render_responses(step)
     )
