@@ -3,8 +3,9 @@ Rails.application.routes.draw do
   root 'welcome#index'
 
   # Activation
-  resource :onboarding, only: :show
+  resource :onboarding, path: 'getting-started', only: :show
   resource :portfolio
+
   # Retention
 
   # Revenue
