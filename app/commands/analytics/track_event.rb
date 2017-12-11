@@ -1,0 +1,22 @@
+module Analytics
+  Engine ||= Segment::Analytics.new(write_key: ENV.fetch('SEGMENT_RUBY_WRITE_KEY'))
+
+  class TrackEvent < Mutations::Command
+    required do
+      string :user_id
+      string :event
+    end
+
+    optional do
+      hash :properties
+    end
+
+    def execute
+      Engine.track(
+        user_id: user_id,
+        event: event,
+        properties: properties
+      )
+    end
+  end
+end
