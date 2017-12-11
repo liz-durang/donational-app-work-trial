@@ -59,7 +59,7 @@
   },
   "addons": [
     "heroku-postgresql",
-    "redistogo",
+    "heroku-redis",
     "sendgrid"
   ],
   "buildpacks": [
