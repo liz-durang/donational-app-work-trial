@@ -21,7 +21,7 @@
 #  username                                    :string
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :donor do
   end
 end

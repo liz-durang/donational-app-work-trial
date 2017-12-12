@@ -12,7 +12,7 @@
 #  processed_at    :datetime
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :contribution do
     portfolio
     amount_cents 123

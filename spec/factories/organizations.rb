@@ -14,7 +14,7 @@
 #  cause_area       :string
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :organization do
     sequence :ein do |n|
       "org_#{n}"

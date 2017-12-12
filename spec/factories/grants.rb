@@ -12,7 +12,7 @@
 #  processed_at     :datetime
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :grant do
     organization
     amount_cents 123

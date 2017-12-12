@@ -27,13 +27,15 @@ gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 gem 'slim-rails'
 
-# Monitoring
-gem 'scout_apm'
-
 source 'https://rails-assets.org' do
   gem 'rails-assets-loadjs'
   gem 'rails-assets-bulma'
 end
+
+# Monitoring
+gem 'scout_apm'
+gem 'sentry-raven'
+gem 'analytics-ruby'
 
 # Commands
 gem 'mutations'
@@ -48,7 +50,7 @@ group :development, :test do
   gem 'byebug', platform: :mri
   gem 'pry'
   gem 'dotenv-rails'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'rspec-rails'
 end
 
