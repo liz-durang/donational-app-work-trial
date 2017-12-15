@@ -8,71 +8,8 @@ section.section
         h2.title#question-heading Loading&hellip;
 
         ol.chat-messages
-        
+
         .chat-responses
 
 javascript:
-  App.signup = App.signup || App.cable.subscriptions.create('OnboardingChannel', {
-    connected: function() {
-      return this.perform('start');
-    },
-
-    disconnected: function() { },
-
-    received: function(data) {
-      if(data.redirect_to) {
-        window.location.href = data.redirect_to;
-        return;
-      }
-
-      $('#question-heading').text(data.heading);
-
-      const chatMessages = $('.chat-messages');
-
-      let cumulativeDelay = 0;
-      const readingDelay = #{params['typing_delay'] || ENV.fetch('TYPING_DELAY', 10).to_i};
-
-      data.messages.forEach(function(message, index, messages) {
-        if (index > 0) {
-          // Give the user time to read the previous message
-          cumulativeDelay += readingDelay * messages[index - 1].body.length;
-        }
-
-        let pendingMessage = $('<li class="chat-message typing appear-in"></li>')
-          .addClass(message.type)
-          .css({ 'animation-delay': cumulativeDelay + 'ms'})
-          .appendTo(chatMessages);
-
-        let messageText = $('<span>').text(message.body).appendTo(pendingMessage);
-
-        // Give the user time to read the current message
-        cumulativeDelay += readingDelay * message.body.length;
-
-        setTimeout(function() { pendingMessage.removeClass('typing'); }, cumulativeDelay);
-      });
-
-      $(data.responses)
-        .css({ 'animation-delay': cumulativeDelay + 500 + 'ms'})
-        .addClass('appear-in')
-        .appendTo('.chat-responses')
-        .find('input:first-of-type')
-        .focus();
-    },
-
-    respond: function(serializedFormData) {
-      $('.chat-messages').html('');
-      $('.chat-responses').html('');
-
-      this.perform('respond', { payload: serializedFormData });
-    }
-  });
-
-  $(document).on('submit', 'form[data-behavior-auto-submit]', function(event) {
-    event.preventDefault();
-    const formData = $(this).serialize();
-    App.signup.respond(formData);
-  });
-
-  $(document).on('change', '[data-behavior-auto-submit] input[type=radio]', function(event) {
-    $(event.target.form).trigger('submit');
-  });
+  App.onboarding.perform('start');
