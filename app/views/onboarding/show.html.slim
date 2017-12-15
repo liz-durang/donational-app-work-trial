@@ -5,11 +5,20 @@ section.section
   .container
     .columns
       .column.is-8.is-offset-2
-        h2.title#question-heading Loading&hellip;
+        h2.title#question-heading Let's get started
 
         ol.chat-messages
+          li.chat-message.appear-in.note style="animation-delay: 0ms;"
+            span Hi!
+          li.chat-message.appear-in.note style="animation-delay: 60ms;"
+            span You've taken the first step to be *deliberate* about the way you donate to charity!!!
+          li.chat-message.appear-in.note style="animation-delay: 1760ms;"
+            span I'm going to help you build a charitable portfolio based on what matters most to you.
 
         .chat-responses
-
-javascript:
-  App.onboarding.perform('start');
+          form.appear-in data-behavior-auto-submit="" style="animation-delay: 3110ms;"
+            .field
+              p.control
+                label.button.is-medium.is-info.is-outlined for="response-yes"
+                  input class="is-hidden" id="response-yes" name="response" type="radio" value="yes"
+                    | Let's get started!
