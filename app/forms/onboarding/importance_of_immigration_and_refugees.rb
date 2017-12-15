@@ -4,11 +4,13 @@ module Onboarding
 
     subtitle "Immigration and Refugees"
 
-    allowed_response 1, "Least important"
-    allowed_response 2, "Not very important"
-    allowed_response 3, "Somewhat important"
-    allowed_response 4, "Very important"
-    allowed_response 5, "Most important"
+    allowed_response 1, "I have other priorities"
+    allowed_response 2, "Not important"
+    allowed_response 3, "A tiny bit important"
+    allowed_response 4, "Somewhat important"
+    allowed_response 5, "Important"
+		allowed_response 6, "Very important"
+		allowed_response 7, "Most important"
 
     display_as :scale
 
