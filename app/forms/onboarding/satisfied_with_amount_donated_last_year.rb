@@ -21,7 +21,7 @@ module Onboarding
       when :gave_too_much
         "That's ok, we can help you stick to your budget this year"
       when :did_not_give_enough
-        "That's ok, we can ensure that give what you feel you should"
+        "That's ok, we can ensure that you give what you feel you should"
       end
     end
   end
