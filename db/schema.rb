@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171205052706) do
+ActiveRecord::Schema.define(version: 20171215045742) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,6 +89,8 @@ ActiveRecord::Schema.define(version: 20171205052706) do
     t.boolean "include_global_organizations", default: true
     t.string "username"
     t.string "payment_processor_customer_id"
+    t.string "giving_challenges", default: [], array: true
+    t.string "reasons_why_i_choose_an_organization", default: [], array: true
     t.index ["username"], name: "index_donors_on_username", unique: true
   end
 

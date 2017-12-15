@@ -24,8 +24,7 @@ class Organization < ApplicationRecord
   validates :ein, presence: true
   validates :name, presence: true
 
-  extend Enumerize
-  enumerize :cause_area, in: %w[
+  CAUSE_AREAS = %w(
     global_health
     poverty_and_income_inequality
     climate_and_environment
@@ -35,12 +34,8 @@ class Organization < ApplicationRecord
     immigration_and_refugees
     education
     economic_development
-    criminal_justice
-    us_tax_policy
-    community_development
-    ai_and_cyber_security
-    arts_and_community
-    human_rights
-    veterans_affairs
-  ]
+  )
+
+  extend Enumerize
+  enumerize :cause_area, in: CAUSE_AREAS
 end
