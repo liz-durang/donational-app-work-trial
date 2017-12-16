@@ -6,7 +6,7 @@ module Onboarding
 
     allowed_response :identify_my_values,
       'Identifying which causes I care about',
-      "Our advisors help you understands your goals and priorities, and align your donations to your values"
+      "Our advisors help you understand your goals and priorities, and align your donations to your values"
     allowed_response :determine_how_much_can_give,
       'Understanding how much I can afford to give',
       "We'll help you determine how much you want to give, and help you stick to your budget"

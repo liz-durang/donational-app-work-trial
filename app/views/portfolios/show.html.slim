@@ -4,11 +4,13 @@ section.section
       .column.is-3
         = render 'shared/account_nav'
       .column.is-9
-        h1.title Portfolio Allocations
+        h1.title Your Charitable Portfolio
         .content
-          ' When you make contribute to your portfolio, we'll distribute the funds to
+          ' When you contribute to your portfolio, we'll distribute the funds to
           strong => pluralize(@allocations.count, 'charity')
           | in your portfolio.
+
+        = render 'shared/contribution_form'
 
         article.notification
           .media
@@ -16,12 +18,9 @@ section.section
             p.media-content
               strong> Worried that a small donation is inefficient? We've got you covered!
               br
-              ' Charities incur overhead costs whenever they process a donation. We hate unnecessary fees, so
-              ' we pool your donation to a charity with donations by other users on the platform.
-              ' By making use of economies of scale charities only have to process a single (big!) donation,
-              ' and can put even more of your funds into making an impact.
-
-        = render 'shared/contribution_form'
+              ' Charities incur overhead costs whenever they process a donation.
+              ' We hate unnecessary fees, so we pool your donation to a charity with donations by other users on the platform.
+              ' By making use of economies of scale charities only have to process a single (big!) donation, and can put even more of your funds into making an impact.
 
         - flash.each do |type, message|
           - type = 'danger' if type.in? %w(alert error)
@@ -39,4 +38,4 @@ section.section
             - @allocations.each_with_index do |allocation, index|
               = f.fields index.to_s, model: allocation do |allocation_form|
                 = render 'allocations/card', allocation: allocation, form: allocation_form
-          = f.submit class: 'button is-primary', value: 'Finish'
+          = f.submit class: 'button is-primary', value: 'Edit allocations'

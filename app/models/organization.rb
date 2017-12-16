@@ -34,6 +34,8 @@ class Organization < ApplicationRecord
     immigration_and_refugees
     education
     economic_development
+    arts_and_community
+    human_rights
   )
 
   extend Enumerize
