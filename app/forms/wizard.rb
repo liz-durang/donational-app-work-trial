@@ -3,6 +3,10 @@ class Wizard
 
   def initialize(steps:)
     @steps = steps
+    restart!
+  end
+
+  def restart!
     @current_step = steps
     @previous_step = NullStep.new
   end
