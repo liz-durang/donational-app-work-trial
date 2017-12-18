@@ -12,6 +12,7 @@
 #  long_term_impact :boolean
 #  description      :text
 #  cause_area       :string
+#  deactivated_at   :datetime
 #
 
 FactoryBot.define do

@@ -3,11 +3,11 @@
 # Table name: donations
 #
 #  id               :uuid             not null, primary key
-#  portfolio_id  :uuid             not null
+#  portfolio_id     :uuid             not null
 #  organization_ein :string           not null
 #  allocation_id    :uuid             not null
-#  contribution_id        :uuid             not null
-#  grant_id       :uuid
+#  contribution_id  :uuid             not null
+#  grant_id         :uuid
 #  amount_cents     :integer
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null

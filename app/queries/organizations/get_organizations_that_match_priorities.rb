@@ -5,7 +5,10 @@ module Organizations
     end
 
     def call(donor:)
-      @relation.where(cause_area: important_cause_areas_for(donor))
+      @relation.where(
+        cause_area: important_cause_areas_for(donor),
+        deactivated_at: nil
+      )
     end
 
     def important_cause_areas_for(donor)

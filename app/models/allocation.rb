@@ -3,7 +3,7 @@
 # Table name: allocations
 #
 #  id               :uuid             not null, primary key
-#  portfolio_id  :uuid
+#  portfolio_id     :uuid
 #  organization_ein :string
 #  percentage       :integer
 #  deactivated_at   :datetime
