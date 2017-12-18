@@ -12,6 +12,7 @@
 #  long_term_impact :boolean
 #  description      :text
 #  cause_area       :string
+#  deactivated_at   :datetime
 #
 
 # A charity of non-profit organization
@@ -40,4 +41,8 @@ class Organization < ApplicationRecord
 
   extend Enumerize
   enumerize :cause_area, in: CAUSE_AREAS
+
+  def active?
+    deactivated_at.blank?
+  end
 end
