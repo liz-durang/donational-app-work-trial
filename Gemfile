@@ -33,9 +33,9 @@ source 'https://rails-assets.org' do
 end
 
 # Monitoring
-gem 'scout_apm'
 gem 'sentry-raven'
 gem 'analytics-ruby'
+gem 'appsignal'
 
 # Commands
 gem 'mutations'
