@@ -2,7 +2,7 @@ form data-behavior-auto-submit=true
   .field.has-addons.has-addons-centered
     - step.allowed_responses.each do |response|
       p.control.is-expanded
-        label.button.is-large.is-info.is-outlined.is-fullwidth> for="response-#{response.to_param}"
+        label.button.is-large.is-primary.is-outlined.is-fullwidth> for="response-#{response.to_param}"
           input.is-hidden type='radio' name='response' value=response.value id="response-#{response.to_param}"
           = response.value
 
