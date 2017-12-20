@@ -5,7 +5,7 @@
         .columns.has-text-centered
           .column.is-6 style="display: flex; flex-direction: column; justify-content: center"
             h1.title.is-spaced The deliberate way to donate
-            h2.subtitle Create a high-impact tax-deductible charitable portfolio based on what matters most to you.
+            h2.subtitle Create a high impact tax-deductible charitable portfolio based on what matters most to you.
             br
             p
               a.button.is-primary.is-medium href=onboarding_path
@@ -18,8 +18,8 @@
           .column.is-6
             = image_tag 'hero-image.jpg'
 
-section.section#learn-more
-  .container.has-text-centered
+section.hero.is-dark#learn-more
+  .container.has-text-centered.hero-body
     h1.title.is-spaced Introducing Your Charitable Advisor
     h2.subtitle
       ' We don't want you to just give.
@@ -30,42 +30,30 @@ section.section#learn-more
       ' and
       strong transparency.
 
-hr.is-marginless
-
 section.section#benefits
-  .container.has-text-centered
-    strong How it works
-    p.subtitle Spark social action by doing good with your money.
+  .container
     .columns
-      .column
-        .content
-          span.is-large.icon: i.fa.fa-handshake-o.fa-2x
-          h4 Tell us about yourself
-          p Answer our survey to tell us what causes matter to you
-      .column
-        .content
-          span.is-large.icon: i.fa.fa-check-square-o.fa-2x
-          h4 Choose what matters to you
-          p Select + give to nonprofits based on our carefully researched recommendations
-      .column
-        .content
-          span.is-large.icon: i.fa.fa-bar-chart.fa-2x
-          h4 See your impact
-          p Track your distribution of giving + become an expert on causes that matter to you
-      .column
-        .content
-          span.is-large.icon: i.fa.fa-smile-o.fa-2x
-          h4 Satisfaction guaranteed
-          p If you’re not satisfied, we’ll work to make it right
-
-hr.is-marginless
-
-section.section
-  .container.has-text-centered
-    p.title.is-3> Give to something you care about, now.
-    a.button.is-primary.is-medium href=onboarding_path
-      span Get started
-      span.icon.is-small: i.fa.fa-angle-right
+      .column.is-6
+        = image_tag('portfolio-screenshot.png')
+      .column.is-6.has-text-centered
+        strong How it works
+        p.subtitle Spark social action by doing good with your money.
+        .columns
+          .column
+            .content
+              span.is-large.icon: i.fa.fa-handshake-o
+              h4.title.is-5 Tell us about yourself
+              p Answer our survey to tell us what causes matter to you
+          .column
+            .content
+              span.is-large.icon: i.fa.fa-check-square-o
+              h4.title.is-5 Choose what matters to you
+              p Select + give to nonprofits based on our carefully researched recommendations
+          .column
+            .content
+              span.is-large.icon: i.fa.fa-bar-chart
+              h4.title.is-5 See your impact
+              p Track your distribution of giving + become an expert on causes that matter to you
 
 section.hero.is-light
   .hero-body
@@ -110,4 +98,9 @@ section.hero.is-light
                   ' I get piece of mind knowing that my money is getting to where it is needed.
                 p &mdash;  Jerry Bass
 
-hr.is-marginless
+section.section
+  .container.has-text-centered
+    p.title.is-3> Give to something you care about, now.
+    a.button.is-primary.is-medium href=onboarding_path
+      span Get started
+      span.icon.is-small: i.fa.fa-angle-right

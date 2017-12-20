@@ -7,7 +7,7 @@ module Onboarding
 
     allowed_response :aligned_with_my_values, 'Alignment with my beliefs and values'
     allowed_response :interest_in_the_cause_area, 'My interest in the cause area'
-    allowed_response :firsthand_experience, 'Firsthand experience'
+    allowed_response :firsthand_experience, 'First-hand experience'
     allowed_response :name_brand, 'Recognizable or reputable brand'
     allowed_response :non_profit_rankings, 'Non-profit report rankings'
     allowed_response :recommendation, 'Friend or family recommendation'
