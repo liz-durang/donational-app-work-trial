@@ -39,6 +39,8 @@ class PortfoliosController < ApplicationController
   end
 
   def show
+    Analytics::TrackEvent.run(user_id: current_donor.id, event: 'Viewed portfolio')
+
     @allocations = Allocations::GetActiveAllocations.call(portfolio: active_portfolio)
   end
 

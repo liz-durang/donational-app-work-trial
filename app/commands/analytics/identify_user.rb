@@ -1,4 +1,5 @@
 require 'segment/analytics'
+
 module Analytics
   Engine ||= Segment::Analytics.new(write_key: ENV.fetch('SEGMENT_RUBY_WRITE_KEY'))
 
@@ -8,7 +9,9 @@ module Analytics
     end
 
     optional do
-      hash :traits
+      hash :traits do
+        duck :*
+      end
     end
 
     def execute
