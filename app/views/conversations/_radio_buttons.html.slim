@@ -2,7 +2,7 @@ form data-behavior-auto-submit=true
   .field.is-grouped.is-grouped-centered.is-grouped-multiline
     - step.allowed_responses.each do |response|
       p.control
-        label.button.is-medium.is-info.is-outlined> for="response-#{response.to_param}"
+        label.button.is-medium.is-primary.is-outlined> for="response-#{response.to_param}"
           input.is-hidden type='radio' name='response' value=response.value id="response-#{response.to_param}"
           = response.title
           small = response.description

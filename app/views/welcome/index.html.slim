@@ -1,79 +1,59 @@
 - content_for :hero do
-  section.hero.is-primary.is-medium
+  section.hero
     .hero-body
-      .container.has-text-centered
-        h1.title.is-1 The deliberate way to donate
-        h2.subtitle Effective giving to causes you care about
-        br
-        p
-          / a.button.is-outlined.is-white.is-medium> href='#learn-more'
-          /   span.icon.is-small: i.fa.fa-file-text-o
-          /   span Learn more
-          a.button.is-dark.is-medium href=onboarding_path
-            span Build your portfolio
-            span.icon.is-small &rarr;
-
-section.section
-  .container.has-text-centered
-    p.title.is-4 We'll help you build a portfolio of charities vetted by experts to have high impact.
-    p
-      ' By pooling donations and avoiding credit card fees, we ensure that
-      strong> more
-      ' of your money makes it to organizations that can do
-      strong> more
-      | with it.
-
-hr.is-marginless
-
-section#learn-more.hero.is-light
-  .hero-body
-    .container.has-text-centered
-      .columns
-        .column
-          .box
-            h3.title Support charities with impact
+      .container
+        .columns.has-text-centered
+          .column.is-6 style="display: flex; flex-direction: column; justify-content: center"
+            h1.title.is-spaced The deliberate way to donate
+            h2.subtitle Create a high impact tax-deductible charitable portfolio based on what matters most to you.
+            br
             p
-              ' Instead of donating to whichever charity solicits you on the street or appears in your social media feed,
-              ' we believe that you ought to donate to causes that are aligned with
-              strong> your values
-              ' and that have the
-              strong> greatest impact
-              | per each dollar that you donate.
-        .column.is-offset-1
-          .box
-            h3.title Donate the right amount
+              a.button.is-primary.is-medium href=onboarding_path
+                span Build your portfolio
+                span.icon.is-small &rarr;
             p
-              ' As a percentage of income, how much do you think an individual in our society
-              em> should
-              ' give to charity?
-              ' We makes it easy for you to give the amount you believe that you ought to, with a
-              strong> single contribution
-              ' that you allocate to
-              strong> causes that matter
-              | to you.
+              a.button.is-text.is-medium href='#learn-more'
+                span.icon.is-small: i.fa.fa-file-text-o
+                span Learn more
+          .column.is-6
+            = image_tag 'hero-image.jpg'
 
-hr.is-marginless
+section.hero.is-dark#learn-more
+  .container.has-text-centered.hero-body
+    h1.title.is-spaced Introducing Your Charitable Advisor
+    h2.subtitle
+      ' We don't want you to just give.
+      ' Our philosophy is to recommend outstanding giving opportunities focused on evidence of
+      strong high impact
+      ',
+      strong> cost-effectiveness
+      ' and
+      strong transparency.
 
 section.section#benefits
-  .container.has-text-centered
-    p.subtitle Giving to charity is one of the most powerful things that we do. And all too often, our giving is not aligned with the causes that we actually care about!
-    hr
+  .container
     .columns
-      .column
-        .content
-          h3 Make your kind of impact
-          p Take advantage of the recommendations from industry experts, who’ve already done the research into which charities make the greatest bang for your buck.
-      .column
-        .content
-          h3 Give more. For less!
-          p By pooling donations and sending one payment to charities from many donors, charities spend less time processing individual payments, and more time making an impact.
-          / p Plus, by using automatic bank transfers, Donational helps you - and the charities that you choose - to avoid those 2-3% credit card processing fees.
-      .column
-        .content
-          h3 Be guilt free about saying no
-          p By giving regularly to high-impact charities that you care about, there’s no need to feel guilty if you want to say no when someone approaches you and asks for a donation.
-
-hr.is-marginless
+      .column.is-6
+        = image_tag('portfolio-screenshot.png')
+      .column.is-6.has-text-centered
+        strong How it works
+        p.subtitle Spark social action by doing good with your money.
+        .columns
+          .column
+            .content
+              span.is-large.icon: i.fa.fa-handshake-o
+              h4.title.is-5 Tell us about yourself
+              p Answer our survey to tell us what causes matter to you
+          .column
+            .content
+              span.is-large.icon: i.fa.fa-check-square-o
+              h4.title.is-5 Choose what matters to you
+              p Select + give to nonprofits based on our carefully researched recommendations
+          .column
+            .content
+              span.is-large.icon: i.fa.fa-bar-chart
+              h4.title.is-5 See your impact
+              p Track your distribution of giving + become an expert on causes that matter to you
 
 section.hero.is-light
   .hero-body
@@ -118,11 +98,9 @@ section.hero.is-light
                   ' I get piece of mind knowing that my money is getting to where it is needed.
                 p &mdash;  Jerry Bass
 
-hr.is-marginless
-
 section.section
   .container.has-text-centered
-    p.title.is-3> Make the impact you believe you can!
+    p.title.is-3> Give to something you care about, now.
     a.button.is-primary.is-medium href=onboarding_path
-      span Start donating effectively now
+      span Get started
       span.icon.is-small: i.fa.fa-angle-right
