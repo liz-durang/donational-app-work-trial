@@ -1,5 +1,6 @@
 class ContributionsController < ApplicationController
   include Secured
+  include ClientSideAnalytics
 
   def index
     redirect_to edit_payment_methods_path and return unless active_payment_method?
@@ -14,6 +15,8 @@ class ContributionsController < ApplicationController
       portfolio: active_portfolio,
       amount_cents: params[:amount_dollars].to_i * 100
     )
+
+    send_client_side_analytics_event('Goal: Donation', { revenue: params[:amount_dollars].to_i })
 
     redirect_to contributions_path
   end

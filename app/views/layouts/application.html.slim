@@ -3,12 +3,12 @@ html
   head
     title Donational | The more deliberate way to donate
     = render 'shared/head'
-    
+
   body
     = render 'shared/nav'
     = yield :hero
 
     main = yield
-      
+
     = render 'shared/analytics'
     = render 'shared/footer'
