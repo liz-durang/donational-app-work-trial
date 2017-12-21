@@ -1,6 +1,6 @@
 class OnboardingChannel < ApplicationCable::Channel
   def subscribed
-    stream_for current_donor
+    stream_for "#{current_donor.id}-#{params['room']}"
 
     @wizard = Wizard.new(
       steps: begin
@@ -59,14 +59,14 @@ class OnboardingChannel < ApplicationCable::Channel
 
   def broadcast_completion
     self.class.broadcast_to(
-      current_donor,
+      "#{current_donor.id}-#{params['room']}",
       redirect_to: Rails.application.routes.url_helpers.new_portfolio_path
     )
   end
 
   def broadcast_step(step: NullStep.new, previous_step: NullStep.new)
     self.class.broadcast_to(
-      current_donor,
+      "#{current_donor.id}-#{params['room']}",
       messages: previous_step.follow_up_messages + step.error_messages + step.messages,
       heading: step.heading,
       responses: render_responses(step)

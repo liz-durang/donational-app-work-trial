@@ -1,19 +1,7 @@
-$(document).on('click', '[data-behavior="StartOnboarding"]', function () {
+$(document).on('click', '[data-behavior="StartOnboarding"] button', function () {
   this.disabled = true;
-
-  if (App.onboarding) {
-    App.onboarding.start();
-  } else {
-    createOnboardingChannel();
-
-    var waitForConnection = setInterval(function(){
-      if (App.onboarding) {
-        App.onboarding.start();
-        clearInterval(waitForConnection);
-      }
-      console.log("polling");
-    }, 200);
-  }
+  var uuid = $(this).data('uuid');
+  App.onboarding = createOnboardingChannel(uuid);
 });
 
 $(document).on('submit', 'form[data-behavior-auto-submit]', function(event) {
@@ -26,15 +14,13 @@ $(document).on('change', '[data-behavior-auto-submit] input[type=radio]', functi
   $(event.target.form).trigger('submit');
 });
 
-function createOnboardingChannel(startOnConnect) {
-  App.cable.subscriptions.create('OnboardingChannel', {
+function createOnboardingChannel(uuid) {
+  return App.cable.subscriptions.create({ channel: 'OnboardingChannel', room: uuid }, {
     connected: function() {
-      App.onboarding = this;
+      this.start();
     },
 
-    disconnected: function() {
-      App.onboarding = null;
-    },
+    disconnected: function() {},
 
     start: function() {
       this.clearScreen();
@@ -94,5 +80,3 @@ function createOnboardingChannel(startOnConnect) {
     }
   });
 }
-
-createOnboardingChannel();
