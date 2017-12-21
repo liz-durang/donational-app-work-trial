@@ -40,4 +40,15 @@ module ApplicationHelper
       end
     end
   end
+
+  def display_flash_messages
+    flash.map do |type, message|
+      next if type == 'analytics'
+      type = 'danger' if type.in? %w(alert error)
+
+      content_tag(:article, class: ['notification', "is-#{type}"]) do
+        content_tag(:p, message)
+      end
+    end.compact.reduce(:+)
+  end
 end

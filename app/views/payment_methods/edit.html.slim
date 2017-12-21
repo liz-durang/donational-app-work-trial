@@ -6,9 +6,7 @@ section.section
       .column.is-9
         h1.title Payment Details
 
-        - flash.each do |type, message|
-          article.notification class="is-#{type}"
-            p = message
+        = display_flash_messagese
 
         - if @payment_method.present?
           article.notification.is-success

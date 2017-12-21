@@ -1,5 +1,6 @@
 class PortfoliosController < ApplicationController
   include Secured
+  include ClientSideAnalytics
 
   def new
     @allocations = Allocations::GetRecommendedAllocations.call(donor: current_donor)
@@ -39,6 +40,10 @@ class PortfoliosController < ApplicationController
   end
 
   def show
+    Analytics::TrackEvent.run(user_id: current_donor.id, event: 'Viewed portfolio')
+
+    send_client_side_analytics_event('Goal: Viewed portfolio')
+
     @allocations = Allocations::GetActiveAllocations.call(portfolio: active_portfolio)
   end
 

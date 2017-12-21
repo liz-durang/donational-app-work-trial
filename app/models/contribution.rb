@@ -18,4 +18,8 @@ class Contribution < ApplicationRecord
   has_one :donor, through: :portfolio
   has_many :donations
   has_many :organizations, through: :donations
+
+  def amount_dollars
+    amount_cents / 100.0
+  end
 end

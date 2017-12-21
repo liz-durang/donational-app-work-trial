@@ -11,10 +11,7 @@ section.section
           strong => pluralize(@allocations.count, 'charity')
           | in your portfolio.
 
-        - flash.each do |type, message|
-          - type = 'danger' if type.in? %w(alert error)
-          article.notification class="is-#{type}"
-            p = message
+        = display_flash_messages
 
         = form_with scope: 'allocations', url: portfolio_path, local: true, method: :put, class: 'form' do |f|
           table.table.is-hoverable.is-fullwidth data-behavior="accordion"

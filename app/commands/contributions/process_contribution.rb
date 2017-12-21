@@ -19,6 +19,12 @@ module Contributions
 
         return payment_failed! unless payment.success?
 
+        Analytics::TrackEvent.run(
+          user_id: contribution.donor.id,
+          event: 'Donation processed',
+          traits: { revenue: contribution.amount_dollars }
+        )
+
         contribution.update!(receipt: payment.result, processed_at: Time.zone.now)
         create_donations_based_on_active_allocations
       end

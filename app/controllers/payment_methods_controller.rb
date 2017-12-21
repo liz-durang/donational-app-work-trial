@@ -8,7 +8,12 @@ class PaymentMethodsController < ApplicationController
   def create
     outcome = save_donor_credit_card
 
-    redirect_to edit_payment_methods_path, alert: outcome.errors
+    if outcome.success?
+      Analytics::TrackEvent.run(user_id: current_donor.id, event: 'Payment info entered')
+      redirect_to edit_payment_methods_path
+    else
+      redirect_to edit_payment_methods_path, alert: outcome.errors
+    end
   end
 
   private
