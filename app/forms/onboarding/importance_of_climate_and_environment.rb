@@ -15,7 +15,7 @@ module Onboarding
     display_as :scale
 
     def save
-      Donors::UpdateCauseAreaRelevance.run!(donor, global_health: response)
+      Donors::UpdateCauseAreaRelevance.run!(donor, climate_and_environment: response)
     end
   end
 end
