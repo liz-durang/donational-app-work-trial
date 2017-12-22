@@ -4,7 +4,7 @@ class OnboardingChannel < ApplicationCable::Channel
 
     @wizard = Wizard.new(
       steps: begin
-        # Onboarding::AreYouReady.new(current_donor) <<
+        Onboarding::AreYouReady.new(current_donor) <<
         Onboarding::WhatIsYourFirstName.new(current_donor) <<
         Onboarding::PrimaryReasons.new(current_donor) <<
         Onboarding::HowDoYouDecideWhichOrganizationsToSupport.new(current_donor) <<

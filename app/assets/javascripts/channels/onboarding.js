@@ -1,9 +1,3 @@
-$(document).on('click', '[data-behavior="StartOnboarding"] button', function () {
-  this.disabled = true;
-  var uuid = $(this).data('uuid');
-  App.onboarding = createOnboardingChannel(uuid);
-});
-
 $(document).on('submit', 'form[data-behavior-auto-submit]', function(event) {
   event.preventDefault();
   const formData = $(this).serialize();
@@ -15,10 +9,8 @@ $(document).on('change', '[data-behavior-auto-submit] input[type=radio]', functi
 });
 
 function createOnboardingChannel(uuid) {
-  return App.cable.subscriptions.create({ channel: 'OnboardingChannel', room: uuid }, {
-    connected: function() {
-      this.start();
-    },
+  App.onboarding = App.cable.subscriptions.create({ channel: 'OnboardingChannel', room: uuid }, {
+    connected: function() { this.start(); },
 
     disconnected: function() {},
 

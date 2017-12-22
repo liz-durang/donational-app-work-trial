@@ -13,7 +13,8 @@ module Organizations
 
     def important_cause_areas_for(donor)
       relevance_scores = CauseAreaRelevance.where(donor: donor).first.attributes.slice(*cause_areas)
-      relevance_scores.select { |_, score| score.to_i >= 5 }.keys
+      top_score = relevance_scores.values.compact.max
+      relevance_scores.select { |_, score| score.to_i >= top_score - 1 }.keys
     end
 
     def cause_areas

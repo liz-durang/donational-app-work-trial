@@ -8,13 +8,8 @@ section.section
         h2.title#question-heading Let's get started
 
         ol.chat-messages
-          li.chat-message.appear-in.note style="animation-delay: 0ms;"
-            span Hello!
-          li.chat-message.appear-in.note style="animation-delay: 1000ms;"
-            span I'm going to help you build a charitable portfolio based on what matters most to you.
 
         .chat-responses
-          .form.appear-in data-behavior="StartOnboarding" style="animation-delay: 2000ms;"
-            .field
-              p.control
-                button.button.is-medium.is-primary.is-outlined data-uuid=SecureRandom.uuid[0..6] Let's get started!
+
+javascript:
+  createOnboardingChannel(#{SecureRandom.uuid[0..6].to_json.html_safe});
