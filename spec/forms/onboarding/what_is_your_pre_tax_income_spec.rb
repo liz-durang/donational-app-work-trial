@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Onboarding::WhatIsYourPreTaxIncome, type: :model do
   subject(:step) { Onboarding::WhatIsYourPreTaxIncome.new(donor) }
 
-  let(:donor) { instance_double(Donor) }
+  let(:donor) { instance_double(Donor, id: 'donor-uuid') }
 
   describe '#process!' do
     context "when the response is a formatted number" do

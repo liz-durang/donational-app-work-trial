@@ -62,6 +62,10 @@ class OnboardingChannel < ApplicationCable::Channel
       "#{current_donor.id}-#{params['room']}",
       redirect_to: Rails.application.routes.url_helpers.new_portfolio_path
     )
+    Analytics::TrackEvent.run(
+      user_id: current_donor.id,
+      event: 'Onboarding finished'
+    )
   end
 
   def broadcast_step(step: NullStep.new, previous_step: NullStep.new)

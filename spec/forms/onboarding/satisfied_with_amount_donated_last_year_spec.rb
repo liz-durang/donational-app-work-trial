@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Onboarding::SatisfiedWithAmountDonatedLastYear, type: :model do
   subject(:step) { Onboarding::SatisfiedWithAmountDonatedLastYear.new(donor) }
 
-  let(:donor) { instance_double(Donor) }
+  let(:donor) { instance_double(Donor, id: 'donor-uuid') }
 
   describe '#process!' do
     context "when the response is 'satisfied'" do

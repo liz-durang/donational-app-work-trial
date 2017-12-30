@@ -89,6 +89,11 @@ class Step < Node
 
     if valid?
       save
+      Analytics::TrackEvent.run(
+        user_id: donor.id,
+        event: 'Onboarding step completed',
+        properties: { step: self.class.name, response: self.response }
+      )
     else
       @response = response_for_rollback
     end
