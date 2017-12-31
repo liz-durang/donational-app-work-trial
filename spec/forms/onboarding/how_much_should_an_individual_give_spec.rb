@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Onboarding::HowMuchShouldAnIndividualGive, type: :model do
   subject(:step) { Onboarding::HowMuchShouldAnIndividualGive.new(donor) }
 
-  let(:donor) { instance_double(Donor) }
+  let(:donor) { instance_double(Donor, id: 'donor-uuid') }
 
   describe '#process!' do
     context "when the response is one of the allowed responses" do
