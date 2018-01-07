@@ -1,6 +1,6 @@
 module Onboarding
   class HowDoYouDecideWhichOrganizationsToSupport < QuickResponseStep
-    section "Let's get started"
+    section "What's important to you"
 
     message 'There are many non-profits you could choose to support'
     message 'What are the most important reasons to give to some organizations over others?'

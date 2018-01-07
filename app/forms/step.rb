@@ -111,6 +111,8 @@ class Step < Node
     @response = case display_as
                 when :integer
                   raw_value.to_i
+                when :text_scale
+                  raw_value.to_s.to_sym
                 when :scale
                   raw_value.to_i
                 when :slider

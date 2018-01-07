@@ -25,7 +25,7 @@
 }
 
 .book:hover {
-	transform: rotate3d(0,1,0,20deg);
+	transform: rotate3d(0,1,0,30deg);
 }
 
 .book > div,
@@ -174,11 +174,12 @@
 }
 
 .book-left h2 {
-	width: 400px;
+	width: 50vh;
 	height: 40px;
 	-moz-transform-origin: 0 0;
 	transform-origin: 0 0;
 	transform: rotate(90deg) translateY(-40px);
+  overflow: hidden;
 }
 
 .book-content {
@@ -317,9 +318,7 @@
 }
 
 .book-colored .book-left h2 {
-	font-family: "Big Caslon", "Book Antiqua", "Palatino Linotype", Georgia, serif;
 	text-transform: uppercase;
-	font-weight: 600;
 	color: #fff;
 	font-size: 15px;
 	line-height: 40px;

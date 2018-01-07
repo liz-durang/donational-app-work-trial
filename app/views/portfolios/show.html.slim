@@ -41,7 +41,7 @@ section.hero.is-light#my-portfolio
 
       hr
 
-      ul.columns.is-multiline.book-list
+      ul.columns.is-multiline.is-centered.book-list
         - @allocations.each do |allocation|
           li.column.is-3
             .book.book-colored class=allocation.organization.cause_area
@@ -58,9 +58,7 @@ section.hero.is-light#my-portfolio
               .book-back
               .book-right
               .book-left
-                h2
-                  span = allocation.organization.name
-                  span = allocation.organization.cause_area
+                h2 = allocation.organization.name
               .book-top
               .book-bottom
             br
