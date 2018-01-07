@@ -4,7 +4,7 @@ module Portfolios
   class CreateOrReplacePortfolio < Mutations::Command
     required do
       model :donor
-      string :contribution_frequency, default: 'monthly'
+      string :contribution_frequency, default: 'once'
     end
 
     optional do

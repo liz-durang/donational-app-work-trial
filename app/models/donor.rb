@@ -22,6 +22,7 @@
 #  payment_processor_customer_id               :string
 #  giving_challenges                           :string           default([]), is an Array
 #  reasons_why_i_choose_an_organization        :string           default([]), is an Array
+#  contribution_frequency                      :string
 #
 
 class Donor < ApplicationRecord
@@ -30,6 +31,11 @@ class Donor < ApplicationRecord
   has_many :contributions, through: :portfolios
   has_many :donations, through: :portfolios
   has_many :active_allocations, through: :active_portfolio
+
+  extend Enumerize
+  enumerize :contribution_frequency,
+            in: %w[never once monthly quarterly annually],
+            predicates: true
 
   before_create :generate_username
 

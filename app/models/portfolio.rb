@@ -31,7 +31,7 @@ class Portfolio < ApplicationRecord
 
   extend Enumerize
   enumerize :contribution_frequency,
-            in: %w[monthly quarterly annually],
+            in: %w[once monthly quarterly annually never],
             predicates: true
 
   def active?

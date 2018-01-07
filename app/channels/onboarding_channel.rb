@@ -16,9 +16,9 @@ class OnboardingChannel < ApplicationCable::Channel
         Onboarding::ImportanceOfAnimalWelfare.new(current_donor) <<
         Onboarding::ImportanceOfHungerNutritionAndSafeWater.new(current_donor) <<
         Onboarding::ImportanceOfImmigrationAndRefugees.new(current_donor) <<
-        Onboarding::ImportanceOfEconomicDevelopment.new(current_donor) <<
-        Onboarding::ImportanceOfEducation.new(current_donor) <<
+        # Onboarding::ImportanceOfEconomicDevelopment.new(current_donor) <<
         Onboarding::ImportanceOfWomenAndGirlsIssues.new(current_donor) <<
+        Onboarding::HowOftenWillYouContribute.new(current_donor) <<
         # Onboarding::SupportExtremePovertyAlleviation.new(current_donor) <<
         # Onboarding::SupportLifeSavingHealthInterventions.new(current_donor) <<
         # Onboarding::SupportAnimalSufferingPrevention.new(current_donor) <<
