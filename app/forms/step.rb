@@ -119,6 +119,8 @@ class Step < Node
                   (raw_value.gsub(/[^0-9\.-]/, '').to_d * 100).to_i
                 when :radio_buttons
                   raw_value.to_s.to_sym
+                when :tags
+                  Array(raw_value).map(&:to_sym)
                 when :checkboxes
                   Array(raw_value).map(&:to_sym)
                 when :string

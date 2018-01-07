@@ -14,9 +14,8 @@ module Onboarding
     allowed_response :high_impact, 'Makes the highest impact'
     allowed_response :belong_to_a_similar_minded_community, 'Part of a similar-minded community'
     allowed_response :become_an_expert, 'I want to become an expert on the issue area'
-    allowed_response :other, 'Other'
 
-    display_as :checkboxes
+    display_as :tags
 
     def save
       Donors::UpdateDonor.run!(donor, reasons_why_i_choose_an_organization: response)
