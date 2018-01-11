@@ -46,10 +46,10 @@ form#panda_cc_form.form
           label.label Donation amount
           #tokenize.control.has-icons-left
             input.input#amount type="number" value="5"
-            span.icon.is-left: i.fa.fa-dollar
+            span.icon.is-left: i.fa.fa-dollar-sign
           p.help
             | Every dollar you donate goes directly to the charities in the portfolio
-          
+
     .field
       .control
         button.button.is-large.is-primary type="submit" Donate
@@ -74,7 +74,7 @@ javascript:
       authenticity_token: "#{ form_authenticity_token }",
       amount_cents: Number(document.getElementById('amount').value) * 100
     };
-    
+
     var request = new XMLHttpRequest();
     request.open('POST', '/contributions', true);
     request.onload = function() {
@@ -90,7 +90,7 @@ javascript:
   });
 
   Panda.on('error', paymentError);
-  
+
   function paymentError(errors) {
     var message = "";
     errors.forEach(function(error) {

@@ -23,28 +23,15 @@ class PortfoliosController < ApplicationController
     redirect_to portfolio_path
   end
 
-  def update
-    command = Allocations::UpdateAllocations.run(
-      portfolio: active_portfolio,
-      allocations: params[:allocations].values
-    )
-
-    if command.success?
-      flash[:success] = 'Allocations saved!'
-      redirect_to portfolio_path
-    else
-      @allocations = params[:allocations].values.map { |a| Allocation.new(a) }
-      flash[:error] = command.errors.message_list.join('\n')
-      render :show
-    end
-  end
-
   def show
     Analytics::TrackEvent.run(user_id: current_donor.id, event: 'Viewed portfolio')
 
-    send_client_side_analytics_event('Goal: Viewed portfolio')
+    track_analytics_event_via_browser('Goal: Viewed portfolio')
 
     @allocations = Allocations::GetActiveAllocations.call(portfolio: active_portfolio)
+    @cause_areas = @allocations.map(&:organization).map(&:cause_area).uniq.map do |cause_area|
+      I18n.t('title', scope: ['cause_areas', cause_area])
+    end
   end
 
   private

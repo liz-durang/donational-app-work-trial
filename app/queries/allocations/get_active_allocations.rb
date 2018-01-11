@@ -5,7 +5,7 @@ module Allocations
     end
 
     def call(portfolio:)
-      @relation.where(portfolio: portfolio, deactivated_at: nil)
+      @relation.where(portfolio: portfolio, deactivated_at: nil).order(:organization_ein)
     end
   end
 end

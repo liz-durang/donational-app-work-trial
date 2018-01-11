@@ -9,7 +9,7 @@ module ApplicationHelper
       method: :delete,
       data: { confirm: 'Are you sure you want to sign out?' }
     ) do
-      icon_tag('fa-sign-out') + ' Sign out'
+      icon_tag('fa-sign-out-alt') + ' Sign out'
     end
   end
 

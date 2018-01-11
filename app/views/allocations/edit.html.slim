@@ -1,0 +1,27 @@
+section.section
+  .container
+    .columns
+      .column.is-3
+        = render 'shared/account_nav'
+      .column.is-9.content
+        h1.title Your Charitable Portfolio
+
+        p
+          ' When you contribute to your portfolio, we'll distribute the funds to
+          strong => pluralize(@allocations.count, 'charity')
+          | in your portfolio.
+
+        = display_flash_messages
+
+        = form_with scope: 'allocations', url: allocations_path, local: true, method: :put, class: 'form' do |f|
+          table.table.is-hoverable.is-fullwidth data-behavior="accordion"
+            thead
+              tr
+                th Charitable Organization
+                th Cause Area
+                th Allocation
+                th
+            - @allocations.each_with_index do |allocation, index|
+              = f.fields index.to_s, model: allocation do |allocation_form|
+                = render 'allocations/card', allocation: allocation, form: allocation_form
+          = f.submit class: 'button is-primary', value: 'Edit allocations'

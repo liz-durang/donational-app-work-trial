@@ -1,18 +1,23 @@
 aside.menu
-  p.menu-label Preferences
+  p.menu-label Your Giving
   ul.menu-list
     li: a href=portfolio_path
+      span.icon>: i.fa.fa-clipboard
+      | Your Charity Portfolio
+  p.menu-label Preferences
+  ul.menu-list
+    li: a href=edit_allocations_path
       span.icon>: i.fa.fa-balance-scale
-      | Portfolio Allocation
-    li: a href=edit_payment_methods_path
-      span.icon>: i.fa.fa-credit-card
-      | Payment Details
+      | Portfolio Allocations
     li: a href=contributions_path
-      span.icon>: i.fa.fa-dollar
+      span.icon>: i.fa.fa-dollar-sign
       | Your Donations
   p.menu-label Account
   ul.menu-list
-    li: a href=profiles_path(current_donor.username)
-      span.icon>: i.fa.fa-id-card
-      | View my public profile
+    li: a href=edit_payment_methods_path
+      span.icon>: i.fa.fa-credit-card
+      | Payment Details
     li = sign_out_link
+  /   li: a href=profiles_path(current_donor.username)
+  /     span.icon>: i.fa.fa-id-card
+  /     | View my public profile
