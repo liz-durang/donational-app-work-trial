@@ -14,6 +14,14 @@ $control-radius: 0px;
 // Bulma
 @import "bulma";
 
+.container {
+  &.is-desktop {
+    @media screen and (min-width: $desktop) {
+      max-width: $desktop + (2 * $gap);
+    }
+  }
+}
+
 // Overrides
 body {
   font-weight: $weight-light;

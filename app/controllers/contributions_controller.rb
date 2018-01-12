@@ -16,7 +16,7 @@ class ContributionsController < ApplicationController
       amount_cents: params[:amount_dollars].to_i * 100
     )
 
-    send_client_side_analytics_event('Goal: Donation', { revenue: params[:amount_dollars].to_i })
+    track_analytics_event_via_browser('Goal: Donation', { revenue: params[:amount_dollars].to_i })
 
     redirect_to contributions_path
   end

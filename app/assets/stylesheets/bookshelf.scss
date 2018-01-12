@@ -1,0 +1,336 @@
+.book-list {
+	list-style: none;
+	position: relative;
+
+  li {
+  	z-index: 1;
+  	-webkit-perspective: 1800px;
+  	perspective: 1800px;
+  }
+
+  li:last-child {
+  	margin-right: 0;
+  }
+}
+
+.book {
+	position: relative;
+	width: 100%;
+  height: 50vh;
+	max-height: 400px;
+	max-width: 300px;
+	transform-style: preserve-3d;
+	transition: transform .5s;
+  margin: 0 auto;
+}
+
+.book:hover {
+	transform: rotate3d(0,1,0,20deg);
+}
+
+.book > div,
+.book-front > div {
+	display: block;
+	position: absolute;
+}
+
+.book-front {
+	cursor: pointer;
+	transform-style: preserve-3d;
+	transform-origin: 0% 50%;
+	transition: transform .5s;
+	transform: translate3d(0,0,20px);
+	z-index: 10;
+}
+
+.book-front > div {
+	z-index: 1;
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+	transform-style: preserve-3d;
+}
+
+.book-page {
+	transform: translate3d(0,0,19px);
+	display: none;
+  top: 5px;
+  bottom: 5px;
+  left: 0px;
+  right: 5px;
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+	z-index: 9;
+}
+
+.book-front,
+.book-back,
+.book-front > div {
+	width: 100%;
+	height: 100%;
+}
+
+.book-left,
+.book-right {
+	width: 40px;
+	left: -20px;
+}
+
+.book-top,
+.book-bottom {
+	height: 40px;
+	top: -15px;
+  left: 0px;
+  right: 5px;
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+}
+
+.book-back {
+	transform: rotate3d(0,1,0,-180deg) translate3d(0,0,20px);
+	box-shadow: 10px 10px 30px rgba(0,0,0,0.3);
+	border-radius: 3px 0 0 3px;
+}
+
+.book-cover-back {
+	background-color: #000;
+	transform: rotate3d(0,1,0,-179deg);
+}
+
+.book-right {
+	top: 5px;
+	bottom: 5px;
+	-moz-transform: rotate3d(0,1,0,90deg) translate3d(0,0,295px);
+	transform: rotate3d(0,1,0,90deg) translate3d(0,0,295px);
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+}
+
+.book-left {
+	height: 100%;
+	transform: rotate3d(0,1,0,-90deg);
+}
+
+.book-top {
+	transform: rotate3d(1,0,0,90deg);
+}
+
+.book-bottom {
+	transform: rotate3d(1,0,0,-90deg) translate3d(0,0,390px);
+}
+
+/* Transform classes */
+
+.book-viewinside .book-front {
+	transform: translate3d(0,0,20px) rotate3d(0,1,0,-160deg);
+}
+
+.book.book-viewinside {
+	transform: translate3d(0,0,150px) rotate3d(0,1,0,0deg);
+}
+
+.book.book-viewback {
+	transform: translate3d(0,0,0px) rotate3d(0,1,0,180deg);
+}
+
+/* Main colors and content */
+
+.book-page,
+.book-right,
+.book-top,
+.book-bottom {
+	background-color: #fff;
+}
+
+.book-front > div {
+	border-radius: 0 3px 3px 0;
+	box-shadow:
+		inset 4px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.book-front:after {
+	content: '';
+	position: absolute;
+	top: 1px;
+	bottom: 1px;
+	left: -1px;
+	width: 1px;
+}
+
+.book-cover:after,
+.book-back:after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 10px;
+	bottom: 0;
+	width: 3px;
+	background: rgba(0,0,0,0.06);
+	box-shadow: 1px 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.book-back:after {
+	left: auto;
+	right: 10px;
+}
+
+.book-left h2 {
+	width: 400px;
+	height: 40px;
+	-moz-transform-origin: 0 0;
+	transform-origin: 0 0;
+	transform: rotate(90deg) translateY(-40px);
+}
+
+.book-content {
+	position: absolute;
+	top: 30px;
+	left: 20px;
+	bottom: 20px;
+	right: 20px;
+	padding: 30px;
+	overflow: hidden;
+	background: #fff;
+	opacity: 0;
+	pointer-events: none;
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+	-webkit-transition: opacity 0.3s ease-in-out;
+	transition: opacity 0.3s ease-in-out;
+	cursor: default;
+}
+
+.book-content-current {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.book-content p {
+	padding: 0 0 10px;
+	-webkit-font-smoothing: antialiased;
+	color: #000;
+	font-size: 13px;
+	line-height: 20px;
+	text-align: justify;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.book-page nav {
+	display: block;
+	text-align: center;
+	margin-top: 20px;
+	position: relative;
+	z-index: 100;
+	cursor: pointer;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.book-page nav span {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	color: #aaa;
+	background: #f0f0f0;
+	border-radius: 50%;
+}
+
+/* Individual style & artwork */
+
+
+/* Book 1 */
+.book-colored .book-front > div,
+.book-colored .book-back,
+.book-colored .book-left,
+.book-colored .book-front:after {
+	background-color: #ff924a;
+}
+
+.climate_and_environment .book-front > div,
+.climate_and_environment .book-back,
+.climate_and_environment .book-left,
+.climate_and_environment .book-front:after {
+	background-color: #68ae3b;
+}
+
+.global_health .book-front > div,
+.global_health .book-back,
+.global_health .book-left,
+.global_health .book-front:after {
+	background-color: #1892cc;
+}
+
+.poverty_eradication .book-front > div,
+.poverty_eradication .book-back,
+.poverty_eradication .book-left,
+.poverty_eradication .book-front:after {
+	background-color: #e9da63;
+}
+
+.book-colored .book-cover {
+	// background-image: url(../images/1.png);
+	background-repeat: no-repeat;
+	background-position: 10px 40px;
+}
+
+.book-colored .book-cover h4 {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	padding: 30px;
+	background: rgba(255,255,255,0.2);
+	color: #fff;
+	text-shadow: 0 -1px 0 rgba(0,0,0,0.1);
+}
+
+.book-colored .book-cover h2 {
+	font-family: "Big Caslon", "Book Antiqua", "Palatino Linotype", Georgia, serif;
+	font-weight: 600;
+	font-size: 20px;
+  color: white;
+	position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 100px;
+  padding: 50px 30px 0;
+}
+
+.book-colored .book-cover h4 {
+	text-transform: uppercase;
+  font-size: 14px;
+  line-height: 20px;
+  min-height: 100px;
+}
+
+.book-colored .book-content p {
+	font-family: Georgia, Times, "Times New Roman", serif;
+}
+
+.book-colored .book-left h2 {
+	font-family: "Big Caslon", "Book Antiqua", "Palatino Linotype", Georgia, serif;
+	text-transform: uppercase;
+	font-weight: 600;
+	color: #fff;
+	font-size: 15px;
+	line-height: 40px;
+	padding-right: 10px;
+	text-align: right;
+}
+
+.book-colored .book-back p {
+	color: #fff;
+	font-size: 13px;
+	padding: 40px;
+	text-align: center;
+	font-weight: 700;
+}

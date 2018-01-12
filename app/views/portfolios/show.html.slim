@@ -1,41 +1,87 @@
 section.section
-  .container
-    .columns
-      .column.is-3
-        = render 'shared/account_nav'
-      .column.is-9.content
-        h1.title Your Charitable Portfolio
+  .container.is-desktop
+    .content.has-text-centered
+      h1.title.is-spaced
+        => icon_tag('fa-bolt')
+        ' Smart choices,
+        = current_donor.first_name
+        | !
 
-        p
-          ' When you contribute to your portfolio, we'll distribute the funds to
-          strong => pluralize(@allocations.count, 'charity')
-          | in your portfolio.
+      p.subtitle
+        ' Hey there,
+        = current_donor.first_name
+        ' !
+        ' We've analyzed your answers and built a portfolio that matches your top priorities, like
+        = @cause_areas.sample(2).map { |c| content_tag(:strong, c) }.to_sentence.html_safe
 
-        = display_flash_messages
+      p
+        | Let's explore your portfolio
+      p
+        a href="#my-portfolio"
+          span.icon.is-medium: i.fa.fa-arrow-circle-down
 
-        = form_with scope: 'allocations', url: portfolio_path, local: true, method: :put, class: 'form' do |f|
-          table.table.is-hoverable.is-fullwidth data-behavior="accordion"
-            thead
-              tr
-                th Charitable Organization
-                th Cause Area
-                th Allocation
-                th
-            - @allocations.each_with_index do |allocation, index|
-              = f.fields index.to_s, model: allocation do |allocation_form|
-                = render 'allocations/card', allocation: allocation, form: allocation_form
-          = f.submit class: 'button is-primary', value: 'Edit allocations'
+section.hero.is-light#my-portfolio
+  .hero-body
+    .container.is-desktop.has-text-centered
+      h4.subtitle
+        span.icon.is-size-7>: i.fa.fa-heart
+        | Charities that align with your values & beliefs
 
-        hr
+      p
+        ' All charities in this portfolio have been
+        strong vetted by industry experts
+        ' , are
+        strong> transparent
+        ' about their financials, and rate amonst the
+        strong> most efficient
+        ' organizations for
+        strong> improving
+        ' and for
+        strong saving lives.
 
-        = render 'shared/contribution_form'
+      hr
 
-        article.notification
-          .media
-            .media-left: span.icon.is-medium: i.fa.fa-info
-            p.media-content
-              strong> Worried that a small donation is inefficient? We've got you covered!
-              br
-              ' Charities incur overhead costs whenever they process a donation.
-              ' We hate unnecessary fees, so we pool your donation to a charity with donations by other users on the platform.
-              ' By making use of economies of scale charities only have to process a single (big!) donation, and can put even more of your funds into making an impact.
+      ul.columns.is-multiline.book-list
+        - @allocations.each do |allocation|
+          li.column.is-3
+            .book.book-colored class=allocation.organization.cause_area
+              .book-front
+                .book-cover-back
+                .book-cover
+                  h2 = allocation.organization.name
+                  h4 = I18n.t('title', scope: ['cause_areas', allocation.organization.cause_area])
+              .book-page
+                - allocation.organization.description.split('. ').each do |page|
+                  .book-content
+                    p
+                      = page
+              .book-back
+              .book-right
+              .book-left
+                h2
+                  span = allocation.organization.name
+                  span = allocation.organization.cause_area
+              .book-top
+              .book-bottom
+            br
+            p: button.button Read more
+            hr
+section.section
+  .container.is-desktop.has-text-centered
+    span.icon.is-medium: i.fa.fa-arrow-circle-down
+    h2.title Make an impact, give to your portfolio
+
+    = render 'shared/contribution_form'
+
+article.notification
+  .container.is-desktop
+    .media
+      .media-left: span.icon.is-medium: i.fa.fa-info
+      p.media-content
+        strong> Worried that a small donation is inefficient? We've got you covered!
+        br
+        ' Charities incur overhead costs whenever they process a donation.
+        ' We hate unnecessary fees, so we pool your donation to a charity with donations by other users on the platform.
+        ' By making use of economies of scale charities only have to process a single (big!) donation, and can put even more of your funds into making an impact.
+
+/ = render 'shared/account_nav'

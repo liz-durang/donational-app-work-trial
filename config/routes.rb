@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   # Retention
 
   # Revenue
+  resource :allocations
   resources :contributions, only: %i[index create]
   resource :payment_methods, path: 'payment-methods', only: %i[edit create]
 
