@@ -22,6 +22,8 @@
 #  payment_processor_customer_id               :string
 #  giving_challenges                           :string           default([]), is an Array
 #  reasons_why_i_choose_an_organization        :string           default([]), is an Array
+#  contribution_frequency                      :string
+#  portfolio_diversity                         :integer
 #
 
 FactoryBot.define do

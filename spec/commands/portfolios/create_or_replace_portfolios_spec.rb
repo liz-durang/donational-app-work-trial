@@ -6,7 +6,12 @@ RSpec.describe Portfolios::CreateOrReplacePortfolio do
   end
 
   let(:portfolio_params) do
-    { donor: donor, donation_rate: 0.01, annual_income_cents: 80_000_00 }
+    {
+      donor: donor,
+      donation_rate: 0.01,
+      annual_income_cents: 80_000_00,
+      contribution_frequency: :monthly
+    }
   end
   let(:other_donor) { create(:donor) }
   let(:donor) { create(:donor) }
