@@ -1,6 +1,6 @@
 module Onboarding
   class PrimaryReasons < QuickResponseStep
-    section "Let's get started"
+    section "Your needs"
 
     message 'What are your main challenges to your charitable giving today?'
 

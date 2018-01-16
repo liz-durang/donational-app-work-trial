@@ -5,5 +5,5 @@ form data-behavior-auto-submit=true
       - step.allowed_responses.each do |response|
         input.is-hidden type='checkbox' name='response[]' value=response.value id="response-#{response.to_param}"
         label.button for="response-#{response.to_param}" = response.title
-  .field
+  .field.has-text-centered
     button.button.is-medium.is-primary.is-outlined type='submit' Next

@@ -59,6 +59,7 @@ function createOnboardingChannel(uuid) {
         .focus();
 
       window.scrollTo(0, 0);
+      FontAwesome.dom.i2svg();
     },
 
     respond: function(serializedFormData) {

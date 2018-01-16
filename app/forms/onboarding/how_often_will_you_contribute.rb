@@ -8,10 +8,10 @@ module Onboarding
 
     display_as :radio_buttons
 
-    allowed_response :once, 'Once'
     allowed_response :monthly, 'Monthly'
-    allowed_response :quarterly, 'Every season'
+    allowed_response :quarterly, 'Every Quarter'
     allowed_response :annually, 'Annually'
+    allowed_response :once, 'Once'
     allowed_response :never, "I'm just looking"
 
     def save

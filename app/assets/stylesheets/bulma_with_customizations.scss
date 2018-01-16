@@ -1,8 +1,8 @@
 // Font resources
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400|Lora:300,400|Raleway:300,400');
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400|Lora:300,400|Raleway:300,400');
 
 // Initial Variables for Bulma
-$family-sans-serif: "Source Sans Pro", Helvetica, Arial, sans-serif;
+$family-sans-serif: 'Lato', Helvetica, Arial, sans-serif;
 $family-serif: 'Lora', serif;
 $family-primary: $family-sans-serif;
 
@@ -20,6 +20,10 @@ $control-radius: 0px;
       max-width: $desktop + (2 * $gap);
     }
   }
+}
+
+html.minimal {
+  background: #fafafa;
 }
 
 // Overrides

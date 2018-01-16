@@ -1,12 +1,10 @@
 doctype html
-html
+html.minimal
   head
     title Donational | The more deliberate way to donate
     = render 'shared/head'
 
   body
-    = render 'shared/minimal_nav'
-
     = yield
 
     = render 'shared/analytics'
