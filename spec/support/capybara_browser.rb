@@ -1,7 +1,7 @@
 require "selenium/webdriver"
 
 Capybara.register_driver :chrome do |app|
-  capabilities = { chromeOptions: { args: %w(headless disable-gpu) } }
+  capabilities = { chromeOptions: { args: %w(headless disable-gpu window-size=1024,768) } }
 
   # Set path to chrome binary when running on Heroku CI
   # https://github.com/heroku/heroku-buildpack-google-chrome#selenium
