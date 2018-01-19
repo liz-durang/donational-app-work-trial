@@ -36,6 +36,14 @@ body.minimal {
   }
 }
 
+section.embossed {
+  background: whitesmoke;
+  border-top: 1px solid #eee;
+}
+
+.table.has-cells-centered {
+ th, td { vertical-align: middle; }
+}
 
 // Overrides
 body {

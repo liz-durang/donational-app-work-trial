@@ -11,33 +11,39 @@ section.section
       - else
         p
           ' You have made
-          => pluralize(@contributions.count, 'donation')
+          strong => pluralize(@contributions.count, 'donation')
           | to your charity portfolio.
 
-        table.table.is-fullwidth data-behavior="accordion"
-          thead
-            th Donation amount
-            th Distributions
-            th Donated at
-            th Transaction id
-          - @contributions.each do |contribution|
-            tr
-              td = number_to_currency(contribution.amount_cents / 100.0)
-              td data-target="contribution-#{contribution.id}"
-                p
-                  a
-                    ' Distributed to
-                    = pluralize(contribution.donations.count, 'charity')
+section.section.embossed
+  .container
+    table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
+      - @contributions.each_with_index do |contribution, index|
+        tr data-accordion-trigger="contribution-#{contribution.id}"
+          td
+            p
+              strong>
+                | Contribution #
+                = @contributions.count - index
+            small.hint
+              ' Ref:
+              = contribution.id
+          td
+            p
+              a
+                ' Made positive impact at
+                = pluralize(contribution.donations.count, 'charity')
+          td.has-text-right
+            strong = number_to_currency(contribution.amount_cents / 100.0)
+          td
+            => time_ago_in_words(contribution.processed_at)
+            | ago
+        - contribution.donations.each do |donation|
+          tr.is-hidden data-accordion-panel-for="contribution-#{contribution.id}"
+            td.has-text-right colspan=2
+              em => donation.organization.name
+            td.has-text-right
+              em = number_to_currency(donation.amount_cents / 100.0)
+            td &nbsp;
 
-                .is-hidden id="contribution-#{contribution.id}"
-                  ul
-                    - contribution.donations.each do |donation|
-                      li
-                        strong => donation.organization.name
-                        = number_to_currency(donation.amount_cents / 100.0)
-              td
-                => time_ago_in_words(contribution.processed_at)
-                | ago
-              td = contribution.id
-
-      = render 'shared/contribution_form'
+section.section
+  = render 'shared/contribution_form'

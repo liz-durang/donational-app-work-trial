@@ -20,50 +20,49 @@ section.section
           span.icon.is-medium: i.fa.fa-arrow-circle-down
       p Let's explore your portfolio
 
-section.hero.is-light#my-portfolio
-  .hero-body
-    .container.has-text-centered
-      h4.subtitle
-        span.icon.is-size-7>: i.fa.fa-heart
-        | Charities that align with your values & beliefs
+section.section.embossed#my-portfolio
+  .container.has-text-centered
+    h4.subtitle
+      span.icon.is-size-7>: i.fa.fa-heart
+      | Charities that align with your values & beliefs
 
-      p
-        ' All charities in this portfolio have been
-        strong vetted by industry experts
-        ' , are
-        strong> transparent
-        ' about their financials, and rate amonst the
-        strong> most efficient
-        ' organizations for
-        strong> improving
-        ' and for
-        strong saving lives.
+    p
+      ' All charities in this portfolio have been
+      strong vetted by industry experts
+      ' , are
+      strong> transparent
+      ' about their financials, and rate amonst the
+      strong> most efficient
+      ' organizations for
+      strong> improving
+      ' and for
+      strong saving lives.
 
-      hr
+    hr
 
-      ul.columns.is-multiline.is-centered.book-list
-        - @allocations.each do |allocation|
-          li.column.is-3
-            .book.book-colored class=allocation.organization.cause_area
-              .book-front
-                .book-cover-back
-                .book-cover
-                  h2 = allocation.organization.name
-                  h4 = I18n.t('title', scope: ['cause_areas', allocation.organization.cause_area])
-              .book-page
-                - allocation.organization.description.split('. ').each do |page|
-                  .book-content
-                    p
-                      = page
-              .book-back
-              .book-right
-              .book-left
+    ul.columns.is-multiline.is-centered.book-list
+      - @allocations.each do |allocation|
+        li.column.is-3
+          .book.book-colored class=allocation.organization.cause_area
+            .book-front
+              .book-cover-back
+              .book-cover
                 h2 = allocation.organization.name
-              .book-top
-              .book-bottom
-            br
-            p: button.button Read more
-            hr
+                h4 = I18n.t('title', scope: ['cause_areas', allocation.organization.cause_area])
+            .book-page
+              - allocation.organization.description.split('. ').each do |page|
+                .book-content
+                  p
+                    = page
+            .book-back
+            .book-right
+            .book-left
+              h2 = allocation.organization.name
+            .book-top
+            .book-bottom
+          br
+          p: button.button Read more
+          hr
 section.section
   .container.has-text-centered
     span.icon.is-medium: i.fa.fa-arrow-circle-down
