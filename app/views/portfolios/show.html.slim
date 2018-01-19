@@ -5,7 +5,7 @@ section.section
         => icon_tag('fa-bolt')
         br
         ' Smart choices,
-        = current_donor.first_name
+        = @portfolio.donor_first_name
         | !
 
       p.subtitle
@@ -13,7 +13,7 @@ section.section
         = current_donor.first_name
         ' !
         ' We've analyzed your answers and built a portfolio that matches your top priorities, like
-        = @cause_areas.sample(2).map { |c| content_tag(:strong, c) }.to_sentence.html_safe
+        = @portfolio.cause_areas.sample(2).map { |c| content_tag(:strong, I18n.t('title', scope: ['cause_areas', c])) }.to_sentence.html_safe
 
       p
         a href="#my-portfolio"
@@ -41,23 +41,23 @@ section.section.embossed#my-portfolio
     hr
 
     ul.columns.is-multiline.is-centered.book-list
-      - @allocations.each do |allocation|
+      - @portfolio.organizations.each do |organization|
         li.column.is-3
-          .book.book-colored class=allocation.organization.cause_area
+          .book.book-colored class=organization.cause_area
             .book-front
               .book-cover-back
               .book-cover
-                h2 = allocation.organization.name
-                h4 = I18n.t('title', scope: ['cause_areas', allocation.organization.cause_area])
+                h2 = organization.name
+                h4 = I18n.t('title', scope: ['cause_areas', organization.cause_area])
             .book-page
-              - allocation.organization.description.split('. ').each do |page|
+              - organization.description.split('. ').each do |page|
                 .book-content
                   p
                     = page
             .book-back
             .book-right
             .book-left
-              h2 = allocation.organization.name
+              h2 = organization.name
             .book-top
             .book-bottom
           br

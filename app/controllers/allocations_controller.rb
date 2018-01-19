@@ -9,7 +9,6 @@ class AllocationsController < ApplicationController
 
     if command.success?
       flash[:success] = 'Allocations saved!'
-      Analytics::TrackEvent.run(user_id: current_donor.id, event: 'Viewed allocations')
       redirect_to edit_allocations_path
     else
       @allocations = params[:allocations].values.map { |a| Allocation.new(a) }

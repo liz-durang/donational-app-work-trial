@@ -29,13 +29,18 @@ class PortfoliosController < ApplicationController
 
     track_analytics_event_via_browser('Goal: Viewed portfolio')
 
-    @allocations = Allocations::GetActiveAllocations.call(portfolio: active_portfolio)
-    @cause_areas = @allocations.map(&:organization).map(&:cause_area).uniq.map do |cause_area|
-      I18n.t('title', scope: ['cause_areas', cause_area])
-    end
+    @portfolio = OpenStruct.new(
+      donor_first_name: current_donor.first_name,
+      organizations: organizations,
+      cause_areas: organizations.map(&:cause_area).uniq
+    )
   end
 
   private
+
+  def organizations
+    @organizations ||= Allocations::GetActiveAllocations.call(portfolio: active_portfolio).map(&:organization)
+  end
 
   def active_portfolio
     @active_portfolio ||= Portfolios::GetActivePortfolio.call(donor: current_donor)
