@@ -1,4 +1,5 @@
 nav.navbar role="navigation" aria-label="main navigation"
+  .container
     .navbar-brand
       a.navbar-item href="/"
         h1.is-5.title Donational
@@ -8,5 +9,14 @@ nav.navbar role="navigation" aria-label="main navigation"
         span
         span
     div#navMenu.navbar-menu
+      - if logged_in?
+        .navbar-end
+          a.navbar-item href=portfolio_path
+            | Portfolio
+          a.navbar-item href=edit_allocations_path
+            | Allocations
+          a.navbar-item href=contributions_path
+            | Donations
+
       .navbar-end
         .navbar-item = sign_in_button_or_account

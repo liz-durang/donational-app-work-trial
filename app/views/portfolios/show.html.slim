@@ -1,8 +1,9 @@
 section.section
-  .container.is-desktop
+  .container
     .content.has-text-centered
       h1.title.is-spaced
         => icon_tag('fa-bolt')
+        br
         ' Smart choices,
         = current_donor.first_name
         | !
@@ -15,14 +16,13 @@ section.section
         = @cause_areas.sample(2).map { |c| content_tag(:strong, c) }.to_sentence.html_safe
 
       p
-        | Let's explore your portfolio
-      p
         a href="#my-portfolio"
           span.icon.is-medium: i.fa.fa-arrow-circle-down
+      p Let's explore your portfolio
 
 section.hero.is-light#my-portfolio
   .hero-body
-    .container.is-desktop.has-text-centered
+    .container.has-text-centered
       h4.subtitle
         span.icon.is-size-7>: i.fa.fa-heart
         | Charities that align with your values & beliefs
@@ -65,14 +65,14 @@ section.hero.is-light#my-portfolio
             p: button.button Read more
             hr
 section.section
-  .container.is-desktop.has-text-centered
+  .container.has-text-centered
     span.icon.is-medium: i.fa.fa-arrow-circle-down
     h2.title Make an impact, give to your portfolio
 
     = render 'shared/contribution_form'
 
 article.notification
-  .container.is-desktop
+  .container
     .media
       .media-left: span.icon.is-medium: i.fa.fa-info
       p.media-content
@@ -81,5 +81,3 @@ article.notification
         ' Charities incur overhead costs whenever they process a donation.
         ' We hate unnecessary fees, so we pool your donation to a charity with donations by other users on the platform.
         ' By making use of economies of scale charities only have to process a single (big!) donation, and can put even more of your funds into making an impact.
-
-/ = render 'shared/account_nav'

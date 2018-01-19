@@ -1,15 +1,17 @@
 - content_for :breadcrumbs do
   = render 'breadcrumbs'
 
-section.section
-  .container.is-desktop
-    .columns
-      .column.is-8.is-offset-2
-        h2.has-text-centered.title#question-heading Let's get started
+main.container
+  section.section
+    h2.has-text-centered.title#question-heading Let's get started
 
-        ol.chat-messages
+    ol.chat-messages
 
-        .chat-responses
+    .chat-responses
+
+footer.container.has-text-centered
+  section.section
+    a.button.is-text.is-small href="/" Donational &copy;
 
 javascript:
   createOnboardingChannel(#{SecureRandom.uuid[0..6].to_json.html_safe});
