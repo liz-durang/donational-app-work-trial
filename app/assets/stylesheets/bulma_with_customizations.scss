@@ -2,28 +2,47 @@
 @import url('https://fonts.googleapis.com/css?family=Lato:300,400|Lora:300,400|Raleway:300,400');
 
 // Initial Variables for Bulma
-$family-sans-serif: 'Lato', Helvetica, Arial, sans-serif;
+$family-sans-serif: "Lato", Helvetica, Arial, sans-serif;
 $family-serif: 'Lora', serif;
 $family-primary: $family-sans-serif;
 
 $primary: #8600ED;
+$link: #8600ED;
 $primary-invert: white;
 
 $control-radius: 0px;
+$footer-background-color: none;
 
 // Bulma
 @import "bulma";
 
 .container {
-  &.is-desktop {
-    @media screen and (min-width: $desktop) {
-      max-width: $desktop + (2 * $gap);
-    }
+  max-width: $desktop + (2 * $gap);
+}
+html {
+  height: 100vh;
+}
+
+body.minimal {
+  min-height: 100vh;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+
+  main { flex: 1; }
+  .container {
+    max-width: $tablet;
+    margin: 0 auto;
   }
 }
 
-html.minimal {
-  background: #fafafa;
+section.embossed {
+  background: whitesmoke;
+  border-top: 1px solid #eee;
+}
+
+.table.has-cells-centered {
+ th, td { vertical-align: middle; }
 }
 
 // Overrides
@@ -56,5 +75,3 @@ h1, h2, h3, h4, h5, h6, .title {
 .buttons input:not(:checked) + label {
   @extend .is-outlined;
 }
-
-@import "bulma_divider";

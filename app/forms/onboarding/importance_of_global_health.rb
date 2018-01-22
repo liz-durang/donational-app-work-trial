@@ -3,7 +3,7 @@ module Onboarding
     section "What's important to you"
 
     message "I'd like to know what issue areas matter most to you. We'll use this to decide which charities to include in your portfolio"
-    message "On a scale from 1-7, how important are the following issues:"
+    message "On a scale from 1-7, how important is it to give towards the following issues?"
     subtitle "Global health"
 
     allowed_response 1, "I have other priorities"

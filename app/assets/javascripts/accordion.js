@@ -4,11 +4,11 @@ document.addEventListener('turbolinks:load', function() {
   }
 
   const $accordions = getAll('[data-behavior="accordion"]');
-  const $accordionToggles = getAll('[data-behavior="accordion"] [data-target]');
-  const $accordionPanels = $accordionToggles.map(function($el) { return $el.dataset.target });
+  const $accordionTriggers = getAll('[data-behavior="accordion"] [data-accordion-trigger]');
+  const $accordionPanels = getAll('[data-behavior="accordion"] [data-accordion-panel-for]');
 
-  if ($accordionToggles.length > 0) {
-    $accordionToggles.forEach(function($el) {
+  if ($accordionTriggers.length > 0) {
+    $accordionTriggers.forEach(function($el) {
       $el.addEventListener('click', function() {
         const currentlyActive = $el.classList.contains('is-active');
 
@@ -17,14 +17,14 @@ document.addEventListener('turbolinks:load', function() {
 
         if (!currentlyActive) {
           activateToggle($el);
-          showPanel($el.dataset.target);
+          showPanel($el.dataset['accordion-trigger']);
         }
       });
     });
   }
 
   function deactivateAllToggles() {
-    $accordionToggles.forEach(function($el) {
+    $accordionTriggers.forEach(function($el) {
       $el.classList.remove('is-active');
     });
   }
@@ -34,12 +34,14 @@ document.addEventListener('turbolinks:load', function() {
   }
 
   function hideAllPanels() {
-    $accordionPanels.forEach(function(id) {
-      document.getElementById(id).classList.add('is-hidden');
+    $accordionPanels.forEach(function($el) {
+      $el.classList.add('is-hidden');
     });
   }
 
   function showPanel(id) {
-    document.getElementById(id).classList.remove('is-hidden');
+    getAll('[data-accordion-panel-for="' + id + '"]').forEach(function($el) {
+      $el.classList.remove('is-hidden');
+    });
   }
 });

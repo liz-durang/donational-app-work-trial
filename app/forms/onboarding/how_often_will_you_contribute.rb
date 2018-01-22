@@ -12,7 +12,7 @@ module Onboarding
     allowed_response :quarterly, 'Every Quarter'
     allowed_response :annually, 'Annually'
     allowed_response :once, 'Once'
-    allowed_response :never, "I'm just looking"
+    # allowed_response :never, "I'm just looking"
 
     def save
       Donors::UpdateDonor.run!(donor, contribution_frequency: response)
