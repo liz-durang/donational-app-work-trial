@@ -8,8 +8,7 @@ module Portfolios
     end
 
     optional do
-      decimal :donation_rate, min: 0, max: 1
-      integer :annual_income_cents, min: 0
+      integer :contribution_amount_cents, min: 0
     end
 
     def execute

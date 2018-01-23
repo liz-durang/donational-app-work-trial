@@ -16,6 +16,7 @@ section.section
 
 section.section.embossed
   .container
+    = display_flash_messages
     table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
       - @contributions.each_with_index do |contribution, index|
         tr data-accordion-trigger="contribution-#{contribution.id}"
@@ -35,8 +36,9 @@ section.section.embossed
           td.has-text-right
             strong = number_to_currency(contribution.amount_cents / 100.0)
           td
-            => time_ago_in_words(contribution.processed_at)
-            | ago
+            - if contribution.processed_at?
+              => time_ago_in_words(contribution.processed_at)
+              | ago
         - contribution.donations.each do |donation|
           tr.is-hidden data-accordion-panel-for="contribution-#{contribution.id}"
             td.has-text-right colspan=2

@@ -5,18 +5,21 @@ class ContributionsController < ApplicationController
   def index
     redirect_to edit_payment_methods_path and return unless active_payment_method?
 
+    active_portfolio
     @contributions = Contributions::GetProcessedContributions.call(donor: current_donor)
   end
 
   def create
     redirect_to edit_payment_methods_path and return unless active_payment_method?
 
+    amount_dollars = params[:portfolio][:amount_dollars].to_i
+
     Contributions::CreateContribution.run!(
       portfolio: active_portfolio,
-      amount_cents: params[:amount_dollars].to_i * 100
+      amount_cents: amount_dollars * 100
     )
 
-    track_analytics_event_via_browser('Goal: Donation', { revenue: params[:amount_dollars].to_i })
+    track_analytics_event_via_browser('Goal: Donation', { revenue: amount_dollars })
 
     redirect_to contributions_path
   end
