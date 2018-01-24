@@ -1,102 +1,128 @@
 - content_for :hero do
-  section.hero
+  section.hero.is-fullheight
+    .hero-head
+      nav.navbar role="navigation" aria-label="main navigation"
+        .container
+          .navbar-brand
+            a.navbar-item href="/"
+              h1.is-5.title Donational
+
+            button.button.navbar-burger.is-white data-target="navMenu"
+              span
+              span
+              span
+          div#navMenu.navbar-menu
+            .navbar-end
+              .navbar-item = sign_in_button_or_account
+
     .hero-body
       .container
-        .columns.has-text-centered
-          .column.is-6 style="display: flex; flex-direction: column; justify-content: center"
-            h1.title.is-spaced Your Partner for Smart Donations
-            h2.subtitle Create a high impact tax-deductible charitable portfolio based on what matters most to you.
-            br
-            p
-              a.button.is-primary.is-medium href=onboarding_path
-                span See Top Charities
-                span.icon.is-small &rarr;
-            p
-              a.button.is-text.is-medium href='#learn-more'
-                span.icon.is-small: i.far.fa-file-alt
-                span Learn more
-          .column.is-6
-            = image_tag 'hero-image.jpg'
-
-section.hero.is-dark#learn-more
-  .container.has-text-centered.hero-body
-    h1.title.is-spaced Introducing Your Charitable Advisor
-    h2.subtitle
-      ' We don't want you to just give.
-      ' Our philosophy is to recommend outstanding giving opportunities focused on evidence of
-      strong high impact
-      ',
-      strong> cost-effectiveness
-      ' and
-      strong transparency.
-
-section.section#benefits
-  .container
-    .columns
-      .column.is-6
-        = image_tag('portfolio-screenshot.png')
-      .column.is-6.has-text-centered
-        strong How it works
-        p.subtitle Spark social action by doing good with your money.
         .columns
-          .column
-            .content
-              span.is-large.icon: i.far.fa-handshake
-              h4.title.is-5 Tell us about yourself
-              p Answer our survey to tell us what causes matter to you
-          .column
-            .content
-              span.is-large.icon: i.far.fa-check-square
-              h4.title.is-5 Choose what matters to you
-              p Select + give to nonprofits based on our carefully researched recommendations
-          .column
-            .content
-              span.is-large.icon: i.far.fa-chart-bar
-              h4.title.is-5 See your impact
-              p Track your distribution of giving + become an expert on causes that matter to you
+          .column.is-5.is-vertically-centered
+            h1.title.is-1.is-spaced
+              ' Take a stand.
+              | Donate to causes that reflect you.
+            h2.subtitle We are your partner for smarter donations.
+            p
+              a.button.is-primary.is-medium.is-fullwidth href=onboarding_path
+                span Tell us what matters to you
+                span.icon.is-small &rarr;
+          .column.is-offset-2.is-5
+            = image_tag 'hero-image.jpg'
+    .hero-footer
+      p.has-text-centered.is-spaced
+        a.button.is-text href='#learn-more'
+          span.icon.is-small: i.far.fa-file-alt
+          span Learn more about us
+section.hero.is-dark.is-medium#learn-more
+  .hero-body
+    .container
+      h1.title.is-spaced.has-text-centered Introducing your Charitable Advisor
+      h2.subtitle.has-text-centered
+        ' Our philosophy is to recommend outstanding giving opportunities.
+        br
+        ' Backed by
+        strong> evidence
+        ' and supported by
+        strong experts
+        | .
+      .columns.is-mobile
+        .column.is-vertically-centered
+          = image_tag('portfolio-screenshot.png')
+        .is-divider-vertical
+        .column.is-vertically-centered
+          ul.is-size-4.fa-ul
+            li
+              span.fa-li: i.fas.fa-check-square
+              | Values aligned
+            li
+              span.fa-li: i.fas.fa-check-square
+              | High impact
+            li
+              span.fa-li: i.fas.fa-check-square
+              | Cost-effective
+            li
+              span.fa-li: i.fas.fa-check-square
+              | Transparent
+
+section.hero#how-it-works
+  .container
+    .hero-body
+      h2.title How it works
+      h3.subtitle Spark social action by doing good with your money.
+      .columns
+        .column
+            span.is-large.icon: i.far.fa-handshake
+            h4.title.is-5 Tell us about yourself
+            p Answer our survey to tell us what causes matter to you
+        .column
+            span.is-large.icon: i.far.fa-check-square
+            h4.title.is-5 Choose what matters to you
+            p Select + give to nonprofits based on our carefully researched recommendations
+        .column
+            span.is-large.icon: i.far.fa-chart-bar
+            h4.title.is-5 See your impact
+            p Track your distribution of giving + become an expert on causes that matter to you
 
 section.hero.is-light
   .hero-body
     .container.has-text-centered
       p.subtitle.is-3 Join thousands of high impact donors
-      .columns
-        .column
-          .box
-            .card-content
-              .content
-                p.title.is-4
-                  | &ldquo;
-                  | I'm finally giving what I ought to!
-                  | &rdquo;
-                p
-                  ' The amount that I donated used to depend on how I was feeling the day when I was asked.
-                  | Now I'm giving an amount that I think is appropriate, and one that fits in with the rest of my finances.
-                p &mdash; Theresa Philips
-        .column
-          .box
-            .card-content
-              .content
-                p.title.is-4
-                  | &ldquo;
-                  | It helped me realize what I care about
-                  | &rdquo;
-                p
-                  ' I'd often try to research which charities were most efficient, only to get lost in all the details.
-                  | Now it's like having a personal advisor to guide me through a shortlist of highly effective causes.
-                p &mdash; Marco Vasquez
-        .column
-          .box
-            .card-content
-              .content
-                p.title.is-4
-                  | &ldquo;
-                  | It's like an auto-pilot for my giving!
-                  | &rdquo;
-                p
-                  ' I don't need to remember to mail in a bunch of checks or
-                  ' separately itemize handfuls of donations at tax time.
-                  ' I get peace of mind knowing that my money is getting to where it is needed.
-                p &mdash;  Jerry Bass
+      .tile.is-ancestor
+        .tile.is-parent
+          .tile.box
+            .content
+              p.title.is-4
+                | &ldquo;
+                | I'm finally giving what I ought to!
+                | &rdquo;
+              p
+                ' The amount that I donated used to depend on how I was feeling the day when I was asked.
+                | Now I'm giving an amount that I think is appropriate, and one that fits in with the rest of my finances.
+              p &mdash; Theresa Philips
+        .tile.is-parent
+          .tile.box
+            .content
+              p.title.is-4
+                | &ldquo;
+                | It helped me realize what I care about
+                | &rdquo;
+              p
+                ' I'd often try to research which charities were most efficient, only to get lost in all the details.
+                | Now it's like having a personal advisor to guide me through a shortlist of highly effective causes.
+              p &mdash; Marco Vasquez
+        .tile.is-parent
+          .tile.box
+            .content
+              p.title.is-4
+                | &ldquo;
+                | It's like an auto-pilot for my giving!
+                | &rdquo;
+              p
+                ' I don't need to remember to mail in a bunch of checks or
+                ' separately itemize handfuls of donations at tax time.
+                ' I get peace of mind knowing that my money is getting to where it is needed.
+              p &mdash;  Jerry Bass
 
 section.hero.is-dark
   .hero-body

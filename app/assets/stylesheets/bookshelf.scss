@@ -276,6 +276,13 @@
 	background-color: #e9da63;
 }
 
+.animal_welfare .book-front > div,
+.animal_welfare .book-back,
+.animal_welfare .book-left,
+.animal_welfare .book-front:after {
+	background-color: #63da63;
+}
+
 .book-colored .book-cover {
 	// background-image: url(../images/1.png);
 	background-repeat: no-repeat;

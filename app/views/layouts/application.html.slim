@@ -5,8 +5,10 @@ html
     = render 'shared/head'
 
   body
-    = render 'shared/nav'
-    = yield :hero
+    - if content_for?(:hero)
+      = yield :hero
+    - else
+      = render 'shared/nav'
 
     main = yield
 
