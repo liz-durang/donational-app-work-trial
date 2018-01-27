@@ -1,51 +1,88 @@
+
 section.section
   .container
-    .content.has-text-centered
-      h1.title.is-spaced
-        => icon_tag('fa-dollar-sign')
+    .content
+      h1.title.is-spaced.has-text-centered
+        => icon_tag('fa-credit-card')
         br
-        ' Donation History
+        ' Donate to your portfolio
+
+      - if @payment_method.present?
+        = render 'shared/contribution_form'
+      - else
+        = render 'payment_methods/form' unless @payment_method.present?
+
+    article.message.is-warning
+      .message-body
+        .media
+          .media-left: span.icon.is-medium: i.fa.fa-info
+          p.media-content
+            strong> Worried that a small donation is inefficient? We've got you covered!
+            br
+            ' Charities incur overhead costs whenever they process a donation.
+            ' We
+            em> hate
+            ' unnecessary fees, so we pool your donation to a charity with donations by other users on the platform.
+            ' By making use of economies of scale charities only have to process a single (big!) donation, and can put even more of your funds into making an impact.
+- if @contributions.present?
+  section.section.embossed
+    .container.has-text-centered
+      h1.title.is-spaced
+        => icon_tag('fa-clipboard')
+        br
+        ' Your Donations
 
       - if @contributions.count == 0
         p Make your first contribution to your portfolio:
+
       - else
         p
           ' You have made
           strong => pluralize(@contributions.count, 'donation')
           | to your charity portfolio.
 
-section.section.embossed
-  .container
-    = display_flash_messages
-    table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
-      - @contributions.each_with_index do |contribution, index|
-        tr data-accordion-trigger="contribution-#{contribution.id}"
-          td
-            p
-              strong>
-                | Contribution #
-                = @contributions.count - index
-            small.hint
-              ' Ref:
-              = contribution.id
-          td
-            p
-              a
-                ' Made positive impact at
-                = pluralize(contribution.donations.count, 'charity')
-          td.has-text-right
-            strong = number_to_currency(contribution.amount_cents / 100.0)
-          td
-            - if contribution.processed_at?
-              => time_ago_in_words(contribution.processed_at)
-              | ago
-        - contribution.donations.each do |donation|
-          tr.is-hidden data-accordion-panel-for="contribution-#{contribution.id}"
-            td.has-text-right colspan=2
-              em => donation.organization.name
+      hr
+      = display_flash_messages
+      table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
+        - @contributions.each_with_index do |contribution, index|
+          tr data-accordion-trigger="contribution-#{contribution.id}"
+            td
+              p
+                strong>
+                  | Contribution #
+                  = @contributions.count - index
+              small.hint
+                ' Ref:
+                = contribution.id
+            td
+              p
+                a
+                  ' You made a positive impact at
+                  = pluralize(contribution.donations.count, 'charity')
             td.has-text-right
-              em = number_to_currency(donation.amount_cents / 100.0)
-            td &nbsp;
+              strong = number_to_currency(contribution.amount_cents / 100.0)
+            td
+              - if contribution.processed_at?
+                => time_ago_in_words(contribution.processed_at)
+                | ago
+          - contribution.donations.each do |donation|
+            tr.is-hidden data-accordion-panel-for="contribution-#{contribution.id}"
+              td.has-text-right colspan=2
+                em => donation.organization.name
+              td.has-text-right
+                em = number_to_currency(donation.amount_cents / 100.0)
+              td &nbsp;
 
 section.section
-  = render 'shared/contribution_form'
+  .container
+    .content.has-text-centered
+      h1.title.is-spaced
+        => icon_tag('fa-credit-card')
+        br
+        ' Payment Details
+      - if @payment_method.present?
+        p
+          ' We have your credit card stored on-file. Thanks!
+          br
+          ' To make changes, please contact
+          a href="mailto:help@donational.org" help@donational.org

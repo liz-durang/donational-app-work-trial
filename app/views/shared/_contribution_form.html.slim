@@ -1,10 +1,5 @@
 .box.has-text-centered = form_with model: @active_portfolio, url: contributions_path, local: true, method: :post, class: 'form' do |f|
-  label.label Make a one-time tax-deductible donation to your high impact portfolio
-  .field.has-addons.has-addons-centered
-    p.control.has-icons-left
-      = f.number_field :amount_dollars, value: 40, class: 'input is-large'
-      span.icon.is-left: i.fa.fa-dollar-sign
-  .field.buttons.has-text-centered
+  .field.buttons.is-centered
     p.control
       = f.collection_radio_buttons( \
         :contribution_frequency, \
@@ -12,6 +7,10 @@
         checked: @active_portfolio.contribution_frequency) do |b| \
           b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
         end
+  .field.has-addons.has-addons-centered
+    p.control.has-icons-left
+      = f.number_field :amount_dollars, value: 40, class: 'input is-large'
+      span.icon.is-left: i.fa.fa-dollar-sign
   .field.has-addons.has-addons-centered
     p.control
       button.button.is-large.is-primary type="submit" Donate now

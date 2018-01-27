@@ -10,9 +10,9 @@ class PaymentMethodsController < ApplicationController
 
     if outcome.success?
       Analytics::TrackEvent.run(user_id: current_donor.id, event: 'Payment info entered')
-      redirect_to edit_payment_methods_path
+      redirect_to contributions_path
     else
-      redirect_to edit_payment_methods_path, alert: outcome.errors
+      redirect_to contributions_path, alert: outcome.errors
     end
   end
 

@@ -9,7 +9,7 @@ class PortfoliosController < ApplicationController
   def create
     new_portfolio_command = Portfolios::CreateOrReplacePortfolio.run(
       donor: current_donor,
-      contribution_amount_cents: current_donor.annual_income_cents
+      contribution_frequency: current_donor.contribution_frequency
     )
 
     if new_portfolio_command.success?

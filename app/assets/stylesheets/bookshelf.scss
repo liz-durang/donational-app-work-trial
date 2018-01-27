@@ -121,11 +121,11 @@
 /* Transform classes */
 
 .book-viewinside .book-front {
-	transform: translate3d(0,0,20px) rotate3d(0,1,0,-160deg);
+	transform: translate3d(0,0,20px) rotate3d(0,1,0,-170deg);
 }
 
 .book.book-viewinside {
-	transform: translate3d(0,0,150px) rotate3d(0,1,0,0deg);
+	transform: translate3d(0,0,100vh) rotate3d(0,1,0,0deg);
 }
 
 .book.book-viewback {

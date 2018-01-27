@@ -50,8 +50,8 @@ module ApplicationHelper
       next if type == 'analytics'
       type = 'danger' if type.in? %w(alert error)
 
-      content_tag(:article, class: ['notification', "is-#{type}"]) do
-        content_tag(:p, message)
+      content_tag(:article, class: ['message', "is-#{type}"]) do
+        content_tag(:p, message, class: 'message-body')
       end
     end.compact.reduce(:+)
   end
