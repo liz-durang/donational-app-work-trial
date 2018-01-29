@@ -1,35 +1,50 @@
 - content_for :hero do
-  section.hero.is-fullheight
+  section.hero.is-medium.has-background
+    .hero-background
+      figure
+      figure
+      figure
+      figure
+      figure
+      figure
+      figure
+      figure
     .hero-head
       nav.navbar role="navigation" aria-label="main navigation"
         .container
           .navbar-brand
-            a.navbar-item href="/"
-              h1.is-5.title Donational
+            .navbar-item href="/"
+              a.is-5.title Donational
 
-            button.button.navbar-burger.is-white data-target="navMenu"
-              span
-              span
-              span
+            - if logged_in?
+              button.button.navbar-burger data-target="navMenu"
+                span
+                span
+                span
           div#navMenu.navbar-menu
-            .navbar-end
-              .navbar-item = sign_in_button_or_account
+            - if logged_in?
+              .navbar-end
+                .navbar-item = link_to 'View your portfolio', portfolio_path
 
     .hero-body
       .container
         .columns
-          .column.is-5.is-vertically-centered
-            h1.title.is-1.is-spaced
+          .column.is-6
+            h1.title.is-2.is-spaced
               ' Take a stand.
               | Donate to causes that reflect you.
-            h2.subtitle We are your partner for smarter donations.
+            h2.subtitle
+              ' We are your partner for
+              strong.has-text-primary> data-rotating-text-alternatives="smarter|simpler|more human|high-impact|values-aligned|cost-effective|celebratory|secure" data-rotating-text-show-time=3000
+                | smarter
+              | donations
+            p &nbsp;
+            p &nbsp;
             p
               a.button.is-primary.is-medium.is-fullwidth href=onboarding_path
                 span Tell us what matters to you
                 span.icon.is-small &rarr;
-          .column.is-offset-2.is-5
-            = image_tag 'hero-image.jpg'
-hr.container
+
 section.section.is-medium
   .container.has-text-centered
     h3.title.is-spaced
@@ -75,7 +90,7 @@ section.section.is-medium
   .container.has-text-centered
     h3.title.is-spaced
       ' Spark
-      span.has-text-primary> data-rotating-text-alternatives="social action|real change|effective impact"
+      span.has-text-primary> data-rotating-text-alternatives="social action|real change|effective impact" data-rotating-text-show-time=2000
         | social action
       | by doing good with your money
 hr.container
@@ -111,10 +126,10 @@ section.hero.is-medium
             ' Donations are directly distributed to charities and
             ' make use of smart features like donation pooling to
             ' ensure that charities spend more on making an impact,
-            | and less on processing donations.
+            ' and less on processing donations.
+            | Standard credit card payment processing fees apply.
           p
-            ' Apart from collecting standard payment processing fees,
-            ' we only make money if you choose to pay us to help you make more of an impact.
+            ' We only make money if you choose to pay us, allowing us to continue to help you &mdash; and others &mdash; make a greater impact.
 hr.container
 section.section.is-medium
   .container

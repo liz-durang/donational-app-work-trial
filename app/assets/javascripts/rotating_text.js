@@ -3,6 +3,7 @@ document.addEventListener('turbolinks:load', function () {
     var el = this;
     var $this = $(this);
     var strings = this.dataset.rotatingTextAlternatives.split('|');
+    var showTime = this.dataset.rotatingTextShowTime;
 
     el.dataset.rotatingTextIndex = 0;
 
@@ -13,6 +14,6 @@ document.addEventListener('turbolinks:load', function () {
         $this.fadeIn(500);
         el.innerHTML = strings[el.dataset.rotatingTextIndex % strings.length];
       });
-    }, 3000);
+    }, showTime);
   });
 });
