@@ -1,5 +1,5 @@
 - content_for :hero do
-  section.hero.is-medium.has-background
+  section.hero.is-fullheight.has-background
     .hero-background
       figure
       figure
@@ -16,16 +16,6 @@
             .navbar-item href="/"
               a.is-5.title Donational
 
-            - if logged_in?
-              button.button.navbar-burger data-target="navMenu"
-                span
-                span
-                span
-          div#navMenu.navbar-menu
-            - if logged_in?
-              .navbar-end
-                .navbar-item = link_to 'View your portfolio', portfolio_path
-
     .hero-body
       .container
         .columns
@@ -41,7 +31,7 @@
             p &nbsp;
             p &nbsp;
             p
-              a.button.is-primary.is-medium.is-fullwidth href=onboarding_path
+              a.button.is-primary.is-large href=onboarding_path
                 span Tell us what matters to you
                 span.icon.is-small &rarr;
 
@@ -63,25 +53,27 @@ section.hero.is-medium#learn-more
         .column.is-vertically-centered
           h1.title.is-spaced Introducing your Charitable Advisor
           h2.subtitle
-            ' We recommended outstanding charities. Backed by
+            ' We recommended outstanding charities.
+            br
+            ' Backed by
             strong> evidence
             ' and supported by
             strong experts
             | .
-          p.content All charities in your portfolio are:
+          p.content Every charity demonstrates:
           ul.is-size-5.fa-ul
             li
               span.fa-li: i.fas.fa-check-square
               | High impact
             li
               span.fa-li: i.fas.fa-check-square
-              | Aligned with your values
+              | Alignment with your values
             li
               span.fa-li: i.fas.fa-check-square
-              | Cost-effective
+              | Cost-effectiveness
             li
               span.fa-li: i.fas.fa-check-square
-              | Transparent
+              | Financial transparency
         .column.is-vertically-centered
           = image_tag('portfolio-screenshot.png')
 
@@ -206,3 +198,10 @@ section.section
     a.button.is-primary.is-medium href=onboarding_path
       span Get started
       span.icon.is-small: i.fa.fa-angle-right
+
+footer.footer
+  .container
+    nav.breadcrumb.has-bullet-separator.is-centered
+      ul
+        li: a.button.is-white href="/" Donational &copy;
+        li = logged_in? ? sign_out_link : sign_in_link

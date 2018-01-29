@@ -3,6 +3,10 @@ module ApplicationHelper
     link_to 'Sign in', new_sessions_path, class: 'button is-outlined'
   end
 
+  def sign_in_link
+    link_to 'Sign in', new_sessions_path
+  end
+
   def sign_out_link
     link_to(
       sessions_path,

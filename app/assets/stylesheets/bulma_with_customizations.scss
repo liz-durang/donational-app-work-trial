@@ -1,5 +1,5 @@
 // Font resources
-@import url('https://fonts.googleapis.com/css?family=Lato:300,400|Lora:300,400|Raleway:300,400');
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400|Lora:300,400');
 
 // Initial Variables for Bulma
 $family-sans-serif: "Lato", Helvetica, Arial, sans-serif;
@@ -62,7 +62,7 @@ h1, h2, h3, h4, h5, h6, .title {
 }
 
 .subtitle {
-  font-family: 'Raleway', $family-sans-serif;
+  font-family: $family-sans-serif;
   font-weight: 300;
 }
 
