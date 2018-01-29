@@ -2,7 +2,7 @@ module Onboarding
   class WhatIsYourFirstName < Step
     section "Let's get started"
 
-    message "Let's start by getting to know a little about you and your values"
+    message "Let's start by getting to know a little about you."
     message "What's your first name?"
 
     follow_up_message -> (response) do

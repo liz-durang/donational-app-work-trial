@@ -2,11 +2,11 @@ module Onboarding
   class SatisfiedWithAmountDonatedLastYear < QuickResponseStep
     section "Your giving history"
 
-    message 'Were you satisfied with how much you gave?'
+    message 'Were you satisfied with how much you donated?'
 
     allowed_response :satisfied, 'Yes'
     allowed_response :gave_too_much, 'I gave too much'
-    allowed_response :did_not_give_enough, "I should have given more"
+    allowed_response :did_not_give_enough, "I should have donated more"
 
     display_as :radio_buttons
 
