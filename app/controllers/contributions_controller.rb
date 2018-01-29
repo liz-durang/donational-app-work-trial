@@ -3,15 +3,22 @@ class ContributionsController < ApplicationController
   include ClientSideAnalytics
 
   def index
-    active_portfolio
-    payment_method
+    redirect_to new_contribution_path and return unless active_payment_method?
+
     @contributions = Contributions::GetProcessedContributions.call(donor: current_donor)
   end
 
-  def create
-    redirect_to contributions_path and return unless active_payment_method?
+  def new
+    active_portfolio
+    payment_method
+  end
 
-    amount_dollars = params[:portfolio][:amount_dollars].to_i
+  def create
+    save_donor_credit_card portfolio_params[:payment_token]
+
+    redirect_to new_contribution_path and return unless active_payment_method?
+
+    amount_dollars = portfolio_params[:contribution_amount_dollars].to_i
 
     Contributions::CreateContribution.run!(
       portfolio: active_portfolio,
@@ -19,20 +26,33 @@ class ContributionsController < ApplicationController
     )
 
     active_portfolio.update(
-      contribution_frequency: params[:portfolio][:contribution_frequency],
+      contribution_frequency: portfolio_params[:contribution_frequency],
       contribution_amount_cents: amount_dollars * 100
     )
 
-    track_analytics_event_via_browser('Goal: Donation', { revenue: amount_dollars })
+    track_analytics_event_via_browser(
+      'Goal: Donation',
+      { revenue: amount_dollars }
+    )
 
     redirect_to contributions_path
   end
 
   private
 
+  def save_donor_credit_card(token)
+    return unless token.present?
+
+    Donors::UpdatePaymentMethod.run(
+      donor: current_donor,
+      payment_token: token
+    )
+  end
+
   def active_payment_method?
     payment_method.present?
   end
+  helper_method :active_payment_method?
 
   def payment_method
     @payment_method = PaymentMethods::GetActivePaymentMethod.call(donor: current_donor)
@@ -40,5 +60,9 @@ class ContributionsController < ApplicationController
 
   def active_portfolio
     @active_portfolio ||= Portfolios::GetActivePortfolio.call(donor: current_donor)
+  end
+
+  def portfolio_params
+    params[:portfolio]
   end
 end

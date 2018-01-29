@@ -10,8 +10,7 @@ Rails.application.routes.draw do
 
   # Revenue
   resource :allocations
-  resources :contributions, only: %i[index create]
-  resource :payment_methods, path: 'payment-methods', only: %i[edit create]
+  resources :contributions, only: %i[index new create]
 
   # Referral
   get 'profiles/:username' => 'profiles#show', as: :profiles

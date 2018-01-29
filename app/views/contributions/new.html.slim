@@ -1,0 +1,130 @@
+section.section
+  .container
+    .content.has-text-centered
+      h1.title.is-spaced
+        => icon_tag('fa-credit-card')
+        br
+        ' Donate to your portfolio
+
+      p
+        ' Every dollar you donate goes directly to the
+        strong => pluralize(@active_portfolio.allocations.count, 'charity')
+        | in your portfolio, based on your allocations.
+      p.help
+        | Donations are tax-deductible operating under the Social Good Fund, a 501(c)3 public charity, EIN 46-1323531.
+
+section.section.embossed
+  .container.content
+    .columns
+      .column
+        = display_flash_messages
+        = form_with model: @active_portfolio, url: contributions_path, local: true, id: 'sanitized_create_payment_method_form', method: :post, class: 'form' do |f|
+          = f.hidden_field :payment_token, id: 'payment_token'
+
+          p.field
+            label.label 1. Enter donation amount
+            .field.has-addons
+              p.control.has-icons-left
+                = f.number_field :contribution_amount_dollars, class: 'input is-medium'
+                span.icon.is-left $
+            .control.buttons
+              = f.collection_radio_buttons( \
+                :contribution_frequency, \
+                { once: 'One-time donation', monthly: 'Monthly donation', annually: 'Annual donation' }, \
+                :first, :last, \
+                checked: @active_portfolio.contribution_frequency) do |b| \
+                  b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
+                end
+
+          p.field
+            label.label 2. Add a tip to help Donational grow
+            .control.buttons = f.collection_radio_buttons :platform_tip_dollars,\
+              [[0, 'No tip'], [2, '$2'], [3, '$3'], [6, '$6']], :first, :last do |b| \
+                b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
+              end
+          - if active_payment_method?
+            p.field
+              .control
+                = f.submit "Donate", class: %w(button is-primary)
+
+        - unless active_payment_method?
+          / This form should remain separate from the credit card details to avoid
+          / accidentally leaking credit card data into our server
+          form#panda_cc_form.panda_cc_form.form
+            p.field
+              label.label 3. Enter Credit Card details:
+              .field.is-grouped
+                .control.is-expanded.has-icons-left
+                  input.input type="text" data-panda="credit_card" placeholder="Card Number"
+                  span.icon.is-left.is-small: i.fa.fa-credit-card
+                .control
+                  .select
+                    select data-panda="month"
+                      option selected=true disabled=true mm
+                      - (1..12).each do |i|
+                        option value=i
+                          = i
+                .control
+                  .select
+                    select data-panda="year"
+                      option selected=true disabled=true yyyy
+                      - (Time.zone.now.year..2030).each do |i|
+                        option value=i
+                          = i
+              .field.is-grouped
+                p.control.is-expanded.has-icons-left
+                  input.input type="text" data-panda="first_name" placeholder="First name"
+                  span.icon.is-left.is-small: i.fa.fa-user
+                p.control.is-expanded
+                  input.input type="text" data-panda="last_name" placeholder="Last name"
+                p.control.has-icons-left
+                  input.input type="text" data-panda="cvv" placeholder="CVV" size=4
+                  span.icon.is-left.is-small: i.fa.fa-lock
+
+              .field
+                .control
+                  button.button.is-primary type="submit" Donate
+                  span.help
+                    | * We use smart and secure online payments to ensure that your donations are simple, secure, and avoid fees.
+              .card-wrapper.is-hidden-mobile
+
+          javascript:
+          	new Card({
+              form: '#panda_cc_form',
+              container: '.card-wrapper',
+              formSelectors: {
+                  nameInput: 'input[data-panda="first_name"], input[data-panda="last_name"]',
+                  numberInput: 'input[data-panda="credit_card"]',
+                  expiryInput: 'input[data-panda="month"], input[data-panda="year"]',
+                  cvcInput: 'input[data-panda="cvv"]'
+              }
+          	});
+
+          	Panda.init("#{ENV.fetch('PANDAPAY_PUBLIC_KEY')}", 'panda_cc_form');
+
+            Panda.on('success', function(cardToken) {
+              document.getElementById('payment_token').value = cardToken;
+              document.getElementById('sanitized_create_payment_method_form').submit();
+            });
+
+            Panda.on('error', function(errors) {
+              var message = "";
+              errors.forEach(function(error) { message += "\n" + error.message; })
+              alert("There was an error processing your payment: " + message);
+            });
+
+      .column
+        article.message.is-warning
+          .message-body
+            .media
+              .media-left: span.icon.is-medium: i.fa.fa-info
+              .media-content
+                p
+                  strong> Worried that a small donation is inefficient? We've got you covered!
+                  br
+                  ' Charities incur overhead costs whenever they process a donation.
+                  ' We
+                  em> hate
+                  ' unnecessary fees, so we pool your donation to a charity with donations by other users on the platform.
+                p
+                  ' By making use of economies of scale charities only have to process a single (big!) donation, and can put even more of your funds into making an impact.

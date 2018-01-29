@@ -33,6 +33,12 @@ class Portfolio < ApplicationRecord
             in: %w[once monthly quarterly annually never],
             predicates: true
 
+  def contribution_amount_dollars
+    return nil if contribution_amount_cents.nil?
+
+    (contribution_amount_cents / 100).to_i
+  end
+
   def active?
     deactivated_at.blank?
   end

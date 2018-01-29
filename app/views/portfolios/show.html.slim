@@ -8,17 +8,14 @@ section.section
         = @portfolio.donor_first_name
         | !
 
-      p.subtitle
-        ' Hey there,
-        = current_donor.first_name
-        ' !
+      p
         ' We've analyzed your answers and built a portfolio that matches your top priorities, like
         = @portfolio.cause_areas.sample(2).map { |c| content_tag(:strong, I18n.t('title', scope: ['cause_areas', c])) }.to_sentence.html_safe
 
       p
         a href="#my-portfolio"
           span.icon.is-medium: i.fa.fa-arrow-circle-down
-      p Let's explore your portfolio
+      p.help Let's explore your portfolio
 
 section.section.embossed#my-portfolio
   .container.has-text-centered
@@ -64,8 +61,12 @@ section.section.embossed#my-portfolio
           p: button.button Read more
           hr
 section.section
-  .container.has-text-centered
-    span.icon.is-medium: i.fa.fa-arrow-circle-down
-    h2.title Make an impact, give to your portfolio
+  .container.has-text-centered.content
+    h2.title
+      | Make an impact, give to your portfolio
 
-    = render 'shared/contribution_form'
+    p Connect your credit card and easily donate to all of the charities in your portfolio.
+
+    a.button.is-large.is-primary href=contributions_path
+      span Donate to your portfolio
+      span.icon.is-small &rarr;

@@ -1,8 +1,8 @@
 class PaymentMethodsController < ApplicationController
   include Secured
 
-  def edit
-    @payment_method = PaymentMethods::GetActivePaymentMethod.call(donor: current_donor)
+  def new
+    payment_method
   end
 
   def create
@@ -18,10 +18,17 @@ class PaymentMethodsController < ApplicationController
 
   private
 
-  def save_donor_credit_card
-    Donors::UpdatePaymentMethod.run(
-      donor: current_donor,
-      payment_token: params[:payment_token]
-    )
+
+  def active_payment_method?
+    payment_method.present?
+  end
+  helper_method :active_payment_method?
+
+  def payment_method
+    @payment_method = PaymentMethods::GetActivePaymentMethod.call(donor: current_donor)
+  end
+
+  def active_portfolio
+    @active_portfolio ||= Portfolios::GetActivePortfolio.call(donor: current_donor)
   end
 end
