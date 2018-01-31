@@ -1,6 +1,6 @@
 module Onboarding
   class DoYouKnowTheAverageContribution < QuickResponseStep
-    section 'Your giving history'
+    section "Your giving goals"
 
     message 'Did you know that the average American gives 2.8% of their pretax annual income to charity?'
     message 'Does that surprise you?'
@@ -9,7 +9,7 @@ module Onboarding
     allowed_response :somewhat, 'A little bit'
     allowed_response :no, 'Not at all!'
 
-    follow_up_message 'Our aim is to make sure that your whatever you give, it is directed toward organizations that have the most impact.'
+    follow_up_message 'Our aim is to make sure that whatever you choose to give, it is directed toward organizations that have the most impact.'
 
     display_as :radio_buttons
 
