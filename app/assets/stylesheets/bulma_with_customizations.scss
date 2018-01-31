@@ -76,7 +76,8 @@ h1, h2, h3, h4, h5, h6, .title {
 }
 
 .buttons input:checked + label {
-  @extend .is-info;
+  @extend .is-primary;
+  @extend .is-outlined;
 }
 .buttons input:not(:checked) + label {
   @extend .is-outlined;

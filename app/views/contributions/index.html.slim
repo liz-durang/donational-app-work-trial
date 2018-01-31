@@ -1,49 +1,48 @@
 section.section
-  .container
-    .content.has-text-centered
-      h1.title.is-spaced
-        => icon_tag('fa-dollar-sign')
-        br
-        ' Donation History
+  .container.has-text-centered
+    h1.title.is-spaced
+      => icon_tag('fa-clipboard')
+      br
+      ' Your Donations
 
-      - if @contributions.count == 0
-        p Make your first contribution to your portfolio:
-      - else
-        p
-          ' You have made
-          strong => pluralize(@contributions.count, 'donation')
-          | to your charity portfolio.
+    - if @contributions.count == 0
+      p Make your first contribution to your portfolio:
 
-section.section.embossed
-  .container
-    table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
-      - @contributions.each_with_index do |contribution, index|
-        tr data-accordion-trigger="contribution-#{contribution.id}"
-          td
-            p
-              strong>
-                | Contribution #
-                = @contributions.count - index
-            small.hint
-              ' Ref:
-              = contribution.id
-          td
-            p
-              a
-                ' Made positive impact at
-                = pluralize(contribution.donations.count, 'charity')
-          td.has-text-right
-            strong = number_to_currency(contribution.amount_cents / 100.0)
-          td
-            => time_ago_in_words(contribution.processed_at)
-            | ago
-        - contribution.donations.each do |donation|
-          tr.is-hidden data-accordion-panel-for="contribution-#{contribution.id}"
-            td.has-text-right colspan=2
-              em => donation.organization.name
+    - else
+      p
+        ' You have made
+        strong => pluralize(@contributions.count, 'donation')
+        | to your charity portfolio.
+- if @contributions.present?
+  section.section.embossed
+    .container
+      = display_flash_messages
+      table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
+        - @contributions.each_with_index do |contribution, index|
+          tr data-accordion-trigger="contribution-#{contribution.id}"
+            td
+              p
+                strong>
+                  | Contribution #
+                  = @contributions.count - index
+              small.hint
+                ' Ref:
+                = contribution.id
+            td
+              p
+                a
+                  ' You made a positive impact at
+                  = pluralize(contribution.donations.count, 'charity')
             td.has-text-right
-              em = number_to_currency(donation.amount_cents / 100.0)
-            td &nbsp;
-
-section.section
-  = render 'shared/contribution_form'
+              strong = number_to_currency(contribution.amount_cents / 100.0)
+            td
+              - if contribution.processed_at?
+                => time_ago_in_words(contribution.processed_at)
+                | ago
+          - contribution.donations.each do |donation|
+            tr.is-hidden data-accordion-panel-for="contribution-#{contribution.id}"
+              td.has-text-right colspan=2
+                em => donation.organization.name
+              td.has-text-right
+                em = number_to_currency(donation.amount_cents / 100.0)
+              td &nbsp;

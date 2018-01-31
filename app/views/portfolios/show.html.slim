@@ -5,20 +5,17 @@ section.section
         => icon_tag('fa-bolt')
         br
         ' Smart choices,
-        = current_donor.first_name
+        = @portfolio.donor_first_name
         | !
 
-      p.subtitle
-        ' Hey there,
-        = current_donor.first_name
-        ' !
+      p
         ' We've analyzed your answers and built a portfolio that matches your top priorities, like
-        = @cause_areas.sample(2).map { |c| content_tag(:strong, c) }.to_sentence.html_safe
+        = @portfolio.cause_areas.sample(2).map { |c| content_tag(:strong, I18n.t('title', scope: ['cause_areas', c])) }.to_sentence.html_safe
 
       p
         a href="#my-portfolio"
           span.icon.is-medium: i.fa.fa-arrow-circle-down
-      p Let's explore your portfolio
+      p.help Let's explore your portfolio
 
 section.section.embossed#my-portfolio
   .container.has-text-centered
@@ -41,42 +38,35 @@ section.section.embossed#my-portfolio
     hr
 
     ul.columns.is-multiline.is-centered.book-list
-      - @allocations.each do |allocation|
+      - @portfolio.organizations.each do |organization|
         li.column.is-3
-          .book.book-colored class=allocation.organization.cause_area
+          .book.book-colored class=organization.cause_area
             .book-front
               .book-cover-back
               .book-cover
-                h2 = allocation.organization.name
-                h4 = I18n.t('title', scope: ['cause_areas', allocation.organization.cause_area])
+                h2 = organization.name
+                h4 = I18n.t('title', scope: ['cause_areas', organization.cause_area])
             .book-page
-              - allocation.organization.description.split('. ').each do |page|
+              - organization.description.split('. ').each do |page|
                 .book-content
                   p
                     = page
             .book-back
             .book-right
             .book-left
-              h2 = allocation.organization.name
+              h2 = organization.name
             .book-top
             .book-bottom
           br
           p: button.button Read more
           hr
 section.section
-  .container.has-text-centered
-    span.icon.is-medium: i.fa.fa-arrow-circle-down
-    h2.title Make an impact, give to your portfolio
+  .container.has-text-centered.content
+    h2.title
+      | Make an impact, give to your portfolio
 
-    = render 'shared/contribution_form'
+    p Connect your credit card and easily donate to all of the charities in your portfolio.
 
-article.notification
-  .container
-    .media
-      .media-left: span.icon.is-medium: i.fa.fa-info
-      p.media-content
-        strong> Worried that a small donation is inefficient? We've got you covered!
-        br
-        ' Charities incur overhead costs whenever they process a donation.
-        ' We hate unnecessary fees, so we pool your donation to a charity with donations by other users on the platform.
-        ' By making use of economies of scale charities only have to process a single (big!) donation, and can put even more of your funds into making an impact.
+    a.button.is-large.is-primary href=contributions_path
+      span Donate to your portfolio
+      span.icon.is-small &rarr;

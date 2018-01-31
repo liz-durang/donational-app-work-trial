@@ -13,10 +13,12 @@ nav.navbar role="navigation" aria-label="main navigation"
         .navbar-end
           a.navbar-item href=portfolio_path
             | Portfolio
+          a.navbar-item href=new_contribution_path
+            | Donate
+          a.navbar-item href=contributions_path
+            | Impact
           a.navbar-item href=edit_allocations_path
             | Allocations
-          a.navbar-item href=contributions_path
-            | Donations
 
       .navbar-end
         .navbar-item = sign_in_button_or_account

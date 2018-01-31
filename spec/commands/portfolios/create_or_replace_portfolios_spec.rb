@@ -8,8 +8,7 @@ RSpec.describe Portfolios::CreateOrReplacePortfolio do
   let(:portfolio_params) do
     {
       donor: donor,
-      donation_rate: 0.01,
-      annual_income_cents: 80_000_00,
+      contribution_amount_cents: 8000,
       contribution_frequency: :monthly
     }
   end
@@ -23,7 +22,7 @@ RSpec.describe Portfolios::CreateOrReplacePortfolio do
       portfolio = Portfolios::GetActivePortfolio.call(donor: donor)
 
       expect(portfolio).to be_active
-      expect(portfolio.donation_rate).to eq 0.01
+      expect(portfolio.contribution_amount_cents).to eq 8000
       expect(portfolio.contribution_frequency).to eq 'monthly'
     end
   end
@@ -49,6 +48,7 @@ RSpec.describe Portfolios::CreateOrReplacePortfolio do
       portfolio = Portfolios::GetActivePortfolio.call(donor: donor)
       expect(portfolio).to be_active
       expect(portfolio.donor).to eq donor
+      expect(portfolio.contribution_amount_cents).to eq 8000
     end
   end
 end

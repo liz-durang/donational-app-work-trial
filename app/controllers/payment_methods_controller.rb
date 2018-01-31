@@ -1,8 +1,8 @@
 class PaymentMethodsController < ApplicationController
   include Secured
 
-  def edit
-    @payment_method = PaymentMethods::GetActivePaymentMethod.call(donor: current_donor)
+  def new
+    payment_method
   end
 
   def create
@@ -10,18 +10,25 @@ class PaymentMethodsController < ApplicationController
 
     if outcome.success?
       Analytics::TrackEvent.run(user_id: current_donor.id, event: 'Payment info entered')
-      redirect_to edit_payment_methods_path
+      redirect_to contributions_path
     else
-      redirect_to edit_payment_methods_path, alert: outcome.errors
+      redirect_to contributions_path, alert: outcome.errors
     end
   end
 
   private
 
-  def save_donor_credit_card
-    Donors::UpdatePaymentMethod.run(
-      donor: current_donor,
-      payment_token: params[:payment_token]
-    )
+
+  def active_payment_method?
+    payment_method.present?
+  end
+  helper_method :active_payment_method?
+
+  def payment_method
+    @payment_method = PaymentMethods::GetActivePaymentMethod.call(donor: current_donor)
+  end
+
+  def active_portfolio
+    @active_portfolio ||= Portfolios::GetActivePortfolio.call(donor: current_donor)
   end
 end
