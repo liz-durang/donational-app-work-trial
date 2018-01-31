@@ -15,6 +15,7 @@
 #  economic_development            :integer
 #  created_at                      :datetime         not null
 #  updated_at                      :datetime         not null
+#  criminal_justice                :integer
 #
 
 class CauseAreaRelevance < ApplicationRecord

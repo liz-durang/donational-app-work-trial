@@ -9,13 +9,7 @@ class OnboardingChannel < ApplicationCable::Channel
         Onboarding::DidYouDonateLastYear.new(current_donor) <<
         Onboarding::PrimaryReasons.new(current_donor) <<
         Onboarding::HowDoYouDecideWhichOrganizationsToSupport.new(current_donor) <<
-        Onboarding::ImportanceOfGlobalHealth.new(current_donor) <<
-        Onboarding::ImportanceOfPovertyAndIncomeInequality.new(current_donor) <<
-        Onboarding::ImportanceOfClimateAndEnvironment.new(current_donor) <<
-        Onboarding::ImportanceOfAnimalWelfare.new(current_donor) <<
-        Onboarding::ImportanceOfHungerNutritionAndSafeWater.new(current_donor) <<
-        Onboarding::ImportanceOfImmigrationAndRefugees.new(current_donor) <<
-        Onboarding::ImportanceOfWomenAndGirlsIssues.new(current_donor) <<
+        Onboarding::WhichCauseAreasMatterToYou.new(current_donor) <<
         Onboarding::DiversityOfPortfolio.new(current_donor) <<
         Onboarding::HowOftenWillYouContribute.new(current_donor) <<
         Onboarding::DoYouKnowTheAverageContribution.new(current_donor) <<

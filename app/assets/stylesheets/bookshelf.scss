@@ -245,42 +245,44 @@
 }
 
 /* Individual style & artwork */
-
+$book-color-1: #05668d;
+$book-color-2: #028090;
+$book-color-3: #00a896;
+$book-color-4: #02c39a;
+$book-color-5: #F0A202;
+$book-color-6: #5e548e;
+$book-color-7: #9f86c0;
+$book-color-8: #be95c4;
+$book-color-9: #e0b1cb;
+$book-color-10: #231942;
 
 /* Book 1 */
-.book-colored .book-front > div,
-.book-colored .book-back,
-.book-colored .book-left,
-.book-colored .book-front:after {
-	background-color: #ff924a;
+.book-colored {
+	.book-front > div, .book-back, .book-left, .book-front:after { background-color: $book-color-1; }
 }
-
-.climate_and_environment .book-front > div,
-.climate_and_environment .book-back,
-.climate_and_environment .book-left,
-.climate_and_environment .book-front:after {
-	background-color: #68ae3b;
+.poverty_and_income_inequality {
+	.book-front > div, .book-back, .book-left, .book-front:after { background-color: $book-color-1; }
 }
-
-.global_health .book-front > div,
-.global_health .book-back,
-.global_health .book-left,
-.global_health .book-front:after {
-	background-color: #1892cc;
+.global_health {
+	.book-front > div, .book-back, .book-left, .book-front:after { background-color: $book-color-2; }
 }
-
-.poverty_eradication .book-front > div,
-.poverty_eradication .book-back,
-.poverty_eradication .book-left,
-.poverty_eradication .book-front:after {
-	background-color: #e9da63;
+.animal_welfare {
+	.book-front > div, .book-back, .book-left, .book-front:after { background-color: $book-color-3; }
 }
-
-.animal_welfare .book-front > div,
-.animal_welfare .book-back,
-.animal_welfare .book-left,
-.animal_welfare .book-front:after {
-	background-color: #63da63;
+.climate_and_environment {
+	.book-front > div, .book-back, .book-left, .book-front:after { background-color: $book-color-4; }
+}
+.women_and_girls {
+	.book-front > div, .book-back, .book-left, .book-front:after { background-color: $book-color-5; }
+}
+.hunger_nutrition_and_safe_water {
+	.book-front > div, .book-back, .book-left, .book-front:after { background-color: $book-color-6; }
+}
+.immigration_and_refugees {
+	.book-front > div, .book-back, .book-left, .book-front:after { background-color: $book-color-7; }
+}
+.criminal_justice {
+	.book-front > div, .book-back, .book-left, .book-front:after { background-color: $book-color-8; }
 }
 
 .book-colored .book-cover {
