@@ -30,7 +30,7 @@ section.section.embossed
             .control.buttons
               = f.collection_radio_buttons( \
                 :contribution_frequency, \
-                { once: 'One-time donation', monthly: 'Monthly donation', annually: 'Annual donation' }, \
+                { monthly: 'Monthly donation', annually: 'Annual donation', quarterly: 'Every quarter', once: 'One-time donation' }, \
                 :first, :last, \
                 checked: @active_portfolio.contribution_frequency) do |b| \
                   b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
@@ -114,6 +114,26 @@ section.section.embossed
             });
 
       .column
+        article.message.is-info
+          .message-body
+            .media
+              .media-left: span.icon.is-medium: i.fa.fa-info
+              .media-content
+                p
+                  strong> How much should you give?
+                  br
+                  p
+                    ' You have an income of
+                    strong> = number_to_currency(current_donor.annual_income_cents / 100, precision: 0)
+                    ' and pledged to give
+                    strong
+                      = current_donor.donation_rate * 100
+                      | %
+                    ' .
+                    br
+                    ' Your target monthly contribution is
+                    strong> = number_to_currency(@active_portfolio.target_monthly_contribution_amount_dollars, precision: 0)
+
         article.message.is-warning
           .message-body
             .media
