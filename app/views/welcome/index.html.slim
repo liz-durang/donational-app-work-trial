@@ -1,5 +1,5 @@
 - content_for :hero do
-  section.hero.is-fullheight.has-background
+  section.hero.is-fullheight.has-background.has-background-animated
     .hero-background
       figure
       figure
@@ -13,8 +13,8 @@
       nav.navbar role="navigation" aria-label="main navigation"
         .container
           .navbar-brand
-            .navbar-item href="/"
-              a.is-5.title Donational
+            .navbar-item
+              h1.title.is-5: a href="/" Donational
 
     .hero-body
       .container
@@ -35,7 +35,13 @@
                 span Tell us what matters to you
                 span.icon.is-small &rarr;
 
-section.section.is-medium
+    .hero-footer
+      .container.has-text-centered.content
+        p
+          a href="#learn-more" Learn more
+          br
+          br
+section.section.is-medium#learn-more
   .container.has-text-centered
     h3.title.is-spaced
       ' Dear
@@ -45,163 +51,142 @@ section.section.is-medium
       ' We believe in a global community that cares for each other.
     p.subtitle
       ' It begins with a commitment to what you care about.
+    p = image_tag('hand.png')
 hr.container
-section.hero.is-medium#learn-more
-  .hero-body
-    .container
-      .columns
-        .column.is-vertically-centered
-          h1.title.is-spaced Introducing your Charitable Advisor
-          h2.subtitle
-            ' We recommended outstanding charities.
-            br
-            ' Backed by
-            strong> evidence
-            ' and supported by
-            strong experts
-            | .
-          p.content Every charity demonstrates:
-          ul.is-size-5.fa-ul
-            li
-              span.fa-li: i.fas.fa-check-square
-              | High impact
-            li
-              span.fa-li: i.fas.fa-check-square
-              | Alignment with your values
-            li
-              span.fa-li: i.fas.fa-check-square
-              | Cost-effectiveness
-            li
-              span.fa-li: i.fas.fa-check-square
-              | Financial transparency
-        .column.is-vertically-centered
-          = image_tag('portfolio-screenshot.png')
-
-hr.container
-section.section.is-medium
-  .container.has-text-centered
-    h3.title.is-spaced
-      ' Spark
-      span.has-text-primary> data-rotating-text-alternatives="social action|real change|effective impact" data-rotating-text-show-time=2000
-        | social action
-      | by doing good with your money
-hr.container
-section.hero.is-medium.is-dark
-  .hero-body.container
-    h4.subtitle.has-text-centered How it works
+section.section.is-medium#learn-more
+  .container
     .columns
-      .column.is-3
-          h4.title.is-5 Tell us about yourself
+      .column.is-vertically-centered
+        h1.title.is-spaced Introducing your Charitable Advisor
+        h2.subtitle
+          ' We recommended outstanding charities.
+          br
+          ' Backed by
+          strong> evidence
+          ' and supported by
+          strong experts
+          | .
+        p.content Every charity demonstrates:
+        ul.is-size-5.fa-ul
+          li
+            span.fa-li: i.fas.fa-check-square
+            | High impact
+          li
+            span.fa-li: i.fas.fa-check-square
+            | Alignment with your values
+          li
+            span.fa-li: i.fas.fa-check-square
+            | Cost-effectiveness
+          li
+            span.fa-li: i.fas.fa-check-square
+            | Financial transparency
+      .column.is-vertically-centered
+        = image_tag('portfolio-screenshot.png')
+hr.container
+section.hero.is-dark.is-medium
+  .hero-body.container.content
+    p.has-text-centered.has-text-weight-bold
+      | How it works
+      br
+      | &mdash;
+    .columns
+      .column
+          h4.title.is-5 1. Tell us about yourself and your values
           p Answer our survey to tell us what causes matter to you
-      .column.is-3
-          h4.title.is-5 Discover expert recommended charities
+          p.has-text-centered
+            br
+            span.icon: i.fas.fa-2x.fa-handshake
+      .column
+          h4.title.is-5 2. Discover expert recommended charities
           p Select from our personalized recommendations to build your charitable portfolio
-      .column.is-3
-          h4.title.is-5 Pledge your income
-          p Tell us how much you’d like to give
-      .column.is-3
-          h4.title.is-5 See your impact
-          p Track your distribution of giving + become an expert on causes that matter to you
+          p.has-text-centered
+            br
+            span.icon: i.fas.fa-2x.fa-university
+      .column
+          h4.title.is-5 3. Pledge your income, make an impact
+          p Tell us how much you'd like give and we send it to your charities
+          p.has-text-centered
+            br
+            span.icon: i.fas.fa-2x.fa-chart-pie
 hr.container
-section.hero.is-medium
-  .hero-body
-    .content.container
-      .columns
-        .column.is-3.is-vertically-centered
-          h1.title 0% Fees,
-          p.subtitle.is-4 Unless You Want to.
-        .column.is-offset-1
-          p.subtitle
-            ' Donational is run at-cost by a team of dedicated members
-            ' building useful tools for the greater good.
-          p
-            ' Donations are directly distributed to charities and
-            ' make use of smart features like donation pooling to
-            ' ensure that charities spend more on making an impact,
-            ' and less on processing donations.
-            | Standard credit card payment processing fees apply.
-          p
-            ' We only make money if you choose to pay us, allowing us to continue to help you &mdash; and others &mdash; make a greater impact.
-hr.container
+section.section.embossed.is-medium
+  .content.container
+    .columns
+      .column.is-3.is-vertically-centered
+        h1.title 0% Fees,
+        p.subtitle.is-4 Unless You Want to.
+      .column.is-offset-1
+        p.subtitle
+          ' Donational is run at-cost by a team of dedicated members
+          ' building useful tools for the greater good.
+        p
+          ' Donations are directly distributed to charities and
+          ' make use of smart features like donation pooling to
+          ' ensure that charities spend more on making an impact,
+          ' and less on processing donations.
+          | Standard credit card payment processing fees apply.
+        p
+          ' We only make money if you choose to pay us, allowing us to continue to help you &mdash; and others &mdash; make a greater impact.
+
 section.section.is-medium
   .container
     .columns
       .column.is-3
-        p.title.is-spaced The power of many.
-        p.subtitle.is-4 Whether you give $1 or $1000, we can make a real impact together.
+        p.title The power of many.
+        p.subtitle.is-4 Give $1 or $1000, we can make a real impact together.
       .column.is-offset-1
-
-section.hero.is-light
+        .tile.is-ancestor
+          .tile.is-parent
+            .tile.box
+              .content
+                p.title.is-4
+                  | &ldquo;
+                  | I'm finally giving what I ought to!
+                  | &rdquo;
+                p
+                  ' The amount that I donated used to depend on how I was feeling the day when I was asked.
+                  | Now I'm giving an amount that I think is appropriate, and one that fits in with the rest of my finances.
+                p &mdash; Theresa Philips
+          .tile.is-parent
+            .tile.box
+              .content
+                p.title.is-4
+                  | &ldquo;
+                  | It helped me realize what I care about
+                  | &rdquo;
+                p
+                  ' I'd often try to research which charities were most efficient, only to get lost in all the details.
+                  | Now it's like having a personal advisor to guide me through a shortlist of highly effective causes.
+                p &mdash; Marco Vasquez
+          .tile.is-parent
+            .tile.box
+              .content
+                p.title.is-4
+                  | &ldquo;
+                  | It's like a smart co-pilot for my giving!
+                  | &rdquo;
+                p
+                  ' I don't need to remember to mail in a bunch of checks or
+                  ' separately itemize handfuls of donations at tax time.
+                  ' I get peace of mind knowing that my money is getting to where it is needed.
+                p &mdash;  Jerry Bass
+section.is-medium.hero.has-background
+  .hero-background
+    figure style="background-image: url(#{image_url('hero-image-6.jpg')})"
   .hero-body
-    .container.content
-      .tile.is-ancestor
-        .tile.is-parent
-          .tile.box.is-radiusless.is-shadowless
-            .content
-              p.title.is-4
-                | &ldquo;
-                | I'm finally giving what I ought to!
-                | &rdquo;
-              p
-                ' The amount that I donated used to depend on how I was feeling the day when I was asked.
-                | Now I'm giving an amount that I think is appropriate, and one that fits in with the rest of my finances.
-              p &mdash; Theresa Philips
-        .tile.is-parent
-          .tile.box.is-radiusless.is-shadowless
-            .content
-              p.title.is-4
-                | &ldquo;
-                | It helped me realize what I care about
-                | &rdquo;
-              p
-                ' I'd often try to research which charities were most efficient, only to get lost in all the details.
-                | Now it's like having a personal advisor to guide me through a shortlist of highly effective causes.
-              p &mdash; Marco Vasquez
-        .tile.is-parent
-          .tile.box.is-radiusless.is-shadowless
-            .content
-              p.title.is-4
-                | &ldquo;
-                | It's like an auto-pilot for my giving!
-                | &rdquo;
-              p
-                ' I don't need to remember to mail in a bunch of checks or
-                ' separately itemize handfuls of donations at tax time.
-                ' I get peace of mind knowing that my money is getting to where it is needed.
-              p &mdash;  Jerry Bass
-
-/ section.hero.is-dark
-/   .hero-body
-/     .container
-/       p.title New to donational?
-/       p.subtitle We'll help you setup a portfolio of charities that have been vetted by experts to have high impact.
-/       .columns
-/         .column
-/           h3 1. Identify your values
-/           p We help you identify which causes are important to you
-/         .column
-/           h3 2. Discover expert recommended charities
-/           p We recommend a portfolio of high impact, transparent and efficient charities that align with your values
-/         .column
-/           h3 3. Donate efficiently
-/           p
-/             ' Your monthly donation is distributed to your charities, making use of smart features like donation pooling to
-/             | ensure that charities spend more on making an impact, and less on fundraising and processing donations.
-/         .column
-/           h3 4. Encourage others
-/           p
-/             ' Boost your impact by asking others to make a contribution to your portfolio,
-/             | or to be more deliberate in their own giving, by creating a portfolio of their own
-section.section
-  .container.has-text-centered
-    p.title.is-3> Give to something you care about, now.
-    a.button.is-primary.is-medium href=onboarding_path
-      span Get started
-      span.icon.is-small: i.fa.fa-angle-right
+    .container.has-text-centered
+      h1.title.is-spaced
+        ' Spark
+        span.has-text-primary> data-rotating-text-alternatives="social action|real change|effective impact" data-rotating-text-show-time=2000
+          | social action
+        | by doing good with your money
+      a.button.is-primary.is-medium href=onboarding_path
+        span Get started
+        span.icon.is-small: i.fa.fa-angle-right
 
 footer.footer
   .container
     nav.breadcrumb.has-bullet-separator.is-centered
       ul
-        li: a.button.is-white href="/" Donational &copy;
+        li.is-active: a href="/" Donational &copy;
         li = logged_in? ? sign_out_link : sign_in_link

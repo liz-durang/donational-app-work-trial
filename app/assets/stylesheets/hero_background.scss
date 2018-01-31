@@ -1,9 +1,13 @@
 .hero.has-background {
   position: relative;
 
-  h1.title, h2.subtitle, a:not(.button) {
+  h1.title, h2.subtitle {
     background: rgba(255,255,255,0.8);
     padding: 1rem;
+  }
+
+  .hero-foot a {
+    margin-bottom: 3rem;
   }
 
   .navbar-burger {
@@ -16,19 +20,25 @@
 
 .hero-background {
   figure {
-    animation: imageAnimation 44s linear infinite 0s;
     backface-visibility: hidden;
     background-size: cover;
     background-position: center center;
     color: transparent;
     height: 100%;
     left: 0px;
-    opacity: 0;
     position: absolute;
     top: 0px;
     width: 100%;
     z-index: 0;
   }
+}
+
+.has-background-animated {
+  figure {
+    animation: imageAnimation 40s linear infinite 0s;
+    opacity: 0;
+  }
+
   figure:nth-child(1) {
     animation-delay: 0s;
     background-image: image_url('hero-image-1.jpg');
@@ -61,20 +71,19 @@
     animation-delay: 35s;
     background-image: image_url('hero-image-8.jpg');
   }
-
   @keyframes imageAnimation {
     0% {
       animation-timing-function: ease-in;
       opacity: 0;
     }
-    8% {
+    4% {
       animation-timing-function: ease-out;
       opacity: 1;
     }
-    17% {
+    14% {
       opacity: 1
     }
-    25% {
+    20% {
       opacity: 0
     }
     100% {
