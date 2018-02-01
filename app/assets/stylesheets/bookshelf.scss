@@ -24,10 +24,6 @@
   margin: 0 auto;
 }
 
-.book:hover {
-	transform: rotate3d(0,1,0,30deg);
-}
-
 .book > div,
 .book-front > div {
 	display: block;
@@ -57,6 +53,7 @@
   bottom: 5px;
   left: 0px;
   right: 5px;
+	font-size: 0.75em;
 	-webkit-backface-visibility: hidden;
 	backface-visibility: hidden;
 	z-index: 9;
@@ -125,11 +122,16 @@
 }
 
 .book.book-viewinside {
-	transform: translate3d(0,0,100vh) rotate3d(0,1,0,0deg);
+	transform: translate3d(0,0,10rem) rotate3d(0,1,0,0deg);
 }
-
 .book.book-viewback {
 	transform: translate3d(0,0,0px) rotate3d(0,1,0,180deg);
+}
+.book:not(.book-viewinside) .book-front:hover {
+	transform: translate3d(0,0,20px) rotate3d(0,1,0,-20deg);
+}
+.book:not(.book-viewinside):hover {
+	transform: translate3d(0,0,0) rotate3d(1,0,0,5deg);
 }
 
 /* Main colors and content */
@@ -204,14 +206,9 @@
 	opacity: 1;
 	pointer-events: auto;
 }
-
 .book-content p {
-	padding: 0 0 10px;
 	-webkit-font-smoothing: antialiased;
 	color: #000;
-	font-size: 13px;
-	line-height: 20px;
-	text-align: justify;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -223,8 +220,10 @@
 .book-page nav {
 	display: block;
 	text-align: center;
-	margin-top: 20px;
-	position: relative;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 20px;
 	z-index: 100;
 	cursor: pointer;
 	-webkit-touch-callout: none;
@@ -235,13 +234,16 @@
 	user-select: none;
 }
 
-.book-page nav span {
+.book-page nav a {
 	display: inline-block;
 	width: 20px;
 	height: 20px;
-	color: #aaa;
-	background: #f0f0f0;
+	font-size: 14px;
+	line-height: 18px;
+	background: #fafafa;
 	border-radius: 50%;
+	border: 1px solid #eee;
+	margin: 0px 2px;
 }
 
 /* Individual style & artwork */
@@ -257,9 +259,8 @@ $book-color-9: #e0b1cb;
 $book-color-10: #231942;
 
 /* Book 1 */
-.book-colored {
-	.book-front > div, .book-back, .book-left, .book-front:after { background-color: $book-color-1; }
-}
+.book-front > div, .book-back, .book-left, .book-front:after { background-color: $book-color-1; }
+
 .poverty_and_income_inequality {
 	.book-front > div, .book-back, .book-left, .book-front:after { background-color: $book-color-1; }
 }
@@ -285,13 +286,13 @@ $book-color-10: #231942;
 	.book-front > div, .book-back, .book-left, .book-front:after { background-color: $book-color-8; }
 }
 
-.book-colored .book-cover {
+.book-cover {
 	// background-image: url(../images/1.png);
 	background-repeat: no-repeat;
 	background-position: 10px 40px;
 }
 
-.book-colored .book-cover h4 {
+.book-cover h4 {
 	position: absolute;
 	bottom: 0;
 	right: 0;
@@ -302,31 +303,29 @@ $book-color-10: #231942;
 	text-shadow: 0 -1px 0 rgba(0,0,0,0.1);
 }
 
-.book-colored .book-cover h2 {
+.book-cover h2 {
 	font-family: "Big Caslon", "Book Antiqua", "Palatino Linotype", Georgia, serif;
 	font-weight: 600;
 	font-size: 20px;
   color: white;
 	position: absolute;
-  top: 0;
+	text-align: center;
+  top: 100px;
   left: 0;
   right: 0;
   bottom: 100px;
   padding: 50px 30px 0;
 }
 
-.book-colored .book-cover h4 {
+.book-cover h4 {
 	text-transform: uppercase;
   font-size: 14px;
   line-height: 20px;
   min-height: 100px;
+	text-align: center;
 }
 
-.book-colored .book-content p {
-	font-family: Georgia, Times, "Times New Roman", serif;
-}
-
-.book-colored .book-left h2 {
+.book-left h2 {
 	text-transform: uppercase;
 	color: #fff;
 	font-size: 15px;
@@ -334,11 +333,14 @@ $book-color-10: #231942;
 	padding-right: 10px;
 	text-align: right;
 }
-
-.book-colored .book-back p {
-	color: #fff;
-	font-size: 13px;
-	padding: 40px;
-	text-align: center;
-	font-weight: 700;
+.book .badges {
+	position: absolute;
+	display: block;
+	text-align: right;
+	top: 0;
+	left: 0;
+	right: 0;
+	img {
+		padding: 0.5rem;
+	}
 }

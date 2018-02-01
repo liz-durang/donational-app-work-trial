@@ -34,8 +34,8 @@ document.addEventListener('turbolinks:load', function () {
 
 			if( $content.length > 1 ) {
 
-				var $navPrev = $( '<span class="book-page-prev">&lt;</span>' ),
-					$navNext = $( '<span class="book-page-next">&gt;</span>' );
+				var $navPrev = $( '<a class="book-page-prev">&lt;</a>' ),
+					$navNext = $( '<a class="book-page-next">&gt;</a>' );
 
 				$page.append( $( '<nav></nav>' ).append( $navPrev, $navNext ) );
 

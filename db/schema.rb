@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180131101326) do
+ActiveRecord::Schema.define(version: 20180201012108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,6 +120,15 @@ ActiveRecord::Schema.define(version: 20180131101326) do
     t.text "description"
     t.string "cause_area"
     t.datetime "deactivated_at"
+    t.text "mission"
+    t.text "context"
+    t.text "impact"
+    t.text "why_you_should_care"
+    t.string "website_url"
+    t.string "annual_report_url"
+    t.string "financials_url"
+    t.string "form_990_url"
+    t.string "recommended_by", default: [], array: true
     t.index ["ein"], name: "index_organizations_on_ein", unique: true
   end
 
