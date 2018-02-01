@@ -124,7 +124,6 @@
 .book.book-viewinside {
 	transform: translate3d(0,0,10rem) rotate3d(0,1,0,0deg);
 }
-
 .book.book-viewback {
 	transform: translate3d(0,0,0px) rotate3d(0,1,0,180deg);
 }
@@ -310,7 +309,8 @@ $book-color-10: #231942;
 	font-size: 20px;
   color: white;
 	position: absolute;
-  top: 0;
+	text-align: center;
+  top: 100px;
   left: 0;
   right: 0;
   bottom: 100px;
@@ -332,4 +332,15 @@ $book-color-10: #231942;
 	line-height: 40px;
 	padding-right: 10px;
 	text-align: right;
+}
+.book .badges {
+	position: absolute;
+	display: block;
+	text-align: right;
+	top: 0;
+	left: 0;
+	right: 0;
+	img {
+		padding: 0.5rem;
+	}
 }

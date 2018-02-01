@@ -28,7 +28,7 @@ csv.each do |row|
       financials_url: row['financials_url'],
       form_990_url: row['form_990_url'],
       recommended_by: {
-        givewell: row['recommended_by_givewell'],
+        give_well: row['recommended_by_givewell'],
         lycs: row['recommended_by_lycs'],
         agora: row['recommended_by_agora'],
         gates_foundation: row['recommended_by_gates_foundation'],

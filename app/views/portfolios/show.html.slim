@@ -46,6 +46,13 @@ section.section.embossed#my-portfolio
               .book-cover
                 h2 = organization.name
                 h4 = I18n.t('title', scope: ['cause_areas', organization.cause_area])
+                .badges
+                  - if organization.recommended_by.include?('lycs')
+                    = image_tag('badge-the-life-you-can-save.svg')
+                  - if organization.recommended_by.include?('animal_charity_evaluators')
+                    = image_tag('badge-animal-charity-evaluators.svg')
+                  - if organization.recommended_by.include?('give_well')
+                    = image_tag('badge-give-well.svg')
             .book-page
               / - organization.description.split('. ').each_slice(2) do |sentence_1, sentence_2|
               /   .book-content
