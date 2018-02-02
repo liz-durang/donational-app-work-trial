@@ -2,9 +2,9 @@ module Onboarding
   class DiversityOfPortfolio < QuickResponseStep
     section "Your giving goals"
 
-    message "Is it more important to you to make a focused impact (donating to a few charities), or to make a broad impact (donating to many charities)?"
+    message "Is it more important for you to make a focused impact or to make a broad impact?"
 
-    subtitle "I want to my portfolio to be"
+    subtitle "I want to my portfolio to be:"
 
     display_as :text_scale
 

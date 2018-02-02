@@ -42,9 +42,20 @@ body.minimal {
   }
 }
 
-section.embossed {
-  background: whitesmoke;
-  border-top: 1px solid #eee;
+.hero-head a.title {
+  color: $primary;
+}
+
+section {
+  &.embossed {
+    background: whitesmoke;
+    border-top: 1px solid #eee;
+  }
+
+  &.is-medium {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
 }
 
 .table.has-cells-centered {

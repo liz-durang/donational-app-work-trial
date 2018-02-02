@@ -3,7 +3,9 @@ module Onboarding
     section "Your giving goals"
 
     message "Now for a harder question..."
-    message 'As a percentage of your pre-tax income, how much do YOU want to contribute?'
+    message "We, at Donational, believe a pledge of income helps donors intuitively understand " +
+            "how much they can give to causes that matter to them."
+    message 'As a percentage of your pre-tax income, how much do you want to contribute?'
 
     display_as :slider
 

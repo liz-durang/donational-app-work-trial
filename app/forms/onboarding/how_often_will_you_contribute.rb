@@ -2,12 +2,10 @@ module Onboarding
   class HowOftenWillYouContribute < QuickResponseStep
     section "Your giving goals"
 
-    message "We help you streamline your charitable giving."
-    message 'Your donation will be split up between the charities and cause areas that are important to you.'
-    message "By making regular contributions that are tied to your income"
-    message "a) you can feel great knowing that you're always giving exactly as much as you believe you *ought* to give."
-    message "b) charities receive donations regularly (as opposed to larger lump sum payments), which helps them to manage their cash flow and plan more efficiently"
     message "How often would you like to donate?"
+    message "Regular giving helps you stick to your giving goals. " +
+            "A regular flow of donations (as opposed to lump-sum contributions) " +
+            "will also help charities manage their cash flow and plan more efficiently."
 
     display_as :radio_buttons
 

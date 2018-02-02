@@ -4,8 +4,8 @@ section.section
       h1.title.is-spaced
         => icon_tag('fa-bolt')
         br
-        ' Smart choices,
         = @portfolio.donor_first_name
+        | , meet your personal Charity Portfolio
         | !
 
       p
@@ -19,8 +19,8 @@ section.section
 
 section.section.embossed#my-portfolio
   .container.has-text-centered
-    h4.subtitle
-      span.icon.is-size-7>: i.fa.fa-heart
+    span.icon.is-size-5>: i.fa.fa-heart
+    h4.subtitle.is-4
       | Charities that align with your values & beliefs
 
     p
@@ -108,5 +108,5 @@ section.section
     p Connect your credit card and easily donate to all of the charities in your portfolio.
 
     a.button.is-large.is-primary href=new_contribution_path
-      span Donate to your portfolio
+      span Give to your portfolio &amp; make an impact
       span.icon.is-small &rarr;

@@ -15,12 +15,11 @@ section.section
 
 section.section.embossed
   .container.content
-    .columns
-      .column
-        = display_flash_messages
-        = form_with model: @active_portfolio, url: contributions_path, local: true, id: 'sanitized_create_payment_method_form', method: :post, class: 'form' do |f|
-          = f.hidden_field :payment_token, id: 'payment_token'
-
+    = display_flash_messages
+    = form_with model: @active_portfolio, url: contributions_path, local: true, id: 'sanitized_create_payment_method_form', method: :post, class: 'form' do |f|
+      = f.hidden_field :payment_token, id: 'payment_token'
+      .columns
+        .column.is-6
           p.field
             label.label 1. Enter donation amount
             .field.has-addons
@@ -36,21 +35,59 @@ section.section.embossed
                   b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
                 end
 
+        .column
+          - if current_donor.annual_income_cents.present? && current_donor.donation_rate.present?
+            article.message.is-info
+              .message-body
+                .media
+                  .media-left: span.icon.is-medium: i.fa.fa-info
+                  .media-content
+                    p
+                      strong> How much should you give?
+                      br
+                      p
+                        ' You have an income of
+                        strong> = number_to_currency(current_donor.annual_income_cents / 100, precision: 0)
+                        ' and pledged to give
+                        strong
+                          = current_donor.donation_rate * 100
+                          | %
+                        ' .
+                        br
+                        ' Your target monthly contribution is
+                        strong> = number_to_currency(@active_portfolio.target_monthly_contribution_amount_dollars, precision: 0)
+      .columns
+        .column.is-6
           p.field
             label.label 2. Add a tip to help Donational grow
             .control.buttons = f.collection_radio_buttons :platform_tip_dollars,\
-              [[0, 'No tip'], [2, '$2'], [3, '$3'], [6, '$6']], :first, :last do |b| \
+              [[0, 'No tip'], [2, '$2'], [5, '$5'], [10, '$10']], :first, :last do |b| \
                 b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
               end
           - if active_payment_method?
             p.field
               .control
-                = f.submit "Donate", class: %w(button is-primary)
+                = f.submit "Donate", class: %w(button is-primary is-medium)
 
-        - unless active_payment_method?
-          / This form should remain separate from the credit card details to avoid
-          / accidentally leaking credit card data into our server
-          form#panda_cc_form.panda_cc_form.form
+        .column
+          article.message.is-warning
+            .message-body
+              .media
+                .media-left: span.icon.is-medium: i.fa.fa-info
+                .media-content
+                  p
+                    strong> Worried that a small donation is inefficient? We've got you covered!
+                    br
+                    ' Charities incur overhead costs whenever they process a donation.
+                    ' We
+                    em> hate
+                    ' unnecessary fees, so we pool your donation to a charity with donations by other users on the platform.
+    - unless active_payment_method?
+      / This form should remain separate from the credit card details to avoid
+      / accidentally leaking credit card data into our server
+      form#panda_cc_form.panda_cc_form.form
+        .columns
+          .column
             p.field
               label.label 3. Enter Credit Card details:
               .field.is-grouped
@@ -80,71 +117,38 @@ section.section.embossed
                 p.control.has-icons-left
                   input.input type="text" data-panda="cvv" placeholder="CVV" size=4
                   span.icon.is-left.is-small: i.fa.fa-lock
-
+              br
               .field
-                .control
-                  button.button.is-primary type="submit" Donate
-                  span.help
-                    | * We use smart and secure online payments to ensure that your donations are simple, secure, and avoid fees.
-              .card-wrapper.is-hidden-mobile
+                p.control
+                  button.button.is-primary.is-medium type="submit" Donate
+          .column
+            p: br
+            .card-wrapper.is-hidden-mobile
 
-          javascript:
-          	new Card({
-              form: '#panda_cc_form',
-              container: '.card-wrapper',
-              formSelectors: {
-                  nameInput: 'input[data-panda="first_name"], input[data-panda="last_name"]',
-                  numberInput: 'input[data-panda="credit_card"]',
-                  expiryInput: 'input[data-panda="month"], input[data-panda="year"]',
-                  cvcInput: 'input[data-panda="cvv"]'
-              }
-          	});
+      javascript:
+        new Card({
+          form: '#panda_cc_form',
+          container: '.card-wrapper',
+          formSelectors: {
+            nameInput: 'input[data-panda="first_name"], input[data-panda="last_name"]',
+            numberInput: 'input[data-panda="credit_card"]',
+            expiryInput: 'input[data-panda="month"], input[data-panda="year"]',
+            cvcInput: 'input[data-panda="cvv"]'
+          }
+      	});
 
-          	Panda.init("#{ENV.fetch('PANDAPAY_PUBLIC_KEY')}", 'panda_cc_form');
+      	Panda.init("#{ENV.fetch('PANDAPAY_PUBLIC_KEY')}", 'panda_cc_form');
 
-            Panda.on('success', function(cardToken) {
-              document.getElementById('payment_token').value = cardToken;
-              document.getElementById('sanitized_create_payment_method_form').submit();
-            });
+        Panda.on('success', function(cardToken) {
+          document.getElementById('payment_token').value = cardToken;
+          document.getElementById('sanitized_create_payment_method_form').submit();
+        });
 
-            Panda.on('error', function(errors) {
-              var message = "";
-              errors.forEach(function(error) { message += "\n" + error.message; })
-              alert("There was an error processing your payment: " + message);
-            });
-
-      .column
-        article.message.is-info
-          .message-body
-            .media
-              .media-left: span.icon.is-medium: i.fa.fa-info
-              .media-content
-                p
-                  strong> How much should you give?
-                  br
-                  p
-                    ' You have an income of
-                    strong> = number_to_currency(current_donor.annual_income_cents / 100, precision: 0)
-                    ' and pledged to give
-                    strong
-                      = current_donor.donation_rate * 100
-                      | %
-                    ' .
-                    br
-                    ' Your target monthly contribution is
-                    strong> = number_to_currency(@active_portfolio.target_monthly_contribution_amount_dollars, precision: 0)
-
-        article.message.is-warning
-          .message-body
-            .media
-              .media-left: span.icon.is-medium: i.fa.fa-info
-              .media-content
-                p
-                  strong> Worried that a small donation is inefficient? We've got you covered!
-                  br
-                  ' Charities incur overhead costs whenever they process a donation.
-                  ' We
-                  em> hate
-                  ' unnecessary fees, so we pool your donation to a charity with donations by other users on the platform.
-                p
-                  ' By making use of economies of scale charities only have to process a single (big!) donation, and can put even more of your funds into making an impact.
+        Panda.on('error', function(errors) {
+          var message = "";
+          errors.forEach(function(error) { message += "\n" + error.message; })
+          alert("There was an error processing your payment: " + message);
+        });
+    hr
+    p.help
+      | We use smart and secure online payments to ensure that your donations are simple, secure, and avoid fees.

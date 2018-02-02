@@ -4,7 +4,6 @@ module Onboarding
 
     message "To calculate your monthly contribution, we'll need to know about how much you earn."
     message "What is your (pre-tax) annual income?"
-    subtitle "(we'll keep this private and secure)"
 
     display_as :currency
 

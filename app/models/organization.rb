@@ -33,6 +33,7 @@ class Organization < ApplicationRecord
     hunger_nutrition_and_safe_water
     women_and_girls
     immigration_and_refugees
+    education
     economic_development
     criminal_justice
   )
