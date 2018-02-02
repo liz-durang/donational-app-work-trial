@@ -2,8 +2,8 @@ module Onboarding
   class HowDoYouDecideWhichOrganizationsToSupport < QuickResponseStep
     section "What's important to you"
 
-    message 'There are many non-profits you could choose to support.'
-    message 'What are some of the reasons why you choose give to some organizations over others?'
+    message 'There are many non-profits that you could to support.'
+    message 'What are the reasons why you would choose to give to some charities over others?'
 
     allowed_response :aligned_with_my_values, 'Alignment with my beliefs and values'
     allowed_response :high_impact, 'Makes the highest impact'

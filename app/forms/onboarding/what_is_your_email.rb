@@ -3,7 +3,6 @@ module Onboarding
     section "Preparing your charity portfolio"
 
     message "We've done the research to ensure that every charity in your portfolio is making measurable impact to problems that are in need, and also can be solved through proven techniques"
-    message "From what you've told us, we'll build a diverse and impactful portfolio of charities that represent your values."
     message "To see your portfolio, please let us know your email address below!"
 
     display_as :email

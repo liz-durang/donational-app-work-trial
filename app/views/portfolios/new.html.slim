@@ -1,28 +1,29 @@
 section.section
   .container
+    .content.has-text-centered
+      h1.title.is-spaced
+        => icon_tag('fa-bolt')
+        br
+        ' Great choices
+        = current_donor.first_name
+        | !
+
+      p.subtitle Your charity portfolio is ready
+section.section.embossed
+  .container
     .content
-      h4 We've built you a personalized charity portfolio based on your values.
-      p
-        ' Every charity that we recommend has been vetted by experts.
-        ' These organizations have high impact,
-        ' are transparent about how they use donor contributions and
-        | solve important and immediate world problems.
+      .columns.is-centered
+        .column.is-6
+          h3 What's next?
 
-      h3 What's next?
-
-      ol
-        li View your charitable portfolio
-        li Make edits to the portfolio allocation of each charity
-        li Make a donation
-
-      p One of our advisors will contact you by email to give you a personal walk-through of your portfolio.
-
-      p However, you're welcome to explore on your own!
-
-
-    = form_with scope: 'allocations', url: portfolio_path, action: :post, class: 'form' do |f|
-      - @allocations.each_with_index do |allocation, index|
-          = f.fields index.to_s, model: allocation do |allocation_form|
-            = allocation_form.hidden_field :organization_ein
-            = allocation_form.hidden_field :percentage
-      = f.submit class: 'button is-primary', value: 'Show me my portfolio'
+          ol
+            li View your charitable portfolio
+            li Make edits to the portfolio allocation of each charity
+            li Make a donation
+          hr
+          = form_with scope: 'allocations', url: portfolio_path, action: :post, class: 'form' do |f|
+            - @allocations.each_with_index do |allocation, index|
+                = f.fields index.to_s, model: allocation do |allocation_form|
+                  = allocation_form.hidden_field :organization_ein
+                  = allocation_form.hidden_field :percentage
+            = f.submit class: 'button is-primary is-large', value: 'Explore your charitable portfolio &rarr;'.html_safe
