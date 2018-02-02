@@ -2,7 +2,7 @@ module Onboarding
   class WhichCauseAreasMatterToYou < QuickResponseStep
     section "What's important to you"
 
-    message "I'd like to know what cause areas matter most to you? We'll use this to decide which charities to include in your portfolio"
+    message "I'd like to know what cause areas matter most to you. We'll use this to decide which charities to include in your portfolio"
 
     allowed_response :global_health, "Global health"
     allowed_response :poverty_and_income_inequality, "Poverty and income inequality"

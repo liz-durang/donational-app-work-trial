@@ -3,7 +3,12 @@ class PortfoliosController < ApplicationController
   include ClientSideAnalytics
 
   def new
-    @allocations = Allocations::GetRecommendedAllocations.call(donor: current_donor)
+    @portfolio = OpenStruct.new(
+      donor_first_name: current_donor.first_name,
+      allocations: Allocations::GetRecommendedAllocations.call(donor: current_donor),
+      cause_areas: organizations.map(&:cause_area).uniq,
+      diversity_text: current_donor.portfolio_diversity
+    )
   end
 
   def create
@@ -29,8 +34,7 @@ class PortfoliosController < ApplicationController
 
     @portfolio = OpenStruct.new(
       donor_first_name: current_donor.first_name,
-      organizations: organizations,
-      cause_areas: organizations.map(&:cause_area).uniq
+      organizations: organizations
     )
   end
 

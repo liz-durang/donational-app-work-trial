@@ -2,10 +2,10 @@ module Onboarding
   class HowOftenWillYouContribute < QuickResponseStep
     section "Your giving goals"
 
-    message "How often would you like to donate?"
-    message "Regular giving helps you stick to your giving goals. " +
-            "A regular flow of donations (as opposed to lump-sum contributions) " +
+    message "Regular giving helps you stick to your giving goals. "
+    message "A regular flow of donations (as opposed to lump-sum contributions) " +
             "will also help charities manage their cash flow and plan more efficiently."
+    message "How often would you like to donate?"
 
     display_as :radio_buttons
 

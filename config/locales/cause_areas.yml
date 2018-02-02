@@ -1,62 +1,20 @@
 en:
   cause_areas:
-    poverty_and_income_inequality:
-      title: Poverty Eradication
-      description: |
-        Give to organizations focused on enabling the poor to create wealth for themselves as a means of ending poverty forever
-    hunger_nutrition_and_safe_water:
-      title: Hunger, nutrition and clean water
-      description: |
-        Give to organizations fighting for everyone’s inalienable fundamental rights as human beings like access to food + clean water + sanitation
     global_health:
-      title: Global Health
-      description: |
-        Give to organizations devoted to improving health and achieving equity in health for all
-    animal_welfare:
-      title: Reducing Animal Suffering
-      description: |
-        Globally, 783 million people do not have access to clean water, and 2.5 billion people have no water-based sanitation resources such as toilets or clean bathing facilities. A lack of clean water isn’t just an inconvenience; for millions around the world, it’s fatal. Each year, between 6 to 8 million people die from drinking contaminated water and from other water-related hygiene issues.
-    women_and_girls:
-      title: Women and Reproductive Rights
-      description: |
-        Give to organizations focused on empowerment and protection of equal rights, women's reproductive issues, and women's health
-    economic_development:
-      title: Jobs and Economic Opportunities
-      description: |
-        Globally, 783 million people do not have access to clean water, and 2.5 billion people have no water-based sanitation resources such as toilets or clean bathing facilities. A lack of clean water isn’t just an inconvenience; for millions around the world, it’s fatal. Each year, between 6 to 8 million people die from drinking contaminated water and from other water-related hygiene issues.
-    criminal_justice:
-      title: Criminal Justice
-      description: |
-        Give to organizations fighting for a more just legal and judicial system.
-    immigration_and_refugees:
-      title: Refugees and Immigration
-      description: |
-        Globally, 783 million people do not have access to clean water, and 2.5 billion people have no water-based sanitation resources such as toilets or clean bathing facilities. A lack of clean water isn’t just an inconvenience; for millions around the world, it’s fatal. Each year, between 6 to 8 million people die from drinking contaminated water and from other water-related hygiene issues.
-    arts_and_community:
-      title: Arts and Culture
-      description: |
-        Give to organizations devoted to supporting and celebrating the arts in public spaces
-    community_development:
-      title: Community Development
-      description: |
-        Globally, 783 million people do not have access to clean water, and 2.5 billion people have no water-based sanitation resources such as toilets or clean bathing facilities. A lack of clean water isn’t just an inconvenience; for millions around the world, it’s fatal. Each year, between 6 to 8 million people die from drinking contaminated water and from other water-related hygiene issues.
-    human_rights:
-      title: Human Rights
-      description: |
-        Give to organizations fighting for everyone’s inalienable fundamental rights as human beings like access to food + clean water + sanitation
-    veterans_affairs:
-      title: Veteran's Affairs
-      description: |
-        Give to organizations focused on providing support and safety nets for our veterans.
-    ai_and_cyber_security:
-      title: Cyber Security
-      description: |
-        Globally, 783 million people do not have access to clean water, and 2.5 billion people have no water-based sanitation resources such as toilets or clean bathing facilities. A lack of clean water isn’t just an inconvenience; for millions around the world, it’s fatal. Each year, between 6 to 8 million people die from drinking contaminated water and from other water-related hygiene issues.
+        title: 'Global health'
+    poverty_and_income_inequality:
+        title: 'Poverty and income inequality'
     climate_and_environment:
-      title: Climate and the Environment
-      description: |
-        Give to organizations focused on systematically improving the environment
-    us_tax_policy:
-      title: US Tax Policy
-      description: |
-        Globally, 783 million people do not have access to clean water, and 2.5 billion people have no water-based sanitation resources such as toilets or clean bathing facilities. A lack of clean water isn’t just an inconvenience; for millions around the world, it’s fatal. Each year, between 6 to 8 million people die from drinking contaminated water and from other water-related hygiene issues.
+        title: 'Climate and the environment'
+    animal_welfare:
+        title: 'Animal welfare'
+    hunger_nutrition_and_safe_water:
+        title: 'Hunger, nutrition and safe water'
+    immigration_and_refugees:
+        title: 'Immigration and refugees'
+    women_and_girls:
+        title: 'Women and girls'
+    criminal_justice:
+        title: 'Criminal justice'
+    economic_development:
+        title: 'Jobs and Economic Opportunities'
