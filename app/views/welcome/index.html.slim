@@ -40,7 +40,8 @@
         p
           a href="#learn-more" Learn more
 section.section.is-medium#learn-more
-  .container.has-text-centered
+  .container.has-text-centered.content
+    p = image_tag('hand.svg', width: 60, height: 60)
     h3.title.is-spaced
       ' Dear
       strong born-again optimists,
@@ -48,10 +49,14 @@ section.section.is-medium#learn-more
       ' This is for you.
       ' We believe in a global community that cares for each other.
     p.subtitle
-      ' Begin with a commitment to what you care about.
-    p = image_tag('hand.svg', width: 60, height: 60)
+      ' It begins with a commitment to what you care about.
+    p.subtitle
+      ' Pledge your
+      strong.has-text-primary> data-rotating-text-alternatives="$|&euro;|&yen;|&pound;|฿" data-rotating-text-show-time=2000
+        | $
+      | to move the world&hellip;
 hr.container
-section.section.is-medium#learn-more
+section.section.is-medium
   .container
     .columns
       .column.is-vertically-centered
