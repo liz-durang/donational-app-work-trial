@@ -61,7 +61,7 @@ section.section.embossed
           p.field
             label.label 2. Add a tip to help Donational grow
             .control.buttons = f.collection_radio_buttons :platform_tip_dollars,\
-              [[0, 'No tip'], [2, '$2'], [3, '$3'], [6, '$6']], :first, :last do |b| \
+              [[0, 'No tip'], [2, '$2'], [5, '$5'], [10, '$10']], :first, :last do |b| \
                 b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
               end
           - if active_payment_method?
