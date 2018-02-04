@@ -4,11 +4,16 @@ section.section
       h1.title.is-spaced
         => icon_tag('fa-bolt')
         br
-        ' Great choices
-        = current_donor.first_name
+        = @portfolio.donor_first_name
+        | , your charitable portfolio is ready!
         | !
 
-      p.subtitle Your charity portfolio is ready
+      p
+        ' We've analyzed your answers and built a
+        strong> = @portfolio.diversity_text
+        ' portfolio that matches your top priorities, like
+        = @portfolio.cause_areas.sample(2).map { |c| content_tag(:strong, I18n.t('title', scope: ['cause_areas', c])) }.to_sentence.html_safe
+
 section.section.embossed
   .container
     .content
@@ -22,8 +27,8 @@ section.section.embossed
             li Make a donation
           hr
           = form_with scope: 'allocations', url: portfolio_path, action: :post, class: 'form' do |f|
-            - @allocations.each_with_index do |allocation, index|
+            - @portfolio.allocations.each_with_index do |allocation, index|
                 = f.fields index.to_s, model: allocation do |allocation_form|
                   = allocation_form.hidden_field :organization_ein
                   = allocation_form.hidden_field :percentage
-            = f.submit class: 'button is-primary is-large', value: 'Explore your charitable portfolio &rarr;'.html_safe
+            = f.submit class: 'button is-primary is-large', value: 'Explore your portfolio &rarr;'.html_safe

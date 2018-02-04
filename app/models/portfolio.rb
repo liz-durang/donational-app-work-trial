@@ -34,9 +34,9 @@ class Portfolio < ApplicationRecord
             predicates: true
 
   def contribution_amount_dollars
-    return target_contribition_amount_dollars.to_i if contribution_amount_cents.nil?
+    return target_contribition_amount_dollars.ceil if contribution_amount_cents.nil?
 
-    (contribution_amount_cents / 100).to_i
+    (contribution_amount_cents / 100).ceil
   end
 
   def active?

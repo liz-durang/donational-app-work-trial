@@ -3,7 +3,7 @@ module Onboarding
     section "Your giving goals"
 
     message "To calculate your monthly contribution, we'll need to know about how much you earn."
-    message "What is your (pre-tax) annual income?"
+    message "What is your pre-tax annual income?"
 
     display_as :currency
 

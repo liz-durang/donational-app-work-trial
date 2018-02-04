@@ -86,7 +86,7 @@ section.section.is-medium
       .column.is-vertically-centered
         = image_tag('portfolio-screenshot.png')
 hr.container
-section.hero.is-dark.is-medium
+section.is-medium.hero.is-dark
   .hero-body.container.content
     p.has-text-centered.has-text-weight-bold
       | How it works
@@ -97,21 +97,20 @@ section.hero.is-dark.is-medium
         p.has-text-centered
           br
           span.icon: i.fas.fa-2x.fa-handshake
-        h4.title.is-5 1. Tell us about yourself and your values
-        p Answer our survey to tell us what causes matter to you
+        h4.is-spaced.title.is-5 1. Tell us about yourself and your values
+        p.subtitle Answer our survey to tell us what causes matter to you
       .column
         p.has-text-centered
           br
           span.icon: i.fas.fa-2x.fa-university
-        h4.title.is-5 2. Discover expert recommended charities
-        p Select from our personalized recommendations to build your charitable portfolio
+        h4.is-spaced.title.is-5 2. Discover expert recommended charities
+        p.subtitle Select from our personalized recommendations to build your charitable portfolio
       .column
         p.has-text-centered
           br
           span.icon: i.fas.fa-2x.fa-chart-pie
-        h4.title.is-5 3. Pledge your income, make an impact
-        p Tell us how much you'd like give and we send it to your charities
-hr.container
+        h4.is-spaced.title.is-5 3. Pledge your income, make an impact
+        p.subtitle Tell us how much you'd like give and we send it to your charities
 section.section.embossed.is-medium
   .content.container
     .columns
@@ -131,6 +130,9 @@ section.section.embossed.is-medium
         p
           ' We only make money if you choose to pay us, allowing us to continue to help you &mdash; and others &mdash; make a greater impact.
 
+section.is-medium.hero.has-background
+  .hero-background
+    figure style="background-image: url(#{image_url('hero-image-7.jpg')})"
 section.section.is-medium
   .container
     .columns
@@ -175,7 +177,7 @@ section.section.is-medium
                 p &mdash;  Jerry Bass
 section.is-medium.hero.has-background
   .hero-background
-    figure style="background-image: url(#{image_url('hero-image-6.jpg')})"
+    figure style="background-image: url(#{image_url('hero-image-2.jpg')})"
   .hero-body
     .container.has-text-centered
       h1.title.is-spaced

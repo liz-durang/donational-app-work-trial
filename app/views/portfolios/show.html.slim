@@ -2,44 +2,40 @@ section.section
   .container
     .content.has-text-centered
       h1.title.is-spaced
-        => icon_tag('fa-bolt')
+        = icon_tag('fa-address-book')
         br
         = @portfolio.donor_first_name
-        | , meet your personal Charity Portfolio
+        | , meet your personalized charitable portfolio
         | !
-
       p
-        ' We've analyzed your answers and built a portfolio that matches your top priorities, like
-        = @portfolio.cause_areas.sample(2).map { |c| content_tag(:strong, I18n.t('title', scope: ['cause_areas', c])) }.to_sentence.html_safe
+        ' Every charity in your portfolio has been
+        strong vetted by industry experts
+        ' , is
+        strong> transparent
+        ' about their financials, and is one of the
+        strong> most efficient
+        ' organizations for
+        strong> improving
+        ' and for
+        strong saving lives.
 
+      p.help Let's explore your portfolio
       p
         a href="#my-portfolio"
           span.icon.is-medium: i.fa.fa-arrow-circle-down
-      p.help Let's explore your portfolio
 
 section.section.embossed#my-portfolio
   .container.has-text-centered
-    span.icon.is-size-5>: i.fa.fa-heart
     h4.subtitle.is-4
+      span.icon.is-size-4>: i.fa.fa-heart
+      br
       | Charities that align with your values & beliefs
-
-    p
-      ' All charities in this portfolio have been
-      strong vetted by industry experts
-      ' , are
-      strong> transparent
-      ' about their financials, and rate amonst the
-      strong> most efficient
-      ' organizations for
-      strong> improving
-      ' and for
-      strong saving lives.
 
     hr
 
     ul.columns.is-multiline.is-centered.book-list
       - @portfolio.organizations.each do |organization|
-        li.column.is-3
+        li.column.is-4
           .book.has-text-left class=organization.cause_area
             .book-front
               .book-cover-back
@@ -54,10 +50,6 @@ section.section.embossed#my-portfolio
                   - if organization.recommended_by.include?('give_well')
                     = image_tag('badge-give-well.svg')
             .book-page
-              / - organization.description.split('. ').each_slice(2) do |sentence_1, sentence_2|
-              /   .book-content
-              /     p = sentence_1
-              /     p = sentence_2
               .book-content.content
                 h3.subtitle = organization.name
                 p = organization.mission
@@ -103,10 +95,10 @@ section.section.embossed#my-portfolio
 section.section
   .container.has-text-centered.content
     h2.title
-      | Make an impact, give to your portfolio
+      | Give to your portfolio &amp; make an impact
 
     p Connect your credit card and easily donate to all of the charities in your portfolio.
 
     a.button.is-large.is-primary href=new_contribution_path
-      span Give to your portfolio &amp; make an impact
+      span Donate to your portfolio
       span.icon.is-small &rarr;
