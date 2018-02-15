@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180201012108) do
+ActiveRecord::Schema.define(version: 20180215020005) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -129,6 +129,7 @@ ActiveRecord::Schema.define(version: 20180201012108) do
     t.string "financials_url"
     t.string "form_990_url"
     t.string "recommended_by", default: [], array: true
+    t.uuid "suggested_by_donor_id"
     t.index ["ein"], name: "index_organizations_on_ein", unique: true
   end
 
@@ -153,5 +154,6 @@ ActiveRecord::Schema.define(version: 20180201012108) do
   add_foreign_key "donations", "organizations", column: "organization_ein", primary_key: "ein"
   add_foreign_key "donations", "portfolios"
   add_foreign_key "grants", "organizations", column: "organization_ein", primary_key: "ein"
+  add_foreign_key "organizations", "donors", column: "suggested_by_donor_id"
   add_foreign_key "portfolios", "donors"
 end

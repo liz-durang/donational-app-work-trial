@@ -7,7 +7,8 @@ module Organizations
     def call(donor:)
       @relation.where(
         cause_area: important_cause_areas_for(donor),
-        deactivated_at: nil
+        deactivated_at: nil,
+        suggested_by_donor: nil
       )
     end
 
