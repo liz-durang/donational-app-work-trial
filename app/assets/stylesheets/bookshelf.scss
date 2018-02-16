@@ -13,7 +13,7 @@
   }
 }
 
-.book {
+.book, .book-placeholder {
 	position: relative;
   width: 100%;
 	height: 75vh;
@@ -22,6 +22,15 @@
 	transform-style: preserve-3d;
 	transition: transform .5s;
   margin: 0 auto;
+}
+
+.book-placeholder {
+	border: 2px dashed #ddd;
+	border-radius: 3px;
+	padding: 2rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .book > div,
@@ -286,13 +295,7 @@ $book-color-10: #231942;
 	.book-front > div, .book-back, .book-left, .book-front:after { background-color: $book-color-8; }
 }
 
-.book-cover {
-	// background-image: url(../images/1.png);
-	background-repeat: no-repeat;
-	background-position: 10px 40px;
-}
-
-.book-cover h4 {
+.book-cover h1 {
 	position: absolute;
 	bottom: 0;
 	right: 0;

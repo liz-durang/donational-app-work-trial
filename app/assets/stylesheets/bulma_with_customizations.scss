@@ -29,6 +29,15 @@ html {
   justify-content: center;
 }
 
+.card.is-fullheight {
+   display:flex;
+   flex-direction: column;
+   height: 100%;
+   .card-footer {
+     margin-top: auto;
+   }
+}
+
 body.minimal {
   min-height: 100vh;
   background: #fafafa;

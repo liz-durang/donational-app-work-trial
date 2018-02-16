@@ -1,6 +1,26 @@
 class AllocationsController < ApplicationController
   include Secured
 
+  def new
+    active_portfolio
+  end
+
+  def create
+    organization = Organizations::FindOrCreateDonorSuggestedCharity.run!(
+      ein: params[:organization][:ein],
+      name: params[:organization][:name],
+      suggested_by: current_donor
+    )
+
+    Allocations::AddOrganizationAndRebalancePortfolio.run!(
+      portfolio: active_portfolio,
+      organization: organization
+    )
+
+    flash[:success] = "#{organization.name} has been added to your portfolio"
+    redirect_to portfolio_path
+  end
+
   def update
     command = Allocations::UpdateAllocations.run(
       portfolio: active_portfolio,
