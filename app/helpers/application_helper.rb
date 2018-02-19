@@ -3,15 +3,16 @@ module ApplicationHelper
     link_to 'Sign in', new_sessions_path, class: 'button is-outlined'
   end
 
-  def sign_in_link
-    link_to 'Sign in', new_sessions_path
+  def sign_in_link(css_class: nil)
+    link_to 'Sign in', new_sessions_path, class: css_class
   end
 
-  def sign_out_link
+  def sign_out_link(css_class: nil)
     link_to(
       sessions_path,
       method: :delete,
-      data: { confirm: 'Are you sure you want to sign out?' }
+      data: { confirm: 'Are you sure you want to sign out?' },
+      class: css_class
     ) do
       icon_tag('fa-sign-out-alt') + ' Sign out'
     end
