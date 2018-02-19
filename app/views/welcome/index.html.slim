@@ -10,12 +10,7 @@
       figure
       figure
     .hero-head
-      nav.navbar role="navigation" aria-label="main navigation"
-        .container
-          .navbar-brand
-            .navbar-item
-              h1.title.is-5: a href="/" Donational
-
+      = render 'nav'
     .hero-body
       .container
         .columns
@@ -38,7 +33,8 @@
     .hero-foot
       .container.has-text-centered.content
         p
-          a href="#learn-more" Learn more
+          a href="#learn-more" title="Learn more"
+            = icon_tag('fa-arrow-down')
 section.section.is-medium#learn-more
   .container.has-text-centered.content
     p = image_tag('hand.svg', width: 60, height: 60)
@@ -83,18 +79,22 @@ section.section.is-medium
           li
             span.fa-li: i.fas.fa-check-square
             | Financial transparency
+          li
+            span.fa-li: i.fas.fa-check-square
+            | Tax-deductible
       .column.is-vertically-centered
         = image_tag('portfolio-screenshot.png')
 hr.container
 
 section.section.is-medium#learn-more
   .container.has-text-centered.content
+    h1.title.is-spaced Measure your impact
     p.subtitle
       ' If
       strong.has-text-primary> 250
       ' people gave
       strong.has-text-primary> 1%
-      ' of their income towards
+      ' of their household income towards
     p.subtitle
       strong.has-text-primary> data-rotating-text-alternatives="global health|poverty eradication|climate change" data-rotating-text-show-time=5000 global health
       span> data-rotating-text-alternatives="then" data-rotating-text-show-time=5000 then
@@ -133,7 +133,7 @@ section.is-medium.hero.is-dark
           br
           span.icon: i.fas.fa-2x.fa-chart-pie
         h4.is-spaced.title.is-5 3. Pledge your income, make an impact
-        p.subtitle Tell us how much you'd like to give and we send it to your charities
+        p.subtitle Tell us how much you'd like to give and we distribute it to your charities
 section.section.embossed.is-medium
   .content.container
     .columns
@@ -217,4 +217,3 @@ footer.footer
     nav.breadcrumb.has-bullet-separator.is-centered
       ul
         li.is-active: a href="/" Donational &copy;
-        li = logged_in? ? sign_out_link : sign_in_link

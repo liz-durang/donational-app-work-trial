@@ -1,0 +1,25 @@
+nav.navbar role="navigation" aria-label="main dropdown navigation"
+  .container
+    .navbar-brand
+      .navbar-item
+        h1.title.is-5: a href="/" Donational
+      button.button.navbar-burger.is-white data-target="navMenu"
+        span
+        span
+        span
+    div#navMenu.navbar-menu
+      .navbar-start
+        a.navbar-item href='faq' FAQs
+      .navbar-end
+        - if logged_in?
+          .navbar-item.has-dropdown.is-hoverable
+            a.navbar-link
+              => icon_tag('fa-user')
+              = current_donor.name
+            .navbar-dropdown
+              a.navbar-item href=portfolio_path
+                = icon_tag('fa-clipboard')
+                | Your Portfolio
+              = sign_out_link(css_class: 'navbar-item')
+        - else
+          = sign_in_link(css_class: 'navbar-item')

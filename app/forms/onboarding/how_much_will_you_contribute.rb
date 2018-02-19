@@ -9,6 +9,7 @@ module Onboarding
 
     display_as :slider
 
+    allowed_response 0.0025, '0.1%'
     allowed_response 0.0025, '0.25%'
     allowed_response 0.005, '0.5%'
     allowed_response 0.005, '0.75%'
