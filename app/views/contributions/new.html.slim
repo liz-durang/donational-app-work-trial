@@ -8,7 +8,7 @@ section.section
 
       p
         ' Every dollar you donate goes directly to the
-        strong => pluralize(@active_portfolio.allocations.count, 'charity')
+        strong => pluralize(@active_portfolio.active_allocations.count, 'charity')
         | in your portfolio, based on your allocations.
       p.help
         | Donations are tax-deductible operating under the Social Good Fund, a 501(c)3 public charity, EIN 46-1323531.
@@ -34,7 +34,6 @@ section.section.embossed
                 checked: @active_portfolio.contribution_frequency) do |b| \
                   b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
                 end
-
         .column
           - if current_donor.annual_income_cents.present? && current_donor.donation_rate.present?
             article.message.is-info
