@@ -36,61 +36,7 @@ section.section.embossed#my-portfolio
     ul.columns.is-multiline.is-centered.book-list
       - @portfolio.organizations.each do |organization|
         li.column.is-4
-          .book.has-text-left class=organization.cause_area
-            .book-front
-              .book-cover-back
-              .book-cover
-                h2 = organization.name
-                h4 = I18n.t('title', scope: ['cause_areas', organization.cause_area])
-                .badges
-                  - if organization.recommended_by.include?('lycs')
-                    = image_tag('badge-the-life-you-can-save.svg')
-                  - if organization.recommended_by.include?('animal_charity_evaluators')
-                    = image_tag('badge-animal-charity-evaluators.svg')
-                  - if organization.recommended_by.include?('give_well')
-                    = image_tag('badge-give-well.svg')
-            .book-page
-              .book-content.content
-                h3.subtitle = organization.name
-                p = organization.mission
-              .book-content.content
-                h4 Why you should care
-                p = organization.why_you_should_care
-              - if organization.context
-                .book-content.content
-                  h4 Context
-                  ul
-                    - organization.context.split("\n").each do |context_fact|
-                      li = context_fact
-              - if organization.impact
-                .book-content.content
-                  h4 Impact
-                  ul
-                    - organization.impact.split("\n").each do |impact_fact|
-                      li = impact_fact
-              .book-content.content
-                h4 More information
-                ul
-                  - if organization.website_url
-                    li: a href=organization.website_url Website
-                  - if organization.annual_report_url
-                    li: a href=organization.annual_report_url Annual Report
-                  - if organization.financials_url
-                    li: a href=organization.financials_url Financials
-                  - if organization.form_990_url
-                    li: a href=organization.form_990_url Form 990 Tax Filing
-              / .book-content.content
-              /   h4 How we select charities
-            .book-back
-            .book-right
-            .book-left
-              h2 = organization.name
-            .book-top
-            .book-bottom
-          br
-          p.content
-            em = organization.why_you_should_care
-          p: button.button Read more
+          = render 'book', organization: organization
           hr
 section.section
   .container.has-text-centered.content
