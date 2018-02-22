@@ -82,6 +82,6 @@ class Portfolio < ApplicationRecord
     return nil unless donor.annual_income_cents
     return nil unless donor.donation_rate
 
-    donor.donation_rate * donor.annual_income_cents / 100
+    donor.donation_rate * donor.annual_income_cents
   end
 end
