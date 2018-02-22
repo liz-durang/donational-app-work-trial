@@ -14,6 +14,10 @@ section.section
         ' portfolio that matches your top priorities, like
         = @portfolio.cause_areas.sample(2).map { |c| content_tag(:strong, I18n.t('title', scope: ['cause_areas', c])) }.to_sentence.html_safe
 
+      p
+        ' We've done the research to ensure that every charity in your portfolio is making measurable impact on problems
+        | using effective and proven techniques.
+
 section.section.embossed
   .container
     .content

@@ -1,9 +1,8 @@
 module Onboarding
   class WhatIsYourEmail < Step
-    section "Preparing your charity portfolio"
+    section "Let's get started"
 
-    message "We've done the research to ensure that every charity in your portfolio is making measurable impact to problems that are in need, and also can be solved through proven techniques"
-    message "To see your portfolio, please let us know your email address below!"
+    message "So that we can save your progress along the way, what's your email?"
 
     display_as :email
     validates :response, presence: true, email: true

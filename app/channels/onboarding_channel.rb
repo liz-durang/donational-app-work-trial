@@ -6,6 +6,7 @@ class OnboardingChannel < ApplicationCable::Channel
       steps: begin
         Onboarding::AreYouReady.new(current_donor) <<
         Onboarding::WhatIsYourFirstName.new(current_donor) <<
+        Onboarding::WhatIsYourEmail.new(current_donor) <<
         Onboarding::DidYouDonateLastYear.new(current_donor) <<
         Onboarding::PrimaryReasons.new(current_donor) <<
         Onboarding::HowDoYouDecideWhichOrganizationsToSupport.new(current_donor) <<
@@ -14,8 +15,7 @@ class OnboardingChannel < ApplicationCable::Channel
         Onboarding::HowOftenWillYouContribute.new(current_donor) <<
         Onboarding::DoYouKnowTheAverageContribution.new(current_donor) <<
         Onboarding::HowMuchWillYouContribute.new(current_donor) <<
-        Onboarding::WhatIsYourPreTaxIncome.new(current_donor) <<
-        Onboarding::WhatIsYourEmail.new(current_donor)
+        Onboarding::WhatIsYourPreTaxIncome.new(current_donor)
       end
     )
   end
