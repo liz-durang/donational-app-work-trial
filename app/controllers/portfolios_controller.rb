@@ -5,8 +5,8 @@ class PortfoliosController < ApplicationController
   def new
     @portfolio = OpenStruct.new(
       donor_first_name: current_donor.first_name,
-      allocations: Allocations::GetRecommendedAllocations.call(donor: current_donor),
-      cause_areas: organizations.map(&:cause_area).uniq,
+      allocations: recommended_allocations,
+      cause_areas: recommended_allocations.map(&:organization).map(&:cause_area).uniq,
       diversity_text: current_donor.portfolio_diversity
     )
   end
@@ -39,6 +39,10 @@ class PortfoliosController < ApplicationController
   end
 
   private
+
+  def recommended_allocations
+    @recommended_allocations ||= Allocations::GetRecommendedAllocations.call(donor: current_donor)
+  end
 
   def organizations
     @organizations ||= Allocations::GetActiveAllocations.call(portfolio: active_portfolio).map(&:organization)
