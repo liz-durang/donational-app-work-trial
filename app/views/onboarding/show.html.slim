@@ -15,3 +15,4 @@ footer.container.has-text-centered
 
 javascript:
   createOnboardingChannel(#{SecureRandom.uuid[0..6].to_json.html_safe});
+  analytics.alias(#{current_donor.id.to_json.html_safe})
