@@ -295,15 +295,32 @@ $book-color-10: #231942;
 	.book-front > div, .book-back, .book-left, .book-front:after { background-color: $book-color-8; }
 }
 
+.book-cover {
+	// background-image: url(../images/1.png);
+	background-repeat: no-repeat;
+	background-position: 10px 40px;
+}
+
 .book-cover h1 {
 	position: absolute;
-	bottom: 0;
+	top: 0;
 	right: 0;
 	left: 0;
 	padding: 30px;
 	background: rgba(255,255,255,0.2);
-	color: #fff;
 	text-shadow: 0 -1px 0 rgba(0,0,0,0.1);
+	color: white;
+	font-size: 32px;
+	text-align: center;
+}
+
+.book-cover h1 small {
+	text-transform: uppercase;
+  font-size: 14px;
+  line-height: 20px;
+  min-height: 100px;
+	text-align: center;
+	color: inherit;
 }
 
 .book-cover h2 {
@@ -313,19 +330,11 @@ $book-color-10: #231942;
   color: white;
 	position: absolute;
 	text-align: center;
-  top: 100px;
+  top: 200px;
   left: 0;
   right: 0;
   bottom: 100px;
-  padding: 50px 30px 0;
-}
-
-.book-cover h4 {
-	text-transform: uppercase;
-  font-size: 14px;
-  line-height: 20px;
-  min-height: 100px;
-	text-align: center;
+  padding: 50px;
 }
 
 .book-left h2 {
