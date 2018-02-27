@@ -18,8 +18,18 @@ nav.navbar role="navigation" aria-label="main dropdown navigation"
               = current_donor.name
             .navbar-dropdown
               a.navbar-item href=portfolio_path
-                = icon_tag('fa-clipboard')
+                = icon_tag('fa-address-book')
                 | Your Portfolio
+              a.navbar-item href=new_contribution_path
+                = icon_tag('fa-credit-card')
+                | Donate
+              a.navbar-item href=contributions_path
+                = icon_tag('fa-clipboard')
+                | Donation history
+              a.navbar-item href=edit_allocations_path
+                = icon_tag('fa-balance-scale')
+                | Allocations
+              .navbar-divider
               = sign_out_link(css_class: 'navbar-item')
         - else
           = sign_in_link(css_class: 'navbar-item')

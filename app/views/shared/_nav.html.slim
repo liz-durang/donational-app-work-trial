@@ -9,16 +9,26 @@ nav.navbar role="navigation" aria-label="main navigation"
         span
         span
     div#navMenu.navbar-menu
-      - if logged_in?
-        .navbar-end
-          a.navbar-item href=portfolio_path
-            | Portfolio
-          a.navbar-item href=new_contribution_path
-            | Donate
-          a.navbar-item href=contributions_path
-            | Impact
-          a.navbar-item href=edit_allocations_path
-            | Allocations
-
       .navbar-end
-        .navbar-item = sign_in_button_or_account
+        - if logged_in?
+          .navbar-item.has-dropdown.is-hoverable
+            a.navbar-link
+              => icon_tag('fa-user')
+              = current_donor.name
+            .navbar-dropdown
+              a.navbar-item href=portfolio_path
+                = icon_tag('fa-address-book')
+                | Your Portfolio
+              a.navbar-item href=new_contribution_path
+                = icon_tag('fa-credit-card')
+                | Donate
+              a.navbar-item href=contributions_path
+                = icon_tag('fa-clipboard')
+                | Donation history
+              a.navbar-item href=edit_allocations_path
+                = icon_tag('fa-balance-scale')
+                | Allocations
+              .navbar-divider
+              = sign_out_link(css_class: 'navbar-item')
+        - else
+          = sign_in_link(css_class: 'navbar-item')
