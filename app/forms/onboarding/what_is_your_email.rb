@@ -17,8 +17,8 @@ module Onboarding
         mail(
           from: 'no-reply@donational.org',
           to: 'hello@donational.org',
-          subject: "#{email} Completed onboarding",
-          body: 'A user completed the coming-soon question'
+          subject: "#{email} started onboarding",
+          body: 'A user entered the email during onboarding'
         )
       end
     end
