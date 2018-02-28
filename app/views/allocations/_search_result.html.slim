@@ -1,0 +1,36 @@
+script#hit_template type="text/html"
+  = form_with url: allocations_path, local: true, method: :post, class: 'card is-fullheight' do |f|
+    = f.fields :organization do |organization_form|
+      = organization_form.hidden_field :ein, value:"{{formattedEin}}"
+      = organization_form.hidden_field :name, value:"{{name}}"
+    .card-content
+      h3.title.is-4
+        | {{{_highlightResult.name.value}}}
+      .field.is-grouped.is-grouped-multiline
+        .control
+          span.tags.has-addons
+            span.tag.is-dark EIN
+            span.tag.is-light
+              | {{formattedEin}}
+        .control
+          span.tags.has-addons
+            span.tag.is-dark State
+            span.tag.is-light
+              | {{state}}
+      .field.is-grouped.is-grouped-multiline
+        | {{#classifications}}
+        .control
+          span.tag
+            | {{.}}
+        | {{/classifications}}
+    .card-footer
+      .card-footer-item
+        = f.submit class:'button is-success is-outlined is-fullwidth', value: 'Add to portfolio'
+script#no_results_template type="text/html"
+  div#no_results_message
+    p
+      ' We didn't find any results for the search
+      em
+        | {{query}}
+      | .
+    a href="." class="clear-all" Clear search

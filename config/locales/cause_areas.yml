@@ -1,20 +1,22 @@
 en:
   cause_areas:
     global_health:
-        title: 'Global health'
+      title: 'Global health'
     poverty_and_income_inequality:
-        title: 'Poverty and income inequality'
+      title: 'Poverty and income inequality'
     climate_and_environment:
-        title: 'Climate and the environment'
+      title: 'Climate and the environment'
     animal_welfare:
-        title: 'Animal welfare'
+      title: 'Animal welfare'
     hunger_nutrition_and_safe_water:
-        title: 'Hunger, nutrition and safe water'
+      title: 'Hunger, nutrition and safe water'
     immigration_and_refugees:
-        title: 'Immigration and refugees'
+      title: 'Immigration and refugees'
     women_and_girls:
-        title: 'Women and girls'
+      title: 'Women and girls'
     criminal_justice:
-        title: 'Criminal justice'
+      title: 'Criminal justice'
     economic_development:
-        title: 'Jobs and Economic Opportunities'
+      title: 'Jobs and Economic Opportunities'
+    user_added_organization:
+      title: 'Added by you'

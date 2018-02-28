@@ -6,11 +6,11 @@ Rails.application.routes.draw do
   # Activation
   resource :onboarding, path: 'getting-started', only: :show
   resource :portfolio
+  resource :allocations, only: %i[new edit create update]
 
   # Retention
 
   # Revenue
-  resource :allocations
   resources :contributions, only: %i[index new create]
 
   # Referral

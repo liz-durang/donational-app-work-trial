@@ -18,7 +18,7 @@ module Onboarding
     validates :response, presence: true
 
     def save
-      relevances = Organization::CAUSE_AREAS.map(&:to_sym).map do |cause_area|
+      relevances = Organization::recommendable_cause_areas.map(&:to_sym).map do |cause_area|
         [cause_area, cause_area.in?(response) ? 7 : 0]
       end.to_h
 

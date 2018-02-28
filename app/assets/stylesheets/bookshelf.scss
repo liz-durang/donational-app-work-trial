@@ -13,7 +13,7 @@
   }
 }
 
-.book {
+.book, .book-placeholder {
 	position: relative;
   width: 100%;
 	height: 75vh;
@@ -22,6 +22,15 @@
 	transform-style: preserve-3d;
 	transition: transform .5s;
   margin: 0 auto;
+}
+
+.book-placeholder {
+	border: 2px dashed #ddd;
+	border-radius: 3px;
+	padding: 2rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .book > div,
@@ -261,6 +270,9 @@ $book-color-10: #231942;
 /* Book 1 */
 .book-front > div, .book-back, .book-left, .book-front:after { background-color: $book-color-1; }
 
+.user_added_organization {
+	.book-front > div, .book-back, .book-left, .book-front:after { background-color: #666; }
+}
 .poverty_and_income_inequality {
 	.book-front > div, .book-back, .book-left, .book-front:after { background-color: $book-color-1; }
 }
@@ -292,15 +304,23 @@ $book-color-10: #231942;
 	background-position: 10px 40px;
 }
 
-.book-cover h4 {
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	left: 0;
+.book-cover h1 {
+	margin: 0;
 	padding: 30px;
 	background: rgba(255,255,255,0.2);
-	color: #fff;
 	text-shadow: 0 -1px 0 rgba(0,0,0,0.1);
+	color: white;
+	font-size: 32px;
+	text-align: center;
+}
+
+.book-cover h1 small {
+	text-transform: uppercase;
+  font-size: 14px;
+  line-height: 20px;
+  min-height: 100px;
+	text-align: center;
+	color: inherit;
 }
 
 .book-cover h2 {
@@ -308,21 +328,8 @@ $book-color-10: #231942;
 	font-weight: 600;
 	font-size: 20px;
   color: white;
-	position: absolute;
 	text-align: center;
-  top: 100px;
-  left: 0;
-  right: 0;
-  bottom: 100px;
-  padding: 50px 30px 0;
-}
-
-.book-cover h4 {
-	text-transform: uppercase;
-  font-size: 14px;
-  line-height: 20px;
-  min-height: 100px;
-	text-align: center;
+  padding: 50px;
 }
 
 .book-left h2 {
@@ -337,7 +344,7 @@ $book-color-10: #231942;
 	position: absolute;
 	display: block;
 	text-align: right;
-	top: 0;
+	bottom: 0;
 	left: 0;
 	right: 0;
 	img {

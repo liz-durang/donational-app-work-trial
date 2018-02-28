@@ -1,0 +1,67 @@
+section.section
+  .container
+    .content.has-text-centered
+      h1.title.is-spaced
+        => icon_tag('fa-search')
+        br
+        | Add a charity to your portfolio
+
+      p Do you have charities that you'd like to add to your portfolio?
+
+section.section.embossed
+  .container
+    .content
+      .level
+        .level-item
+          #search-input
+          = icon_tag('fa-search')
+      #search-hits
+
+  = render 'search_result'
+
+  javascript:
+    var search = instantsearch({
+      appId: 'EZ0RKGG8TJ',
+      apiKey: 'c8a2dbd3c43a16b24b63d52875582b7e',
+      indexName: 'Publication78',
+      searchFunction(helper) {
+        if (helper.state.query === '') {
+          return;
+        }
+        helper.search();
+      },
+    });
+    search.addWidget(
+      instantsearch.widgets.searchBox({
+        container: '#search-input',
+        cssClasses: { input: 'input' },
+        placeholder: 'Search',
+        magnifier: false,
+        reset: false
+      })
+    );
+    search.addWidget(
+      instantsearch.widgets.hits({
+        container: '#search-hits',
+        cssClasses: {
+          item: ['column', 'is-4'],
+          root: ['columns', 'is-multiline']
+        },
+        templates: {
+          item: document.getElementById('hit_template').innerHTML,
+          empty: "no results"//document.getElementById(id + 'no_results_template').innerHTML
+        },
+        transformData: function(result) {
+          result.formattedEin = result.ein.toString().substring(0, 2) + '-' + result.ein.toString().substring(2, 9);
+          if (result.npo.business_master) {
+            result.state = result.npo.business_master.state;
+            result.classifications = result.npo.business_master.classifications;
+          } else if (result.npo.form990_n) {
+            result.state = result.npo.form990_n.org_state;
+            result.classifications = [];
+          }
+          return result;
+        }
+      })
+    );
+    search.start();
