@@ -270,6 +270,9 @@ $book-color-10: #231942;
 /* Book 1 */
 .book-front > div, .book-back, .book-left, .book-front:after { background-color: $book-color-1; }
 
+.user_added_organization {
+	.book-front > div, .book-back, .book-left, .book-front:after { background-color: #666; }
+}
 .poverty_and_income_inequality {
 	.book-front > div, .book-back, .book-left, .book-front:after { background-color: $book-color-1; }
 }
@@ -302,10 +305,7 @@ $book-color-10: #231942;
 }
 
 .book-cover h1 {
-	position: absolute;
-	top: 0;
-	right: 0;
-	left: 0;
+	margin: 0;
 	padding: 30px;
 	background: rgba(255,255,255,0.2);
 	text-shadow: 0 -1px 0 rgba(0,0,0,0.1);
@@ -328,12 +328,7 @@ $book-color-10: #231942;
 	font-weight: 600;
 	font-size: 20px;
   color: white;
-	position: absolute;
 	text-align: center;
-  top: 200px;
-  left: 0;
-  right: 0;
-  bottom: 100px;
   padding: 50px;
 }
 
@@ -349,7 +344,7 @@ $book-color-10: #231942;
 	position: absolute;
 	display: block;
 	text-align: right;
-	top: 0;
+	bottom: 0;
 	left: 0;
 	right: 0;
 	img {

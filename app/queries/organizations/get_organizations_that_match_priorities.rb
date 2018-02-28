@@ -19,7 +19,7 @@ module Organizations
     end
 
     def cause_areas
-      Organization::CAUSE_AREAS
+      Organization.recommendable_cause_areas
     end
   end
 end

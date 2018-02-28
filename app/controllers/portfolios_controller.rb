@@ -34,7 +34,7 @@ class PortfoliosController < ApplicationController
 
     @portfolio = OpenStruct.new(
       donor_first_name: current_donor.first_name,
-      organizations: organizations
+      organizations: organizations_by_cause_area
     )
   end
 
@@ -46,6 +46,10 @@ class PortfoliosController < ApplicationController
 
   def organizations
     @organizations ||= Allocations::GetActiveAllocations.call(portfolio: active_portfolio).map(&:organization)
+  end
+
+  def organizations_by_cause_area
+    organizations.sort_by { |o| o.cause_area.to_s }
   end
 
   def active_portfolio

@@ -1,5 +1,5 @@
 script
-  - if current_donor?
+  - if current_donor
     | analytics.identify(#{current_donor.id.to_json.html_safe}, #{current_donor.to_json(only: %i(first_name last_name email username created_at)).html_safe});
   - (flash[:analytics] || []).each do |event|
     | analytics.track(#{event.first.to_json.html_safe}, #{event.second.to_json.html_safe});

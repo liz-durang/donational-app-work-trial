@@ -48,10 +48,15 @@ class Organization < ApplicationRecord
     education
     economic_development
     criminal_justice
+    user_added_organization
   )
 
   extend Enumerize
   enumerize :cause_area, in: CAUSE_AREAS
+
+  def self.recommendable_cause_areas
+    CAUSE_AREAS - ['user_added_organization']
+  end
 
   def active?
     deactivated_at.blank?
@@ -59,5 +64,9 @@ class Organization < ApplicationRecord
 
   def suggested_by_donor?
     suggested_by_donor.present?
+  end
+
+  def cause_area
+    super || 'user_added_organization'
   end
 end
