@@ -9,7 +9,8 @@ nav.navbar role="navigation" aria-label="main dropdown navigation"
         span
     div#navMenu.navbar-menu
       .navbar-start
-        a.navbar-item href='faq' FAQs
+        a.navbar-item href=organizations_path Charities we recommend
+        a.navbar-item href=faq_path About us
       .navbar-end
         - if logged_in?
           .navbar-item.has-dropdown.is-hoverable
