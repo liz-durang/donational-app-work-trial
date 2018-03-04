@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   # Acquisition
   root 'welcome#index'
   get 'faq' => 'welcome#show', page: 'faq'
+  resources :organizations, path: 'charities'
 
   # Activation
   resource :onboarding, path: 'getting-started', only: :show

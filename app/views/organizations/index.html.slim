@@ -1,0 +1,44 @@
+- content_for :hero
+  = render 'welcome/nav'
+
+section.section
+  .container
+    .content.has-text-centered
+      h1.title.is-spaced
+        => icon_tag('fa-handshake')
+        br
+        | Our recommended charities
+
+      p.subtitle
+        ' Donational works with industry experts to recommend leading charities
+        ' that are extremely efficient at improving and saving lives
+      p
+        ' You can add these &mdash; and any other 501(c)3 charitable organization &mdash; to your own personal portfolio, and start
+        a> href=onboarding_path(utm_source: 'charity-catalog') giving with impact
+        | today!
+
+section.section.embossed
+  .container
+
+    ul.columns.is-multiline.is-centered.book-list.content
+      - @model.organizations.each do |organization|
+        li.column.is-4
+          = render 'portfolios/book', organization: organization
+          a.button.is-primary href=onboarding_path(utm_source: organization.name)
+            | Start a portfolio with this Charity &rarr;
+
+
+section.hero.is-dark
+  .hero-body
+    .container.has-text-centered.content
+      h2.title
+        | Spark social action by doing good with your money
+      a.button.is-primary.is-medium href=onboarding_path
+        span Build your charity portfolio
+        span.icon.is-small &rarr;
+
+footer.footer
+  .container
+    nav.breadcrumb.has-bullet-separator.is-centered
+      ul
+        li.is-active: a href="/" Donational &copy;

@@ -9,13 +9,40 @@ section.section
       p Do you have charities that you'd like to add to your portfolio?
 
 section.section.embossed
+  .tabs.is-centered
+    ul
+      li.is-active data-target="select-a-charity-from-catalog": a Choose a recommended charity
+      li data-target="search-for-a-charity": a Search for a charity
   .container
-    .content
+
+    #search-for-a-charity.is-hidden
       .level
         .level-item
           #search-input
           = icon_tag('fa-search')
       #search-hits
+
+    #select-a-charity-from-catalog
+      p.has-text-centered Donational recommends these high impact charities. Add one to your portfolio!
+      br
+
+      - if @model.addable_organizations.empty?
+        p.notification.is-warning You have all of our recommended charities in your portfolio!
+
+      ul.columns.is-multiline.is-centered.book-list.content
+        - @model.addable_organizations.each do |organization|
+          li.column.is-4
+            = render 'portfolios/book', organization: organization
+            = form_with url: allocations_path, local: true, method: :post do |f|
+              = f.fields :organization do |organization_form|
+                = organization_form.hidden_field :ein, value: organization.ein
+                = organization_form.hidden_field :name, value: organization.name
+              = f.submit class:'button is-primary', value: 'Add to portfolio'
+
+      p
+        ' Want to donate to a charity that isn't listed here?
+        a href='#search-for-a-charity' data-activate-tab='' data-target="search-for-a-charity"
+          | Search for a charity
 
   = render 'search_result'
 

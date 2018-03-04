@@ -2,7 +2,10 @@ class AllocationsController < ApplicationController
   include Secured
 
   def new
-    active_portfolio
+    @model = OpenStruct.new(
+      portfolio: active_portfolio,
+      addable_organizations: organizations_available_to_add_to_portfolio
+    )
   end
 
   def create
@@ -44,6 +47,10 @@ class AllocationsController < ApplicationController
   end
 
   private
+
+  def organizations_available_to_add_to_portfolio
+    Organizations::GetRecommendedOrganizationsThatAreNotInPortfolio.call(portfolio: active_portfolio)
+  end
 
   def active_portfolio
     @active_portfolio ||= Portfolios::GetActivePortfolio.call(donor: current_donor)
