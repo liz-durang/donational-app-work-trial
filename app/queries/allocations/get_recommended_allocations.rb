@@ -3,7 +3,8 @@ module Allocations
     def call(donor:)
       organizations = Organizations::GetOrganizationsThatMatchPriorities.call(donor: donor)
 
-      organizations_per_cause_area = Donor.portfolio_diversities[donor.portfolio_diversity]
+      organizations_per_cause_area = { "focused" => 2, "mixed" => 3, "broad" => 4 }.fetch(donor.portfolio_diversity)
+      organizations_per_cause_area += 1 unless organizations.distinct.count(:cause_area) > 1
 
       organizations = organizations.group_by(&:cause_area).map do |cause_area, orgs|
         orgs.sample(organizations_per_cause_area)
