@@ -10,8 +10,6 @@ section.section
         ' Every dollar you donate goes directly to the
         strong => pluralize(@active_portfolio.active_allocations.count, 'charity')
         | in your portfolio, based on your allocations.
-      p.help
-        | Donations are tax-deductible operating under the Social Good Fund, a 501(c)3 public charity, EIN 46-1323531.
 
 section.section.embossed
   .container.content
@@ -21,19 +19,21 @@ section.section.embossed
       .columns
         .column.is-6
           p.field
-            label.label 1. Enter donation amount
+            label.subtitle
+              | 1. Enter donation amount
             .field.has-addons
-              p.control.has-icons-left
-                = f.number_field :contribution_amount_dollars, class: 'input is-medium'
+              .control.has-icons-left
+                = f.number_field :contribution_amount_dollars, class: 'input'
                 span.icon.is-left $
             .control.buttons
               = f.collection_radio_buttons( \
                 :contribution_frequency, \
-                { monthly: 'Monthly donation', annually: 'Annual donation', quarterly: 'Every quarter', once: 'One-time donation' }, \
+                { monthly: 'Monthly', quarterly: 'Every quarter', annually: 'Yearly', once: 'One-time' }, \
                 :first, :last, \
                 checked: @active_portfolio.contribution_frequency) do |b| \
                   b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
                 end
+            p.help All donations are tax-deductible operating under the Social Good Fund, a 501(c)3 public charity, EIN 46-1323531.
         .column
           - if current_donor.annual_income_cents.present? && current_donor.donation_rate.present?
             article.message.is-info
@@ -58,18 +58,21 @@ section.section.embossed
       .columns
         .column.is-6
           p.field
-            label.label 2. Add a tip to help Donational grow
+            label.subtitle 2. Add a tip to help Donational grow
             .control.buttons = f.collection_radio_buttons :platform_tip_dollars,\
               [[0, 'No tip'], [2, '$2'], [5, '$5'], [10, '$10']], :first, :last do |b| \
                 b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
               end
+          p.help
+            ' Donational is run at-cost by a team of dedicated members building useful tools for the greater good.
+            | We only make money if you choose to tip us, allowing us to help you — and to help others — make a greater impact.
           - if active_payment_method?
             p.field
               .control
                 = f.submit "Donate", class: %w(button is-primary is-medium)
 
         .column
-          article.message.is-warning
+          article.message.is-info
             .message-body
               .media
                 .media-left: span.icon.is-medium: i.fa.fa-info
@@ -88,7 +91,7 @@ section.section.embossed
         .columns
           .column
             p.field
-              label.label 3. Enter Credit Card details:
+              label.subtitle 3. Enter Credit Card details:
               .field.is-grouped
                 .control.is-expanded.has-icons-left
                   input.input type="text" data-panda="credit_card" placeholder="Card Number"
@@ -116,7 +119,13 @@ section.section.embossed
                 p.control.has-icons-left
                   input.input type="text" data-panda="cvv" placeholder="CVV" size=4
                   span.icon.is-left.is-small: i.fa.fa-lock
-              br
+              .field
+                label.subtitle 4. Receive your tax-deductible receipt
+                p.help
+                  ' We'll distribute your donation to the
+                  => pluralize(@active_portfolio.active_allocations.count, 'charity')
+                  | in your portfolio, and we'll email you a single tax-deductible receipt.
+
               .field
                 p.control
                   button.button.is-primary.is-medium type="submit" Donate
