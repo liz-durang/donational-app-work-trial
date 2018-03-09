@@ -2,47 +2,44 @@ section.section
   .container
     .content.has-text-centered
       h1.title.is-spaced
-        => icon_tag('fa-search')
+        => icon_tag('fa-cart-plus')
         br
         | Add a charity to your portfolio
 
       p Do you have charities that you'd like to add to your portfolio?
 
 section.section.embossed
-  .tabs.is-centered
-    ul
-      li.is-active data-target="select-a-charity-from-catalog": a Choose a recommended charity
-      li data-target="search-for-a-charity": a Search for a charity
-  .container
+  .container.has-text-centered
+    .level
+      .level-item
+        span.icon.is-large: i.fas.fa-search
+        #search-input
+    p.help You can add any 501(c)3 recognized organization to your portfolio
+    #search-hits
+    hr
+    p.is-4.has-text-centered OR
+    hr
+    h3.has-text-centered.title Choose one of our vetted high-impact charities
+    p.has-text-centered Donational recommends these high impact charities. Add one to your portfolio!
+    br
 
-    #search-for-a-charity.is-hidden
-      .level
-        .level-item
-          #search-input
-          = icon_tag('fa-search')
-      #search-hits
+    - if @model.addable_organizations.empty?
+      p.notification.is-warning You have all of our recommended charities in your portfolio!
 
-    #select-a-charity-from-catalog
-      p.has-text-centered Donational recommends these high impact charities. Add one to your portfolio!
-      br
+    ul.columns.is-multiline.is-centered.book-list.content
+      - @model.addable_organizations.each do |organization|
+        li.column.is-4
+          = render 'portfolios/book', organization: organization
+          = form_with url: allocations_path, local: true, method: :post do |f|
+            = f.fields :organization do |organization_form|
+              = organization_form.hidden_field :ein, value: organization.ein
+              = organization_form.hidden_field :name, value: organization.name
+            = f.submit class:'button is-primary', value: 'Add to portfolio'
 
-      - if @model.addable_organizations.empty?
-        p.notification.is-warning You have all of our recommended charities in your portfolio!
-
-      ul.columns.is-multiline.is-centered.book-list.content
-        - @model.addable_organizations.each do |organization|
-          li.column.is-4
-            = render 'portfolios/book', organization: organization
-            = form_with url: allocations_path, local: true, method: :post do |f|
-              = f.fields :organization do |organization_form|
-                = organization_form.hidden_field :ein, value: organization.ein
-                = organization_form.hidden_field :name, value: organization.name
-              = f.submit class:'button is-primary', value: 'Add to portfolio'
-
-      p
-        ' Want to donate to a charity that isn't listed here?
-        a href='#search-for-a-charity' data-activate-tab='' data-target="search-for-a-charity"
-          | Search for a charity
+    p
+      ' Want to donate to a charity that isn't listed here?
+      a href='#search-for-a-charity'
+        | Search for a charity
 
   = render 'search_result'
 
@@ -61,8 +58,8 @@ section.section.embossed
     search.addWidget(
       instantsearch.widgets.searchBox({
         container: '#search-input',
-        cssClasses: { input: 'input' },
-        placeholder: 'Search',
+        cssClasses: { input: 'input is-large' },
+        placeholder: 'Search for a charity',
         magnifier: false,
         reset: false
       })

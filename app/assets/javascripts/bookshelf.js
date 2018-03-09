@@ -12,6 +12,13 @@ document.addEventListener('turbolinks:load', function () {
 				$(this).find('.book-page .book-content').removeClass('book-content-current').eq(0).addClass('book-content-current');
       });
 
+      $('.book + .read-more').on('click', function() {
+        $('.book.open').removeClass('open');
+        $(this).prev('.book').addClass('open');
+        $overlay.removeClass('is-hidden');
+				$(this).prev('.book').find('.book-page .book-content').removeClass('book-content-current').eq(0).addClass('book-content-current');
+      });
+
       $(document).on('click', '.book-underlay, .book-page .delete', function() {
         $('.book.open').removeClass('open');
         $overlay.addClass('is-hidden');
