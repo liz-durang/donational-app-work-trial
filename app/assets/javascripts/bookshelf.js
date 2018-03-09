@@ -2,40 +2,30 @@ document.addEventListener('turbolinks:load', function () {
 
   	var $books = $( '.book-list .book' ), booksCount = $books.length;
 
+    if (booksCount > 0) {
+      $overlay = $('<div class="book-underlay is-hidden-mobile is-hidden"></div>').appendTo('body');
+
+      $('.book-list').on('click', '.book:not(.open)', function() {
+        $('.book.open').removeClass('open');
+        $(this).addClass('open');
+        $overlay.removeClass('is-hidden');
+				$(this).find('.book-page .book-content').removeClass('book-content-current').eq(0).addClass('book-content-current');
+      });
+
+      $(document).on('click', '.book-underlay, .book-page .delete', function() {
+        $('.book.open').removeClass('open');
+        $overlay.addClass('is-hidden');
+      });
+    }
 		$books.each( function() {
 			var $book = $( this ),
-				$other = $books.not( $book ),
-				$parent = $book.parent(),
 				$page = $book.children( '.book-page' ),
-				$bookview = $parent,
 				$content = $page.children( '.book-content' ), current = 0;
-
-			$bookview.on( 'click', function() {
-				var $this = $( this );
-
-				$other.data( 'opened', false ).removeClass( 'book-viewinside' ).parent().css( 'z-index', 0 ).find( 'button.book-bookview' ).removeClass( 'book-active' );
-				if( !$other.hasClass( 'book-viewback' ) ) {
-					$other.addClass( 'book-bookdefault' );
-				}
-
-				if( $book.data( 'opened' ) ) {
-					$this.removeClass( 'book-active' );
-					$book.data( { opened : false, flip : false } ).removeClass( 'book-viewinside' ).addClass( 'book-bookdefault' );
-				}
-				else {
-					$this.addClass( 'book-active' );
-					$book.data( { opened : true, flip : false } ).removeClass( 'book-viewback book-bookdefault' ).addClass( 'book-viewinside' );
-					$parent.css( 'z-index', booksCount );
-					current = 0;
-					$content.removeClass( 'book-content-current' ).eq( current ).addClass( 'book-content-current' );
-				}
-
-			} );
 
 			if( $content.length > 1 ) {
 
-				var $navPrev = $( '<a class="book-page-prev">&lt;</a>' ),
-					$navNext = $( '<a class="book-page-next">&gt;</a>' );
+				var $navPrev = $( '<a class="button book-page-prev"><span class="icon">&lt;</span></a>' ),
+					$navNext = $( '<a class="button book-page-next"><span class="icon">&gt;</span></a>' );
 
 				$page.append( $( '<nav></nav>' ).append( $navPrev, $navNext ) );
 
