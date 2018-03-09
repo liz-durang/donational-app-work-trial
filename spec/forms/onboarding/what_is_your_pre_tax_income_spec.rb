@@ -6,13 +6,13 @@ RSpec.describe Onboarding::WhatIsYourPreTaxIncome, type: :model do
   let(:donor) { instance_double(Donor, id: 'donor-uuid') }
 
   describe '#process!' do
-    context "when the response is a formatted number" do
-      let(:response) { '$76,543.21' }
+    context "when the response is a formatted number of monthly income" do
+      let(:response) { '$6,543.21' }
 
       it "sets the Donor's #annual_income_cents" do
         expect(Donors::UpdateDonor)
           .to receive(:run!)
-          .with(donor, annual_income_cents: 76_543_21)
+          .with(donor, annual_income_cents: 78_518_52)
 
         step.process!(response)
       end

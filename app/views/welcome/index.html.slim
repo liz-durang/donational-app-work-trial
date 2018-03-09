@@ -222,4 +222,7 @@ footer.footer
   .container
     nav.breadcrumb.has-bullet-separator.is-centered
       ul
-        li.is-active: a href="/" Donational &copy;
+        li.is-active
+          a href="/"
+            ' Donational &copy;
+            = Time.now.year
