@@ -4,24 +4,38 @@ section.section
 css:
   .auth0-lock-header-bg { display: none; }
   .auth0-lock.auth0-lock button.auth0-lock-submit {
-    width: 240px;
-    margin: 0 auto;
+    width: 260px;
+    margin: 0 20px;
     border-radius: 5px;
   }
 
 javascript:
-  loadjs('https://cdn.auth0.com/js/lock-passwordless-2.2.min.js', {
+  loadjs('https://cdn.auth0.com/js/lock/11.3.1/lock.min.js', {
     success: function() {
-      var lock = new Auth0LockPasswordless('#{ENV.fetch('AUTH0_CLIENT_ID')}', '#{ENV.fetch('AUTH0_DOMAIN')}');
-
-      lock.socialOrMagiclink({
-        authParams: { state: $('meta[name="state"]').attr('content') },
-        container: 'auth0-login',
-        callbackURL: '#{auth_oauth2_callback_url}',
-        connections: ['google-oauth2', 'facebook'],
-        icon: 'https://placeholdit.co//i/1x1?&bg=fff',
-        dict: { title: 'Sign in' },
-        primaryColor: '#8600ED'
-      });
+      var lock = new Auth0LockPasswordless(
+        '#{ENV.fetch('AUTH0_CLIENT_ID')}',
+        '#{ENV.fetch('AUTH0_DOMAIN')}',
+        {
+          container: 'auth0-login',
+          closable: false,
+          allowedConnections: ['email', 'google-oauth2', 'facebook', 'linkedin'],
+          passwordlessMethod: 'link',
+          auth: {
+            redirectUrl: '#{@callback_url}',
+            responseType: 'token id_token',
+            params: {
+              scope: 'openid email',
+              state: '#{@csrf_state}',
+              response_type : 'code'
+            }
+          },
+          theme: {
+            logo: 'https://placeholdit.co/i/1x1?&bg=fff',
+            primaryColor: '#8600ED'
+          },
+          languageDictionary: { title: 'Sign in' }
+        }
+      );
+      lock.show();
     }
   });

@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe 'Visitor signs in', type: :feature do
   scenario 'with valid credentials', js: true do
     visit new_sessions_path
-    expect(page).to have_content('LOGIN WITH GOOGLE')
     sign_in_as!(first_name: 'Donny', last_name: 'Donator')
+    visit root_path
     expect(page).to have_content('Donny Donator')
   end
 
