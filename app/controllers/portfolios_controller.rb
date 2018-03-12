@@ -28,6 +28,8 @@ class PortfoliosController < ApplicationController
   end
 
   def show
+    redirect_to onboarding_path unless active_portfolio.present?
+
     Analytics::TrackEvent.run(user_id: current_donor.id, event: 'Viewed portfolio')
 
     track_analytics_event_via_browser('Goal: Viewed portfolio')

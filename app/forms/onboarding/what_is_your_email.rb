@@ -12,6 +12,10 @@ module Onboarding
       ComingSoonNotificationMailer.test(response.to_s).deliver_later
     end
 
+    def prepopulated_value
+      donor.email
+    end
+
     class ComingSoonNotificationMailer < ActionMailer::Base
       def test(email)
         mail(

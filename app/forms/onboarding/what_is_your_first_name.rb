@@ -14,5 +14,9 @@ module Onboarding
     def save
       Donors::UpdateDonor.run!(donor, first_name: response)
     end
+
+    def prepopulated_value
+      donor.first_name
+    end
   end
 end
