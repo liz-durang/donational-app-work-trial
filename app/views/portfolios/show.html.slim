@@ -32,8 +32,6 @@ section.section.embossed#my-portfolio
       br
       | Charities that align with your values & beliefs
 
-    hr
-
     ul.columns.is-multiline.is-centered.book-list
       - @portfolio.organizations.each do |organization|
         li.column.is-4
@@ -43,10 +41,8 @@ section.section.embossed#my-portfolio
         .book-placeholder
           h3.subtitle
             | Want to add another high-impact charity to your portfolio?
-        br
-        p: a.button.is-info.is-outlined href=new_allocations_path
-          | Add a charity
-        hr
+          p: a.button.is-info href=new_allocations_path
+            | Add a charity
 
 section.section
   .container.has-text-centered.content

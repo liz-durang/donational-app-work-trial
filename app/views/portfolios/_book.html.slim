@@ -15,6 +15,7 @@
         - if organization.recommended_by.include?('give_well')
           = image_tag('badge-give-well.svg')
   .book-page
+    button.button.delete aria-label="close"
     - if organization.why_you_should_care
       .book-content.content
         h3.subtitle = organization.name
@@ -64,5 +65,4 @@
     h2 = organization.name
   .book-top
   .book-bottom
-br
-p: button.button Read more
+button.button.is-text.read-more Read more

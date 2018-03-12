@@ -2,7 +2,7 @@ module Onboarding
   class WhatIsYourEmail < Step
     section "Let's get started"
 
-    message "So that we can save your progress along the way, what's your email?"
+    message "So that we can save your portfolio, what's your email?"
 
     display_as :email
     validates :response, presence: true, email: true

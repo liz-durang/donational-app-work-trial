@@ -1,4 +1,6 @@
 .book-list {
+	margin: 0;
+	padding: 0;
 	list-style: none;
 	position: relative;
 
@@ -13,6 +15,16 @@
   }
 }
 
+.book-underlay {
+	z-index: 0;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background: rgba(0, 0, 0, 0.3);
+}
+
 .book, .book-placeholder {
 	position: relative;
   width: 100%;
@@ -21,16 +33,25 @@
 	max-width: 400px;
 	transform-style: preserve-3d;
 	transition: transform .5s;
-  margin: 0 auto;
+  margin: 0 auto 1rem;
+	z-index: 1;
 }
 
 .book-placeholder {
-	border: 2px dashed #ddd;
+	border: 1px dashed #999;
 	border-radius: 3px;
 	padding: 2rem;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	z-index: 0;
+}
+
+.book .delete {
+	z-index: 2;
+	position: absolute;
+	right: 0.5rem;
+	top: 0.5rem;
 }
 
 .book > div,
@@ -126,20 +147,16 @@
 
 /* Transform classes */
 
-.book-viewinside .book-front {
+.book.open .book-front {
 	transform: translate3d(0,0,20px) rotate3d(0,1,0,-170deg);
 }
-
-.book.book-viewinside {
+.book.open {
 	transform: translate3d(0,0,10rem) rotate3d(0,1,0,0deg);
 }
-.book.book-viewback {
-	transform: translate3d(0,0,0px) rotate3d(0,1,0,180deg);
-}
-.book:not(.book-viewinside) .book-front:hover {
+.book:not(.open) .book-front:hover {
 	transform: translate3d(0,0,20px) rotate3d(0,1,0,-20deg);
 }
-.book:not(.book-viewinside):hover {
+.book:not(.open, .book-placeholder):hover {
 	transform: translate3d(0,0,0) rotate3d(1,0,0,5deg);
 }
 
@@ -154,8 +171,7 @@
 
 .book-front > div {
 	border-radius: 0 3px 3px 0;
-	box-shadow:
-		inset 4px 0 10px rgba(0, 0, 0, 0.1);
+	box-shadow: inset 4px 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .book-front:after {
@@ -244,15 +260,8 @@
 }
 
 .book-page nav a {
-	display: inline-block;
-	width: 4rem;
-	height: 4rem;
-	font-size: 1rem;
-	line-height: 4rem;
-	background: #fafafa;
 	border-radius: 50%;
-	border: 1px solid #eee;
-	margin: 0px 2px;
+	margin: 0px 5px;
 }
 
 /* Individual style & artwork */

@@ -21,7 +21,7 @@
               | Donate to causes that reflect you.
             h2.subtitle
               ' We are your partner for
-              strong.has-text-primary> data-rotating-text-alternatives="smarter|simpler|more human|high-impact|values-aligned|cost-effective|celebratory|secure" data-rotating-text-show-time=3000
+              strong.has-text-info> data-rotating-text-alternatives="smarter|simpler|more human|high-impact|values-aligned|cost-effective|celebratory|secure" data-rotating-text-show-time=3000
                 | smarter
               | donations
             p &nbsp;
@@ -49,7 +49,7 @@ section.section.is-medium#learn-more
       ' It begins with a commitment to what you care about.
     p.subtitle
       ' Pledge your
-      strong.has-text-primary> data-rotating-text-alternatives="$|&euro;|&yen;|&pound;|฿" data-rotating-text-show-time=2000
+      strong.has-text-info> data-rotating-text-alternatives="$|&euro;|&yen;|&pound;|฿" data-rotating-text-show-time=2000
         | $
       | to move the world&hellip;
 hr.container
@@ -92,25 +92,25 @@ section.section.is-medium#learn-more
     h1.title.is-spaced Measure your impact
     p.subtitle
       ' If
-      strong.has-text-primary> 250
+      strong.has-text-info> 250
       ' people gave
-      strong.has-text-primary> 1%
+      strong.has-text-info> 1%
       ' of their household income towards
     p.subtitle
-      strong.has-text-primary> data-rotating-text-alternatives="global health|poverty eradication|climate change" data-rotating-text-show-time=5000 global health
-      span> data-rotating-text-alternatives="then" data-rotating-text-show-time=5000 then
-      strong.has-text-primary> data-rotating-text-alternatives="3000 people's blindness|60 lives can be saved|180,000 tonnes of CO2" data-rotating-text-show-time=5000 3000 people's blindness
+      strong.has-text-info> data-rotating-text-alternatives="global health|poverty eradication|climate change" data-rotating-text-show-time=8000 global health
+      span> data-rotating-text-alternatives="then" data-rotating-text-show-time=8000 then
+      strong.has-text-info> data-rotating-text-alternatives="3000 people's blindness|60 lives can be saved|180,000 tonnes of CO2" data-rotating-text-show-time=8000 3000 people's blindness
     p.subtitle
-      span> data-rotating-text-alternatives="can be cured with a|by delivering|will be locked in by protecting" data-rotating-text-show-time=5000 can be cured with a
-      strong.has-text-primary> data-rotating-text-alternatives="$50 eye-surgery|60,000 bednets|700 acres" data-rotating-text-show-time=5000 $50 eye-surgery
-      span> data-rotating-text-alternatives="lasting less than 30 minutes|to protect families from malaria|of at-risk rainforest" data-rotating-text-show-time=5000 lasting less than 30 minutes
+      span> data-rotating-text-alternatives="can be cured with a|by delivering|will be locked in by protecting" data-rotating-text-show-time=8000 can be cured with a
+      strong.has-text-info> data-rotating-text-alternatives="$50 eye-surgery|60,000 bednets|700 acres" data-rotating-text-show-time=8000 $50 eye-surgery
+      span> data-rotating-text-alternatives="lasting less than 30 minutes|to protect families from malaria|of at-risk rainforest" data-rotating-text-show-time=8000 lasting less than 30 minutes
     p.help
       | Based on the median US household income of $59,039
       sup>
         a href="https://www.census.gov/newsroom/press-releases/2017/income-povery.html" target="_blank" title="Income, Poverty and Health Insurance Coverage in the United States: 2016" 1
       ' donated to
       br
-      strong data-rotating-text-alternatives="Seva|Against Malaria Foundation|Cool Earth" data-rotating-text-show-time=5000 Seva
+      strong data-rotating-text-alternatives="Seva|Against Malaria Foundation|Cool Earth" data-rotating-text-show-time=8000 Seva
       |
       br
       | (one of the world's most effective charities)
@@ -211,10 +211,10 @@ section.is-medium.hero.has-background
     .container.has-text-centered
       h1.title.is-spaced
         ' Spark
-        span.has-text-primary> data-rotating-text-alternatives="social action|real change|effective impact" data-rotating-text-show-time=2000
+        span.has-text-info> data-rotating-text-alternatives="social action|real change|effective impact" data-rotating-text-show-time=2000
           | social action
         | by doing good with your money
-      a.button.is-primary.is-medium href=onboarding_path
+      a.button.is-primary.is-large href=onboarding_path
         span Get started
         span.icon.is-small &rarr;
 
@@ -222,4 +222,7 @@ footer.footer
   .container
     nav.breadcrumb.has-bullet-separator.is-centered
       ul
-        li.is-active: a href="/" Donational &copy;
+        li.is-active
+          a href="/"
+            ' Donational &copy;
+            = Time.now.year
