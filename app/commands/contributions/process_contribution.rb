@@ -14,7 +14,8 @@ module Contributions
         payment = Payments::ChargeCustomer.run(
           customer_id: payment_method.customer_id,
           email: contribution.donor.email,
-          amount_cents: contribution.amount_cents
+          amount_cents: contribution.amount_cents,
+          platform_fee_cents: contribution.platform_fee_cents
         )
 
         return payment_failed! unless payment.success?
@@ -22,7 +23,7 @@ module Contributions
         Analytics::TrackEvent.run(
           user_id: contribution.donor.id,
           event: 'Donation processed',
-          traits: { revenue: contribution.amount_dollars }
+          traits: { revenue: contribution.amount_dollars, tip_dollars: contribution.platform_fee_cents / 100 }
         )
 
         contribution.update!(receipt: payment.result, processed_at: Time.zone.now)

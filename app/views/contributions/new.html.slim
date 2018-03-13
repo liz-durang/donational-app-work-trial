@@ -29,8 +29,7 @@ section.section.embossed
               = f.collection_radio_buttons( \
                 :contribution_frequency, \
                 { monthly: 'Monthly', quarterly: 'Every quarter', annually: 'Yearly', once: 'One-time' }, \
-                :first, :last, \
-                checked: @active_portfolio.contribution_frequency) do |b| \
+                :first, :last) do |b| \
                   b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
                 end
             p.help All donations are tax-deductible operating under the Social Good Fund, a 501(c)3 public charity, EIN 46-1323531.
@@ -59,8 +58,8 @@ section.section.embossed
         .column.is-6
           p.field
             label.subtitle 2. Add a tip to help Donational grow
-            .control.buttons = f.collection_radio_buttons :platform_tip_dollars,\
-              [[0, 'No tip'], [2, '$2'], [5, '$5'], [10, '$10']], :first, :last do |b| \
+            .control.buttons = f.collection_radio_buttons :contribution_platform_fee_cents,\
+              [[0, 'No tip'], [200, '$2'], [500, '$5'], [1_000, '$10']], :first, :last do |b| \
                 b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
               end
           p.help

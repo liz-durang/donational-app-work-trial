@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180215020005) do
+ActiveRecord::Schema.define(version: 20180313103348) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 20180215020005) do
     t.datetime "updated_at", null: false
     t.datetime "scheduled_at"
     t.datetime "processed_at"
+    t.integer "platform_fee_cents", default: 0
     t.index ["portfolio_id"], name: "index_contributions_on_portfolio_id"
   end
 
@@ -140,6 +141,7 @@ ActiveRecord::Schema.define(version: 20180215020005) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "contribution_amount_cents"
+    t.integer "contribution_platform_fee_cents"
     t.index ["donor_id"], name: "index_active_subscriptions_on_donor_id", where: "(deactivated_at IS NULL)"
     t.index ["donor_id"], name: "index_portfolios_on_donor_id"
   end

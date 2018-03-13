@@ -9,6 +9,7 @@ module Contributions
       Contribution.create!(
         portfolio: portfolio,
         amount_cents: portfolio.contribution_amount_cents,
+        platform_fee_cents: portfolio.contribution_platform_fee_cents,
         scheduled_at: scheduled_at
       )
 
