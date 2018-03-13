@@ -34,7 +34,7 @@ section.section
                   ' You made a positive impact at
                   = pluralize(contribution.donations.count, 'charity')
             td.has-text-right
-              strong = number_to_currency(contribution.amount_cents / 100.0)
+              strong = number_to_currency(contribution.total_charges_cents / 100.0)
             td
               - if contribution.processed_at?
                 => time_ago_in_words(contribution.processed_at)
@@ -45,6 +45,15 @@ section.section
                 em => donation.organization.name
               td.has-text-right
                 em = number_to_currency(donation.amount_cents / 100.0)
+              td &nbsp;
+          - if contribution.platform_fee_cents
+            tr.is-hidden data-accordion-panel-for="contribution-#{contribution.id}"
+              td.has-text-right colspan=2
+                em Tip to Donational
+                br
+                small Thanks for helping us grow!
+              td.has-text-right
+                em = number_to_currency(contribution.platform_fee_cents / 100.0)
               td &nbsp;
 section.section
   .container.content.has-text-centered style="max-width: 40rem;"

@@ -29,14 +29,15 @@ RSpec.describe Payments::ChargeCustomer do
             receipt_email: 'user@example.com',
             source: 'cus_123',
             amount: 123,
-            platform_fee: 0,
+            platform_fee: 23,
             currency: 'usd'
           ).and_return(successful_response)
 
         command = Payments::ChargeCustomer.run(
           customer_id: customer_id,
           email: email,
-          amount_cents: 123
+          donation_amount_cents: 100,
+          platform_fee_cents: 23
         )
 
         expect(command).to be_success
@@ -47,7 +48,7 @@ RSpec.describe Payments::ChargeCustomer do
         unfiltered_json = '{ "payment_token": "this_is_sensitive", "id": 123 }'
         expect(donations_resource).to receive(:post).and_return(double(body: unfiltered_json))
 
-        command = Payments::ChargeCustomer.run(customer_id: customer_id, email: email, amount_cents: 123)
+        command = Payments::ChargeCustomer.run(customer_id: customer_id, email: email, donation_amount_cents: 100)
 
         expect(command.result.keys).not_to include('payment_token')
       end
@@ -68,7 +69,7 @@ RSpec.describe Payments::ChargeCustomer do
       end
 
       it 'fails with errors' do
-        command = Payments::ChargeCustomer.run(customer_id: customer_id, email: email, amount_cents: 123)
+        command = Payments::ChargeCustomer.run(customer_id: customer_id, email: email, donation_amount_cents: 100)
 
         expect(command).not_to be_success
         expect(command.errors.symbolic).to include(customer: :some_pandapay_error_type)
@@ -81,7 +82,7 @@ RSpec.describe Payments::ChargeCustomer do
     let(:email) { '' }
 
     it 'fails with errors' do
-      command = Payments::ChargeCustomer.run(customer_id: customer_id, email: email, amount_cents: 123)
+      command = Payments::ChargeCustomer.run(customer_id: customer_id, email: email, donation_amount_cents: 100)
 
       expect(command).not_to be_success
       expect(command.errors.symbolic).to include(customer_id: :empty)

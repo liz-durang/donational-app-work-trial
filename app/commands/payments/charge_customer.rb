@@ -7,14 +7,17 @@ module Payments
     required do
       string :customer_id, empty: false
       string :email, empty: false
-      integer :amount_cents
-      integer :platform_fee_cents
+      integer :donation_amount_cents
+    end
+
+    optional do
+      integer :platform_fee_cents, default: 0
     end
 
     def execute
       payment = pandapay_donations.post(
         source: customer_id,
-        amount: amount_cents,
+        amount: donation_amount_cents + platform_fee_cents,
         platform_fee: platform_fee_cents,
         currency: 'usd',
         receipt_email: email
