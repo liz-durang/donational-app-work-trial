@@ -20,13 +20,12 @@ javascript:
           closable: false,
           allowedConnections: ['email', 'google-oauth2', 'facebook', 'linkedin'],
           passwordlessMethod: 'link',
+          responseType: 'token id_token',
           auth: {
             redirectUrl: '#{@callback_url}',
-            responseType: 'token id_token',
             params: {
               scope: 'openid email',
-              state: '#{@csrf_state}',
-              response_type : 'code'
+              state: '#{@csrf_state}'
             }
           },
           theme: {
