@@ -22,18 +22,17 @@ class ContributionsController < ApplicationController
 
     Contributions::CreateContribution.run!(
       portfolio: active_portfolio,
-      amount_cents: amount_dollars * 100
+      amount_cents: amount_dollars * 100,
+      platform_fee_cents: portfolio_params[:contribution_platform_fee_cents]
     )
 
     active_portfolio.update(
       contribution_frequency: portfolio_params[:contribution_frequency],
-      contribution_amount_cents: amount_dollars * 100
+      contribution_amount_cents: amount_dollars * 100,
+      contribution_platform_fee_cents: portfolio_params[:contribution_platform_fee_cents]
     )
 
-    track_analytics_event_via_browser(
-      'Goal: Donation',
-      { revenue: amount_dollars }
-    )
+    track_analytics_event_via_browser('Goal: Donation', { revenue: amount_dollars })
 
     redirect_to contributions_path
   end

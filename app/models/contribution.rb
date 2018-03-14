@@ -22,4 +22,8 @@ class Contribution < ApplicationRecord
   def amount_dollars
     amount_cents / 100.0
   end
+
+  def total_charges_cents
+    amount_cents + platform_fee_cents
+  end
 end

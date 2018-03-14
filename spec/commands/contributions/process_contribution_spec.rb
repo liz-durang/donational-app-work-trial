@@ -23,7 +23,7 @@ RSpec.describe Contributions::ProcessContribution do
 
     let(:portfolio) { create(:portfolio, donor: donor) }
     let(:contribution) do
-      create(:contribution, portfolio: portfolio, amount_cents: 123, processed_at: nil)
+      create(:contribution, portfolio: portfolio, amount_cents: 1_000, platform_fee_cents: 200, processed_at: nil)
     end
     let(:org_1) { create(:organization, ein: 'org1') }
     let(:org_2) { create(:organization, ein: 'org2') }
@@ -68,7 +68,7 @@ RSpec.describe Contributions::ProcessContribution do
       it 'stores the receipt and marks the contribution as processed' do
         expect(Payments::ChargeCustomer)
           .to receive(:run)
-          .with(email: 'user@example.com', customer_id: 'cus_123', amount_cents: 123)
+          .with(email: 'user@example.com', customer_id: 'cus_123', donation_amount_cents: 1_000, platform_fee_cents: 200)
           .and_return(successful_widthdrawal)
 
         command = Contributions::ProcessContribution.run(contribution: contribution)
@@ -86,9 +86,9 @@ RSpec.describe Contributions::ProcessContribution do
         expect { Contributions::ProcessContribution.run(contribution: contribution) }.to change { Donation.count }.by(2)
 
         expect(Donation.where(organization: org_1).first)
-          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 73)
+          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 553)
         expect(Donation.where(organization: org_2).first)
-          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 49)
+          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 369)
       end
     end
   end

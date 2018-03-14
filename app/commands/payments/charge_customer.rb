@@ -3,19 +3,22 @@ require 'panda_pay'
 module Payments
   class ChargeCustomer < Mutations::Command
     SENSITIVE_PARAMETERS = %i(payment_token)
-    PLATFORM_FEE = 0
 
     required do
       string :customer_id, empty: false
       string :email, empty: false
-      integer :amount_cents
+      integer :donation_amount_cents
+    end
+
+    optional do
+      integer :platform_fee_cents, default: 0
     end
 
     def execute
       payment = pandapay_donations.post(
         source: customer_id,
-        amount: amount_cents,
-        platform_fee: platform_fee,
+        amount: donation_amount_cents + platform_fee_cents,
+        platform_fee: platform_fee_cents,
         currency: 'usd',
         receipt_email: email
       )
@@ -36,10 +39,6 @@ module Payments
         'https://api.pandapay.io/v1/donations',
         ENV.fetch('PANDAPAY_SECRET_KEY')
       )
-    end
-
-    def platform_fee
-      PLATFORM_FEE
     end
   end
 end

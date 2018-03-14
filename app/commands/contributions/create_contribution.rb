@@ -5,10 +5,15 @@ module Contributions
       integer :amount_cents
     end
 
+    optional do
+      integer :platform_fee_cents
+    end
+
     def execute
       contribution = Contribution.create!(
         portfolio: portfolio,
         amount_cents: amount_cents,
+        platform_fee_cents: platform_fee_cents,
         scheduled_at: Time.now
       )
 

@@ -14,7 +14,8 @@ module Contributions
         payment = Payments::ChargeCustomer.run(
           customer_id: payment_method.customer_id,
           email: contribution.donor.email,
-          amount_cents: contribution.amount_cents
+          donation_amount_cents: contribution.amount_cents,
+          platform_fee_cents: contribution.platform_fee_cents
         )
 
         return payment_failed! unless payment.success?
@@ -22,7 +23,7 @@ module Contributions
         Analytics::TrackEvent.run(
           user_id: contribution.donor.id,
           event: 'Donation processed',
-          traits: { revenue: contribution.amount_dollars }
+          traits: { revenue: contribution.amount_dollars, tip_dollars: contribution.platform_fee_cents / 100 }
         )
 
         contribution.update!(receipt: payment.result, processed_at: Time.zone.now)
@@ -47,13 +48,19 @@ module Contributions
     end
 
     def create_donations_based_on_active_allocations
+      payment_processor_fixed_fee = 30
+      payment_processor_percentage_fee = 0.039
+      total_charge_amount = contribution.amount_cents + contribution.platform_fee_cents
+      fees = total_charge_amount * payment_processor_percentage_fee + payment_processor_fixed_fee
+      amount_donated_after_fees = total_charge_amount - fees - contribution.platform_fee_cents
+
       Allocations::GetActiveAllocations.call(portfolio: contribution.portfolio).each do |a|
         Donation.create!(
           allocation: a,
           contribution: contribution,
           portfolio: a.portfolio,
           organization: a.organization,
-          amount_cents: (contribution.amount_cents * a.percentage / 100.0).floor
+          amount_cents: (amount_donated_after_fees * a.percentage / 100.0).floor
         )
       end
     end
