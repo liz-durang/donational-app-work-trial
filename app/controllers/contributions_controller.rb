@@ -21,6 +21,7 @@ class ContributionsController < ApplicationController
     amount_dollars = portfolio_params[:contribution_amount_dollars].to_i
 
     Contributions::CreateContribution.run!(
+      donor: current_donor,
       portfolio: active_portfolio,
       amount_cents: amount_dollars * 100,
       platform_fee_cents: portfolio_params[:contribution_platform_fee_cents]

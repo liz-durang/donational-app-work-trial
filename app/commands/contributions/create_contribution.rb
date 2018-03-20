@@ -2,6 +2,7 @@ module Contributions
   class CreateContribution < ApplicationCommand
     required do
       model :portfolio
+      model :donor
       integer :amount_cents
     end
 
@@ -11,6 +12,7 @@ module Contributions
 
     def execute
       contribution = Contribution.create!(
+        donor: donor,
         portfolio: portfolio,
         amount_cents: amount_cents,
         platform_fee_cents: platform_fee_cents,

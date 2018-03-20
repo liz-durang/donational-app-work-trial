@@ -11,6 +11,7 @@
 #  scheduled_at       :datetime
 #  processed_at       :datetime
 #  platform_fee_cents :integer          default(0)
+#  donor_id           :uuid
 #
 
 FactoryBot.define do

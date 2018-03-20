@@ -6,17 +6,11 @@ module Contributions
 
     def call(donor:)
       @relation
-        .where(portfolio: all_portfolios_for(donor))
+        .where(donor: donor)
         .where.not(processed_at: nil)
         .preload(:donations)
         .preload(:organizations)
         .order(created_at: :desc)
-    end
-
-    private
-
-    def all_portfolios_for(donor)
-      Portfolio.where(donor: donor)
     end
   end
 end
