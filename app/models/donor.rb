@@ -61,4 +61,11 @@ class Donor < ApplicationRecord
   def account_holder?
     email.present?
   end
+
+  def target_annual_contribution_amount_cents
+    return nil unless annual_income_cents
+    return nil unless donation_rate
+
+    donation_rate * annual_income_cents
+  end
 end

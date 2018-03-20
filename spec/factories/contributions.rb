@@ -2,14 +2,15 @@
 #
 # Table name: contributions
 #
-#  id           :uuid             not null, primary key
-#  portfolio_id :uuid
-#  amount_cents :integer
-#  receipt      :json
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  scheduled_at :datetime
-#  processed_at :datetime
+#  id                 :uuid             not null, primary key
+#  portfolio_id       :uuid
+#  amount_cents       :integer
+#  receipt            :json
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  scheduled_at       :datetime
+#  processed_at       :datetime
+#  platform_fee_cents :integer          default(0)
 #
 
 FactoryBot.define do
