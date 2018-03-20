@@ -1,7 +1,7 @@
 require 'panda_pay'
 
 module Payments
-  class CreateCustomer < Mutations::Command
+  class CreateCustomer < ApplicationCommand
     required do
       string :email, empty: false
     end

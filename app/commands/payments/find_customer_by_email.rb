@@ -1,7 +1,7 @@
 require 'panda_pay'
 
 module Payments
-  class FindCustomerByEmail < Mutations::Command
+  class FindCustomerByEmail < ApplicationCommand
     required do
       string :email
     end

@@ -1,5 +1,5 @@
 module Checks
-  class SendCheck < Mutations::Command
+  class SendCheck < ApplicationCommand
     required do
       model :organization
       integer :amount_cents

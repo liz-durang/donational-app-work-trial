@@ -1,5 +1,5 @@
 module Contributions
-  class CreateContribution < Mutations::Command
+  class CreateContribution < ApplicationCommand
     required do
       model :portfolio
       integer :amount_cents
@@ -17,7 +17,7 @@ module Contributions
         scheduled_at: Time.now
       )
 
-      ProcessContribution.run(contribution: contribution)
+      chain ProcessContribution.run(contribution: contribution)
 
       nil
     end

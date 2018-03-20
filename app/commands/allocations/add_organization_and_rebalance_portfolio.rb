@@ -1,5 +1,5 @@
 module Allocations
-  class AddOrganizationAndRebalancePortfolio < Mutations::Command
+  class AddOrganizationAndRebalancePortfolio < ApplicationCommand
     required do
       model :portfolio
       model :organization
@@ -11,11 +11,10 @@ module Allocations
         percentage: 100 - existing_allocations_with_room_for_new_org.sum { |a| a[:percentage] }
       }
 
-      update_allocations = UpdateAllocations.run(
+      chain UpdateAllocations.run(
         portfolio: portfolio,
         allocations: existing_allocations_with_room_for_new_org + [new_allocation]
       )
-      merge_errors(update_allocations.errors) unless update_allocations.success?
 
       nil
     end

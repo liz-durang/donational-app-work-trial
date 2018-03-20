@@ -1,5 +1,5 @@
 module Allocations
-  class UpdateAllocations < Mutations::Command
+  class UpdateAllocations < ApplicationCommand
     required do
       model :portfolio
       array :allocations do
@@ -36,8 +36,8 @@ module Allocations
     private
 
     def deactivate_existing_allocations!
-      Allocations::GetActiveAllocations.call(portfolio: portfolio)
-                                       .update_all(deactivated_at: Time.zone.now)
+      GetActiveAllocations.call(portfolio: portfolio)
+                          .update_all(deactivated_at: Time.zone.now)
     end
 
     def ensure_allocations_add_to_one_hundred_percent!

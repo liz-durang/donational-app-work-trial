@@ -1,7 +1,7 @@
 require 'panda_pay'
 
 module Payments
-  class FindCustomerById < Mutations::Command
+  class FindCustomerById < ApplicationCommand
     required do
       string :customer_id
     end

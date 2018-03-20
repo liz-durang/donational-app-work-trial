@@ -1,5 +1,5 @@
 module Grants
-  class ScheduleGrant < Mutations::Command
+  class ScheduleGrant < ApplicationCommand
     required do
       model :organization
       time :scheduled_at, after: Time.zone.now
@@ -16,7 +16,7 @@ module Grants
         )
 
         unpaid_donations.each do |donation|
-          Donations::MarkDonationAsProcessed.run!(donation: donation, processed_by: grant)
+          chain Donations::MarkDonationAsProcessed.run(donation: donation, processed_by: grant)
         end
       end
 

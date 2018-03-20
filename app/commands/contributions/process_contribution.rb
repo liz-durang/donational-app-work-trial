@@ -1,5 +1,5 @@
 module Contributions
-  class ProcessContribution < Mutations::Command
+  class ProcessContribution < ApplicationCommand
     required do
       model :contribution
     end
@@ -11,7 +11,7 @@ module Contributions
 
     def execute
       Contribution.transaction do
-        payment = Payments::ChargeCustomer.run(
+        payment = chain Payments::ChargeCustomer.run(
           customer_id: payment_method.customer_id,
           email: contribution.donor.email,
           donation_amount_cents: contribution.amount_cents,
@@ -20,7 +20,7 @@ module Contributions
 
         return payment_failed! unless payment.success?
 
-        Analytics::TrackEvent.run(
+        chain Analytics::TrackEvent.run(
           user_id: contribution.donor.id,
           event: 'Donation processed',
           traits: { revenue: contribution.amount_dollars, tip_dollars: contribution.platform_fee_cents / 100 }

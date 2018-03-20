@@ -1,6 +1,6 @@
 module Donors
-  class CreateAnonymousDonor
-    def self.run!
+  class CreateAnonymousDonor < ApplicationCommand
+    def execute
       Donor.create!
     end
   end

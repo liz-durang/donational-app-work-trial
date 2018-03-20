@@ -1,7 +1,7 @@
 require Rails.root.join('lib','mutations','decimal_filter')
 
 module Portfolios
-  class CreateOrReplacePortfolio < Mutations::Command
+  class CreateOrReplacePortfolio < ApplicationCommand
     required do
       model :donor
       string :contribution_frequency, default: 'once'

@@ -1,7 +1,7 @@
 require 'panda_pay'
 
 module Payments
-  class ChargeCustomer < Mutations::Command
+  class ChargeCustomer < ApplicationCommand
     SENSITIVE_PARAMETERS = %i(payment_token)
 
     required do

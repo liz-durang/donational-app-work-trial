@@ -1,5 +1,5 @@
 module Donations
-  class MarkDonationAsProcessed < Mutations::Command
+  class MarkDonationAsProcessed < ApplicationCommand
     required do
       model :donation
       model :processed_by, class: Grant
