@@ -2,9 +2,9 @@ class WelcomeController < ApplicationController
   def index
   end
 
-  def show
-    not_found unless params[:page] == 'faq'
+  def faq
+  end
 
-    render 'faq'
+  def api
   end
 end
