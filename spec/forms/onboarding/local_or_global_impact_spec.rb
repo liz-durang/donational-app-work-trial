@@ -9,7 +9,7 @@ RSpec.describe Onboarding::LocalOrGlobalImpact, type: :model do
     context "when the response is 'local'" do
       it "sets the Donor's preferences to local impact organizations only" do
         expect(Donors::UpdateDonor).to receive(:run!).with(
-          donor,
+          donor: donor,
           include_local_organizations: true,
           include_global_organizations: false
         )
@@ -21,7 +21,7 @@ RSpec.describe Onboarding::LocalOrGlobalImpact, type: :model do
     context "when the response is 'both'" do
       it "sets the Donor's preferences to local impact and global impact organizations" do
         expect(Donors::UpdateDonor).to receive(:run!).with(
-          donor,
+          donor: donor,
           include_local_organizations: true,
           include_global_organizations: true
         )
@@ -33,7 +33,7 @@ RSpec.describe Onboarding::LocalOrGlobalImpact, type: :model do
     context "when the response is 'global'" do
       it "sets the Donor's preferences to global impact organizations only" do
         expect(Donors::UpdateDonor).to receive(:run!).with(
-          donor,
+          donor: donor,
           include_local_organizations: false,
           include_global_organizations: true
         )

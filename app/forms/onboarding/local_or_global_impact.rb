@@ -16,19 +16,19 @@ module Onboarding
       case response
       when :local
         Donors::UpdateDonor.run!(
-          donor,
+          donor: donor,
           include_local_organizations: true,
           include_global_organizations: false
         )
       when :both
         Donors::UpdateDonor.run!(
-          donor,
+          donor: donor,
           include_local_organizations: true,
           include_global_organizations: true
         )
       when :global
         Donors::UpdateDonor.run!(
-          donor,
+          donor: donor,
           include_local_organizations: false,
           include_global_organizations: true
         )

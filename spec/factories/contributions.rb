@@ -16,6 +16,7 @@
 
 FactoryBot.define do
   factory :contribution do
+    donor
     portfolio
     amount_cents 123
     scheduled_at 1.day.ago

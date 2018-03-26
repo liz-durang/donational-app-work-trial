@@ -14,7 +14,7 @@ module Donors
         return
       end
 
-      chain Donors::UpdateDonor.run(donor, payment_processor_customer_id: customer[:id])
+      chain Donors::UpdateDonor.run(donor: donor, payment_processor_customer_id: customer[:id])
       chain Payments::UpdateCustomerCard.run(customer_id: customer[:id], payment_token: payment_token)
 
       nil

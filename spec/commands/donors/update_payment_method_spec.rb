@@ -19,7 +19,7 @@ RSpec.describe Donors::UpdatePaymentMethod do
         .with(customer_id: 'cus_123')
         .and_return(double(success?: true, result: existing_customer))
 
-      allow(Donors::UpdateDonor).to receive(:run!)
+      allow(Donors::UpdateDonor).to receive(:run).and_return(double(success?: true))
     end
 
     context "and the update to the customer's card succeeds" do
@@ -65,6 +65,7 @@ RSpec.describe Donors::UpdatePaymentMethod do
 
     context 'and the customer can be created' do
       let(:successful_create) { double(success?: true, result: { id: 'new_cus_123' }) }
+      let(:successful_update) { double(success?: true) }
 
       before do
         expect(Payments::CreateCustomer)
@@ -76,7 +77,10 @@ RSpec.describe Donors::UpdatePaymentMethod do
       end
 
       it 'saves the newly created customer id to the donor' do
-        expect(Donors::UpdateDonor).to receive(:run!).with(donor, payment_processor_customer_id: 'new_cus_123')
+        expect(Donors::UpdateDonor)
+          .to receive(:run)
+          .with(donor: donor, payment_processor_customer_id: 'new_cus_123')
+          .and_return(successful_update)
 
         command = Donors::UpdatePaymentMethod.run(donor: donor, payment_token: 'token')
 
@@ -111,6 +115,7 @@ RSpec.describe Donors::UpdatePaymentMethod do
 
       context 'and there is an existing customer with a matching email' do
         let(:existing_customer) { { id: 'cus_with_matching_email' } }
+        let(:successful_update) { double(success?: true) }
 
         before do
           expect(Payments::FindCustomerByEmail)
@@ -120,7 +125,10 @@ RSpec.describe Donors::UpdatePaymentMethod do
         end
 
         it 'saves the matching customer id to the donor' do
-          expect(Donors::UpdateDonor).to receive(:run!).with(donor, payment_processor_customer_id: 'cus_with_matching_email')
+          expect(Donors::UpdateDonor)
+            .to receive(:run)
+            .with(donor: donor, payment_processor_customer_id: 'cus_with_matching_email')
+            .and_return(successful_update)
 
           command = Donors::UpdatePaymentMethod.run(donor: donor, payment_token: 'token')
 
@@ -152,7 +160,7 @@ RSpec.describe Donors::UpdatePaymentMethod do
         end
 
         it 'fails with customer not found errors' do
-          expect(Donors::UpdateDonor).not_to receive(:run!)
+          expect(Donors::UpdateDonor).not_to receive(:run)
 
           command = Donors::UpdatePaymentMethod.run(donor: donor, payment_token: 'token')
 

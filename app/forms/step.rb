@@ -18,7 +18,7 @@
 #       end
 #
 #       def save
-#         Donors::UpdateDonor.run!(donor, year_of_birth: response)
+#         Donors::UpdateDonor.run!(donor: donor, year_of_birth: response)
 #       end
 #     end
 class Step < Node

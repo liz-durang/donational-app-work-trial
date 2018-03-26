@@ -14,7 +14,7 @@ module Onboarding
     display_as :radio_buttons
 
     def save
-      Donors::UpdateDonor.run!(donor, surprised_by_average_american_donation_rate: response)
+      Donors::UpdateDonor.run!(donor: donor, surprised_by_average_american_donation_rate: response)
     end
   end
 end

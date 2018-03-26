@@ -9,7 +9,7 @@ RSpec.describe Onboarding::ImmediateOrLongTerm, type: :model do
     context "when the response is 'immediate'" do
       it "sets the Donor's preferences to immediate impact organizations only" do
         expect(Donors::UpdateDonor).to receive(:run!).with(
-          donor,
+          donor: donor,
           include_immediate_impact_organizations: true,
           include_long_term_impact_organizations: false
         )
@@ -21,7 +21,7 @@ RSpec.describe Onboarding::ImmediateOrLongTerm, type: :model do
     context "when the response is 'both'" do
       it "sets the Donor's preferences to immediate impact and long term impact organizations" do
         expect(Donors::UpdateDonor).to receive(:run!).with(
-          donor,
+          donor: donor,
           include_immediate_impact_organizations: true,
           include_long_term_impact_organizations: true
         )
@@ -33,7 +33,7 @@ RSpec.describe Onboarding::ImmediateOrLongTerm, type: :model do
     context "when the response is 'long_term'" do
       it "sets the Donor's preferences to long term impact organizations only" do
         expect(Donors::UpdateDonor).to receive(:run!).with(
-          donor,
+          donor: donor,
           include_immediate_impact_organizations: false,
           include_long_term_impact_organizations: true
         )

@@ -20,7 +20,7 @@ module Onboarding
 
     def save
       Donors::UpdateDonor.run!(
-        donor,
+        donor: donor,
         donated_prior_year:
           case response
           when :yes

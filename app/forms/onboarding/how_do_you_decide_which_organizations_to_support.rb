@@ -18,7 +18,7 @@ module Onboarding
     display_as :tags
 
     def save
-      Donors::UpdateDonor.run!(donor, reasons_why_i_choose_an_organization: response)
+      Donors::UpdateDonor.run!(donor: donor, reasons_why_i_choose_an_organization: response)
     end
   end
 end

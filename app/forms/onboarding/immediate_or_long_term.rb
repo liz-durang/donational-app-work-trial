@@ -18,19 +18,19 @@ module Onboarding
       case response
       when :immediate
         Donors::UpdateDonor.run!(
-          donor,
+          donor: donor,
           include_immediate_impact_organizations: true,
           include_long_term_impact_organizations: false
         )
       when :both
         Donors::UpdateDonor.run!(
-          donor,
+          donor: donor,
           include_immediate_impact_organizations: true,
           include_long_term_impact_organizations: true
         )
       when :long_term
         Donors::UpdateDonor.run!(
-          donor,
+          donor: donor,
           include_immediate_impact_organizations: false,
           include_long_term_impact_organizations: true
         )
