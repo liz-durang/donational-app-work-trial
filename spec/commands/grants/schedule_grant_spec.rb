@@ -21,6 +21,7 @@ RSpec.describe Grants::ScheduleGrant do
     let(:donation_1) { instance_double(Donation, update: true) }
     let(:donation_2) { instance_double(Donation, update: true) }
     let(:grant) { instance_double(Grant, id: 'some_id') }
+    let(:successful_command) { double(success?: true) }
 
     before do
       allow(Donations::GetUnpaidDonations)
@@ -35,7 +36,7 @@ RSpec.describe Grants::ScheduleGrant do
 
       allow(donations).to receive(:each).and_yield(donation_1).and_yield(donation_2)
 
-      allow(Donations::MarkDonationAsProcessed).to receive(:run!)
+      allow(Donations::MarkDonationAsProcessed).to receive(:run).and_return(successful_command)
     end
 
     it 'creates a scheduled Grant to the organization for any unpaid donations' do
@@ -53,11 +54,13 @@ RSpec.describe Grants::ScheduleGrant do
       allow(Grant).to receive(:create!).and_return(grant)
 
       expect(Donations::MarkDonationAsProcessed)
-        .to receive(:run!)
+        .to receive(:run)
         .with(donation: donation_1, processed_by: grant)
+        .and_return(successful_command)
       expect(Donations::MarkDonationAsProcessed)
-        .to receive(:run!)
+        .to receive(:run)
         .with(donation: donation_2, processed_by: grant)
+        .and_return(successful_command)
 
       command = Grants::ScheduleGrant.run(organization: organization, scheduled_at: scheduled_at)
 

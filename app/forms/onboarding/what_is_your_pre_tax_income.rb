@@ -11,7 +11,7 @@ module Onboarding
 
     def save
       annual_income_cents = response * 12
-      Donors::UpdateDonor.run!(donor, annual_income_cents: annual_income_cents)
+      Donors::UpdateDonor.run!(donor: donor, annual_income_cents: annual_income_cents)
     end
   end
 end

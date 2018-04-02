@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180313103348) do
+ActiveRecord::Schema.define(version: 20180320075532) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,8 @@ ActiveRecord::Schema.define(version: 20180313103348) do
     t.datetime "scheduled_at"
     t.datetime "processed_at"
     t.integer "platform_fee_cents", default: 0
+    t.uuid "donor_id"
+    t.index ["donor_id"], name: "index_contributions_on_donor_id"
     t.index ["portfolio_id"], name: "index_contributions_on_portfolio_id"
   end
 
@@ -149,6 +151,7 @@ ActiveRecord::Schema.define(version: 20180313103348) do
   add_foreign_key "allocations", "organizations", column: "organization_ein", primary_key: "ein"
   add_foreign_key "allocations", "portfolios"
   add_foreign_key "cause_area_relevances", "donors"
+  add_foreign_key "contributions", "donors"
   add_foreign_key "contributions", "portfolios"
   add_foreign_key "donations", "allocations"
   add_foreign_key "donations", "contributions"

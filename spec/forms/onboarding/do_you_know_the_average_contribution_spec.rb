@@ -10,7 +10,7 @@ RSpec.describe Onboarding::DoYouKnowTheAverageContribution, type: :model do
       it "sets the Donor's #surprised_by_average_american_donation_rate to yes" do
         expect(Donors::UpdateDonor)
           .to receive(:run!)
-          .with(donor, surprised_by_average_american_donation_rate: :yes)
+          .with(donor: donor, surprised_by_average_american_donation_rate: :yes)
 
 
         step.process!('yes')
@@ -21,7 +21,7 @@ RSpec.describe Onboarding::DoYouKnowTheAverageContribution, type: :model do
       it "sets the Donor's #surprised_by_average_american_donation_rate to somewhat" do
         expect(Donors::UpdateDonor)
           .to receive(:run!)
-          .with(donor, surprised_by_average_american_donation_rate: :somewhat)
+          .with(donor: donor, surprised_by_average_american_donation_rate: :somewhat)
 
         step.process!('somewhat')
       end
@@ -31,7 +31,7 @@ RSpec.describe Onboarding::DoYouKnowTheAverageContribution, type: :model do
       it "sets the Donor's #surprised_by_average_american_donation_rate to no" do
         expect(Donors::UpdateDonor)
           .to receive(:run!)
-          .with(donor, surprised_by_average_american_donation_rate: :no)
+          .with(donor: donor, surprised_by_average_american_donation_rate: :no)
 
         step.process!('no')
       end

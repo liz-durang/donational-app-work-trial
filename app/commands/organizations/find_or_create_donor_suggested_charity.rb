@@ -1,5 +1,5 @@
 module Organizations
-  class FindOrCreateDonorSuggestedCharity < Mutations::Command
+  class FindOrCreateDonorSuggestedCharity < ApplicationCommand
     required do
       string :ein
       string :name

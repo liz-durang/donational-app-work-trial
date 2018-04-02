@@ -1,5 +1,5 @@
 module Donors
-  class UpdatePaymentMethod < Mutations::Command
+  class UpdatePaymentMethod < ApplicationCommand
     required do
       model :donor do
         string :email, empty: false
@@ -9,25 +9,21 @@ module Donors
     end
 
     def execute
-      customer = customer_by_id || create_customer || customer_by_email
-
       unless customer
         add_error(:customer, :empty, 'Customer does not exist and could not be created')
         return
       end
 
-      update_donor_with_customer_id(customer[:id])
-
-      update_card = Payments::UpdateCustomerCard.run(customer_id: customer[:id], payment_token: payment_token)
-      merge_errors(update_card.errors) unless update_card.success?
+      chain Donors::UpdateDonor.run(donor: donor, payment_processor_customer_id: customer[:id])
+      chain Payments::UpdateCustomerCard.run(customer_id: customer[:id], payment_token: payment_token)
 
       nil
     end
 
     private
 
-    def update_donor_with_customer_id(customer_id)
-      Donors::UpdateDonor.run!(donor, payment_processor_customer_id: customer_id)
+    def customer
+      @customer ||= (customer_by_id || create_customer || customer_by_email)
     end
 
     def customer_by_id

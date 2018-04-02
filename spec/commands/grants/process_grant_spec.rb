@@ -21,6 +21,7 @@ RSpec.describe Grants::ProcessGrant do
     let(:grant) do
       create(:grant, organization: organization, amount_cents: 123, processed_at: nil)
     end
+    let(:successful_command) { double(success?: true)}
 
     around do |spec|
       travel_to(Time.now) do
@@ -32,6 +33,7 @@ RSpec.describe Grants::ProcessGrant do
       expect(Checks::SendCheck)
         .to receive(:run)
         .with(organization: organization, amount_cents: 123)
+        .and_return(successful_command)
 
       command = Grants::ProcessGrant.run(grant: grant)
 

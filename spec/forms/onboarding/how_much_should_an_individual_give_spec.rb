@@ -12,7 +12,7 @@ RSpec.describe Onboarding::HowMuchShouldAnIndividualGive, type: :model do
       it "sets the Donor's #donation_rate_expected_from_individuals" do
         expect(Donors::UpdateDonor)
           .to receive(:run!)
-          .with(donor, donation_rate_expected_from_individuals: 0.035)
+          .with(donor: donor, donation_rate_expected_from_individuals: 0.035)
 
         step.process!(response)
       end

@@ -29,7 +29,7 @@ module Onboarding
     display_as :checkboxes
 
     def save
-      Donors::UpdateDonor.run!(donor, giving_challenges: response)
+      Donors::UpdateDonor.run!(donor: donor, giving_challenges: response)
     end
   end
 end

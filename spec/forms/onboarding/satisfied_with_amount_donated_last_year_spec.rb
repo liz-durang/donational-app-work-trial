@@ -10,7 +10,7 @@ RSpec.describe Onboarding::SatisfiedWithAmountDonatedLastYear, type: :model do
       it "sets the Donor's #satisfaction_with_prior_donation to satisfied" do
         expect(Donors::UpdateDonor)
           .to receive(:run!)
-          .with(donor, satisfaction_with_prior_donation: :satisfied)
+          .with(donor: donor, satisfaction_with_prior_donation: :satisfied)
 
         step.process!('satisfied')
       end
@@ -20,7 +20,7 @@ RSpec.describe Onboarding::SatisfiedWithAmountDonatedLastYear, type: :model do
       it "sets the Donor's #satisfaction_with_prior_donation to gave_too_much" do
         expect(Donors::UpdateDonor)
           .to receive(:run!)
-          .with(donor, satisfaction_with_prior_donation: :gave_too_much)
+          .with(donor: donor, satisfaction_with_prior_donation: :gave_too_much)
 
         step.process!('gave_too_much')
       end
@@ -30,7 +30,7 @@ RSpec.describe Onboarding::SatisfiedWithAmountDonatedLastYear, type: :model do
       it "sets the Donor's #satisfaction_with_prior_donation to did_not_give_enough" do
         expect(Donors::UpdateDonor)
           .to receive(:run!)
-          .with(donor, satisfaction_with_prior_donation: :did_not_give_enough)
+          .with(donor: donor, satisfaction_with_prior_donation: :did_not_give_enough)
 
         step.process!('did_not_give_enough')
       end

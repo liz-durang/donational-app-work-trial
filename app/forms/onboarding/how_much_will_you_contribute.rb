@@ -9,10 +9,10 @@ module Onboarding
 
     display_as :slider
 
-    allowed_response 0.0025, '0.1%'
+    allowed_response 0.001, '0.1%'
     allowed_response 0.0025, '0.25%'
     allowed_response 0.005, '0.5%'
-    allowed_response 0.005, '0.75%'
+    allowed_response 0.0075, '0.75%'
     allowed_response 0.01, '1%'
     allowed_response 0.015, '1.5%'
     allowed_response 0.02, '2%'
@@ -22,7 +22,7 @@ module Onboarding
     allowed_response 0.1, '10%'
 
     def save
-      Donors::UpdateDonor.run!(donor, donation_rate: response)
+      Donors::UpdateDonor.run!(donor: donor, donation_rate: response)
     end
   end
 end

@@ -16,7 +16,7 @@ module Onboarding
     # allowed_response :never, "I'm just looking"
 
     def save
-      Donors::UpdateDonor.run!(donor, contribution_frequency: response)
+      Donors::UpdateDonor.run!(donor: donor, contribution_frequency: response)
     end
   end
 end

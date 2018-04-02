@@ -1,5 +1,5 @@
 module Grants
-  class ProcessGrant < Mutations::Command
+  class ProcessGrant < ApplicationCommand
     required do
       model :grant
     end
@@ -11,7 +11,7 @@ module Grants
 
     def execute
       Grant.transaction do
-        Checks::SendCheck.run(
+        chain Checks::SendCheck.run(
           organization: grant.organization,
           amount_cents: grant.amount_cents
         )

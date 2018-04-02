@@ -12,7 +12,7 @@ RSpec.describe Onboarding::HowMuchWillYouContribute, type: :model do
       it "sets the Donor's #donation_rate" do
         expect(Donors::UpdateDonor)
           .to receive(:run!)
-          .with(donor, donation_rate: 0.005)
+          .with(donor: donor, donation_rate: 0.005)
 
         step.process!(response)
       end

@@ -12,7 +12,7 @@ module Onboarding
     display_as :text
 
     def save
-      Donors::UpdateDonor.run!(donor, first_name: response)
+      Donors::UpdateDonor.run!(donor: donor, first_name: response)
     end
 
     def prepopulated_value

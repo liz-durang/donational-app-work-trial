@@ -2,13 +2,14 @@
 #
 # Table name: portfolios
 #
-#  id                        :uuid             not null, primary key
-#  donor_id                  :uuid
-#  contribution_frequency    :string
-#  deactivated_at            :datetime
-#  created_at                :datetime         not null
-#  updated_at                :datetime         not null
-#  contribution_amount_cents :integer
+#  id                              :uuid             not null, primary key
+#  donor_id                        :uuid
+#  contribution_frequency          :string
+#  deactivated_at                  :datetime
+#  created_at                      :datetime         not null
+#  updated_at                      :datetime         not null
+#  contribution_amount_cents       :integer
+#  contribution_platform_fee_cents :integer
 #
 
 # A donor's portfolio of charities
@@ -34,7 +35,7 @@ class Portfolio < ApplicationRecord
             predicates: true
 
   def contribution_amount_dollars
-    return target_contribition_amount_dollars if contribution_amount_cents.nil?
+    return target_contribution_amount_dollars if contribution_amount_cents.nil?
 
     (contribution_amount_cents / 100).ceil
   end
@@ -43,7 +44,7 @@ class Portfolio < ApplicationRecord
     deactivated_at.blank?
   end
 
-  def target_contribition_amount_dollars
+  def target_contribution_amount_dollars
     case contribution_frequency
     when 'annually'
       target_annual_contribution_amount_dollars
@@ -59,29 +60,20 @@ class Portfolio < ApplicationRecord
   end
 
   def target_monthly_contribution_amount_dollars
-    return nil unless target_annual_contribution_amount_cents
+    return nil unless donor.target_annual_contribution_amount_cents
 
-    (target_annual_contribution_amount_cents / 12.0 / 100).ceil
+    (donor.target_annual_contribution_amount_cents / 12.0 / 100).ceil
   end
 
   def target_quarterly_contribution_amount_dollars
-    return nil unless target_annual_contribution_amount_cents
+    return nil unless donor.target_annual_contribution_amount_cents
 
-    (target_annual_contribution_amount_cents / 4.0 / 100).ceil
+    (donor.target_annual_contribution_amount_cents / 4.0 / 100).ceil
   end
 
   def target_annual_contribution_amount_dollars
-    return nil unless target_annual_contribution_amount_cents
+    return nil unless donor.target_annual_contribution_amount_cents
 
-    (target_annual_contribution_amount_cents / 100.0).ceil
-  end
-
-  private
-
-  def target_annual_contribution_amount_cents
-    return nil unless donor.annual_income_cents
-    return nil unless donor.donation_rate
-
-    donor.donation_rate * donor.annual_income_cents
+    (donor.target_annual_contribution_amount_cents / 100.0).ceil
   end
 end

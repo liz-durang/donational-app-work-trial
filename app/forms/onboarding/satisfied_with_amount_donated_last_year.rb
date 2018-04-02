@@ -11,7 +11,7 @@ module Onboarding
     display_as :radio_buttons
 
     def save
-      Donors::UpdateDonor.run!(donor, satisfaction_with_prior_donation: response)
+      Donors::UpdateDonor.run!(donor: donor, satisfaction_with_prior_donation: response)
     end
 
     follow_up_message -> (response) do

@@ -1,5 +1,5 @@
 module Contributions
-  class ScheduleContribution < Mutations::Command
+  class ScheduleContribution < ApplicationCommand
     required do
       model :portfolio
       time :scheduled_at, after: Time.zone.now

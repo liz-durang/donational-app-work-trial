@@ -12,7 +12,7 @@ RSpec.describe Onboarding::WhatIsYourPreTaxIncome, type: :model do
       it "sets the Donor's #annual_income_cents" do
         expect(Donors::UpdateDonor)
           .to receive(:run!)
-          .with(donor, annual_income_cents: 78_518_52)
+          .with(donor: donor, annual_income_cents: 78_518_52)
 
         step.process!(response)
       end

@@ -13,7 +13,7 @@ module Onboarding
     allowed_response :broad, "Many charities"
 
     def save
-      Donors::UpdateDonor.run!(donor, portfolio_diversity: response)
+      Donors::UpdateDonor.run!(donor: donor, portfolio_diversity: response)
     end
   end
 end

@@ -10,7 +10,7 @@ RSpec.describe Onboarding::DidYouDonateLastYear, type: :model do
       it "sets the Donor's #donated_prior_year to true" do
         expect(Donors::UpdateDonor)
           .to receive(:run!)
-          .with(donor, donated_prior_year: true)
+          .with(donor: donor, donated_prior_year: true)
 
         step.process!('yes')
       end
@@ -20,7 +20,7 @@ RSpec.describe Onboarding::DidYouDonateLastYear, type: :model do
       it "sets the Donor's #donated_prior_year to false" do
         expect(Donors::UpdateDonor)
           .to receive(:run!)
-          .with(donor, donated_prior_year: false)
+          .with(donor: donor, donated_prior_year: false)
 
         step.process!('no')
       end

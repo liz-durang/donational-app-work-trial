@@ -1,7 +1,7 @@
 require 'panda_pay'
 
 module Payments
-  class UpdateCustomerCard < Mutations::Command
+  class UpdateCustomerCard < ApplicationCommand
     required do
       string :customer_id
       string :payment_token
