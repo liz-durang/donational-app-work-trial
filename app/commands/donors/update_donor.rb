@@ -1,3 +1,6 @@
+require Rails.root.join('lib','mutations','symbol_filter')
+require Rails.root.join('lib','mutations','decimal_filter')
+
 module Donors
   class UpdateDonor < ApplicationCommand
     required do
@@ -8,7 +11,7 @@ module Donors
       string :first_name
       string :last_name
       string :email
-      float :donation_rate
+      decimal :donation_rate
       integer :annual_income_cents
       boolean :donated_prior_year
       boolean :include_local_organizations
@@ -20,7 +23,7 @@ module Donors
       array :giving_challenges
       array :reasons_why_i_choose_an_organization
       string :contribution_frequency
-      integer :portfolio_diversity
+      symbol :portfolio_diversity
     end
 
     def execute

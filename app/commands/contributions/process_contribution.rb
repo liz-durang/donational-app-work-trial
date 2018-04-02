@@ -12,11 +12,12 @@ module Contributions
     def execute
       Contribution.transaction do
         payment = chain Payments::ChargeCustomer.run(
-          customer_id: payment_method,
+          customer_id: payment_method.customer_id,
           email: contribution.donor.email,
           donation_amount_cents: contribution.amount_cents,
           platform_fee_cents: contribution.platform_fee_cents
         )
+
         return payment_failed! unless payment.success?
 
         chain Analytics::TrackEvent.run(
@@ -68,7 +69,7 @@ module Contributions
       add_error(
         :contribution,
         :payment_failed,
-        "Could not charge customer '#{payment_method}'"
+        "Could not charge customer '#{payment_method.customer_id}'"
       )
       nil
     end

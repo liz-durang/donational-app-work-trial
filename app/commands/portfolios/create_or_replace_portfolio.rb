@@ -1,5 +1,3 @@
-require Rails.root.join('lib','mutations','decimal_filter')
-
 module Portfolios
   class CreateOrReplacePortfolio < ApplicationCommand
     required do
