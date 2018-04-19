@@ -117,7 +117,7 @@ javascript:
     for (var i = 1; i < table.rows.length; i++) {
       if (table.rows[i].cells.length) {
         charities += table.rows[i].cells[0].textContent.trim() + ",";
-        charities += table.rows[i].cells[1].textContent.trim() + "|";
+        charities += table.rows[i].cells[1].textContent.trim() + ";";
       }
     }
     document.getElementById('charities').value = charities;

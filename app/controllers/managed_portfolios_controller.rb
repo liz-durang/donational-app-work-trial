@@ -63,6 +63,6 @@ class ManagedPortfoliosController < ApplicationController
   end
 
   def organizations
-    params[:charities].split('|')
+    params[:charities].split(';')
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_07_171055) do
+ActiveRecord::Schema.define(version: 2018_08_13_185606) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -178,7 +178,6 @@ ActiveRecord::Schema.define(version: 2018_08_07_171055) do
     t.boolean "global_impact"
     t.boolean "immediate_impact"
     t.boolean "long_term_impact"
-    t.text "description"
     t.string "cause_area"
     t.datetime "deactivated_at"
     t.text "mission"
@@ -191,6 +190,8 @@ ActiveRecord::Schema.define(version: 2018_08_07_171055) do
     t.string "form_990_url"
     t.string "recommended_by", default: [], array: true
     t.uuid "suggested_by_donor_id"
+    t.string "program_restriction"
+    t.string "routing_organization_name"
     t.index ["ein"], name: "index_organizations_on_ein", unique: true
   end
 

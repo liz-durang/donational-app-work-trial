@@ -12,7 +12,6 @@ module Organizations
             ein: row['ein'],
             name: row['name'],
             cause_area: row['cause_area'],
-            description: row['description'],
             why_you_should_care: row['why_you_should_care'],
             mission: row['mission'],
             context: row['context'],

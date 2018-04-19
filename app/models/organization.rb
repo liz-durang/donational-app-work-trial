@@ -2,27 +2,28 @@
 #
 # Table name: organizations
 #
-#  ein                   :string           not null, primary key
-#  name                  :string
-#  created_at            :datetime         not null
-#  updated_at            :datetime         not null
-#  local_impact          :boolean
-#  global_impact         :boolean
-#  immediate_impact      :boolean
-#  long_term_impact      :boolean
-#  description           :text
-#  cause_area            :string
-#  deactivated_at        :datetime
-#  mission               :text
-#  context               :text
-#  impact                :text
-#  why_you_should_care   :text
-#  website_url           :string
-#  annual_report_url     :string
-#  financials_url        :string
-#  form_990_url          :string
-#  recommended_by        :string           default([]), is an Array
-#  suggested_by_donor_id :uuid
+#  ein                       :string           not null, primary key
+#  name                      :string
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
+#  local_impact              :boolean
+#  global_impact             :boolean
+#  immediate_impact          :boolean
+#  long_term_impact          :boolean
+#  cause_area                :string
+#  deactivated_at            :datetime
+#  mission                   :text
+#  context                   :text
+#  impact                    :text
+#  why_you_should_care       :text
+#  website_url               :string
+#  annual_report_url         :string
+#  financials_url            :string
+#  form_990_url              :string
+#  recommended_by            :string           default([]), is an Array
+#  suggested_by_donor_id     :uuid
+#  program_restriction       :string
+#  routing_organization_name :string
 #
 
 # A charity of non-profit organization
@@ -37,6 +38,7 @@ class Organization < ApplicationRecord
   validates :ein, presence: true
   validates :name, presence: true
 
+  EIN_ROUTING_SEPARATOR = '|'
   CAUSE_AREAS = %w(
     global_health
     poverty_and_income_inequality
@@ -64,6 +66,16 @@ class Organization < ApplicationRecord
 
   def suggested_by_donor?
     suggested_by_donor.present?
+  end
+
+  # Some organizations don't have tax-deductible status, but can
+  # accept funding routed via another organization
+  def grants_routed_via_another_organization?
+    ein.include?(EIN_ROUTING_SEPARATOR)
+  end
+
+  def displayable_ein
+    ein.include?(EIN_ROUTING_SEPARATOR)
   end
 
   def cause_area
