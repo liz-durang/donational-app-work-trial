@@ -14,7 +14,7 @@ module Onboarding
       when :yes
         "That's great!"
       when :no
-        "That's okay, now is the perfect time to start."
+        "That's ok, now is the perfect time to start!"
       end
     end
 

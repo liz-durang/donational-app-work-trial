@@ -1,11 +1,15 @@
 nav.navbar role="navigation" aria-label="main dropdown navigation"
   .container
     .navbar-brand
-      .navbar-item
-        h1.title.is-5: a href="/" Donational
       button.button.navbar-burger.is-white data-target="navMenu"
         span
         span
         span
+      .navbar-item
+        h1.title.is-5: a href="/" Donational
     div#navMenu.navbar-menu
+      .navbar-start
+        a.navbar-item href=organizations_path Charities
+        a.navbar-item href=faq_path About
+        a.navbar-item href=api_path API
       .navbar-end = render 'shared/user_nav'
