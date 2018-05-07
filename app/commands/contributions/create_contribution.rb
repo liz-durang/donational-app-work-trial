@@ -3,11 +3,11 @@ module Contributions
     required do
       model :portfolio
       model :donor
-      integer :amount_cents
+      integer :amount_cents, min: 100
     end
 
     optional do
-      integer :platform_fee_cents
+      integer :platform_fee_cents, min: 0, default: 0
     end
 
     def execute

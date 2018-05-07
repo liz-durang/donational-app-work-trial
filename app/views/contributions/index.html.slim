@@ -46,7 +46,7 @@ section.section
               td.has-text-right
                 em = number_to_currency(donation.amount_cents / 100.0)
               td &nbsp;
-          - if contribution.platform_fee_cents
+          - if contribution.platform_fee_cents > 0
             tr.is-hidden data-accordion-panel-for="contribution-#{contribution.id}"
               td.has-text-right colspan=2
                 em Tip to Donational

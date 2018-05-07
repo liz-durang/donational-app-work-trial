@@ -14,26 +14,27 @@ class ContributionsController < ApplicationController
   end
 
   def create
-    save_donor_credit_card portfolio_params[:payment_token]
+    save_card_command = save_donor_credit_card(portfolio_params[:payment_token])
 
-    redirect_to new_contribution_path and return unless active_payment_method?
-
-    amount_dollars = portfolio_params[:contribution_amount_dollars].to_i
+    unless active_payment_method?
+      redirect_to new_contribution_path, alert: save_card_command.errors.message_list.join(' ')
+      return
+    end
 
     Contributions::CreateContribution.run!(
       donor: current_donor,
       portfolio: active_portfolio,
-      amount_cents: amount_dollars * 100,
-      platform_fee_cents: portfolio_params[:contribution_platform_fee_cents]
+      amount_cents: contribution_amount_cents,
+      platform_fee_cents: platform_fee_cents
     )
 
     active_portfolio.update(
       contribution_frequency: portfolio_params[:contribution_frequency],
-      contribution_amount_cents: amount_dollars * 100,
-      contribution_platform_fee_cents: portfolio_params[:contribution_platform_fee_cents]
+      contribution_amount_cents: contribution_amount_cents,
+      contribution_platform_fee_cents: platform_fee_cents
     )
 
-    track_analytics_event_via_browser('Goal: Donation', { revenue: amount_dollars })
+    track_analytics_event_via_browser('Goal: Donation', { revenue: contribution_amount_dollars })
 
     redirect_to contributions_path
   end
@@ -64,5 +65,17 @@ class ContributionsController < ApplicationController
 
   def portfolio_params
     params[:portfolio]
+  end
+
+  def contribution_amount_cents
+    contribution_amount_dollars * 100
+  end
+
+  def platform_fee_cents
+    portfolio_params[:contribution_platform_fee_cents].to_i
+  end
+
+  def contribution_amount_dollars
+    portfolio_params[:contribution_amount_dollars].to_i
   end
 end
