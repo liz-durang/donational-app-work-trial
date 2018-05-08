@@ -43,6 +43,16 @@ class RecurringContribution < ApplicationRecord
     end
   end
 
+  def amount_dollars
+    return target_amount_dollars if amount_cents.nil?
+
+    (amount_cents / 100).ceil
+  end
+
+  def target_amount_dollars
+    (Contributions::GetTargetContributionAmountCents.call(donor: donor, frequency: frequency) / 100).ceil
+  end
+
   private
 
   def next_15th_of_the_month_after(date)

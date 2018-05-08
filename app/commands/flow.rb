@@ -16,4 +16,9 @@ class Flow < ApplicationCommand
   def execute
     true
   end
+
+  def chain_if(condition, &operation)
+    chain(&operation) if condition
+    self
+  end
 end

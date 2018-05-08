@@ -24,7 +24,7 @@ module Contributions
           frequency: frequency,
           start_at: start_at || Time.zone.now,
           amount_cents: amount_cents,
-          platform_fee_cents: platform_fee_cents,
+          platform_fee_cents: platform_fee_cents
         )
       end
 

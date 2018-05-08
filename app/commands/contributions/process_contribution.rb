@@ -12,25 +12,26 @@ module Contributions
     def execute
       Contribution.transaction do
         payment = Payments::ChargeCustomer.run(
-            customer_id: payment_method.customer_id,
-            email: contribution.donor.email,
-            donation_amount_cents: contribution.amount_cents,
-            platform_fee_cents: contribution.platform_fee_cents
-          )
+          customer_id: payment_method.customer_id,
+          email: contribution.donor.email,
+          donation_amount_cents: contribution.amount_cents,
+          platform_fee_cents: contribution.platform_fee_cents
+        )
 
         return payment_failed! unless payment.success?
 
-        chain do
-          Analytics::TrackEvent.run(
-            user_id: contribution.donor.id,
-            event: 'Donation processed',
-            traits: { revenue: contribution.amount_dollars, tip_dollars: contribution.platform_fee_cents / 100 }
-          )
-        end
-
         contribution.update!(receipt: payment.result, processed_at: Time.zone.now)
+      end
+
+      Donation.transaction do
         create_donations_based_on_active_allocations
       end
+
+      Analytics::TrackEvent.run(
+        user_id: contribution.donor.id,
+        event: 'Donation processed',
+        traits: { revenue: contribution.amount_dollars, tip_dollars: contribution.platform_fee_cents / 100 }
+      )
 
       nil
     end
@@ -68,11 +69,8 @@ module Contributions
     end
 
     def payment_failed!
-      add_error(
-        :contribution,
-        :payment_failed,
-        "Could not charge customer '#{payment_method.customer_id}'"
-      )
+      add_error(:contribution, :payment_failed, "Could not charge customer '#{payment_method.customer_id}'")
+
       nil
     end
 
