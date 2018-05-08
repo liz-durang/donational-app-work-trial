@@ -73,7 +73,7 @@ section.section.embossed
         },
         templates: {
           item: document.getElementById('hit_template').innerHTML,
-          empty: "no results"//document.getElementById(id + 'no_results_template').innerHTML
+          empty: 'no results'
         },
         transformData: function(result) {
           result.formattedEin = result.ein.toString().substring(0, 2) + '-' + result.ein.toString().substring(2, 9);

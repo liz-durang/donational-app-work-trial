@@ -28,7 +28,6 @@ gem 'uglifier', '>= 1.3.0'
 gem 'slim-rails'
 
 source 'https://rails-assets.org' do
-  gem 'rails-assets-loadjs'
   gem 'rails-assets-bulma'
 end
 

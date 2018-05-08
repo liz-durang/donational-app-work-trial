@@ -171,7 +171,6 @@ GEM
       railties (= 5.1.6)
       sprockets-rails (>= 2.0.0)
     rails-assets-bulma (0.6.2)
-    rails-assets-loadjs (3.5.4)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
@@ -307,7 +306,6 @@ DEPENDENCIES
   puma (~> 3.0)
   rails (~> 5.1.0)
   rails-assets-bulma!
-  rails-assets-loadjs!
   redis (~> 3.3.3)
   rest-client
   rspec-rails
