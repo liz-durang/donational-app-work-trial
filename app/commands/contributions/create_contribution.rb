@@ -19,7 +19,7 @@ module Contributions
         scheduled_at: Time.now
       )
 
-      chain ProcessContribution.run(contribution: contribution)
+      chain { ProcessContribution.run(contribution: contribution) }
 
       nil
     end

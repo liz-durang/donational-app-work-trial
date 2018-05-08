@@ -6,11 +6,9 @@ module Allocations
     end
 
     def execute
-      allocations_for_new_organizations = organization_eins.map do |ein|
-        { organization_ein: ein, percentage: target_percentage }
-      end
-
-      new_allocations = adjust_to_ensure_100_percent(scaled_existing_allocations + allocations_for_new_organizations)
+      new_allocations = adjust_to_ensure_100_percent(
+        scaled_existing_allocations + allocations_for_new_organizations
+      )
 
       if new_allocations.any? { |a| a[:percentage] < 1 }
         add_error(
@@ -18,14 +16,23 @@ module Allocations
           :balancing_would_remove_organization,
           'Balancing would remove organization from portfolio'
         )
-      else
-        chain UpdateAllocations.run(portfolio: portfolio, allocations: new_allocations)
+        return nil
+      end
+
+      chain do
+        UpdateAllocations.run(portfolio: portfolio, allocations: new_allocations)
       end
 
       nil
     end
 
     private
+
+    def allocations_for_new_organizations
+      organization_eins.map do |ein|
+        { organization_ein: ein, percentage: target_percentage }
+      end
+    end
 
     def existing_allocations
       @existing_allocations ||= Allocations::GetActiveAllocations.call(portfolio: portfolio)

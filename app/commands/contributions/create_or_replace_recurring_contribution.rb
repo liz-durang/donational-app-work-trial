@@ -27,6 +27,7 @@ module Contributions
           platform_fee_cents: platform_fee_cents,
         )
       end
+
       nil
     end
 

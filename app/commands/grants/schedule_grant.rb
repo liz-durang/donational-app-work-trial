@@ -16,7 +16,9 @@ module Grants
         )
 
         unpaid_donations.each do |donation|
-          chain Donations::MarkDonationAsProcessed.run(donation: donation, processed_by: grant)
+          chain do
+            Donations::MarkDonationAsProcessed.run(donation: donation, processed_by: grant)
+          end
         end
       end
 

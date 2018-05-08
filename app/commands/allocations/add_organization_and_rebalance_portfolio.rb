@@ -6,10 +6,12 @@ module Allocations
     end
 
     def execute
-      chain AddOrganizationsAndRebalancePortfolio.run(
-        portfolio: portfolio,
-        organization_eins: [organization.ein]
-      )
+      chain do
+        AddOrganizationsAndRebalancePortfolio.run(
+          portfolio: portfolio,
+          organization_eins: [organization.ein]
+        )
+      end
 
       nil
     end

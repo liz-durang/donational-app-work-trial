@@ -11,10 +11,12 @@ module Grants
 
     def execute
       Grant.transaction do
-        chain Checks::SendCheck.run(
-          organization: grant.organization,
-          amount_cents: grant.amount_cents
-        )
+        chain do
+          Checks::SendCheck.run(
+            organization: grant.organization,
+            amount_cents: grant.amount_cents
+          )
+        end
 
         grant.update!(processed_at: Time.zone.now)
       end

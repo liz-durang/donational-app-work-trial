@@ -12,19 +12,18 @@ class PortfoliosController < ApplicationController
   end
 
   def create
-    new_portfolio_command = Portfolios::CreateOrReplacePortfolio.run(
-      donor: current_donor,
-      contribution_frequency: current_donor.contribution_frequency
-    )
+    new_allocations = params[:allocations].values
 
-    if new_portfolio_command.success?
-      update_allocations_command = Allocations::UpdateAllocations.run(
-        portfolio: active_portfolio,
-        allocations: params[:allocations].values
-      )
+    outcome = Flow.new
+      .chain { Portfolios::CreateOrReplacePortfolio.run(donor: current_donor) }
+      .chain { Allocations::UpdateAllocations.run(portfolio: active_portfolio, allocations: new_allocations) }
+      .run
+
+    if outcome.success?
+      redirect_to portfolio_path
+    else
+      redirect_to new_portfolio_path, alert: outcome.errors.message_list.join(' ')
     end
-
-    redirect_to portfolio_path
   end
 
   def show

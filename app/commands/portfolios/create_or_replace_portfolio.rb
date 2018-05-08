@@ -2,22 +2,14 @@ module Portfolios
   class CreateOrReplacePortfolio < ApplicationCommand
     required do
       model :donor
-      string :contribution_frequency, default: 'once'
-    end
-
-    optional do
-      integer :contribution_amount_cents, min: 0
     end
 
     def execute
       Portfolio.transaction do
         deactivate_existing_portfolios!
-        Portfolio.create!(
-          donor: donor,
-          contribution_frequency: contribution_frequency,
-          contribution_amount_cents: contribution_amount_cents
-        )
+        Portfolio.create!(donor: donor)
       end
+
       nil
     end
 
