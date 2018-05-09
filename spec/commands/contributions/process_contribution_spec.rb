@@ -68,7 +68,7 @@ RSpec.describe Contributions::ProcessContribution do
     end
 
     around do |spec|
-      travel_to(Time.now) do
+      travel_to(Time.zone.now.change(usec: 0)) do
         spec.run
       end
     end
@@ -81,12 +81,13 @@ RSpec.describe Contributions::ProcessContribution do
         expect(Payments::ChargeCustomer).to receive(:run).and_return(unsuccessful_charge)
       end
 
-      it 'leaves the contribution as unprocessed' do
+      it 'marks the contribution as failed and unprocessed' do
         command = Contributions::ProcessContribution.run(contribution: contribution)
 
         expect(command).not_to be_success
 
         expect(contribution.processed_at).to be nil
+        expect(contribution.failed_at).to eq Time.zone.now
       end
 
       it 'does not track an analytics event' do
@@ -114,7 +115,8 @@ RSpec.describe Contributions::ProcessContribution do
 
         contribution.reload
         expect(contribution.receipt).to eq '{ "some": "receipt" }'
-        expect(contribution.processed_at).to eq Time.zone.now.change(usec: 0)
+        expect(contribution.processed_at).to eq Time.zone.now
+        expect(contribution.failed_at).to be nil
       end
 
       it "creates donations based on the donor's allocations" do

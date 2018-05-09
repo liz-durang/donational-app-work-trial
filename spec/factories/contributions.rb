@@ -12,6 +12,7 @@
 #  processed_at       :datetime
 #  platform_fee_cents :integer          default(0)
 #  donor_id           :uuid
+#  failed_at          :datetime
 #
 
 FactoryBot.define do

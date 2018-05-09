@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180507201512) do
+ActiveRecord::Schema.define(version: 20180509191629) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 20180507201512) do
     t.datetime "processed_at"
     t.integer "platform_fee_cents", default: 0
     t.uuid "donor_id"
+    t.datetime "failed_at"
     t.index ["donor_id"], name: "index_contributions_on_donor_id"
     t.index ["portfolio_id"], name: "index_contributions_on_portfolio_id"
   end
