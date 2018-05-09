@@ -74,7 +74,7 @@ RSpec.describe Contributions::ProcessContribution do
     end
 
     context 'and the payment is unsuccessful' do
-      let(:charge_errors) { { some: :error } }
+      let(:charge_errors) { double(to_json: 'errors_as_json') }
       let(:unsuccessful_charge) { double(success?: false, errors: charge_errors) }
 
       before do
@@ -88,6 +88,7 @@ RSpec.describe Contributions::ProcessContribution do
 
         expect(contribution.processed_at).to be nil
         expect(contribution.failed_at).to eq Time.zone.now
+        expect(contribution.receipt).to eq 'errors_as_json'
       end
 
       it 'does not track an analytics event' do

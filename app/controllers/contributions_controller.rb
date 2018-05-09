@@ -16,38 +16,50 @@ class ContributionsController < ApplicationController
 
   def create
     pipeline = Flow.new
-      .chain_if(payment_token.present?) {
-        Donors::UpdatePaymentMethod.run(donor: current_donor, payment_token: payment_token)
-      }
-      .chain_if(frequency.in?(RecurringContribution.frequency.values)) {
-        Contributions::CreateOrReplaceRecurringContribution.run(
-          donor: current_donor,
-          portfolio: active_portfolio,
-          frequency: frequency,
-          amount_cents: amount_cents,
-          platform_fee_cents: platform_fee_cents
-        )
-      }
-      .chain { # TODO: Can we combine one-time and recurring into a ScheduledContribution?
-        Contributions::ScheduleContribution.run(
-          donor: current_donor,
-          portfolio: active_portfolio,
-          amount_cents: amount_cents,
-          platform_fee_cents: platform_fee_cents,
-          scheduled_at: Time.zone.now
-        )
-      }
-      .run
+    pipeline.chain { update_donor_payment_method! } if payment_token.present?
+    pipeline.chain { update_recurring_contribution! } if frequency.in?(RecurringContribution.frequency.values)
+    pipeline.chain { schedule_first_contribution_immediately! }
 
-    if pipeline.success?
+    new_unprocessed_contributions = Contributions::GetUnprocessedContributions.call(donor: current_donor)
+    new_unprocessed_contributions.each do |c|
+      pipeline.chain { Contributions::ProcessContribution.run(contribution: c) }
+    end
+
+    outcome = pipeline.run
+
+    if outcome.success?
       track_analytics_event_via_browser('Goal: Donation', { revenue: amount_dollars })
       redirect_to contributions_path
     else
-      redirect_to new_contribution_path, alert: outcome.errors.message_list.join('')
+      redirect_to new_contribution_path, alert: outcome.errors.message_list.join('\n')
     end
   end
 
   private
+
+  def update_donor_payment_method!
+    Donors::UpdatePaymentMethod.run(donor: current_donor, payment_token: payment_token)
+  end
+
+  def update_recurring_contribution!
+    Contributions::CreateOrReplaceRecurringContribution.run(
+      donor: current_donor,
+      portfolio: active_portfolio,
+      frequency: frequency,
+      amount_cents: amount_cents,
+      platform_fee_cents: platform_fee_cents
+    )
+  end
+
+  def schedule_first_contribution_immediately!
+    Contributions::ScheduleContribution.run(
+      donor: current_donor,
+      portfolio: active_portfolio,
+      amount_cents: amount_cents,
+      platform_fee_cents: platform_fee_cents,
+      scheduled_at: Time.zone.now
+    )
+  end
 
   def active_payment_method?
     payment_method.present?

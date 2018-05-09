@@ -18,7 +18,7 @@ module Contributions
       )
 
       unless payment.success?
-        contribution.update(failed_at: Time.zone.now)
+        contribution.update(failed_at: Time.zone.now, receipt: payment.errors.to_json)
         payment_failed!
         return
       end
