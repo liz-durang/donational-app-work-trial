@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180320075532) do
+ActiveRecord::Schema.define(version: 20180509191629) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 20180320075532) do
     t.datetime "processed_at"
     t.integer "platform_fee_cents", default: 0
     t.uuid "donor_id"
+    t.datetime "failed_at"
     t.index ["donor_id"], name: "index_contributions_on_donor_id"
     t.index ["portfolio_id"], name: "index_contributions_on_portfolio_id"
   end
@@ -148,6 +149,21 @@ ActiveRecord::Schema.define(version: 20180320075532) do
     t.index ["donor_id"], name: "index_portfolios_on_donor_id"
   end
 
+  create_table "recurring_contributions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "donor_id"
+    t.uuid "portfolio_id"
+    t.datetime "start_at", null: false
+    t.datetime "deactivated_at"
+    t.string "frequency"
+    t.integer "amount_cents"
+    t.integer "platform_fee_cents", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deactivated_at"], name: "index_recurring_contributions_on_deactivated_at"
+    t.index ["donor_id"], name: "index_recurring_contributions_on_donor_id"
+    t.index ["portfolio_id"], name: "index_recurring_contributions_on_portfolio_id"
+  end
+
   add_foreign_key "allocations", "organizations", column: "organization_ein", primary_key: "ein"
   add_foreign_key "allocations", "portfolios"
   add_foreign_key "cause_area_relevances", "donors"
@@ -161,4 +177,6 @@ ActiveRecord::Schema.define(version: 20180320075532) do
   add_foreign_key "grants", "organizations", column: "organization_ein", primary_key: "ein"
   add_foreign_key "organizations", "donors", column: "suggested_by_donor_id"
   add_foreign_key "portfolios", "donors"
+  add_foreign_key "recurring_contributions", "donors"
+  add_foreign_key "recurring_contributions", "portfolios"
 end

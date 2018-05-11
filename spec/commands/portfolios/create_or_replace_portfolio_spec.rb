@@ -2,16 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Portfolios::CreateOrReplacePortfolio do
   subject do
-    Portfolios::CreateOrReplacePortfolio.run(portfolio_params)
+    Portfolios::CreateOrReplacePortfolio.run(donor: donor)
   end
 
-  let(:portfolio_params) do
-    {
-      donor: donor,
-      contribution_amount_cents: 8000,
-      contribution_frequency: :monthly
-    }
-  end
   let(:other_donor) { create(:donor) }
   let(:donor) { create(:donor) }
 
@@ -22,8 +15,6 @@ RSpec.describe Portfolios::CreateOrReplacePortfolio do
       portfolio = Portfolios::GetActivePortfolio.call(donor: donor)
 
       expect(portfolio).to be_active
-      expect(portfolio.contribution_amount_cents).to eq 8000
-      expect(portfolio.contribution_frequency).to eq 'monthly'
     end
   end
 
@@ -47,8 +38,6 @@ RSpec.describe Portfolios::CreateOrReplacePortfolio do
 
       portfolio = Portfolios::GetActivePortfolio.call(donor: donor)
       expect(portfolio).to be_active
-      expect(portfolio.donor).to eq donor
-      expect(portfolio.contribution_amount_cents).to eq 8000
     end
   end
 end

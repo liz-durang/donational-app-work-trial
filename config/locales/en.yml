@@ -21,3 +21,10 @@
 
 en:
   hello: "Hello world"
+  enumerize:
+    recurring_contribution:
+      frequency:
+        monthly: 'Monthly'
+        quarterly: 'Every quarter'
+        annually: 'Yearly'
+        once: 'One-time'

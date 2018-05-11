@@ -10,43 +10,54 @@ class ContributionsController < ApplicationController
 
   def new
     active_portfolio
+    active_recurring_contribution
     payment_method
   end
 
   def create
-    save_card_command = save_donor_credit_card(portfolio_params[:payment_token])
+    pipeline = Flow.new
+    pipeline.chain { update_donor_payment_method! } if payment_token.present?
+    pipeline.chain { update_recurring_contribution! } if frequency.in?(RecurringContribution.frequency.values)
+    pipeline.chain { schedule_first_contribution_immediately! }
 
-    unless active_payment_method?
-      redirect_to new_contribution_path, alert: save_card_command.errors.message_list.join(' ')
-      return
+    new_unprocessed_contributions = Contributions::GetUnprocessedContributions.call(donor: current_donor)
+    new_unprocessed_contributions.each do |c|
+      pipeline.chain { Contributions::ProcessContribution.run(contribution: c) }
     end
 
-    Contributions::CreateContribution.run!(
-      donor: current_donor,
-      portfolio: active_portfolio,
-      amount_cents: contribution_amount_cents,
-      platform_fee_cents: platform_fee_cents
-    )
+    outcome = pipeline.run
 
-    active_portfolio.update(
-      contribution_frequency: portfolio_params[:contribution_frequency],
-      contribution_amount_cents: contribution_amount_cents,
-      contribution_platform_fee_cents: platform_fee_cents
-    )
-
-    track_analytics_event_via_browser('Goal: Donation', { revenue: contribution_amount_dollars })
-
-    redirect_to contributions_path
+    if outcome.success?
+      track_analytics_event_via_browser('Goal: Donation', { revenue: amount_dollars })
+      redirect_to contributions_path
+    else
+      redirect_to new_contribution_path, alert: outcome.errors.message_list.join('\n')
+    end
   end
 
   private
 
-  def save_donor_credit_card(token)
-    return unless token.present?
+  def update_donor_payment_method!
+    Donors::UpdatePaymentMethod.run(donor: current_donor, payment_token: payment_token)
+  end
 
-    Donors::UpdatePaymentMethod.run(
+  def update_recurring_contribution!
+    Contributions::CreateOrReplaceRecurringContribution.run(
       donor: current_donor,
-      payment_token: token
+      portfolio: active_portfolio,
+      frequency: frequency,
+      amount_cents: amount_cents,
+      platform_fee_cents: platform_fee_cents
+    )
+  end
+
+  def schedule_first_contribution_immediately!
+    Contributions::ScheduleContribution.run(
+      donor: current_donor,
+      portfolio: active_portfolio,
+      amount_cents: amount_cents,
+      platform_fee_cents: platform_fee_cents,
+      scheduled_at: Time.zone.now
     )
   end
 
@@ -63,19 +74,37 @@ class ContributionsController < ApplicationController
     @active_portfolio ||= Portfolios::GetActivePortfolio.call(donor: current_donor)
   end
 
-  def portfolio_params
-    params[:portfolio]
+  def active_recurring_contribution
+    @active_recurring_contribution ||= begin
+      Contributions::GetActiveRecurringContribution.call(donor: current_donor) || new_recurring_donation
+    end
   end
 
-  def contribution_amount_cents
-    contribution_amount_dollars * 100
+  def new_recurring_donation
+    RecurringContribution.new(
+      donor: current_donor,
+      portfolio: active_portfolio,
+      frequency: current_donor.contribution_frequency
+    )
+  end
+
+  def amount_cents
+    amount_dollars * 100
   end
 
   def platform_fee_cents
-    portfolio_params[:contribution_platform_fee_cents].to_i
+    params[:recurring_contribution][:platform_fee_cents].to_i
   end
 
-  def contribution_amount_dollars
-    portfolio_params[:contribution_amount_dollars].to_i
+  def amount_dollars
+    params[:recurring_contribution][:amount_dollars].to_i
+  end
+
+  def payment_token
+    params[:recurring_contribution][:payment_token]
+  end
+
+  def frequency
+    params[:recurring_contribution][:frequency]
   end
 end

@@ -23,6 +23,7 @@ section.section.embossed
     .content
       .columns.is-centered
         .column.is-6
+          = display_flash_messages
           h3 What's next?
 
           ol
@@ -30,7 +31,7 @@ section.section.embossed
             li Make edits to the portfolio allocation of each charity
             li Make a donation
           hr
-          = form_with scope: 'allocations', url: portfolio_path, action: :post, class: 'form' do |f|
+          = form_with scope: 'allocations', url: portfolio_path, action: :post, local: true, class: 'form' do |f|
             - @portfolio.allocations.each_with_index do |allocation, index|
                 = f.fields index.to_s, model: allocation do |allocation_form|
                   = allocation_form.hidden_field :organization_ein

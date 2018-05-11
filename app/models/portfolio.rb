@@ -34,46 +34,7 @@ class Portfolio < ApplicationRecord
             in: %w[once monthly quarterly annually never],
             predicates: true
 
-  def contribution_amount_dollars
-    return target_contribution_amount_dollars if contribution_amount_cents.nil?
-
-    (contribution_amount_cents / 100).ceil
-  end
-
   def active?
     deactivated_at.blank?
-  end
-
-  def target_contribution_amount_dollars
-    case contribution_frequency
-    when 'annually'
-      target_annual_contribution_amount_dollars
-    when 'quarterly'
-      target_quarterly_contribution_amount_dollars
-    when 'monthly'
-      target_monthly_contribution_amount_dollars
-    when 'once'
-      target_monthly_contribution_amount_dollars
-    else
-      nil
-    end
-  end
-
-  def target_monthly_contribution_amount_dollars
-    return nil unless donor.target_annual_contribution_amount_cents
-
-    (donor.target_annual_contribution_amount_cents / 12.0 / 100).ceil
-  end
-
-  def target_quarterly_contribution_amount_dollars
-    return nil unless donor.target_annual_contribution_amount_cents
-
-    (donor.target_annual_contribution_amount_cents / 4.0 / 100).ceil
-  end
-
-  def target_annual_contribution_amount_dollars
-    return nil unless donor.target_annual_contribution_amount_cents
-
-    (donor.target_annual_contribution_amount_cents / 100.0).ceil
   end
 end

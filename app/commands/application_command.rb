@@ -1,7 +1,10 @@
 class ApplicationCommand < Mutations::Command
-  def chain(other_command)
-    merge_errors(other_command.errors) unless other_command.success?
+  def chain(&other_operation)
+    return if has_errors?
 
-    other_command
+    chained_outcome = other_operation.call
+    merge_errors(chained_outcome.errors) unless chained_outcome.success?
+
+    self
   end
 end

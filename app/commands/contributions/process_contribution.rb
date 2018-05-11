@@ -10,25 +10,23 @@ module Contributions
     end
 
     def execute
-      Contribution.transaction do
-        payment = chain Payments::ChargeCustomer.run(
-          customer_id: payment_method.customer_id,
-          email: contribution.donor.email,
-          donation_amount_cents: contribution.amount_cents,
-          platform_fee_cents: contribution.platform_fee_cents
-        )
+      payment = Payments::ChargeCustomer.run(
+        customer_id: payment_method.customer_id,
+        email: contribution.donor.email,
+        donation_amount_cents: contribution.amount_cents,
+        platform_fee_cents: contribution.platform_fee_cents
+      )
 
-        return payment_failed! unless payment.success?
-
-        chain Analytics::TrackEvent.run(
-          user_id: contribution.donor.id,
-          event: 'Donation processed',
-          traits: { revenue: contribution.amount_dollars, tip_dollars: contribution.platform_fee_cents / 100 }
-        )
-
-        contribution.update!(receipt: payment.result, processed_at: Time.zone.now)
-        create_donations_based_on_active_allocations
+      unless payment.success?
+        contribution.update(failed_at: Time.zone.now, receipt: payment.errors.to_json)
+        payment_failed!
+        return
       end
+
+      contribution.update(receipt: payment.result, processed_at: Time.zone.now)
+
+      create_donations_based_on_active_allocations
+      track_contribution_processed_event
 
       nil
     end
@@ -48,30 +46,39 @@ module Contributions
     end
 
     def create_donations_based_on_active_allocations
+      # TODO: Move calculation of donation_after_fees into a query
       payment_processor_fixed_fee = 30
       payment_processor_percentage_fee = 0.039
       total_charge_amount = contribution.amount_cents + contribution.platform_fee_cents
       fees = total_charge_amount * payment_processor_percentage_fee + payment_processor_fixed_fee
       amount_donated_after_fees = total_charge_amount - fees - contribution.platform_fee_cents
 
-      Allocations::GetActiveAllocations.call(portfolio: contribution.portfolio).each do |a|
-        Donation.create!(
-          allocation: a,
-          contribution: contribution,
-          portfolio: a.portfolio,
-          organization: a.organization,
-          amount_cents: (amount_donated_after_fees * a.percentage / 100.0).floor
-        )
+      # TODO: Move this into a Donations::CreateDonationsFromContributionIntoPortfolio command
+      Donation.transaction do
+        Allocations::GetActiveAllocations.call(portfolio: contribution.portfolio).each do |a|
+          Donation.create!(
+            allocation: a,
+            contribution: contribution,
+            portfolio: a.portfolio,
+            organization: a.organization,
+            amount_cents: (amount_donated_after_fees * a.percentage / 100.0).floor
+          )
+        end
       end
     end
 
     def payment_failed!
-      add_error(
-        :contribution,
-        :payment_failed,
-        "Could not charge customer '#{payment_method.customer_id}'"
-      )
+      add_error(:contribution, :payment_failed, "Could not charge customer '#{payment_method.customer_id}'")
+
       nil
+    end
+
+    def track_contribution_processed_event
+      Analytics::TrackEvent.run(
+        user_id: contribution.donor.id,
+        event: 'Donation processed',
+        traits: { revenue: contribution.amount_dollars, tip_dollars: contribution.platform_fee_cents / 100 }
+      )
     end
 
     def payment_method

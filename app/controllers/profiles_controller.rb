@@ -15,7 +15,7 @@ class ProfilesController < ApplicationController
           description: I18n.t('description', scope: ['cause_areas', cause_area]),
           organizations: organizations
         )
-      end,
+      end
     )
   end
 

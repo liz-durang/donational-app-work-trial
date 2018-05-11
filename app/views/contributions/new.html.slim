@@ -14,7 +14,7 @@ section.section
 section.section.embossed
   .container.content
     = display_flash_messages
-    = form_with model: @active_portfolio, url: contributions_path, local: true, id: 'sanitized_create_payment_method_form', method: :post, class: 'form' do |f|
+    = form_with model: @active_recurring_contribution, url: contributions_path, local: true, id: 'sanitized_create_payment_method_form', method: :post, class: 'form' do |f|
       = f.hidden_field :payment_token, id: 'payment_token'
       .columns
         .column.is-6
@@ -23,13 +23,10 @@ section.section.embossed
               | 1. Enter donation amount
             .field.has-addons
               .control.has-icons-left
-                = f.number_field :contribution_amount_dollars, class: 'input'
+                = f.number_field :amount_dollars, class: 'input'
                 span.icon.is-left $
             .control.buttons
-              = f.collection_radio_buttons( \
-                :contribution_frequency, \
-                { monthly: 'Monthly', quarterly: 'Every quarter', annually: 'Yearly', once: 'One-time' }, \
-                :first, :last) do |b| \
+              = f.collection_radio_buttons(:frequency, RecurringContribution.frequency.options << ['One-time', 'once'], :last, :first) do |b| \
                   b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
                 end
             p.help All donations are tax-deductible operating under the Social Good Fund, a 501(c)3 public charity, EIN 46-1323531.
@@ -52,13 +49,20 @@ section.section.embossed
                           | %
                         ' .
                         br
-                        ' Your target monthly contribution is
-                        strong> = number_to_currency(@active_portfolio.target_monthly_contribution_amount_dollars, precision: 0)
+                        ' Your target
+                        - if @active_recurring_contribution.annually?
+                          ' annual
+                        - elsif @active_recurring_contribution.quarterly?
+                          ' quarterly
+                        - else @active_recurring_contribution.monthly?
+                          ' monthly
+                        ' contribution is
+                        strong> = number_to_currency(@active_recurring_contribution.target_amount_dollars, precision: 0)
       .columns
         .column.is-6
           p.field
             label.subtitle 2. Add a tip to help Donational grow
-            .control.buttons = f.collection_radio_buttons :contribution_platform_fee_cents,\
+            .control.buttons = f.collection_radio_buttons :platform_fee_cents,\
               [[0, 'No tip'], [200, '$2'], [500, '$5'], [1_000, '$10']], :first, :last do |b| \
                 b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
               end
