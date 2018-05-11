@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180509191629) do
+ActiveRecord::Schema.define(version: 20180511155832) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -139,12 +139,9 @@ ActiveRecord::Schema.define(version: 20180509191629) do
 
   create_table "portfolios", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "donor_id"
-    t.string "contribution_frequency"
     t.datetime "deactivated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "contribution_amount_cents"
-    t.integer "contribution_platform_fee_cents"
     t.index ["donor_id"], name: "index_active_subscriptions_on_donor_id", where: "(deactivated_at IS NULL)"
     t.index ["donor_id"], name: "index_portfolios_on_donor_id"
   end
