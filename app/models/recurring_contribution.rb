@@ -19,7 +19,7 @@ class RecurringContribution < ApplicationRecord
   belongs_to :portfolio
 
   extend Enumerize
-  enumerize :frequency, in: %w[monthly quarterly annually], predicates: true
+  enumerize :frequency, in: %w[monthly quarterly annually once], predicates: true
 
   def active?
     deactivated_at.blank?
@@ -41,16 +41,6 @@ class RecurringContribution < ApplicationRecord
     elsif annually?
       Date.new(today.year + 1, start_at.month, start_at.day)
     end
-  end
-
-  def amount_dollars
-    return target_amount_dollars if amount_cents.nil?
-
-    (amount_cents / 100).ceil
-  end
-
-  def target_amount_dollars
-    (Contributions::GetTargetContributionAmountCents.call(donor: donor, frequency: frequency) / 100).ceil
   end
 
   private
