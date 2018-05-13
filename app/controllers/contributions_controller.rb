@@ -3,21 +3,24 @@ class ContributionsController < ApplicationController
   include ClientSideAnalytics
 
   def index
-    redirect_to new_contribution_path and return unless active_payment_method?
-
     @contributions = Contributions::GetProcessedContributions.call(donor: current_donor)
+
+    redirect_to new_contribution_path if @contributions.empty?
   end
 
   def new
-    active_portfolio
-    active_recurring_contribution
-    payment_method
+    @model = OpenStruct.new(
+      target_amount_cents: target_amount_cents,
+      recurring_contribution: active_recurring_contribution || new_recurring_donation,
+      active_payment_method: payment_method.present?,
+      portfolio_organization_count: active_portfolio.active_allocations.count
+    )
   end
 
   def create
     pipeline = Flow.new
     pipeline.chain { update_donor_payment_method! } if payment_token.present?
-    pipeline.chain { update_recurring_contribution! } if frequency.in?(RecurringContribution.frequency.values)
+    pipeline.chain { update_recurring_contribution! }
     pipeline.chain { schedule_first_contribution_immediately! }
 
     new_unprocessed_contributions = Contributions::GetUnprocessedContributions.call(donor: current_donor)
@@ -61,11 +64,6 @@ class ContributionsController < ApplicationController
     )
   end
 
-  def active_payment_method?
-    payment_method.present?
-  end
-  helper_method :active_payment_method?
-
   def payment_method
     @payment_method = PaymentMethods::GetActivePaymentMethod.call(donor: current_donor)
   end
@@ -75,16 +73,22 @@ class ContributionsController < ApplicationController
   end
 
   def active_recurring_contribution
-    @active_recurring_contribution ||= begin
-      Contributions::GetActiveRecurringContribution.call(donor: current_donor) || new_recurring_donation
-    end
+    @active_contribution ||= Contributions::GetActiveRecurringContribution.call(donor: current_donor)
   end
 
   def new_recurring_donation
     RecurringContribution.new(
       donor: current_donor,
+      amount_cents: target_amount_cents,
       portfolio: active_portfolio,
       frequency: current_donor.contribution_frequency
+    )
+  end
+
+  def target_amount_cents
+    Contributions::GetTargetContributionAmountCents.call(
+      donor: current_donor,
+      frequency: active_recurring_contribution.try(:frequency) || current_donor.contribution_frequency
     )
   end
 
