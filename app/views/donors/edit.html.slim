@@ -1,0 +1,32 @@
+section.section
+  .container
+    .content.has-text-centered
+      h1.title.is-spaced
+        => icon_tag('fa-user')
+        br
+        ' Account Information
+
+      p.subtitle
+        ' Basic Contact Information
+
+section.embossed.section
+  .container
+    = display_flash_messages
+    = form_with model: @current_donor, url: donors_path, local: true, method: :put, class: 'form' do |f|
+      .columns
+        .column.is-3.container
+          p.field
+            label.subtitle
+              | First name
+              = f.text_field :first_name, class: 'input', value: @current_donor.first_name
+          p.field
+            label.subtitle
+              | Last name
+              = f.text_field :last_name, class: 'input', value: @current_donor.last_name
+          p.field
+            label.subtitle
+              | Email
+              = f.text_field :email, class: 'input', value: @current_donor.email
+          p.field
+            .control.has-text-centered
+              = f.submit "Save", class: %w(button is-primary is-medium)
