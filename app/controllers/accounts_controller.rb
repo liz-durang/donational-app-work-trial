@@ -1,4 +1,4 @@
-class DonorsController < ApplicationController
+class AccountsController < ApplicationController
   include Secured
 
   def update
@@ -11,10 +11,17 @@ class DonorsController < ApplicationController
 
     if command.success?
       flash[:success] = "Thanks, we've updated your account"
-      redirect_to edit_donors_path
+      redirect_to edit_accounts_path
     else
-      flash[:error] = command.errors.message_list.join('<br/>').html_safe
-      render :edit
+      flash[:error] = command.errors.message_list.join('. ')
+      redirect_to edit_accounts_path
     end
+  end
+
+  def edit
+    @view_model = OpenStruct.new(
+      donor: current_donor,
+      accounts_path: accounts_path
+    )
   end
 end
