@@ -23,3 +23,5 @@
 spec/examples.txt
 /public/packs
 /node_modules
+
+.env

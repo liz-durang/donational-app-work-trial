@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resource :onboarding, path: 'getting-started', only: :show
   resource :portfolio
   resource :allocations, only: %i[new edit create update]
+  resource :accounts, only: %i[edit update]
 
   # Retention
 

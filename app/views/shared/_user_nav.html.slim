@@ -4,6 +4,9 @@
       => icon_tag('fa-user')
       = current_donor.name
     .navbar-dropdown
+      a.navbar-item href=edit_accounts_path
+        = icon_tag('fa-user')
+        | Your Account
       a.navbar-item href=portfolio_path
         = icon_tag('fa-address-book')
         | Your Portfolio
