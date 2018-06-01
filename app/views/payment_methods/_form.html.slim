@@ -7,12 +7,14 @@ section.section
         / This form should remain separate from the credit card details to avoid
         / accidentally leaking credit card data into our server
         = f.hidden_field :payment_token, id: 'payment_token'
+        = f.hidden_field :name_on_card, id: 'name_on_card'
+        = f.hidden_field :last4, id: 'last4'
       form#panda_cc_form.panda_cc_form.form
         .columns
           .column
             .field.is-grouped
               .control.is-expanded.has-icons-left
-                input.input type="text" data-panda="credit_card" placeholder="Credit Card Number"
+                input.input id="credit_card" type="text" data-panda="credit_card" placeholder="Credit Card Number"
                 span.icon.is-left.is-small: i.fa.fa-credit-card
               .control
                 .select
@@ -30,10 +32,10 @@ section.section
                         = i
             .field.is-grouped
               p.control.is-expanded.has-icons-left
-                input.input type="text" data-panda="first_name" placeholder="First name"
+                input.input id="first_name" type="text" data-panda="first_name" placeholder="First Name"
                 span.icon.is-left.is-small: i.fa.fa-user
               p.control.is-expanded
-                input.input type="text" data-panda="last_name" placeholder="Last name"
+                input.input id="last_name" type="text" data-panda="last_name" placeholder="Last Name"
               p.control.has-icons-left
                 input.input type="text" data-panda="cvv" placeholder="CVV" size=4
                 span.icon.is-left.is-small: i.fa.fa-lock
@@ -62,6 +64,8 @@ javascript:
 
   Panda.on('success', function(cardToken) {
     document.getElementById('payment_token').value = cardToken;
+    document.getElementById('name_on_card').value = document.getElementById('first_name').value + ' ' + document.getElementById('last_name').value;
+    document.getElementById('last4').value = document.getElementById('credit_card').value.slice(-4);
     document.getElementById('sanitized_create_payment_method_form').submit();
   });
 
