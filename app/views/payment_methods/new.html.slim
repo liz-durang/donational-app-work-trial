@@ -13,10 +13,10 @@ section.section.embossed
     h3.has-text-centered Active Payment Method
     - if @view_model.active_payment_method.present?
       p
-        | Name on card:&nbsp
+        ' Name on card:
         = @view_model.active_payment_method.name_on_card
       p
-        | Last 4 digits:&nbsp
+        ' Last 4 digits:
         = @view_model.active_payment_method.last4
     - else
       p There is no active payment method. Please add your credit card using the form below.

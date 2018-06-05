@@ -143,6 +143,7 @@ ActiveRecord::Schema.define(version: 20180530123144) do
     t.string "name_on_card"
     t.string "last4"
     t.datetime "deactivated_at"
+    t.index ["deactivated_at"], name: "index_payment_methods_on_deactivated_at"
     t.index ["donor_id"], name: "index_payment_methods_on_donor_id"
   end
 

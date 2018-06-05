@@ -5,7 +5,7 @@ class CreatePaymentMethods < ActiveRecord::Migration[5.1]
       t.string :payment_processor_customer_id
       t.string :name_on_card
       t.string :last4
-      t.datetime :deactivated_at
+      t.datetime :deactivated_at, index: true
     end
   end
 end

@@ -18,15 +18,15 @@ section.section
                 span.icon.is-left.is-small: i.fa.fa-credit-card
               .control
                 .select
-                  select data-panda="month"
-                    option selected=true disabled=true mm
+                  select id="month" data-panda="month"
+                    option selected=true mm
                     - (1..12).each do |i|
                       option value=i
                         = i
               .control
                 .select
-                  select data-panda="year"
-                    option selected=true disabled=true yyyy
+                  select id="year" data-panda="year"
+                    option selected=true yyyy
                     - (2017..2030).each do |i|
                       option value=i
                         = i
@@ -37,7 +37,7 @@ section.section
               p.control.is-expanded
                 input.input id="last_name" type="text" data-panda="last_name" placeholder="Last Name"
               p.control.has-icons-left
-                input.input type="text" data-panda="cvv" placeholder="CVV" size=4
+                input.input id="cvv" type="text" data-panda="cvv" placeholder="CVV" size=4
                 span.icon.is-left.is-small: i.fa.fa-lock
 
             .field
