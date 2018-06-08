@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
   # Acquisition
   root 'pages#index'
-  get 'faq' => 'pages#faq'
-  get 'api' => 'pages#api'
+  %w(mission donate-with-confidence methodology faq api).each do |page_slug|
+    get page_slug => 'pages#show', page: page_slug.underscore
+  end
+
   resources :organizations, path: 'charities', only: :index
 
   # Activation
