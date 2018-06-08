@@ -1,5 +1,5 @@
 - content_for :hero do
-  section.hero.is-light
+  section.hero
     .hero-head
       = render 'nav'
     .hero-body
@@ -11,51 +11,52 @@
             h2.subtitle
               ' We want to see a world where individuals are doing the most good that they can
 
+section.section.embossed
+  .container.content
+    .box
+      h2.title Social good built right into your product
+      p
+        ' We believe that effective programs, backed by scientific data, are the best way forward
+        ' in cause areas both global and local, big and small. By joining the community at Donational,
+        ' you’re adding your individual voice to a collective of hundreds of other voices,
+        ' all saying that we value programs that have a high positive impact.
+        ' Together, we’ll demand action from charities that are ineffective and opaque, and push
+        | the industry to change for the better.
+
+    .box
+      h2.title We want to drive a cultural shift towards high positive impact giving
+      p
+        ' Most people don’t really know where their money is going when they donate to charity.
+        ' We want to help individuals understand what it means to give to charities with a high
+        ' positive impact on the world. We do that by focusing on you and your values.
+        ' There are several outstanding organizations use data, evidence and thorough analysis
+        ' to rate and review charities based on their impact. We make that information accessible
+        ' and actionable for you, so that you can easily find the charities that are doing the best
+        ' work in the cause areas that you care about most. Whether you use Donational to make your
+        ' final donation or not, we want to help you in your search for charities with high positive impact.
+
+    .box
+      h2.title We do that by focusing on you and your values
+      p
+        ' There are several outstanding organizations use data, evidence and thorough analysis to rate and
+        ' review charities based on their impact. We make that information accessible and actionable for you,
+        ' so that you can easily find the charities that are doing the best work in the cause areas that you
+        ' care about most. Whether you use Donational to make your final donation or not, we want to help you
+        ' in your search for charities that prove high positive impact.
+
 section.section
   .container.content
-    h2.title Social good built right into your product
-    p
-      ' We believe that effective programs, backed by scientific data, are the best way forward
-      ' in cause areas both global and local, big and small. By joining the community at Donational,
-      ' you’re adding your individual voice to a collective of hundreds of other voices,
-      ' all saying that we value programs that have a high positive impact.
-      ' Together, we’ll demand action from charities that are ineffective and opaque, and push
-      | the industry to change for the better.
-
-  .container.content
-    h2.title We want to drive a cultural shift towards high positive impact giving
-    p
-      ' Most people don’t really know where their money is going when they donate to charity.
-      ' We want to help individuals understand what it means to give to charities with a high
-      ' positive impact on the world. We do that by focusing on you and your values.
-      ' There are several outstanding organizations use data, evidence and thorough analysis
-      ' to rate and review charities based on their impact. We make that information accessible
-      ' and actionable for you, so that you can easily find the charities that are doing the best
-      ' work in the cause areas that you care about most. Whether you use Donational to make your
-      ' final donation or not, we want to help you in your search for charities with high positive impact.
-
-  .container.content
-    h2.title We do that by focusing on you and your values
-    p
-      ' There are several outstanding organizations use data, evidence and thorough analysis to rate and
-      ' review charities based on their impact. We make that information accessible and actionable for you,
-      ' so that you can easily find the charities that are doing the best work in the cause areas that you
-      ' care about most. Whether you use Donational to make your final donation or not, we want to help you
-      ' in your search for charities that prove high positive impact.
-
-section.section.embossed
-  .container.content.has-text-centered
     .columns
       .column
-        p.subtitle Next steps:
+        p.subtitle Next steps
         a.button.is-primary.is-large href=onboarding_path
           => icon_tag('fa-address-book', size: :small)
           span Build a personalized charitable portfolio
-      .column
-        p.subtitle Read more:
+      .column.has-text-right-tablet
+        p.subtitle Read more
         a.button.is-info.is-outlined.is-large href=donate_with_confidence_path
           = icon_tag('fa-book', size: :small)
-          | &nbsp; Why use donational?
+          | &nbsp; Why choose donational?
           span.icon.is-small &rarr;
         | &nbsp;
 

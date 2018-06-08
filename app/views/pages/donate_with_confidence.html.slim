@@ -1,0 +1,62 @@
+- content_for :hero do
+  section.hero
+    .hero-head
+      = render 'nav'
+    .hero-body
+      .container
+        .columns
+          .column.is-6
+            h1.title.is-2.is-spaced
+              ' Why Donational?
+            h2.subtitle
+              ' We’ll help you donate with confidence
+
+section.section.embossed
+  .container.content
+    .box
+        h2.title Make an impact
+        p Donational only recommends charities that have a proven track record of high positive impact – their programs actually make a difference, and we have the data to prove it.
+
+    .box
+        h2.title Donate like an expert
+        p Donational is influenced by research from industry experts, such as GiveWell and Open Philanthropy, making their research easily accessible to you in the form of personalized recommendations. If we recommend a charity to you, you can be sure that it’s been thoroughly vetted as one of the most effective ways to make an impact towards cause areas that matter to you.
+    .box
+        h2.title Diversify your giving (or not)
+        p Whether you want to focus your impact on a few charities in or make a broad impact across many charities and issues, it’s your choice. No matter what, we’ll make it easy, convenient, and efficient.
+    .box
+        h2.title Make it personal
+        p Giving is deeply personal. Donational isn’t just designed to help you make a high positive impact difference, it’s designed to help you make a difference in the issues that you really care about. For example, you may currently be giving to global health, but upon reflection, you may realize you want to put more of your dollar towards fighting for criminal justice reform. Donational helps you figure that out and align your giving with your true values.
+        p We also know that many people donate to charities that they have a personal connection to, so we made it easy to add any 503(c) charity to your portfolio. You can bring all of the benefits of Donational – one easy monthly payment, consolidated tax forms – to all of the charities you hold dear.
+    .box
+        h2.title One easy payment
+        p Donational provides an easy and streamlined way to donate to as many charities as you want with just one monthly payment. At any point, you can change which charities you’re donating to without having to give your payment information to yet another source.
+        p Plus, we pool everyone’s donations into combined donations so that we reduce the amount of overheads our charities need to spend on processing individual donations. Even if you’re donating small amounts to many charities, being part of a network of other high-impact donors means that charities are still receiving your contribution efficiently.
+    .box
+        h2.title Make tax time easy
+        p Every donation you make through Donational is tax-deductible, and at the end of the year, you’ll get one statement detailing all of your charitable giving, and when you go to file your taxes, you’ll only have to fill out one line on your return. Your accountant will thank you.
+    .box
+        h2.title Influence charities
+        p When you donate as an individual, charities have surprisingly little understanding of what attracted you to their charity. That’s one reason why we pool all of our donations into one big donation – when you give through us, you’re adding your voice to a community of people who care about positive impact, financial transparency, and underserved causes. As we grow as a community, we can influence the entire industry to move away from ineffective and opaque practices, eliminate inefficiencies, and ultimately help save and improve more lives around the world.
+
+section.section
+  .container.content
+    .columns
+      .column
+        p.subtitle Get started
+        a.button.is-primary.is-outlined.is-large href=onboarding_path
+          => icon_tag('fa-address-book', size: :small)
+          span Build personalized charitable portfolio
+      .column.has-text-right-tablet
+        p.subtitle Read more
+        a.button.is-info.is-outlined.is-large href=methodology_path
+          = icon_tag('fa-book', size: :small)
+          | Our Methodology
+          span.icon.is-small &rarr;
+        | &nbsp;
+
+
+footer.footer
+  .container
+    nav.breadcrumb.has-bullet-separator.is-centered
+      ul
+        li.is-active: a href="/" Donational &copy;
