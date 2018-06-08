@@ -5,7 +5,7 @@
     .hero-body
       .container
         .columns
-          .column.is-6
+          .column.is-8
             h1.title.is-2.is-spaced
               ' Why Donational?
             h2.subtitle
@@ -14,14 +14,20 @@
 section.section.embossed
   .container.content
     .box
-        h2.title Make an impact
+        h2.title Make a greater impact
         p Donational only recommends charities that have a proven track record of high positive impact – their programs actually make a difference, and we have the data to prove it.
 
     .box
         h2.title Donate like an expert
-        p Donational is influenced by research from industry experts, such as GiveWell and Open Philanthropy, making their research easily accessible to you in the form of personalized recommendations. If we recommend a charity to you, you can be sure that it’s been thoroughly vetted as one of the most effective ways to make an impact towards cause areas that matter to you.
+        p
+          ' Donational is influenced by research from industry experts, such as
+          a> href="https://www.givewell.org" target="blank" GiveWell
+          ' and
+          a href="https://www.openphilanthropy.org" target="blank" Open Philanthropy
+          | , making their research easily accessible to you in the form of personalized recommendations. If we recommend a charity to you, you can be sure that it’s been thoroughly vetted as one of the most effective ways to make an impact towards cause areas that matter to you.
     .box
-        h2.title Diversify your giving (or not)
+        h2.title
+          ' Diversify your giving
         p Whether you want to focus your impact on a few charities in or make a broad impact across many charities and issues, it’s your choice. No matter what, we’ll make it easy, convenient, and efficient.
     .box
         h2.title Make it personal
@@ -43,12 +49,12 @@ section.section
     .columns
       .column
         p.subtitle Get started
-        a.button.is-primary.is-outlined.is-large href=onboarding_path
+        a.button.is-primary.is-outlined.is-medium href=onboarding_path
           => icon_tag('fa-address-book', size: :small)
           span Build personalized charitable portfolio
       .column.has-text-right-tablet
         p.subtitle Read more
-        a.button.is-info.is-outlined.is-large href=methodology_path
+        a.button.is-info.is-outlined.is-medium href=methodology_path
           = icon_tag('fa-book', size: :small)
           | Our Methodology
           span.icon.is-small &rarr;
