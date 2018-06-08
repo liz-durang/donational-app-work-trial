@@ -9,7 +9,10 @@ nav.navbar role="navigation" aria-label="main dropdown navigation"
         h1.title.is-5: a href="/" Donational
     div#navMenu.navbar-menu
       .navbar-start
+        a.navbar-item href=mission_path Mission
+        a.navbar-item href=donate_with_confidence_path Why Donational?
+        a.navbar-item href=methodology_path Methodology
         a.navbar-item href=organizations_path Charities
-        a.navbar-item href=faq_path About
+        a.navbar-item href=faq_path FAQ
         a.navbar-item href=api_path API
       .navbar-end = render 'shared/user_nav'

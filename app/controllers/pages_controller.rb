@@ -2,9 +2,7 @@ class PagesController < ApplicationController
   def index
   end
 
-  def faq
-  end
-
-  def api
+  def show
+    render params[:page]
   end
 end

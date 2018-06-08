@@ -1,0 +1,110 @@
+- content_for :hero do
+  section.hero
+    .hero-head
+      = render 'nav'
+    .hero-body
+      .container
+        .columns
+          .column.is-8
+            h1.title.is-2.is-spaced
+              ' Our methodology
+            h2.subtitle
+              ' How do you go about choosing which charities to support?
+              ' There are over 1.5 million charities in the U.S. alone, making it impossible for one person
+              | to research each of them.
+            p.subtitle
+              | More importantly, however, you have to know what you’re looking for.
+
+section.section.embossed
+  .container.content
+    .box
+      h2.title We’re looking for high positive impact
+      p We judge charities across many dimensions, but they all boil down to one question: are they making a big positive impact in their cause areas? This doesn’t mean that we just look for the biggest charities – instead, we look for charities that have the highest amount of positive impact per dollar spent.
+      p
+        ' Our approach is based in data, evidence, and scientific rigor, and on a focus on the real-life outcomes of the work
+        ' being done. Donational is influenced by research from industry experts, such as
+        a href="https://www.givewell.org" target="blank" GiveWell
+        ' ,
+        a href="https://www.openphilanthropy.org" target="blank" Open Philanthropy
+        ' ,
+        a> href="https://www.thelifeyoucansave.org" target="blank" The Life You Can Save
+        ' and
+        a href="https://animalcharityevaluators.org" target="blank" Animal Charity Evaluators
+        | .
+      p Donational looks for charities that share information about their programs to third parties such as those listed above who can independently assess their impact. If we can’t answer “What does the world get out of my dollar?”, then we don’t include that charity as part of our recommendations. Donational pledges to stay up-to-date to continue helping users learn how to do the most good with the resources available – we’re doing the work so you don’t have to!
+      blockquote
+        ' You may recognize our approach from a movement called Effective Altruism. For more about the philosophy and views of the EA movement, check out this
+        a href="https://reg-charity.org/effective-giving-guide/part-1/" target="blank" excellent guide from Raising for Effective Giving
+    .box
+      p.title First things first, we prioritize cause areas
+      p
+        ' Charities typically decide on one focus area to, you know, focus on, but many tackle more than one focus area
+        ' or an entire cause. What’s the difference? A cause area is a broad category of issues, while a focus area
+        ' is a specific issue within that cause. As an example, Global Health is a cause area, malaria is a focus area,
+        ' and the Against Malaria Foundation is a charity designed to tackle that focus area.
+        | Here, we’ll use the two phrases interchangeably to describe which cause areas we suggest in the app.
+      em We're looking for cause areas that are:
+      h3 1. Large Scale
+      p How many people does a problem affect, and how much does it affect them? If you want to give your money most effectively, one way to do it is to focus on a big problem that affects a lot of people.
+      p One way to think about this is to ask yourself, “How many lives could I save,” or, “How many lives will I meaningfully improve?” Not every focus area has life or death consequences, but we are looking at that level of positive impact in the long term for the largest group of people possible.
+      h3 2. Underfunded
+      p Popular, well-known issues often suffer from diminishing returns – the more people get involved, the lower their individual impacts are. Meanwhile, donating to a less well-known cause can cause your individual impact to skyrocket, no matter what size your donation is. We try and get an idea of what your underlying values are, and match you up to underfunded cause areas that we think you’ll care about, and where you’ll have the most impact.
+      h3 3. Solvable
+      p
+        ' Are there clear ways that you can contribute to a solution? Not every problem is solvable through charity work alone,
+        ' and it’s possible that a charity with an actual path forward for progress does not exist for a specific focus area.
+        ' What does a path forward look like, exactly? For starters, evidence of progress from past programs helps prove that
+        ' charitable programs do work. Alternatively, there may be new, unproven solutions being worked on, but they show promise
+        ' based on scientifically-supported assumptions. Additionally, we also look for solutions that may only have a small
+        ' chance of working, but if they do, would have a massive positive impact on the cause area.
+    .box
+      p.title How we select charities
+      p After finding cause areas that meet our criteria for scale, neglectedness, and tractability, we look for the charities that are doing the best work within those areas. In order to get our support, charities not only have to fit within the guidelines outlined above, but also prove that their approach is sound on an institutional level. Here are the three things that we look for.
+
+      h3 1. Track record
+      p Every charity has a history. Maybe they have a long string of excellent programs over the last few decades, or maybe it’s a brand new charity with an excellent team of veterans behind it. Either way, we make sure to look at the track record of both the team and the effectiveness of the programs before we recommend a charity to our users.
+      h3 2. Approach to data
+      p In case you can’t tell, we believe in the power of data. We think that data science is the best way to prove that a charity is making a real difference in the world, and we want the charities that we support to agree. We look for charities that not only keep their own data on their programs, but also open the books for outside watchdogs who can independently verify the results.
+      h3 3. Financial soundness and transparency
+      p Financial soundness and transparency are important for measuring the impact of a charity. For starters, we want to know that the charity is able to sustain itself and its programs. A charity that’s unable to do that is unlikely to solve any problems; instead, they’ll probably create more. Additionally, a charity needs to be transparent with how their budget is being spent. This allows researchers to determine the impact of every dollar.
+
+      blockquote
+        p
+          ' Note that while we care a lot about financial transparency, we’re not overly concerned with the exact amount
+          ' that goes to administrative or fundraising expenses – a.k.a. overhead.
+          ' Many people believe that measuring the ratio of overhead spending to program spending can tell you the effectiveness of a charity.
+          em We don’t believe that’s the case.
+        p
+          ' Overhead efficiency can be an important metric to measure, but it rarely tells
+          ' the whole truth. Let’s say Charity A spends 40% of its budget on overhead, while Charity B spends 10%.
+          ' If you’re just using an overhead ratio to determine who to give to, you’d probably pick Charity B.
+          ' But let’s say research shows that Charity A’s programs have 8 times more impact than Charity B's programs.
+          ' That means that even though Charity A far more of every dollar on overhead, your 60 cents at
+          ' Charity A is going to have a way bigger impact than your 90 cents at Charity B.
+        p
+          ' For further information, we recommend watching Dan Pallotta’s insightful TED talk:
+          a href="https://www.ted.com/talks/dan_pallotta_the_way_we_think_about_charity_is_dead_wrong" target="blank"
+            | The way we think about charity is dead wrong
+
+section.section
+  .container.content
+    .columns
+      .column
+        p.subtitle Get started
+        a.button.is-primary.is-outlined.is-medium href=onboarding_path
+          => icon_tag('fa-address-book', size: :small)
+          span Build personalized charitable portfolio
+      .column.has-text-right-tablet
+        p.subtitle Read more
+        a.button.is-info.is-outlined.is-medium href=organizations_path
+          = icon_tag('fa-book', size: :small)
+          | Our Recommended Charities
+          span.icon.is-small &rarr;
+        | &nbsp;
+
+
+footer.footer
+  .container
+    nav.breadcrumb.has-bullet-separator.is-centered
+      ul
+        li.is-active: a href="/" Donational &copy;
