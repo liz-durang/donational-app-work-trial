@@ -34,32 +34,7 @@ section.section.embossed
             p.help All donations are tax-deductible operating under the Social Good Fund, a 501(c)3 public charity, EIN 46-1323531.
         .column
           - if current_donor.annual_income_cents.present? && current_donor.donation_rate.present?
-            article.message.is-info
-              .message-body
-                .media
-                  .media-left: span.icon.is-medium: i.fa.fa-info
-                  .media-content
-                    p
-                      strong> How much should you give?
-                      br
-                      p
-                        ' You have an income of
-                        strong> = cents_to_currency(current_donor.annual_income_cents)
-                        ' and pledged to give
-                        strong
-                          = current_donor.donation_rate * 100
-                          | %
-                        ' .
-                        br
-                        ' Your target
-                        - if @view_model.recurring_contribution.annually?
-                          ' annual
-                        - elsif @view_model.recurring_contribution.quarterly?
-                          ' quarterly
-                        - else @view_model.recurring_contribution.monthly?
-                          ' monthly
-                        ' contribution is
-                        strong> = cents_to_currency(@view_model.target_amount_cents)
+             = render 'how_much_give_note'
       .columns
         .column.is-6
           p.field

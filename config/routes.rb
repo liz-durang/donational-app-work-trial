@@ -17,7 +17,9 @@ Rails.application.routes.draw do
   # Retention
 
   # Revenue
-  resources :contributions, only: %i[index new create]
+  resources :contributions, only: %i[index new edit create update] do
+    put :cancel, on: :member
+  end
 
   # Referral
   get 'profiles/:username' => 'profiles#show', as: :profiles

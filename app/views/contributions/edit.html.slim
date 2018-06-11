@@ -1,0 +1,45 @@
+section.section
+  .container
+    .content.has-text-centered
+      h1.title.is-spaced
+        => icon_tag('fa-credit-card')
+        br
+        ' Donate to your portfolio
+
+      p
+        ' Every dollar you donate goes directly to the
+        strong => pluralize(@view_model.portfolio_organization_count, 'charity')
+        | in your portfolio, based on your allocations.
+
+section.section.embossed
+  .container.content
+    p.has-text-centered
+      ' You are a
+      => @view_model.recurring_contribution.frequency
+      ' donor. Your next donation of
+      => number_to_currency(@view_model.recurring_contribution.amount_dollars)
+      ' is scheduled for
+      => @view_model.recurring_contribution.next_contribution_at.strftime('%Y/%m/%d')
+      = display_flash_messages
+      = form_with model: @view_model.recurring_contribution, url: contribution_path, local: true, method: :put, class: 'form' do |f|
+        .columns
+          .column.is-6
+            p.field
+              label.subtitle
+                | Change donation amount and frequency
+              .field.has-addons
+                .control.has-icons-left
+                  = f.number_field :amount_dollars, class: 'input', value: (@view_model.recurring_contribution.amount_cents / 100.0).ceil
+                  span.icon.is-left $
+              .control.buttons
+                = f.collection_radio_buttons(:frequency, RecurringContribution.frequency.options, :last, :first) do |b| \
+                    b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
+                  end
+              p.help All donations are tax-deductible operating under the Social Good Fund, a 501(c)3 public charity, EIN 46-1323531.
+              .field
+                 .control
+                   = f.submit "Update my recurring donation", class: %w(button is-primary is-medium)
+          .column
+            - if current_donor.annual_income_cents.present? && current_donor.donation_rate.present?
+               = render 'how_much_give_note'
+      = link_to @view_model.cancel_link, cancel_contribution_path, method: :put, data: { confirm: 'Are you sure you want to cancel your recurring donation?' }

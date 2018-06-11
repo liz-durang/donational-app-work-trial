@@ -25,6 +25,14 @@ class RecurringContribution < ApplicationRecord
     deactivated_at.blank?
   end
 
+  def amount_dollars
+    amount_cents / 100.0
+  end
+
+  def recurrent?
+    monthly? || quarterly? || annually?
+  end
+
   def next_contribution_at
     today = Date.today
 
