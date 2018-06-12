@@ -13,4 +13,5 @@
 #
 
 class Partner < ApplicationRecord
+  has_many :portfolio_templates
 end

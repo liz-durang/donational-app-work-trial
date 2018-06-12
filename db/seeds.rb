@@ -14,3 +14,14 @@ Campaign.find_or_create_by(slug: '1ftw-wharton') do |c|
 end
 
 Organizations::CreateOrUpdateOrganizationsFromGoogleSheets.run
+
+PortfolioTemplate.create(
+  partner: one_for_the_world,
+  title: 'Random Picks',
+  organization_eins: Organization.all.pluck(:ein).sample(8)
+)
+PortfolioTemplate.create(
+  partner: one_for_the_world,
+  title: "One charity - #{Organization.first.name}",
+  organization_eins: [Organization.first.ein]
+)
