@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180511155832) do
+ActiveRecord::Schema.define(version: 20180530123144) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -137,6 +137,16 @@ ActiveRecord::Schema.define(version: 20180511155832) do
     t.index ["ein"], name: "index_organizations_on_ein", unique: true
   end
 
+  create_table "payment_methods", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "donor_id", null: false
+    t.string "payment_processor_customer_id"
+    t.string "name_on_card"
+    t.string "last4"
+    t.datetime "deactivated_at"
+    t.index ["deactivated_at"], name: "index_payment_methods_on_deactivated_at"
+    t.index ["donor_id"], name: "index_payment_methods_on_donor_id"
+  end
+
   create_table "portfolios", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "donor_id"
     t.datetime "deactivated_at"
@@ -173,6 +183,7 @@ ActiveRecord::Schema.define(version: 20180511155832) do
   add_foreign_key "donations", "portfolios"
   add_foreign_key "grants", "organizations", column: "organization_ein", primary_key: "ein"
   add_foreign_key "organizations", "donors", column: "suggested_by_donor_id"
+  add_foreign_key "payment_methods", "donors"
   add_foreign_key "portfolios", "donors"
   add_foreign_key "recurring_contributions", "donors"
   add_foreign_key "recurring_contributions", "portfolios"

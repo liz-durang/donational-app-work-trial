@@ -16,6 +16,8 @@ section.section.embossed
     = display_flash_messages
     = form_with model: @model.recurring_contribution, url: contributions_path, local: true, id: 'sanitized_create_payment_method_form', method: :post, class: 'form' do |f|
       = f.hidden_field :payment_token, id: 'payment_token'
+      = f.hidden_field :name_on_card, id: 'name_on_card'
+      = f.hidden_field :last4, id: 'last4'
       .columns
         .column.is-6
           p.field
@@ -97,7 +99,7 @@ section.section.embossed
               label.subtitle 3. Enter Credit Card details:
               .field.is-grouped
                 .control.is-expanded.has-icons-left
-                  input.input type="text" data-panda="credit_card" placeholder="Card Number"
+                  input.input id="credit_card" type="text" data-panda="credit_card" placeholder="Card Number"
                   span.icon.is-left.is-small: i.fa.fa-credit-card
                 .control
                   .select
@@ -115,10 +117,10 @@ section.section.embossed
                           = i
               .field.is-grouped
                 p.control.is-expanded.has-icons-left
-                  input.input type="text" data-panda="first_name" placeholder="First name"
+                  input.input id="first_name" type="text" data-panda="first_name" placeholder="First name"
                   span.icon.is-left.is-small: i.fa.fa-user
                 p.control.is-expanded
-                  input.input type="text" data-panda="last_name" placeholder="Last name"
+                  input.input id="last_name" type="text" data-panda="last_name" placeholder="Last name"
                 p.control.has-icons-left
                   input.input type="text" data-panda="cvv" placeholder="CVV" size=4
                   span.icon.is-left.is-small: i.fa.fa-lock
@@ -152,6 +154,8 @@ section.section.embossed
 
         Panda.on('success', function(cardToken) {
           document.getElementById('payment_token').value = cardToken;
+          document.getElementById('name_on_card').value = document.getElementById('first_name').value + ' ' + document.getElementById('last_name').value;
+          document.getElementById('last4').value = document.getElementById('credit_card').value.slice(-4);
           document.getElementById('sanitized_create_payment_method_form').submit();
         });
 

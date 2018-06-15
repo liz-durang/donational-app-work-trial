@@ -40,7 +40,7 @@ RSpec.describe Contributions::ProcessContribution do
       create(:donor, email: 'user@example.com')
     end
 
-    let(:payment_method_query_result) { double(customer_id: 'cus_123') }
+    let(:payment_method_query_result) { double(payment_processor_customer_id: 'cus_123') }
 
     let(:portfolio) { create(:portfolio, donor: donor) }
     let(:contribution) do

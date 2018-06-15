@@ -1,11 +1,12 @@
-module Donors
+module PaymentMethods
   class UpdatePaymentMethod < ApplicationCommand
     required do
       model :donor do
         string :email, empty: false
-        string :payment_processor_customer_id
       end
       string :payment_token, empty: false
+      string :name_on_card
+      string :last4
     end
 
     def execute
@@ -14,8 +15,15 @@ module Donors
         return
       end
 
-      chain do
-        Donors::UpdateDonor.run(donor: donor, payment_processor_customer_id: customer[:id])
+      PaymentMethod.transaction do
+        deactivate_existing_payment_method!
+
+        PaymentMethod.create!(
+          donor: donor,
+          payment_processor_customer_id: customer[:id],
+          name_on_card: name_on_card,
+          last4: last4
+        )
       end
 
       chain do
@@ -31,10 +39,14 @@ module Donors
       @customer ||= (customer_by_id || create_customer || customer_by_email)
     end
 
-    def customer_by_id
-      return nil unless donor.payment_processor_customer_id.present?
+    def payment_method
+      @payment_method ||= PaymentMethods::GetActivePaymentMethod.call(donor: donor)
+    end
 
-      find_by_id = Payments::FindCustomerById.run(customer_id: donor.payment_processor_customer_id)
+    def customer_by_id
+      return nil unless payment_method&.payment_processor_customer_id.present?
+
+      find_by_id = Payments::FindCustomerById.run(customer_id: payment_method.payment_processor_customer_id)
       return nil unless find_by_id.success?
       find_by_id.result
     end
@@ -53,6 +65,10 @@ module Donors
       create_customer = Payments::CreateCustomer.run(email: donor.email)
       return nil unless create_customer.success?
       create_customer.result
+    end
+
+    def deactivate_existing_payment_method!
+      payment_method&.update!(deactivated_at: Time.zone.now)
     end
   end
 end
