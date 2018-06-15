@@ -19,7 +19,6 @@
 #  include_local_organizations                 :boolean          default(TRUE)
 #  include_global_organizations                :boolean          default(TRUE)
 #  username                                    :string
-#  payment_processor_customer_id               :string
 #  giving_challenges                           :string           default([]), is an Array
 #  reasons_why_i_choose_an_organization        :string           default([]), is an Array
 #  contribution_frequency                      :string
