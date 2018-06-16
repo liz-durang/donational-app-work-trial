@@ -1,6 +1,6 @@
 class OrganizationsController < ApplicationController
   def index
-    @model = OpenStruct.new(
+    @view_model = OpenStruct.new(
       organizations: recommended_organizations
     )
   end

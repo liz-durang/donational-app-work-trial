@@ -23,11 +23,11 @@ section.section.embossed
     p.has-text-centered Donational recommends these high impact charities. Add one to your portfolio!
     br
 
-    - if @model.addable_organizations.empty?
+    - if @view_model.addable_organizations.empty?
       p.notification.is-warning You have all of our recommended charities in your portfolio!
 
     ul.columns.is-multiline.is-centered.book-list.content
-      - @model.addable_organizations.each do |organization|
+      - @view_model.addable_organizations.each do |organization|
         li.column.is-4
           = render 'portfolios/book', organization: organization
           = form_with url: allocations_path, local: true, method: :post do |f|

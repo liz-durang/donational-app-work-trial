@@ -9,7 +9,7 @@ class ContributionsController < ApplicationController
   end
 
   def new
-    @model = OpenStruct.new(
+    @view_model = OpenStruct.new(
       target_amount_cents: target_amount_cents,
       recurring_contribution: active_recurring_contribution || new_recurring_donation,
       active_payment_method: payment_method.present?,

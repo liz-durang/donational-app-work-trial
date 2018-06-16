@@ -20,7 +20,7 @@ section.section.embossed
         a> href=onboarding_path(utm_source: 'charity-catalog') giving with impact
         | today!
     ul.columns.is-multiline.is-centered.book-list.content
-      - @model.organizations.each do |organization|
+      - @view_model.organizations.each do |organization|
         li.column.is-4
           = render 'portfolios/book', organization: organization
           a.button.is-primary href=onboarding_path(utm_source: organization.name)

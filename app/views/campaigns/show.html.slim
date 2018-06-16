@@ -1,0 +1,112 @@
+section.section
+  .container
+    .content.has-text-centered
+      h1.title.is-spaced
+        => icon_tag('fa-credit-card')
+        br
+        ' Donate with
+        = @view_model.partner_name
+
+      p = @view_model.partner_description
+      p = link_to @view_model.partner_name, @view_model.partner_website_url
+      p = @view_model.campaign_title
+      p = @view_model.campaign_description
+section.section.embossed
+  .container.content
+    = display_flash_messages
+    = form_with model: @view_model.new_campaign_contribution, local: true, id: 'sanitized_form', method: :post, class: 'form' do |f|
+      = f.hidden_field :payment_token, id: 'payment_token'
+      = f.hidden_field :name_on_card, id: 'name_on_card'
+      = f.hidden_field :last4, id: 'last4'
+      .field
+        label.label First name
+        = f.text_field :first_name, class: :input
+      .field
+        label.label Last name
+        = f.text_field :last_name, class: :input
+      .field
+        label.label Email
+        = f.email_field :email, class: :input
+      .field
+        = f.label :amount_dollars, class: :label, value: 'Enter donation amount'
+        .control.buttons = f.collection_radio_buttons :amount_dollars,\
+          @view_model.default_contribution_amounts.map { |amt| [amt, number_to_currency(amt, precision: 0)] }, :first, :last do |b| \
+            b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
+          end
+      .field
+        = f.label :frequency, class: :label, value: 'Donation Frequency'
+        .control.buttons
+          = f.collection_radio_buttons(:frequency, RecurringContribution.frequency.options, :last, :first) do |b| \
+              b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
+            end
+    hr
+
+    / This form should remain separate from the credit card details to avoid
+    / accidentally leaking credit card data into our server
+    form#panda_cc_form.panda_cc_form.form
+      .field
+        label.label Enter Credit Card details:
+        .field.is-grouped
+          .control.is-expanded.has-icons-left
+            input.input type="text" data-panda="credit_card" placeholder="Card Number"
+            span.icon.is-left.is-small: i.fa.fa-credit-card
+          .control
+            .select
+              select data-panda="month" name='month'
+                option selected=true disabled=true mm
+                - (1..12).each do |i|
+                  option value=i
+                    = i
+          .control
+            .select
+              select data-panda="year" name='year'
+                option selected=true disabled=true yyyy
+                - (Time.zone.now.year..2030).each do |i|
+                  option value=i
+                    = i
+        .field.is-grouped
+          p.control.is-expanded.has-icons-left
+            input.input type="text" data-panda="first_name" placeholder="First name"
+            span.icon.is-left.is-small: i.fa.fa-user
+          p.control.is-expanded
+            input.input type="text" data-panda="last_name" placeholder="Last name"
+          p.control.has-icons-left
+            input.input type="text" data-panda="cvv" placeholder="CVV" size=4
+            span.icon.is-left.is-small: i.fa.fa-lock
+          .card-wrapper.is-hidden
+      hr
+      .message.is-info
+        p.message-body All donations are tax-deductible operating under the Social Good Fund, a 501(c)3 public charity, EIN 46-1323531.
+      .field
+        p.control
+          button.button.is-primary.is-medium type="submit" Donate
+
+    hr
+    p.help
+      | We use smart and secure online payments to ensure that your donations are simple, secure, and avoid fees.
+    javascript:
+      new Card({
+        form: '#panda_cc_form',
+        container: '.card-wrapper',
+        formSelectors: {
+          nameInput: 'input[data-panda="first_name"], input[data-panda="last_name"]',
+          numberInput: 'input[data-panda="credit_card"]',
+          expiryInput: 'input[data-panda="month"], input[data-panda="year"]',
+          cvcInput: 'input[data-panda="cvv"]'
+        }
+    	});
+
+    	Panda.init("#{ENV.fetch('PANDAPAY_PUBLIC_KEY')}", 'panda_cc_form');
+
+      Panda.on('success', function(cardToken) {
+        document.getElementById('payment_token').value = cardToken;
+        document.getElementById('name_on_card').value = $('input[data-panda="first_name"]').val() + ' ' + $('input[data-panda="last_name"]').val();
+        document.getElementById('last4').value = $('input[data-panda="credit_card"]').val().slice(-4);
+        document.getElementById('sanitized_form').submit();
+      });
+
+      Panda.on('error', function(errors) {
+        var message = "";
+        errors.forEach(function(error) { message += "\n" + error.message; })
+        alert("There was an error processing your payment: " + message);
+      });

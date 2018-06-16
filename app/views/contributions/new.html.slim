@@ -8,13 +8,13 @@ section.section
 
       p
         ' Every dollar you donate goes directly to the
-        strong => pluralize(@model.portfolio_organization_count, 'charity')
+        strong => pluralize(@view_model.portfolio_organization_count, 'charity')
         | in your portfolio, based on your allocations.
 
 section.section.embossed
   .container.content
     = display_flash_messages
-    = form_with model: @model.recurring_contribution, url: contributions_path, local: true, id: 'sanitized_create_payment_method_form', method: :post, class: 'form' do |f|
+    = form_with model: @view_model.recurring_contribution, url: contributions_path, local: true, id: 'sanitized_create_payment_method_form', method: :post, class: 'form' do |f|
       = f.hidden_field :payment_token, id: 'payment_token'
       = f.hidden_field :name_on_card, id: 'name_on_card'
       = f.hidden_field :last4, id: 'last4'
@@ -25,7 +25,7 @@ section.section.embossed
               | 1. Enter donation amount
             .field.has-addons
               .control.has-icons-left
-                = f.number_field :amount_dollars, class: 'input', value: (@model.recurring_contribution.amount_cents / 100.0).ceil
+                = f.number_field :amount_dollars, class: 'input', value: (@view_model.recurring_contribution.amount_cents / 100.0).ceil
                 span.icon.is-left $
             .control.buttons
               = f.collection_radio_buttons(:frequency, RecurringContribution.frequency.options, :last, :first) do |b| \
@@ -52,14 +52,14 @@ section.section.embossed
                         ' .
                         br
                         ' Your target
-                        - if @model.recurring_contribution.annually?
+                        - if @view_model.recurring_contribution.annually?
                           ' annual
-                        - elsif @model.recurring_contribution.quarterly?
+                        - elsif @view_model.recurring_contribution.quarterly?
                           ' quarterly
-                        - else @model.recurring_contribution.monthly?
+                        - else @view_model.recurring_contribution.monthly?
                           ' monthly
                         ' contribution is
-                        strong> = cents_to_currency(@model.target_amount_cents)
+                        strong> = cents_to_currency(@view_model.target_amount_cents)
       .columns
         .column.is-6
           p.field
@@ -71,7 +71,7 @@ section.section.embossed
           p.help
             ' Donational is run at-cost by a team of dedicated members building useful tools for the greater good.
             | We only make money if you choose to tip us, allowing us to help you — and to help others — make a greater impact.
-          - if @model.active_payment_method
+          - if @view_model.active_payment_method
             p.field
               .control
                 = f.submit "Donate", class: %w(button is-primary is-medium)
@@ -89,7 +89,7 @@ section.section.embossed
                     ' We
                     em> hate
                     ' unnecessary fees, so we pool your donation to a charity with donations by other users on the platform.
-    - unless @model.active_payment_method
+    - unless @view_model.active_payment_method
       / This form should remain separate from the credit card details to avoid
       / accidentally leaking credit card data into our server
       form#panda_cc_form.panda_cc_form.form
@@ -128,7 +128,7 @@ section.section.embossed
                 label.subtitle 4. Receive your tax-deductible receipt
                 p.help
                   ' We'll distribute your donation to the
-                  => pluralize(@model.portfolio_organization_count, 'charity')
+                  => pluralize(@view_model.portfolio_organization_count, 'charity')
                   | in your portfolio, and we'll email you a single tax-deductible receipt.
 
               .field

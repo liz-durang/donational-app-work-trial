@@ -2,7 +2,7 @@ class AllocationsController < ApplicationController
   include Secured
 
   def new
-    @model = OpenStruct.new(
+    @view_model = OpenStruct.new(
       portfolio: active_portfolio,
       addable_organizations: organizations_available_to_add_to_portfolio
     )

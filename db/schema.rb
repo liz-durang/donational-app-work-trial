@@ -28,6 +28,18 @@ ActiveRecord::Schema.define(version: 20180605181847) do
     t.index ["portfolio_id"], name: "index_allocations_on_portfolio_id"
   end
 
+  create_table "campaigns", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "partner_id"
+    t.string "title"
+    t.text "description"
+    t.string "slug"
+    t.integer "target_amount_cents"
+    t.string "default_contribution_amounts", array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["partner_id"], name: "index_campaigns_on_partner_id"
+  end
+
   create_table "cause_area_relevances", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "donor_id"
     t.integer "global_health"
@@ -136,6 +148,28 @@ ActiveRecord::Schema.define(version: 20180605181847) do
     t.index ["ein"], name: "index_organizations_on_ein", unique: true
   end
 
+  create_table "partner_affiliations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "donor_id"
+    t.uuid "partner_id"
+    t.uuid "campaign_id"
+    t.jsonb "custom_donor_info"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_id"], name: "index_partner_affiliations_on_campaign_id"
+    t.index ["donor_id"], name: "index_partner_affiliations_on_donor_id"
+    t.index ["partner_id"], name: "index_partner_affiliations_on_partner_id"
+  end
+
+  create_table "partners", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "website_url"
+    t.text "description"
+    t.decimal "platform_fee_percentage", default: "0.0"
+    t.string "primary_branding_color"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "payment_methods", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "donor_id", null: false
     t.string "payment_processor_customer_id"
@@ -172,6 +206,7 @@ ActiveRecord::Schema.define(version: 20180605181847) do
 
   add_foreign_key "allocations", "organizations", column: "organization_ein", primary_key: "ein"
   add_foreign_key "allocations", "portfolios"
+  add_foreign_key "campaigns", "partners"
   add_foreign_key "cause_area_relevances", "donors"
   add_foreign_key "contributions", "donors"
   add_foreign_key "contributions", "portfolios"
@@ -182,6 +217,9 @@ ActiveRecord::Schema.define(version: 20180605181847) do
   add_foreign_key "donations", "portfolios"
   add_foreign_key "grants", "organizations", column: "organization_ein", primary_key: "ein"
   add_foreign_key "organizations", "donors", column: "suggested_by_donor_id"
+  add_foreign_key "partner_affiliations", "campaigns"
+  add_foreign_key "partner_affiliations", "donors"
+  add_foreign_key "partner_affiliations", "partners"
   add_foreign_key "payment_methods", "donors"
   add_foreign_key "portfolios", "donors"
   add_foreign_key "recurring_contributions", "donors"

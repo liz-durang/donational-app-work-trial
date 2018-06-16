@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :organizations, path: 'charities', only: :index
 
   # Activation
+  mount ActionCable.server => '/cable'
   resource :onboarding, path: 'getting-started', only: :show
   resource :portfolio
   resource :allocations, only: %i[new edit create update]
@@ -26,5 +27,7 @@ Rails.application.routes.draw do
   get '/auth/oauth2/callback' => 'auth0#callback'
   get '/auth/failure' => 'auth0#failure'
 
-  mount ActionCable.server => '/cable'
+  get '/:campaign_slug' => 'campaigns#show', as: :campaigns
+  post '/:campaign_slug/contributions' => 'campaign_contributions#create', as: :campaign_contributions
+
 end
