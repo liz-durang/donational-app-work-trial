@@ -12,13 +12,14 @@ module Payments
 
     optional do
       integer :platform_fee_cents, default: 0
+      integer :tips_cents, default: 0
     end
 
     def execute
       payment = pandapay_donations.post(
         source: customer_id,
-        amount: donation_amount_cents + platform_fee_cents,
-        platform_fee: platform_fee_cents,
+        amount: donation_amount_cents + tips_cents,
+        platform_fee: platform_fee_cents + tips_cents,
         currency: 'usd',
         receipt_email: email
       )

@@ -55,7 +55,7 @@ class ContributionsController < ApplicationController
       portfolio: active_portfolio,
       frequency: frequency,
       amount_cents: amount_cents,
-      platform_fee_cents: platform_fee_cents
+      tips_cents: tips_cents
     )
   end
 
@@ -64,7 +64,7 @@ class ContributionsController < ApplicationController
       donor: current_donor,
       portfolio: active_portfolio,
       amount_cents: amount_cents,
-      platform_fee_cents: platform_fee_cents,
+      tips_cents: tips_cents,
       scheduled_at: Time.zone.now
     )
   end
@@ -101,8 +101,8 @@ class ContributionsController < ApplicationController
     amount_dollars * 100
   end
 
-  def platform_fee_cents
-    params[:recurring_contribution][:platform_fee_cents].to_i
+  def tips_cents
+    params[:recurring_contribution][:tips_cents].to_i
   end
 
   def amount_dollars

@@ -68,7 +68,7 @@ class CampaignContributionsController < ApplicationController
       portfolio: active_portfolio,
       frequency: frequency,
       amount_cents: amount_cents,
-      platform_fee_cents: platform_fee_cents
+      tips_cents: 0
     )
   end
 
@@ -77,7 +77,7 @@ class CampaignContributionsController < ApplicationController
       donor: current_donor,
       portfolio: active_portfolio,
       amount_cents: amount_cents,
-      platform_fee_cents: platform_fee_cents,
+      tips_cents: 0,
       scheduled_at: Time.zone.now
     )
   end
@@ -88,11 +88,6 @@ class CampaignContributionsController < ApplicationController
 
   def active_recurring_contribution
     @active_contribution ||= Contributions::GetActiveRecurringContribution.call(donor: current_donor)
-  end
-
-  def platform_fee_cents
-    # TODO: read from Partner config as an ApplicationQuery
-    (partner.platform_fee_percentage * amount_cents).to_i
   end
 
   def amount_cents

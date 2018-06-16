@@ -44,7 +44,7 @@ RSpec.describe Contributions::ProcessContribution do
 
     let(:portfolio) { create(:portfolio, donor: donor) }
     let(:contribution) do
-      create(:contribution, donor: donor, portfolio: portfolio, amount_cents: 1_000, platform_fee_cents: 200, processed_at: nil)
+      create(:contribution, donor: donor, portfolio: portfolio, amount_cents: 1_000, tips_cents: 200, processed_at: nil)
     end
     let(:org_1) { create(:organization, ein: 'org1') }
     let(:org_2) { create(:organization, ein: 'org2') }
@@ -74,7 +74,7 @@ RSpec.describe Contributions::ProcessContribution do
     end
 
     context 'and the payment is unsuccessful' do
-      let(:charge_errors) { double(to_json: 'errors_as_json') }
+      let(:charge_errors) { { some: 'error' } }
       let(:unsuccessful_charge) { double(success?: false, errors: charge_errors) }
 
       before do
@@ -88,7 +88,7 @@ RSpec.describe Contributions::ProcessContribution do
 
         expect(contribution.processed_at).to be nil
         expect(contribution.failed_at).to eq Time.zone.now
-        expect(contribution.receipt).to eq 'errors_as_json'
+        expect(contribution.receipt).to eq '{"some":"error"}'
       end
 
       it 'does not track an analytics event' do
@@ -106,7 +106,12 @@ RSpec.describe Contributions::ProcessContribution do
       it 'stores the receipt and marks the contribution as processed' do
         expect(Payments::ChargeCustomer)
           .to receive(:run)
-          .with(email: 'user@example.com', customer_id: 'cus_123', donation_amount_cents: 1_000, platform_fee_cents: 200)
+          .with(
+            email: 'user@example.com',
+            customer_id: 'cus_123',
+            donation_amount_cents: 1_000,
+            platform_fee_cents: 0,
+            tips_cents: 200)
           .and_return(successful_charge)
         expect(Analytics::TrackEvent).to receive(:run).and_return(successful_track_event)
 
