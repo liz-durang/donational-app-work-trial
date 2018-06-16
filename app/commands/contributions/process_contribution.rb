@@ -25,7 +25,7 @@ module Contributions
         email: contribution.donor.email,
         donation_amount_cents: contribution.amount_cents,
         tips_cents: contribution.tips_cents,
-        platform_fee_cents: platform_fee_cents
+        platform_fee_cents: payment_fees.platform_fee_cents
       ).tap do |command|
         if command.success?
           contribution.update(receipt: command.result, processed_at: Time.zone.now)
@@ -47,41 +47,21 @@ module Contributions
       add_error(:contribution, :already_processed, 'The payment has already been processed')
     end
 
-    def platform_fee_cents
-      # contribution.amount_cents * donor.partner&.platform_fee_percentage.to_f
-      0
-    end
-
-    def payment_processor_fixed_fee
-      30
-    end
-
-    def payment_processor_percentage_fee
-      0.039
-    end
-
-    def total_charge_amount
-      contribution.amount_cents + contribution.tips_cents
-    end
-
-    def fees
-      total_charge_amount * payment_processor_percentage_fee + payment_processor_fixed_fee
-    end
-
-    def amount_donated_after_fees
-      total_charge_amount - fees - contribution.tips_cents
+    def payment_fees
+      @payment_fees ||= Contributions::CalculatePaymentFees.call(contribution: contribution)
     end
 
     def create_donations_based_on_active_allocations
       # TODO: Move this into a Donations::CreateDonationsFromContributionIntoPortfolio command
       Donation.transaction do
         Portfolios::GetActiveAllocations.call(portfolio: contribution.portfolio).each do |a|
+          donation_amount_cents = (payment_fees.amount_donated_after_fees_cents * a.percentage / 100.0).floor
           Donation.create!(
             allocation: a,
             contribution: contribution,
             portfolio: a.portfolio,
             organization: a.organization,
-            amount_cents: (amount_donated_after_fees * a.percentage / 100.0).floor
+            amount_cents: donation_amount_cents
           )
         end
       end

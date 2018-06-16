@@ -131,10 +131,13 @@ RSpec.describe Contributions::ProcessContribution do
 
         expect { Contributions::ProcessContribution.run(contribution: contribution) }.to change { Donation.count }.by(2)
 
+        # (1000 - (1200 * 0.029 + 30) - (1000 * 0.01)) * 0.6
         expect(Donation.where(organization: org_1).first)
-          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 553)
+          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 555)
+
+        # (1000 - (1200 * 0.029 + 30) - (1000 * 0.01)) * 0.4
         expect(Donation.where(organization: org_2).first)
-          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 369)
+          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 370)
       end
     end
   end
