@@ -1,4 +1,4 @@
-module Allocations
+module Portfolios
   class AddOrganizationAndRebalancePortfolio < ApplicationCommand
     required do
       model :portfolio

@@ -43,7 +43,7 @@ class CampaignContributionsController < ApplicationController
   def create_portfolio_from_template!
     template = PortfolioTemplate.find(params[:campaign_contribution][:portfolio_template_id])
     Portfolios::CreateOrReplacePortfolio.run(donor: current_donor)
-    Allocations::AddOrganizationsAndRebalancePortfolio.run(
+    Portfolios::AddOrganizationsAndRebalancePortfolio.run(
       portfolio: active_portfolio,
       organization_eins: template.organization_eins
     )
@@ -54,7 +54,7 @@ class CampaignContributionsController < ApplicationController
   end
 
   def update_donor_payment_method!
-    PaymentMethods::UpdatePaymentMethod.run(
+    Payments::UpdatePaymentMethod.run(
       donor: current_donor,
       payment_token: payment_token,
       name_on_card: name_on_card,

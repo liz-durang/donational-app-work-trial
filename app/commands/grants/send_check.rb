@@ -1,4 +1,4 @@
-module Checks
+module Grants
   class SendCheck < ApplicationCommand
     required do
       model :organization

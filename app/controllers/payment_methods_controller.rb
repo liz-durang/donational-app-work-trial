@@ -9,7 +9,7 @@ class PaymentMethodsController < ApplicationController
   end
 
   def create
-    PaymentMethods::UpdatePaymentMethod.run!(
+    Payments::UpdatePaymentMethod.run!(
       donor: current_donor,
       payment_token: params[:payment_token],
       name_on_card: params[:name_on_card],
@@ -23,6 +23,6 @@ class PaymentMethodsController < ApplicationController
   private
 
   def active_payment_method
-    @active_payment_method ||= PaymentMethods::GetActivePaymentMethod.call(donor: current_donor)
+    @active_payment_method ||= Payments::GetActivePaymentMethod.call(donor: current_donor)
   end
 end

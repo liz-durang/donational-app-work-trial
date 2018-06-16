@@ -7,7 +7,7 @@ RSpec.describe Contributions::ProcessContribution do
     let(:contribution) { create(:contribution, processed_at: nil) }
 
     before do
-      expect(PaymentMethods::GetActivePaymentMethod)
+      expect(Payments::GetActivePaymentMethod)
         .to receive(:call)
         .and_return(nil)
     end
@@ -56,12 +56,12 @@ RSpec.describe Contributions::ProcessContribution do
     end
 
     before do
-      expect(PaymentMethods::GetActivePaymentMethod)
+      expect(Payments::GetActivePaymentMethod)
         .to receive(:call)
         .with(donor: donor)
         .and_return(payment_method_query_result)
 
-      allow(Allocations::GetActiveAllocations)
+      allow(Portfolios::GetActiveAllocations)
         .to receive(:call)
         .with(portfolio: portfolio)
         .and_return([allocation_1, allocation_2])

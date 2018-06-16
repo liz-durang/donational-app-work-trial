@@ -41,7 +41,7 @@ class ContributionsController < ApplicationController
   private
 
   def update_donor_payment_method!
-    PaymentMethods::UpdatePaymentMethod.run!(
+    Payments::UpdatePaymentMethod.run!(
       donor: current_donor,
       payment_token: payment_token,
       name_on_card: name_on_card,
@@ -70,7 +70,7 @@ class ContributionsController < ApplicationController
   end
 
   def payment_method
-    @payment_method = PaymentMethods::GetActivePaymentMethod.call(donor: current_donor)
+    @payment_method = Payments::GetActivePaymentMethod.call(donor: current_donor)
   end
 
   def active_portfolio

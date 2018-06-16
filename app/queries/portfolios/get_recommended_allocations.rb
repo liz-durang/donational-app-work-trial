@@ -1,4 +1,4 @@
-module Allocations
+module Portfolios
   class GetRecommendedAllocations < ApplicationQuery
     def call(donor:)
       organizations = Organizations::GetOrganizationsThatMatchPriorities.call(donor: donor)

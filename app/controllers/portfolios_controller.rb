@@ -16,7 +16,7 @@ class PortfoliosController < ApplicationController
 
     outcome = Flow.new
       .chain { Portfolios::CreateOrReplacePortfolio.run(donor: current_donor) }
-      .chain { Allocations::UpdateAllocations.run(portfolio: active_portfolio, allocations: new_allocations) }
+      .chain { Portfolios::UpdateAllocations.run(portfolio: active_portfolio, allocations: new_allocations) }
       .run
 
     if outcome.success?
@@ -42,11 +42,11 @@ class PortfoliosController < ApplicationController
   private
 
   def recommended_allocations
-    @recommended_allocations ||= Allocations::GetRecommendedAllocations.call(donor: current_donor)
+    @recommended_allocations ||= Portfolios::GetRecommendedAllocations.call(donor: current_donor)
   end
 
   def organizations
-    @organizations ||= Allocations::GetActiveAllocations.call(portfolio: active_portfolio).map(&:organization)
+    @organizations ||= Portfolios::GetActiveAllocations.call(portfolio: active_portfolio).map(&:organization)
   end
 
   def organizations_by_cause_area

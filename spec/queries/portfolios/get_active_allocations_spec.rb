@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe Allocations::GetActiveAllocations do
+RSpec.describe Portfolios::GetActiveAllocations do
   let(:other_portfolio) { create(:portfolio) }
   let(:portfolio) { create(:portfolio) }
 
-  subject { Allocations::GetActiveAllocations.call(portfolio: portfolio) }
+  subject { Portfolios::GetActiveAllocations.call(portfolio: portfolio) }
 
   context 'when there are no allocations for the portfolio' do
     before { create(:allocation, portfolio: other_portfolio) }

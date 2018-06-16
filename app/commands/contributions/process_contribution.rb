@@ -75,7 +75,7 @@ module Contributions
     def create_donations_based_on_active_allocations
       # TODO: Move this into a Donations::CreateDonationsFromContributionIntoPortfolio command
       Donation.transaction do
-        Allocations::GetActiveAllocations.call(portfolio: contribution.portfolio).each do |a|
+        Portfolios::GetActiveAllocations.call(portfolio: contribution.portfolio).each do |a|
           Donation.create!(
             allocation: a,
             contribution: contribution,
@@ -103,7 +103,7 @@ module Contributions
     end
 
     def payment_method
-      @payment_method ||= PaymentMethods::GetActivePaymentMethod.call(donor: contribution.donor)
+      @payment_method ||= Payments::GetActivePaymentMethod.call(donor: contribution.donor)
     end
   end
 end

@@ -15,7 +15,7 @@ class AllocationsController < ApplicationController
       suggested_by: current_donor
     )
 
-    Allocations::AddOrganizationAndRebalancePortfolio.run!(
+    Portfolios::AddOrganizationAndRebalancePortfolio.run!(
       portfolio: active_portfolio,
       organization: organization
     )
@@ -25,7 +25,7 @@ class AllocationsController < ApplicationController
   end
 
   def update
-    command = Allocations::UpdateAllocations.run(
+    command = Portfolios::UpdateAllocations.run(
       portfolio: active_portfolio,
       allocations: params[:allocations].values
     )
@@ -43,7 +43,7 @@ class AllocationsController < ApplicationController
   def edit
     Analytics::TrackEvent.run(user_id: current_donor.id, event: 'Viewed allocations')
 
-    @allocations = Allocations::GetActiveAllocations.call(portfolio: active_portfolio)
+    @allocations = Portfolios::GetActiveAllocations.call(portfolio: active_portfolio)
   end
 
   private

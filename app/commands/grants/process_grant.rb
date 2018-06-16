@@ -12,7 +12,7 @@ module Grants
     def execute
       Grant.transaction do
         chain do
-          Checks::SendCheck.run(
+          Grants::SendCheck.run(
             organization: grant.organization,
             amount_cents: grant.amount_cents
           )

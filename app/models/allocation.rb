@@ -18,7 +18,7 @@ class Allocation < ApplicationRecord
   belongs_to :organization, foreign_key: 'organization_ein'
   has_many :donations
 
-  scope :active, Allocations::GetActiveAllocations
+  scope :active, Portfolios::GetActiveAllocations
 
   def active?
     deactivated_at.blank?
