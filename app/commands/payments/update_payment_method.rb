@@ -1,4 +1,4 @@
-module PaymentMethods
+module Payments
   class UpdatePaymentMethod < ApplicationCommand
     required do
       model :donor do
@@ -40,7 +40,7 @@ module PaymentMethods
     end
 
     def payment_method
-      @payment_method ||= PaymentMethods::GetActivePaymentMethod.call(donor: donor)
+      @payment_method ||= Payments::GetActivePaymentMethod.call(donor: donor)
     end
 
     def customer_by_id

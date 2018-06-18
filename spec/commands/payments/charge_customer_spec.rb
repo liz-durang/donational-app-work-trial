@@ -29,7 +29,7 @@ RSpec.describe Payments::ChargeCustomer do
             receipt_email: 'user@example.com',
             source: 'cus_123',
             amount: 123,
-            platform_fee: 23,
+            platform_fee: 25,
             currency: 'usd'
           ).and_return(successful_response)
 
@@ -37,7 +37,8 @@ RSpec.describe Payments::ChargeCustomer do
           customer_id: customer_id,
           email: email,
           donation_amount_cents: 100,
-          platform_fee_cents: 23
+          tips_cents: 23,
+          platform_fee_cents: 2
         )
 
         expect(command).to be_success

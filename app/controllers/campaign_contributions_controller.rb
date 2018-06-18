@@ -43,7 +43,7 @@ class CampaignContributionsController < ApplicationController
   def create_portfolio_from_template!
     template = PortfolioTemplate.find(params[:campaign_contribution][:portfolio_template_id])
     Portfolios::CreateOrReplacePortfolio.run(donor: current_donor)
-    Allocations::AddOrganizationsAndRebalancePortfolio.run(
+    Portfolios::AddOrganizationsAndRebalancePortfolio.run(
       portfolio: active_portfolio,
       organization_eins: template.organization_eins
     )
@@ -54,7 +54,7 @@ class CampaignContributionsController < ApplicationController
   end
 
   def update_donor_payment_method!
-    PaymentMethods::UpdatePaymentMethod.run(
+    Payments::UpdatePaymentMethod.run(
       donor: current_donor,
       payment_token: payment_token,
       name_on_card: name_on_card,
@@ -68,7 +68,7 @@ class CampaignContributionsController < ApplicationController
       portfolio: active_portfolio,
       frequency: frequency,
       amount_cents: amount_cents,
-      platform_fee_cents: platform_fee_cents
+      tips_cents: 0
     )
   end
 
@@ -77,7 +77,7 @@ class CampaignContributionsController < ApplicationController
       donor: current_donor,
       portfolio: active_portfolio,
       amount_cents: amount_cents,
-      platform_fee_cents: platform_fee_cents,
+      tips_cents: 0,
       scheduled_at: Time.zone.now
     )
   end
@@ -88,11 +88,6 @@ class CampaignContributionsController < ApplicationController
 
   def active_recurring_contribution
     @active_contribution ||= Contributions::GetActiveRecurringContribution.call(donor: current_donor)
-  end
-
-  def platform_fee_cents
-    # TODO: read from Partner config as an ApplicationQuery
-    (partner.platform_fee_percentage * amount_cents).to_i
   end
 
   def amount_cents

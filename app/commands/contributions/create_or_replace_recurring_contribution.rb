@@ -7,7 +7,7 @@ module Contributions
       model :portfolio
       symbol :frequency, default: :monthly, in: RecurringContribution.frequency.values
       integer :amount_cents, min: 0
-      integer :platform_fee_cents, min: 0, default: 0
+      integer :tips_cents, min: 0, default: 0
     end
 
     optional do
@@ -24,7 +24,7 @@ module Contributions
           frequency: frequency,
           start_at: start_at || Time.zone.now,
           amount_cents: amount_cents,
-          platform_fee_cents: platform_fee_cents
+          tips_cents: tips_cents
         )
       end
 

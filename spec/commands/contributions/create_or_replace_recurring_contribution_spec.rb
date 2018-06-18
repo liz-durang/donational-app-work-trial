@@ -12,7 +12,7 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
       donor: donor,
       portfolio: portfolio,
       amount_cents: 8000,
-      platform_fee_cents: 100,
+      tips_cents: 100,
       frequency: :annually,
       start_at: '2000-01-01'
     }
@@ -29,7 +29,7 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
 
       expect(recurring_contribution).to be_active
       expect(recurring_contribution.amount_cents).to eq 8000
-      expect(recurring_contribution.platform_fee_cents).to eq 100
+      expect(recurring_contribution.tips_cents).to eq 100
       expect(recurring_contribution.frequency).to eq 'annually'
       expect(recurring_contribution.start_at).to eq Date.new(2000, 1, 1)
     end

@@ -1,4 +1,4 @@
-module Allocations
+module Portfolios
   class GetActiveAllocations < ApplicationQuery
     def initialize(relation = Allocation.all)
       @relation = relation

@@ -13,7 +13,7 @@ module Organizations
     end
 
     def organization_eins_in(portfolio)
-      Allocations::GetActiveAllocations
+      Portfolios::GetActiveAllocations
         .call(portfolio: portfolio)
         .map(&:organization_ein)
     end

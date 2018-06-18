@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe PaymentMethods::UpdatePaymentMethod do
+RSpec.describe Payments::UpdatePaymentMethod do
   around do |example|
     ClimateControl.modify(PANDAPAY_SECRET_KEY: 'sk_test_123') do
       example.run
@@ -31,7 +31,7 @@ RSpec.describe PaymentMethods::UpdatePaymentMethod do
           .with(customer_id: 'cus_123', payment_token: 'token')
           .and_return(successful_update)
 
-        command = PaymentMethods::UpdatePaymentMethod.run(
+        command = Payments::UpdatePaymentMethod.run(
           donor: donor,
           payment_token: 'token',
           name_on_card: 'customer',
@@ -57,7 +57,7 @@ RSpec.describe PaymentMethods::UpdatePaymentMethod do
           .to receive(:run)
           .and_return(failed_update)
 
-        command = PaymentMethods::UpdatePaymentMethod.run(
+        command = Payments::UpdatePaymentMethod.run(
           donor: donor,
           payment_token: 'token',
           name_on_card: 'customer',
@@ -87,7 +87,7 @@ RSpec.describe PaymentMethods::UpdatePaymentMethod do
       end
 
       it 'saves the newly created customer id to the donor' do
-        command = PaymentMethods::UpdatePaymentMethod.run(
+        command = Payments::UpdatePaymentMethod.run(
           donor: donor,
           payment_token: 'token',
           name_on_card: 'customer',
@@ -106,7 +106,7 @@ RSpec.describe PaymentMethods::UpdatePaymentMethod do
             .with(customer_id: 'new_cus_123', payment_token: 'token')
             .and_return(successful_update)
 
-          command = PaymentMethods::UpdatePaymentMethod.run(
+          command = Payments::UpdatePaymentMethod.run(
             donor: donor,
             payment_token: 'token',
             name_on_card: 'customer',
@@ -141,7 +141,7 @@ RSpec.describe PaymentMethods::UpdatePaymentMethod do
 
         it 'saves the matching customer id to the donor' do
 
-          command = PaymentMethods::UpdatePaymentMethod.run(
+          command = Payments::UpdatePaymentMethod.run(
             donor: donor,
             payment_token: 'token',
             name_on_card: 'customer',
@@ -160,7 +160,7 @@ RSpec.describe PaymentMethods::UpdatePaymentMethod do
               .with(customer_id: 'cus_with_matching_email', payment_token: 'token')
               .and_return(successful_update)
 
-            command = PaymentMethods::UpdatePaymentMethod.run(
+            command = Payments::UpdatePaymentMethod.run(
               donor: donor,
               payment_token: 'token',
               name_on_card: 'customer',
@@ -183,7 +183,7 @@ RSpec.describe PaymentMethods::UpdatePaymentMethod do
         it 'fails with customer not found errors' do
           expect(Donors::UpdateDonor).not_to receive(:run)
 
-          command = PaymentMethods::UpdatePaymentMethod.run(
+          command = Payments::UpdatePaymentMethod.run(
             donor: donor,
             payment_token: 'token',
             name_on_card: 'customer',
@@ -206,7 +206,7 @@ RSpec.describe PaymentMethods::UpdatePaymentMethod do
       expect(Payments::FindCustomerByEmail).not_to receive(:run)
       expect(Payments::CreateCustomer).not_to receive(:run)
 
-      command = PaymentMethods::UpdatePaymentMethod.run(
+      command = Payments::UpdatePaymentMethod.run(
         donor: donor,
         payment_token: payment_token,
         name_on_card: 'customer',

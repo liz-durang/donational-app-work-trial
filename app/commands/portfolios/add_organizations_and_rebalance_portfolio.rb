@@ -1,4 +1,4 @@
-module Allocations
+module Portfolios
   class AddOrganizationsAndRebalancePortfolio < ApplicationCommand
     required do
       model :portfolio
@@ -35,7 +35,7 @@ module Allocations
     end
 
     def existing_allocations
-      @existing_allocations ||= Allocations::GetActiveAllocations.call(portfolio: portfolio)
+      @existing_allocations ||= Portfolios::GetActiveAllocations.call(portfolio: portfolio)
     end
 
     # The percentage allocated to each new organization if the portfolio was evenly balanced

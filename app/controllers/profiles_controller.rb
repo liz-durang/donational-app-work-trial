@@ -30,7 +30,7 @@ class ProfilesController < ApplicationController
   end
 
   def allocations
-    @allocations ||= Allocations::GetActiveAllocations.call(portfolio: active_portfolio)
+    @allocations ||= Portfolios::GetActiveAllocations.call(portfolio: active_portfolio)
   end
 
   def organizations

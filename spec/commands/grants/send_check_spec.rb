@@ -1,5 +1,5 @@
 require 'rails_helper'
 
-RSpec.describe Checks::SendCheck do
+RSpec.describe Grants::SendCheck do
   pending
 end

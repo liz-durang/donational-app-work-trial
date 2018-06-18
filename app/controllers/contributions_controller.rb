@@ -41,7 +41,7 @@ class ContributionsController < ApplicationController
   private
 
   def update_donor_payment_method!
-    PaymentMethods::UpdatePaymentMethod.run!(
+    Payments::UpdatePaymentMethod.run!(
       donor: current_donor,
       payment_token: payment_token,
       name_on_card: name_on_card,
@@ -55,7 +55,7 @@ class ContributionsController < ApplicationController
       portfolio: active_portfolio,
       frequency: frequency,
       amount_cents: amount_cents,
-      platform_fee_cents: platform_fee_cents
+      tips_cents: tips_cents
     )
   end
 
@@ -64,13 +64,13 @@ class ContributionsController < ApplicationController
       donor: current_donor,
       portfolio: active_portfolio,
       amount_cents: amount_cents,
-      platform_fee_cents: platform_fee_cents,
+      tips_cents: tips_cents,
       scheduled_at: Time.zone.now
     )
   end
 
   def payment_method
-    @payment_method = PaymentMethods::GetActivePaymentMethod.call(donor: current_donor)
+    @payment_method = Payments::GetActivePaymentMethod.call(donor: current_donor)
   end
 
   def active_portfolio
@@ -101,8 +101,8 @@ class ContributionsController < ApplicationController
     amount_dollars * 100
   end
 
-  def platform_fee_cents
-    params[:recurring_contribution][:platform_fee_cents].to_i
+  def tips_cents
+    params[:recurring_contribution][:tips_cents].to_i
   end
 
   def amount_dollars

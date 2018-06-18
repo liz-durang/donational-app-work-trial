@@ -1,4 +1,4 @@
-module PaymentMethods
+module Payments
   class GetActivePaymentMethod < ApplicationQuery
     def initialize(relation = Donor.all)
       @relation = relation

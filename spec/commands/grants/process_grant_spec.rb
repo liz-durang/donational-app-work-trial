@@ -7,7 +7,7 @@ RSpec.describe Grants::ProcessGrant do
     let(:grant) { create(:grant, processed_at: 1.day.ago) }
 
     it 'does not process any payments' do
-      expect(Checks::SendCheck).not_to receive(:run)
+      expect(Grants::SendCheck).not_to receive(:run)
 
       command = Grants::ProcessGrant.run(grant: grant)
 
@@ -30,7 +30,7 @@ RSpec.describe Grants::ProcessGrant do
     end
 
     it "sends a check to the organization and persists the processed at time" do
-      expect(Checks::SendCheck)
+      expect(Grants::SendCheck)
         .to receive(:run)
         .with(organization: organization, amount_cents: 123)
         .and_return(successful_command)

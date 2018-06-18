@@ -7,7 +7,7 @@ RSpec.describe Contributions::ProcessContribution do
     let(:contribution) { create(:contribution, processed_at: nil) }
 
     before do
-      expect(PaymentMethods::GetActivePaymentMethod)
+      expect(Payments::GetActivePaymentMethod)
         .to receive(:call)
         .and_return(nil)
     end
@@ -44,7 +44,7 @@ RSpec.describe Contributions::ProcessContribution do
 
     let(:portfolio) { create(:portfolio, donor: donor) }
     let(:contribution) do
-      create(:contribution, donor: donor, portfolio: portfolio, amount_cents: 1_000, platform_fee_cents: 200, processed_at: nil)
+      create(:contribution, donor: donor, portfolio: portfolio, amount_cents: 1_000, tips_cents: 200, processed_at: nil)
     end
     let(:org_1) { create(:organization, ein: 'org1') }
     let(:org_2) { create(:organization, ein: 'org2') }
@@ -56,12 +56,12 @@ RSpec.describe Contributions::ProcessContribution do
     end
 
     before do
-      expect(PaymentMethods::GetActivePaymentMethod)
+      expect(Payments::GetActivePaymentMethod)
         .to receive(:call)
         .with(donor: donor)
         .and_return(payment_method_query_result)
 
-      allow(Allocations::GetActiveAllocations)
+      allow(Portfolios::GetActiveAllocations)
         .to receive(:call)
         .with(portfolio: portfolio)
         .and_return([allocation_1, allocation_2])
@@ -74,7 +74,7 @@ RSpec.describe Contributions::ProcessContribution do
     end
 
     context 'and the payment is unsuccessful' do
-      let(:charge_errors) { double(to_json: 'errors_as_json') }
+      let(:charge_errors) { { some: 'error' } }
       let(:unsuccessful_charge) { double(success?: false, errors: charge_errors) }
 
       before do
@@ -88,7 +88,7 @@ RSpec.describe Contributions::ProcessContribution do
 
         expect(contribution.processed_at).to be nil
         expect(contribution.failed_at).to eq Time.zone.now
-        expect(contribution.receipt).to eq 'errors_as_json'
+        expect(contribution.receipt).to eq '{"some":"error"}'
       end
 
       it 'does not track an analytics event' do
@@ -106,7 +106,12 @@ RSpec.describe Contributions::ProcessContribution do
       it 'stores the receipt and marks the contribution as processed' do
         expect(Payments::ChargeCustomer)
           .to receive(:run)
-          .with(email: 'user@example.com', customer_id: 'cus_123', donation_amount_cents: 1_000, platform_fee_cents: 200)
+          .with(
+            email: 'user@example.com',
+            customer_id: 'cus_123',
+            donation_amount_cents: 1_000,
+            platform_fee_cents: 0,
+            tips_cents: 200)
           .and_return(successful_charge)
         expect(Analytics::TrackEvent).to receive(:run).and_return(successful_track_event)
 
@@ -126,10 +131,13 @@ RSpec.describe Contributions::ProcessContribution do
 
         expect { Contributions::ProcessContribution.run(contribution: contribution) }.to change { Donation.count }.by(2)
 
+        # (1000 - (1200 * 0.029 + 30) - (1000 * 0.01)) * 0.6
         expect(Donation.where(organization: org_1).first)
-          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 553)
+          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 555)
+
+        # (1000 - (1200 * 0.029 + 30) - (1000 * 0.01)) * 0.4
         expect(Donation.where(organization: org_2).first)
-          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 369)
+          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 370)
       end
     end
   end

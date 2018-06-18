@@ -1,4 +1,4 @@
-module Allocations
+module Portfolios
   class UpdateAllocations < ApplicationCommand
     required do
       model :portfolio

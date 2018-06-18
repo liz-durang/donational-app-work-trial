@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(version: 20180616224338) do
     t.datetime "updated_at", null: false
     t.datetime "scheduled_at"
     t.datetime "processed_at"
-    t.integer "platform_fee_cents", default: 0
+    t.integer "tips_cents", default: 0
     t.uuid "donor_id"
     t.datetime "failed_at"
     t.index ["donor_id"], name: "index_contributions_on_donor_id"
@@ -205,7 +205,7 @@ ActiveRecord::Schema.define(version: 20180616224338) do
     t.datetime "deactivated_at"
     t.string "frequency"
     t.integer "amount_cents"
-    t.integer "platform_fee_cents", default: 0
+    t.integer "tips_cents", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["deactivated_at"], name: "index_recurring_contributions_on_deactivated_at"

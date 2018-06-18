@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Allocations::UpdateAllocations do
+RSpec.describe Portfolios::UpdateAllocations do
   let(:command_params) do
     {
       portfolio: portfolio,
@@ -14,7 +14,7 @@ RSpec.describe Allocations::UpdateAllocations do
     let(:allocations) { nil }
 
     it 'does not run, and includes a nil allocations error' do
-      command = Allocations::UpdateAllocations.run(command_params)
+      command = Portfolios::UpdateAllocations.run(command_params)
 
       expect(command).not_to be_success
       errors = command.errors.symbolic
@@ -31,7 +31,7 @@ RSpec.describe Allocations::UpdateAllocations do
     end
 
     it 'does not run, and includes an error' do
-      command = Allocations::UpdateAllocations.run(command_params)
+      command = Portfolios::UpdateAllocations.run(command_params)
 
       expect(command).not_to be_success
       errors = command.errors.symbolic
@@ -54,7 +54,7 @@ RSpec.describe Allocations::UpdateAllocations do
 
     context 'and there are no existing allocations for the portfolio' do
       it 'creates a new set of allocations' do
-        expect { Allocations::UpdateAllocations.run(command_params) }
+        expect { Portfolios::UpdateAllocations.run(command_params) }
           .to change { Allocation.count }.from(0).to(2)
 
         foo = Allocation.where(organization_ein: 'foo').first
@@ -86,14 +86,14 @@ RSpec.describe Allocations::UpdateAllocations do
       end
 
       it 'deactivates the previous allocations for the portfolio' do
-        Allocations::UpdateAllocations.run(command_params)
+        Portfolios::UpdateAllocations.run(command_params)
         expect(existing_allocation_1.reload).not_to be_active
         expect(existing_allocation_2.reload).not_to be_active
         expect(existing_allocation_other_portfolio.reload).to be_active
       end
 
       it 'creates a new set of allocations' do
-        expect { Allocations::UpdateAllocations.run(command_params) }
+        expect { Portfolios::UpdateAllocations.run(command_params) }
           .to change { Allocation.count }.by(2)
       end
     end

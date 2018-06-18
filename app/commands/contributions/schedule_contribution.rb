@@ -8,7 +8,7 @@ module Contributions
     end
 
     optional do
-      integer :platform_fee_cents, min: 0, default: 0
+      integer :tips_cents, min: 0, default: 0
     end
 
     def execute
@@ -16,7 +16,7 @@ module Contributions
         donor: donor,
         portfolio: portfolio,
         amount_cents: amount_cents,
-        platform_fee_cents: platform_fee_cents,
+        tips_cents: tips_cents,
         scheduled_at: scheduled_at
       )
     end
