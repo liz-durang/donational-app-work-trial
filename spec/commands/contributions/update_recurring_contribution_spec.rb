@@ -34,20 +34,4 @@ RSpec.describe Contributions::UpdateRecurringContribution do
       expect(recurring_contribution.reload.amount_cents).to eq 5000
     end
   end
-
-  context 'when is cancelled' do
-    let(:recurring_contribution) do
-      create(:recurring_contribution, donor: donor, deactivated_at: nil)
-    end
-
-    it 'deactivates recurring_contribution' do
-      command = Contributions::UpdateRecurringContribution.run(
-        recurring_contribution: recurring_contribution,
-        deactivated_at: Time.zone.now
-      )
-
-      expect(command).to be_success
-      expect(recurring_contribution.reload).not_to be_active
-    end
-  end
 end

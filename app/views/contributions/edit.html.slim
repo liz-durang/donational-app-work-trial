@@ -42,4 +42,4 @@ section.section.embossed
           .column
             - if current_donor.annual_income_cents.present? && current_donor.donation_rate.present?
                = render 'how_much_give_note'
-      = link_to @view_model.cancel_link, cancel_contribution_path, method: :put, data: { confirm: 'Are you sure you want to cancel your recurring donation?' }
+      = link_to @view_model.cancel_link, contribution_path, method: :delete, data: { confirm: 'Are you sure you want to cancel your recurring donation?' }

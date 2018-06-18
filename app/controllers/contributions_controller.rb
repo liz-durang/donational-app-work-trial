@@ -70,7 +70,12 @@ class ContributionsController < ApplicationController
   private
 
   def update_donor_payment_method!
-    Donors::UpdatePaymentMethod.run(donor: current_donor, payment_token: payment_token)
+    PaymentMethods::UpdatePaymentMethod.run!(
+      donor: current_donor,
+      payment_token: payment_token,
+      name_on_card: name_on_card,
+      last4: last4
+    )
   end
 
   def update_recurring_contribution!
@@ -139,5 +144,13 @@ class ContributionsController < ApplicationController
 
   def frequency
     params[:recurring_contribution][:frequency]
+  end
+
+  def name_on_card
+    params[:recurring_contribution][:name_on_card]
+  end
+
+  def last4
+    params[:recurring_contribution][:last4]
   end
 end

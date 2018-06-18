@@ -29,10 +29,6 @@ class RecurringContribution < ApplicationRecord
     amount_cents / 100.0
   end
 
-  def recurrent?
-    monthly? || quarterly? || annually?
-  end
-
   def next_contribution_at
     today = Date.today
 
