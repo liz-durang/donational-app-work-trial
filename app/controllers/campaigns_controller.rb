@@ -12,7 +12,8 @@ class CampaignsController < ApplicationController
       campaign_description: campaign.description,
       default_contribution_amounts: campaign.default_contribution_amounts,
       campaign_contributions_path: campaign_contributions_path(campaign.slug),
-      new_campaign_contribution: new_campaign_contribution
+      new_campaign_contribution: new_campaign_contribution,
+      portolio_templates: partner.portfolio_templates
     )
   end
 

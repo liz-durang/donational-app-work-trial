@@ -3,14 +3,21 @@ require 'support/capybara_form_helpers'
 
 RSpec.describe "Donor makes a donation from a partner's campaign page", type: :feature do
   before do
+    partner = Partner.create(name: 'One for the World', platform_fee_percentage: 0.02)
     Campaign.create(
-      partner: Partner.create(name: 'One for the World', platform_fee_percentage: 0.02),
+      partner: partner,
       title: 'The Wharton School',
       slug: '1ftw-wharton',
       default_contribution_amounts: [10, 20, 50, 100, 200]
     )
-    create(:organization, name: 'Charity 1')
-    create(:organization, name: 'Charity 2')
+    charity_1 = create(:organization, name: 'Charity 1')
+    charity_2 = create(:organization, name: 'Charity 2')
+    charity_3 = create(:organization, name: 'Charity 3')
+    PortfolioTemplate.create(
+      partner: partner,
+      title: 'Top Picks',
+      organization_eins: [charity_1.ein, charity_2.ein]
+    )
   end
 
   scenario 'as a new visitor', js: true do
@@ -21,6 +28,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     fill_in 'campaign_contribution[email]', with: "ian+#{RSpec.configuration.seed}@donational.org"
     click_on_label '$20'
     click_on_label 'Monthly'
+    select 'Top Picks'
     fill_in 'Card Number', with: '4111111111111111'
     select 12
     select 1.year.from_now.year

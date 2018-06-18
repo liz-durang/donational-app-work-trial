@@ -41,11 +41,11 @@ class CampaignContributionsController < ApplicationController
   end
 
   def create_portfolio_from_template!
-    # TODO replace this temporary code with Partner portfolio templates
+    template = PortfolioTemplate.find(params[:campaign_contribution][:portfolio_template_id])
     Portfolios::CreateOrReplacePortfolio.run(donor: current_donor)
     Allocations::AddOrganizationsAndRebalancePortfolio.run(
       portfolio: active_portfolio,
-      organization_eins: Organization.all.pluck(:ein).sample(8)
+      organization_eins: template.organization_eins
     )
   end
 
@@ -114,7 +114,6 @@ class CampaignContributionsController < ApplicationController
   def last4
     params[:campaign_contribution][:last4]
   end
-
 
   def ensure_current_donor!
     return if current_donor

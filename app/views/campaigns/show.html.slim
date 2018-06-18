@@ -39,7 +39,10 @@ section.section.embossed
           = f.collection_radio_buttons(:frequency, RecurringContribution.frequency.options, :last, :first) do |b| \
               b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
             end
-    hr
+      .field
+        = f.label :portfolio_template_id, class: :label, value: 'Portfolio'
+        .select = f.collection_select :portfolio_template_id, @view_model.portolio_templates, :id, :title
+      hr
 
     / This form should remain separate from the credit card details to avoid
     / accidentally leaking credit card data into our server

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180605181847) do
+ActiveRecord::Schema.define(version: 20180616224338) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -180,6 +180,15 @@ ActiveRecord::Schema.define(version: 20180605181847) do
     t.index ["donor_id"], name: "index_payment_methods_on_donor_id"
   end
 
+  create_table "portfolio_templates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "partner_id"
+    t.string "title"
+    t.string "organization_eins", array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["partner_id"], name: "index_portfolio_templates_on_partner_id"
+  end
+
   create_table "portfolios", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "donor_id"
     t.datetime "deactivated_at"
@@ -221,6 +230,7 @@ ActiveRecord::Schema.define(version: 20180605181847) do
   add_foreign_key "partner_affiliations", "donors"
   add_foreign_key "partner_affiliations", "partners"
   add_foreign_key "payment_methods", "donors"
+  add_foreign_key "portfolio_templates", "partners"
   add_foreign_key "portfolios", "donors"
   add_foreign_key "recurring_contributions", "donors"
   add_foreign_key "recurring_contributions", "portfolios"
