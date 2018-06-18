@@ -9,11 +9,22 @@ class ContributionsController < ApplicationController
   end
 
   def new
+    redirect_to edit_contribution_path(active_recurring_contribution) if active_recurring_contribution
+
     @view_model = OpenStruct.new(
       target_amount_cents: target_amount_cents,
       recurring_contribution: active_recurring_contribution || new_recurring_donation,
       active_payment_method: payment_method.present?,
       portfolio_organization_count: active_portfolio.active_allocations.count
+    )
+  end
+
+  def edit
+    @view_model = OpenStruct.new(
+      target_amount_cents: target_amount_cents,
+      recurring_contribution: active_recurring_contribution,
+      portfolio_organization_count: active_portfolio.active_allocations.count,
+      cancel_link: 'Stop my ' + active_recurring_contribution.frequency + ' donation'
     )
   end
 
@@ -36,6 +47,24 @@ class ContributionsController < ApplicationController
     else
       redirect_to new_contribution_path, alert: outcome.errors.message_list.join('\n')
     end
+  end
+
+  def update
+    Contributions::UpdateRecurringContribution.run(
+      recurring_contribution: active_recurring_contribution,
+      frequency: frequency,
+      amount_cents: amount_cents
+    )
+
+    flash[:success] = "We've updated your recurring donation"
+    redirect_to edit_contribution_path(active_recurring_contribution)
+  end
+
+  def destroy
+    Contributions::DeactivateRecurringContribution.run(recurring_contribution: active_recurring_contribution)
+
+    flash[:success] = "We've cancelled your recurring donation"
+    redirect_to new_contribution_path
   end
 
   private
