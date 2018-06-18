@@ -5,6 +5,23 @@
 one_for_the_world = Partner.find_or_create_by(name: 'One For The World') do |p|
   p.website_url = 'http://1fortheworld.org'
   p.platform_fee_percentage = 0.02
+  p.donor_questions_schema = {
+    questions: [
+      {
+        name: 'school',
+        title: 'What organization/school are you affiliated with?',
+        type: 'select',
+        options: ['Harvard', 'Wharton', 'Other'],
+        required: true
+      },
+      {
+        name: 'city',
+        title: 'Which city will you be living in when your donation commences?',
+        type: 'text',
+        required: false
+      }
+    ]
+  }
 end
 
 Campaign.find_or_create_by(slug: '1ftw-wharton') do |c|

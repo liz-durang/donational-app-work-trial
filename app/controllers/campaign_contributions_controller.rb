@@ -5,7 +5,7 @@ class CampaignContributionsController < ApplicationController
     pipeline = Flow.new
     pipeline.chain { update_donor! }
     pipeline.chain { associate_donor_with_partner! }
-    #TODO pipeline.chain { store_custom_donor_information! }
+    pipeline.chain { store_custom_donor_information! }
     pipeline.chain { create_portfolio_from_template! }
     pipeline.chain { update_donor_payment_method! } if payment_token.present?
     pipeline.chain { update_recurring_contribution! }
@@ -40,6 +40,14 @@ class CampaignContributionsController < ApplicationController
     Partners::AffiliateDonorWithPartner.run(donor: current_donor, partner: partner, campaign: campaign)
   end
 
+  def store_custom_donor_information!
+    Partners::UpdateCustomDonorInformation.run(
+      donor: current_donor,
+      partner: partner,
+      responses: custom_question_responses
+    )
+  end
+
   def create_portfolio_from_template!
     template = PortfolioTemplate.find(params[:campaign_contribution][:portfolio_template_id])
     Portfolios::CreateOrReplacePortfolio.run(donor: current_donor)
@@ -49,16 +57,12 @@ class CampaignContributionsController < ApplicationController
     )
   end
 
-  def store_custom_donor_information!
-    # Partners::UpdateDonorCustomInformation.run(donor: current_donor, partner: partner, campaign: campaign)
-  end
-
   def update_donor_payment_method!
     Payments::UpdatePaymentMethod.run(
       donor: current_donor,
       payment_token: payment_token,
-      name_on_card: name_on_card,
-      last4: last4
+      name_on_card: params[:campaign_contribution][:name_on_card],
+      last4: params[:campaign_contribution][:last4]
     )
   end
 
@@ -66,7 +70,7 @@ class CampaignContributionsController < ApplicationController
     Contributions::CreateOrReplaceRecurringContribution.run(
       donor: current_donor,
       portfolio: active_portfolio,
-      frequency: frequency,
+      frequency: params[:campaign_contribution][:frequency],
       amount_cents: amount_cents,
       tips_cents: 0
     )
@@ -98,16 +102,12 @@ class CampaignContributionsController < ApplicationController
     params[:campaign_contribution][:payment_token]
   end
 
-  def frequency
-    params[:campaign_contribution][:frequency]
-  end
-
-  def name_on_card
-    params[:campaign_contribution][:name_on_card]
-  end
-
-  def last4
-    params[:campaign_contribution][:last4]
+  def custom_question_responses
+    permitted_question_keys = partner.donor_questions.map(&:name)
+    params
+      .require(:campaign_contribution)
+      .permit(donor_questions: permitted_question_keys)[:donor_questions]
+      .to_h
   end
 
   def ensure_current_donor!
