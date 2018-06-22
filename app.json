@@ -43,7 +43,8 @@
         "AUTH0_CLIENT_SECRET": "xxx",
         "AUTH0_DOMAIN": "donatedirectly.auth0.com",
         "SEGMENT_RUBY_WRITE_KEY": "Pe9TTOBFO0pjhJJ6dJBZzUgB2hVwbzlE",
-        "SEGMENT_JAVASCRIPT_WRITE_KEY": "NVjy3azUr5S6AhhhXeWsaWd7m0SeewQo"
+        "SEGMENT_JAVASCRIPT_WRITE_KEY": "NVjy3azUr5S6AhhhXeWsaWd7m0SeewQo",
+        "DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL": "true"
       },
       "scripts": {
         "test": "bin/test"
