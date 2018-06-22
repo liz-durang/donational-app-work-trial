@@ -1,18 +1,19 @@
 module Payments
   class UpdatePaymentMethod < ApplicationCommand
     required do
-      model :donor do
-        string :email, empty: false
-      end
+      model :donor
       string :payment_token, empty: false
-      string :name_on_card
-      string :last4
     end
 
     def execute
       unless customer
         add_error(:customer, :empty, 'Customer does not exist and could not be created')
+
         return
+      end
+
+      chain do
+        @response = Payments::UpdateCustomerCard.run(customer_id: customer[:id], payment_token: payment_token)
       end
 
       PaymentMethod.transaction do
@@ -21,13 +22,9 @@ module Payments
         PaymentMethod.create!(
           donor: donor,
           payment_processor_customer_id: customer[:id],
-          name_on_card: name_on_card,
-          last4: last4
+          name_on_card: credit_card_data(@response).first,
+          last4: credit_card_data(@response).last
         )
-      end
-
-      chain do
-        Payments::UpdateCustomerCard.run(customer_id: customer[:id], payment_token: payment_token)
       end
 
       nil
@@ -36,11 +33,15 @@ module Payments
     private
 
     def customer
-      @customer ||= (customer_by_id || create_customer || customer_by_email)
+      @customer ||= (customer_by_id || create_customer)
     end
 
     def payment_method
       @payment_method ||= Payments::GetActivePaymentMethod.call(donor: donor)
+    end
+
+    def credit_card_data(response)
+      return response.result[:sources][:data][0][:name], response.result[:sources][:data][0][:last4]
     end
 
     def customer_by_id
@@ -49,14 +50,6 @@ module Payments
       find_by_id = Payments::FindCustomerById.run(customer_id: payment_method.payment_processor_customer_id)
       return nil unless find_by_id.success?
       find_by_id.result
-    end
-
-    def customer_by_email
-      return nil unless donor.email.present?
-
-      find_by_email = Payments::FindCustomerByEmail.run(email: donor.email)
-      return nil unless find_by_email.success?
-      find_by_email.result
     end
 
     def create_customer

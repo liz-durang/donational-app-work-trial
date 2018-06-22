@@ -1,58 +1,58 @@
 require 'rails_helper'
 
 RSpec.describe Payments::UpdateCustomerCard do
-  let(:customers_resource) { instance_double(RestClient::Resource) }
-  let(:customer_resource) { instance_double(RestClient::Resource) }
-
   around do |example|
-    ClimateControl.modify(PANDAPAY_SECRET_KEY: 'sk_test_123') do
+    ClimateControl.modify(STRIPE_SECRET_KEY: 'sk_test_QaS3Ao4UjJPLuhWA86UfHNyS') do
       example.run
     end
   end
 
-  before do
-    allow(RestClient::Resource)
-      .to receive(:new)
-      .with('https://api.pandapay.io/v1/customers', 'sk_test_123')
-      .and_return(customers_resource)
+  before(:all) do
+    StripeMock.start
+  end
 
-    allow(customers_resource)
-      .to receive(:[])
-      .with('cus_123/cards')
-      .and_return(customer_resource)
+  after(:all) do
+    StripeMock.stop
+  end
+
+  let(:stripe_helper) { StripeMock.create_test_helper }
+  let(:card_params) do
+    {
+      number: '4242424242424242',
+      exp_month: 12,
+      exp_year: 1.year.from_now.year,
+      cvc: '999'
+    }
+  end
+
+  before do
+    Payments::CreateCustomer.run(email: 'user@example.com')
   end
 
   context 'when a card can be added to the customer' do
-    let(:successful_create) do
-      double(:successful_create, body: '{ "id": "card_123", "object": "card", "foo": "bar" }')
-    end
+    let(:payment_token) { stripe_helper.generate_card_token(card_params) }
 
     it 'updates the customer card' do
-      expect(customer_resource).to receive(:post).with(source: 'foo').and_return(successful_create)
-
-      command = Payments::UpdateCustomerCard.run(customer_id: 'cus_123', payment_token: 'foo')
+      command = Payments::UpdateCustomerCard.run(customer_id: 'test_cus_1', payment_token: payment_token)
 
       expect(command).to be_success
-      expect(command.result).to eq({ id: "card_123", object: "card", foo: "bar" })
+      expect(command.result[:sources][:data][0][:customer]).to eq('test_cus_1')
+      expect(command.result[:sources][:data][0][:object]).to eq('card')
+      expect(command.result[:sources][:data][0][:last4]).to eq('4242')
     end
   end
 
   context 'when a customer card cannot be created' do
-    let(:failed_create) do
-      double(:failed_create, body: '{ "error": { "type": "some_pandapay_error_type", "message": "some_message" } }')
-    end
-
-    before do
-      expect(customer_resource)
-        .to receive(:post)
-        .and_raise(RestClient::ExceptionWithResponse.new(failed_create))
-    end
+    let(:payment_token) { stripe_helper.generate_card_token(card_params) }
 
     it 'fails with errors' do
-      command = Payments::UpdateCustomerCard.run(customer_id: 'cus_123', payment_token: 'foo')
+      stripe_error = Stripe::StripeError.new('Some error message')
+      StripeMock.prepare_error(stripe_error, :update_customer)
+
+      command = Payments::UpdateCustomerCard.run(customer_id: 'test_cus_1', payment_token: payment_token)
 
       expect(command).not_to be_success
-      expect(command.errors.symbolic).to include(customer: :some_pandapay_error_type)
+      expect(command.errors.symbolic).to include(customer: :stripe_error)
     end
   end
 end

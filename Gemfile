@@ -47,6 +47,7 @@ gem 'jbuilder', '~> 2.5'
 
 # Payments
 gem 'rest-client'
+gem 'stripe'
 
 group :development, :test do
   gem 'byebug', platform: :mri
@@ -71,4 +72,6 @@ group :test do
   gem 'climate_control'
   gem 'capybara'
   gem 'capybara-selenium'
+  gem 'selenium-webdriver', '~> 3.12.0' 
+  gem 'stripe-ruby-mock', '~> 2.5.4', require: 'stripe_mock'
 end

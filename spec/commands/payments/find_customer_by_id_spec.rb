@@ -2,68 +2,42 @@ require 'rails_helper'
 
 RSpec.describe Payments::FindCustomerById do
   around do |example|
-    ClimateControl.modify(PANDAPAY_SECRET_KEY: 'sk_test_123') do
+    ClimateControl.modify(STRIPE_SECRET_KEY: 'sk_test_QaS3Ao4UjJPLuhWA86UfHNyS') do
       example.run
     end
   end
 
-  let(:customer_id) { 'cus_123' }
-  let(:customers_resource) { instance_double(RestClient::Resource) }
-  let(:customer_resource) { instance_double(RestClient::Resource) }
-
-  before do
-    allow(RestClient::Resource)
-      .to receive(:new)
-      .with('https://api.pandapay.io/v1/customers', 'sk_test_123')
-      .and_return(customers_resource)
+  before(:all) do
+    StripeMock.start
   end
 
-  context 'when the pandapay response is successful' do
-    let(:customer_response) do
-      double(body: '{ "id": "cus_123", "object": "customer", "email": "user@example.com" }')
-    end
+  after(:all) do
+    StripeMock.stop
+  end
 
-    before do
-      expect(customers_resource)
-        .to receive(:[])
-        .with(customer_id)
-        .and_return(customer_resource)
-      expect(customer_resource)
-        .to receive(:get)
-        .and_return(customer_response)
-    end
+  let(:email) { 'user@example.com' }
+  let(:customer_id) { 'test_cus_1' }
 
+  before do
+    Payments::CreateCustomer.run(email: email)
+  end
+
+  context 'when the Stripe response is successful' do
     it 'returns the customer' do
       command = Payments::FindCustomerById.run(customer_id: customer_id)
 
       expect(command).to be_success
-      expect(command.result).to eq({ id: 'cus_123', object: 'customer', email: 'user@example.com' })
+      expect(command.result[:id]).to eq(customer_id)
+      expect(command.result[:email]).to eq(email)
     end
   end
 
   context 'when the pandapay response is unsuccessful' do
-    let(:unsuccessful_response) do
-      double(
-        :unsuccessful_response,
-        body: %q({"error":{"type":"some_pandapay_error_type","message":"Some message"}})
-      )
-    end
-
-    before do
-      expect(customers_resource)
-        .to receive(:[])
-        .with(customer_id)
-        .and_return(customer_resource)
-      expect(customer_resource)
-        .to receive(:get)
-        .and_raise(RestClient::ExceptionWithResponse.new(unsuccessful_response))
-    end
-
     it 'fails with errors' do
-      command = Payments::FindCustomerById.run(customer_id: customer_id)
+      command = Payments::FindCustomerById.run(customer_id: 'incorrect_cus_id')
 
       expect(command).not_to be_success
-      expect(command.errors.symbolic).to include(customer: :some_pandapay_error_type)
+      expect(command.errors.symbolic).to include(customer: :stripe_error)
     end
   end
 

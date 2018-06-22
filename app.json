@@ -33,7 +33,9 @@
       "required": true
     },
     "PANDAPAY_SECRET_KEY": "sk_test_F6XU6b5IKNfJRjHEi-XMeQ",
-    "PANDAPAY_PUBLIC_KEY": "pk_test_5suAzK7SjOWHudXvZ_04CA"
+    "PANDAPAY_PUBLIC_KEY": "pk_test_5suAzK7SjOWHudXvZ_04CA",
+    "STRIPE_SECRET_KEY": "sk_test_QaS3Ao4UjJPLuhWA86UfHNyS",
+    "STRIPE_PUBLIC_KEY": "pk_test_JvMXIo3Rfg1pV1r1WaMVP3Za"
   },
   "environments": {
     "test": {

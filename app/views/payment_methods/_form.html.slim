@@ -1,71 +1,11 @@
-= form_with url: payment_methods_path, method: :post, id: 'sanitized_create_payment_method_form' do |f|
-  / This form should remain separate from the credit card details to avoid
-  / accidentally leaking credit card data into our server
+= form_with url: payment_methods_path, method: :post, id: 'payment-form', local: true do |f|
   = f.hidden_field :payment_token, id: 'payment_token'
-  = f.hidden_field :name_on_card, id: 'name_on_card'
-  = f.hidden_field :last4, id: 'last4'
-form#panda_cc_form.panda_cc_form.form
-  label.label Card Details
-  .field.is-grouped
-    .control.is-expanded.has-icons-left
-      input.input id="credit_card" type="text" data-panda="credit_card" placeholder="Card Number"
-      span.icon.is-left.is-small: i.fa.fa-credit-card
-    .control
-      .select
-        select id="month" data-panda="month"
-          option selected=true mm
-          - (1..12).each do |i|
-            option value=i
-              = i
-    .control
-      .select
-        select id="year" data-panda="year"
-          option selected=true yyyy
-          - (2017..2030).each do |i|
-            option value=i
-              = i
-  .field.is-grouped
-    p.control.is-expanded.has-icons-left
-      input.input id="first_name" type="text" data-panda="first_name" placeholder="First Name"
-      span.icon.is-left.is-small: i.fa.fa-user
-    p.control.is-expanded
-      input.input id="last_name" type="text" data-panda="last_name" placeholder="Last Name"
-    p.control.has-icons-left
-      input.input id="cvv" type="text" data-panda="cvv" placeholder="CVV" size=4
-      span.icon.is-left.is-small: i.fa.fa-lock
 
+  = render 'payment_methods/credit_card_form'
   .field
     .control
       span.help
         | We use smart and secure online payments to ensure that your donations are simple, secure, and avoid fees.
 
   .field.has-text-right
-    button.button.is-primary type="submit" Update card
-  .card-wrapper.is-hidden
-
-javascript:
-	new Card({
-    form: '#panda_cc_form',
-    container: '.card-wrapper',
-    formSelectors: {
-        nameInput: 'input[data-panda="first_name"], input[data-panda="last_name"]',
-        numberInput: 'input[data-panda="credit_card"]',
-        expiryInput: 'input[data-panda="month"], input[data-panda="year"]',
-        cvcInput: 'input[data-panda="cvv"]'
-    }
-	});
-
-	Panda.init("#{ENV.fetch('PANDAPAY_PUBLIC_KEY')}", 'panda_cc_form');
-
-  Panda.on('success', function(cardToken) {
-    document.getElementById('payment_token').value = cardToken;
-    document.getElementById('name_on_card').value = document.getElementById('first_name').value + ' ' + document.getElementById('last_name').value;
-    document.getElementById('last4').value = document.getElementById('credit_card').value.slice(-4);
-    document.getElementById('sanitized_create_payment_method_form').submit();
-  });
-
-  Panda.on('error', function(errors) {
-    var message = "";
-    errors.forEach(function(error) { message += "\n" + error.message; })
-    alert("There was an error processing your payment: " + message);
-  });
+    = f.submit class: %w(button is-primary), value: 'Update card'

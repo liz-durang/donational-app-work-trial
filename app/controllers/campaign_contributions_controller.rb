@@ -58,9 +58,7 @@ class CampaignContributionsController < ApplicationController
   def update_donor_payment_method!
     Payments::UpdatePaymentMethod.run(
       donor: current_donor,
-      payment_token: payment_token,
-      name_on_card: params[:campaign_contribution][:name_on_card],
-      last4: params[:campaign_contribution][:last4]
+      payment_token: payment_token
     )
   end
 
