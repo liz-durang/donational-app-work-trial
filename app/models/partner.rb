@@ -14,4 +14,24 @@
 
 class Partner < ApplicationRecord
   has_many :portfolio_templates
+
+  def donor_questions
+    return if donor_questions_schema.nil?
+
+    donor_questions_schema['questions'].map { |q| DonorQuestion.new(q) }
+  end
+
+  class DonorQuestion
+    include ActiveModel::Model
+
+    attr_reader :name, :title, :type, :options, :required
+
+    def initialize(h)
+      @name = h['name']
+      @title = h['title']
+      @type = h['type']
+      @options = h['options']
+      @required = h['required'] || false
+    end
+  end
 end

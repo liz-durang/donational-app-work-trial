@@ -13,7 +13,8 @@ class CampaignsController < ApplicationController
       default_contribution_amounts: campaign.default_contribution_amounts,
       campaign_contributions_path: campaign_contributions_path(campaign.slug),
       new_campaign_contribution: new_campaign_contribution,
-      portolio_templates: partner.portfolio_templates
+      portolio_templates: partner.portfolio_templates,
+      donor_questions: partner.donor_questions
     )
   end
 
