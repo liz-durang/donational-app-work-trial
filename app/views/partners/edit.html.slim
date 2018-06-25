@@ -1,0 +1,32 @@
+section.section
+  .container
+    .content.has-text-centered
+      h1.title.is-spaced
+        => icon_tag('fa-user')
+        br
+        ' Partner Information
+
+      p.subtitle
+        ' Basic Information & Donors Questions
+
+section.embossed.section
+  .container
+    = display_flash_messages
+    = form_with model: @view_model.partner, url: @view_model.partners_path, local: true, method: :put, class: 'form' do |f|
+      .columns
+        .column.is-3.container
+          p.field
+            label.subtitle
+              | Name
+              = f.text_field :name, class: 'input', value: @view_model.partner.name
+          p.field
+            label.subtitle
+              | Website URL
+              = f.text_field :website_url, class: 'input', value: @view_model.partner.website_url
+          p.field
+            label.subtitle
+              | Description
+              = f.text_area :description, class: 'input', value: @view_model.partner.description
+          p.field
+            .control.has-text-centered
+              = f.submit "Save", class: %w(button is-primary is-medium)

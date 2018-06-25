@@ -14,6 +14,9 @@
 
 class Partner < ApplicationRecord
   has_many :portfolio_templates
+  has_many :campaigns
+  # Partner administrators
+  has_and_belongs_to_many :donors
 
   def donor_questions
     return if donor_questions_schema.nil?

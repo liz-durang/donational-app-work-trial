@@ -32,6 +32,8 @@ class Donor < ApplicationRecord
   has_many :donations, through: :portfolios
   has_many :active_allocations, through: :active_portfolio
   has_many :payment_methods
+  # Partner administrator
+  has_and_belongs_to_many :partners
 
   enum portfolio_diversity: { focused: 1, mixed: 2, broad: 3 }
 

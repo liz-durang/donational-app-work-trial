@@ -22,6 +22,10 @@
       a.navbar-item href=edit_allocations_path
         = icon_tag('fa-balance-scale')
         | Allocations
+      - if current_donor.partners.any?
+        a.navbar-item href=edit_partners_path
+          = icon_tag('fa-user')
+          | Partner Account
       .navbar-divider
       = sign_out_link(css_class: 'navbar-item')
 - else
