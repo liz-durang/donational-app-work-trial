@@ -22,12 +22,18 @@ one_for_the_world = Partner.find_or_create_by(name: 'One For The World') do |p|
       }
     ]
   }
+  p.description = "1% of the developed world's income can eliminate extreme poverty. Let it start with you."
 end
 
 Campaign.find_or_create_by(slug: '1ftw-wharton') do |c|
   c.partner = one_for_the_world
   c.title = 'The Wharton School Chapter'
   c.default_contribution_amounts = [10, 20, 50, 100]
+  c.description = <<~EOTXT
+    In the U.S., individuals with incomes between $100K-$200K donate on average 2.6% of their income to charity. How much will you give?
+
+    Your generous contribution will provide life-saving solutions to impoverished communities, where millions of children die from health problems with well-known solutions. Donate now and help us end these preventable deaths.
+  EOTXT
 end
 
 Organizations::CreateOrUpdateOrganizationsFromGoogleSheets.run

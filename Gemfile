@@ -16,6 +16,9 @@ gem 'redis', '~> 3.3.3'
 # Models
 gem 'enumerize', '~> 2.1'
 
+# Views
+gem 'commonmarker', '~> 0.17.9'
+
 # Authentication
 gem 'omniauth'
 gem 'omniauth-auth0'
