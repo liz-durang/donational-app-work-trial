@@ -67,6 +67,8 @@ module ApplicationHelper
   end
 
   def markdown_to_html(markdown)
+    return '' if markdown.blank?
+
     CommonMarker.render_html(markdown).html_safe
   end
 end
