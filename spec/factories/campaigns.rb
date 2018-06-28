@@ -17,7 +17,7 @@ FactoryBot.define do
   factory :campaign do
     partner
     title "MyString"
-    slug "MyString"
+    slug SecureRandom.uuid
     description "MyText"
     target_amount_cents 1
     default_contribution_amounts ""

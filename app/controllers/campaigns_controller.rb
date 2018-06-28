@@ -1,5 +1,19 @@
 class CampaignsController < ApplicationController
-  layout 'minimal'
+  before_action :ensure_donor_has_permission!, except: :show
+
+  def create
+    command = Campaigns::CreateCampaign.run(
+      partner: current_donor.partners.first,
+      title: params[:title],
+      description: params[:description],
+      slug: params[:slug],
+      default_contribution_amounts: default_contribution_amounts
+    )
+
+    flash[:success] = "Campaign created successfully." if command.success?
+    flash[:error] = command.errors.message_list.join('. ') unless command.success?
+    redirect_to new_partner_campaigns_path(partner)
+  end
 
   def show
     not_found unless campaign
@@ -20,6 +34,13 @@ class CampaignsController < ApplicationController
 
   private
 
+  def ensure_donor_has_permission!
+    unless current_donor.partners.exists?(id: partner.id)
+      flash[:error] = "Sorry, you don't have permission to create a campaign for this partner"
+      redirect_to edit_partner_path(partner)
+    end
+  end
+
   def new_campaign_contribution
     CampaignContribution.new(
       first_name: current_donor.try(:first_name),
@@ -33,6 +54,10 @@ class CampaignsController < ApplicationController
   end
 
   def partner
-    @partner ||= campaign.partner
+    @partner = Partners::GetPartnerById.call(id: params[:partner_id]) || campaign.partner
+  end
+
+  def default_contribution_amounts
+    params[:default_contribution_amounts].split(',').map { |amount| amount.to_i }
   end
 end

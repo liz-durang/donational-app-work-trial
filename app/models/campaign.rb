@@ -15,4 +15,6 @@
 
 class Campaign < ApplicationRecord
   belongs_to :partner
+
+  validates :slug, uniqueness: true
 end

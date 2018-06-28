@@ -1,34 +1,72 @@
 class PartnersController < ApplicationController
   include Secured
 
-  def update
-    command = Partners::UpdatePartner.run(
-      partner: partner,
-      name: params[:partner][:name],
-      website_url: params[:partner][:website_url],
-      description: params[:partner][:description]
-    )
+  before_action :ensure_donor_has_permission!
 
-    if command.success?
-      flash[:success] = "Thanks, we've updated your information"
-      redirect_to edit_partners_path
+  def update
+    pipeline = Flow.new
+    pipeline.chain { update_partner! } if params[:partner].present?
+    pipeline.chain { create_or_update_question! } if params[:name].present?
+    pipeline.chain { delete_question! } if params[:question].present?
+
+    outcome = pipeline.run
+
+    if outcome.success?
+      flash[:success] = "Thanks, we've updated your information" if params[:partner].present?
+      flash[:success] = "Question was added successfully" if params[:name].present?
+      flash[:success] = "Question was deleted successfully" if params[:question].present?
     else
-      flash[:error] = command.errors.message_list.join('. ')
-      redirect_to edit_partners_path
+      flash[:error] = outcome.errors.message_list.join('. ')
     end
+
+    redirect_to edit_partner_path(partner)
   end
 
   def edit
     @view_model = OpenStruct.new(
       donor: current_donor,
       partner: partner,
-      partners_path: partners_path
+      partner_path: partner_path
     )
   end
 
   private
 
+  def ensure_donor_has_permission!
+    unless current_donor.partners.exists?(id: partner.id)
+      flash[:error] = "Sorry, you don't have permission to update this partner account"
+      redirect_to edit_partner_path(partner)
+    end
+  end
+
   def partner
-    @partner ||= current_donor.partners.first
+    @partner ||= Partners::GetPartnerById.call(id: params[:id])
+  end
+
+  def update_partner!
+    Partners::UpdatePartner.run(
+      partner: partner,
+      name: params[:partner][:name],
+      website_url: params[:partner][:website_url],
+      description: params[:partner][:description]
+    )
+  end
+
+  def create_or_update_question!
+    command = Partners::CreateOrUpdateCustomDonorQuestion.run(
+      partner: partner,
+      name: params[:name],
+      title: params[:title],
+      type: params[:type].downcase,
+      options: params[:options].split(','),
+      required: params[:required]
+    )
+  end
+
+  def delete_question!
+    command = Partners::DeleteCustomDonorQuestion.run(
+      partner: partner,
+      name: params[:question]
+    )
   end
 end

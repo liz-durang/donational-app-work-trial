@@ -1,0 +1,36 @@
+section.section
+  .container
+    .content.has-text-centered
+      h1.title.is-spaced
+        => icon_tag('fa-globe')
+        br
+        | Create campaign
+
+      p Please, enter campaign information
+
+section.embossed.section
+  .container
+    = display_flash_messages
+    = form_with url: partner_campaigns_path, local: true, method: :post, class: 'form' do |f|
+      .columns
+        .column.is-6.container
+          p.field
+            label.subtitle
+              | Title
+            = f.text_field :title, class: :input
+          p.field
+            label.subtitle
+              | Description
+            = f.text_area :description, class: :input
+          p.field
+            label.subtitle
+              | Slug
+            = f.text_field :slug, class: :input, placeholder: 'i.e. 1ftw-wharton'
+          p.field
+            label.subtitle
+              | Default contribution amounts
+            = f.text_field :default_contribution_amounts, class: :input, placeholder: 'i.e. 10, 20, 50, 100'
+            p.help Please, enter values separated by comma.
+          p.field
+            .control.has-text-centered
+              = f.submit "Save", class: %w(button is-primary is-medium)

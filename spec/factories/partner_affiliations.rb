@@ -15,7 +15,7 @@ FactoryBot.define do
   factory :partner_affiliation do
     partner
     donor
-    campaign
+    campaign { create(:campaign, slug: SecureRandom.uuid) }
     custom_donor_info ""
   end
 end

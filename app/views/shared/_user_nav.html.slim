@@ -23,9 +23,12 @@
         = icon_tag('fa-balance-scale')
         | Allocations
       - if current_donor.partners.any?
-        a.navbar-item href=edit_partners_path
-          = icon_tag('fa-user')
+        a.navbar-item href=edit_partner_path(current_donor.partners.first)
+          = icon_tag('fa-handshake')
           | Partner Account
+        a.navbar-item href=new_partner_campaigns_path(current_donor.partners.first)
+          = icon_tag('fa-globe')
+          | Create Campaign
       .navbar-divider
       = sign_out_link(css_class: 'navbar-item')
 - else

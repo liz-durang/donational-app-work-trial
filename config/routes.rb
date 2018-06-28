@@ -14,7 +14,9 @@ Rails.application.routes.draw do
   resource :allocations, only: %i[new edit create update]
   resource :accounts, only: %i[edit update]
   resource :payment_methods, only: %i[new create]
-  resource :partners, only: %i[edit update]
+  resources :partners, only: %i[edit update] do
+    resource :campaigns, only: %i[new create]
+  end
   # Retention
 
   # Revenue
