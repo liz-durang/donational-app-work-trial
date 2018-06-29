@@ -1,3 +1,5 @@
+require 'commonmarker'
+
 module ApplicationHelper
   def sign_in_button
     link_to 'Sign in', new_sessions_path, class: 'button is-outlined'
@@ -62,5 +64,11 @@ module ApplicationHelper
 
     dollars = (cents / 100.0).ceil
     number_to_currency(dollars, precision: 0)
+  end
+
+  def markdown_to_html(markdown)
+    return '' if markdown.blank?
+
+    CommonMarker.render_html(markdown).html_safe
   end
 end

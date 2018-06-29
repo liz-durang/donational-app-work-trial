@@ -21,6 +21,12 @@
 
 en:
   hello: "Hello world"
+  next_contribution:
+    once: "Your donation of %{amount} is scheduled for %{date}"
+    monthly: "Your next donation of %{amount} is scheduled for %{date}"
+    quarterly: "Your next quarterly donation of %{amount} is scheduled for %{date}"
+    annually: "Your next annual donation of %{amount} is scheduled for %{date}"
+
   enumerize:
     recurring_contribution:
       frequency:
