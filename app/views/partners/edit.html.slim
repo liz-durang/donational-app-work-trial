@@ -1,0 +1,149 @@
+section.section
+  .container
+    .content.has-text-centered
+      h1.title.is-spaced
+        => icon_tag('fa-handshake')
+        br
+        ' Partner Account
+
+      p.subtitle
+        ' Information, Donor Questions & Campaigns
+
+section.embossed.section
+  .container
+    p.subtitle.is-spaced.has-text-centered
+      ' Basic Information
+      = display_flash_messages
+      = form_with model: @view_model.partner, url: @view_model.partner_path, local: true, method: :put, class: 'form' do |f|
+        .columns
+          .column.is-3.container
+            p.field
+              = f.text_field :name, class: 'input', value: @view_model.partner.name, placeholder: 'Name'
+            p.field
+              = f.text_field :website_url, class: 'input', value: @view_model.partner.website_url, placeholder: 'Website URL'
+            p.field
+              = f.text_area :description, class: 'input', value: @view_model.partner.description, placeholder: 'Description'
+            p.field
+              .control.has-text-centered
+                = f.submit "Save", class: %w(button is-primary is-medium)
+
+section.section
+  .container
+    p.subtitle.is-spaced.has-text-centered
+      ' Donor Questions
+      table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
+        tr
+          td
+            p
+              strong>
+                | Name
+          td
+            p
+              strong>
+                | Title
+          td
+            p
+              strong>
+                | Type
+          td
+            p
+              strong>
+                | Options
+          td
+            p
+              strong>
+                | Required
+          td colspan=2
+            p
+              strong>
+                | Actions
+        - @view_model.partner.donor_questions.each do |question|
+          tr
+            td
+              p
+                = question.name
+            td
+              p
+                = question.title
+            td
+              p
+                = question.type
+            td
+              p
+                - if question.type == 'select'
+                  = question.options.join(', ')
+                - else
+                  = question.options
+            td
+              p
+                = question.required
+            td
+              p
+                = link_to 'Edit', 'javascript:;', class: 'btn-edit', onClick: "fillForm('#{question.name}', '#{question.title}', '#{question.type}', '#{question.options}', '#{question.required}');"
+            td
+              p
+                = link_to 'Delete', partner_path(question: question.name), method: :put, data: { confirm: 'Are you sure you want to delete the question?' }
+      br
+      = form_with url: @view_model.partner_path, local: true, method: :put, class: 'form' do |f|
+        .columns
+          .column.is-12
+            .field.is-grouped
+              label.subtitle.control
+                | Name
+              p.field.control.is-expanded
+                = f.text_field :name, id: 'input-name', class: :input, placeholder: 'i.e. school'
+              label.subtitle.control
+                | Title
+              p.field.control.is-expanded
+                = f.text_field :title, id: 'input-title', class: :input, placeholder: 'i.e. What organization/school are you affiliated with?'
+            .field.is-grouped
+              label.subtitle.control
+                | Type
+              p.field
+                .select.control = f.select :type, ['Text', 'Select'], { }, { id: 'input-type', class: :input }
+              label.subtitle.control
+                | Required
+              p.field
+                .select.control = f.select :required, [['Yes', true], ['No', false]], { }, { id: 'input-required', class: :input }
+              label.subtitle.control
+                | Options
+              p.field.control.is-expanded
+                = f.text_field :options, id: 'input-options', class: :input, placeholder: 'i.e. Harvard, Wharton, Other'
+            span.help.has-text-right
+              | This field is required only if type is Select. Please enter values separated by comma.
+            p.field
+              .control.has-text-centered
+                = f.submit 'Add question', class: %w(button is-primary is-medium)
+
+- if @view_model.partner.campaigns.any?
+  section.embossed.section
+    .container
+      p.subtitle.has-text-centered
+        ' Campaigns
+      table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
+        tr
+          td
+            p
+              strong>
+                | Title
+          td
+            p
+              strong>
+                | Description
+        - @view_model.partner.campaigns.each do |campaign|
+          tr
+            td
+              p
+                = link_to campaign.title, campaigns_path(campaign.slug)
+            td
+              p
+                = campaign.description
+
+javascript:
+  function fillForm(name, title, type, options, required) {
+    document.getElementById('input-name').value = name;
+    document.getElementById('input-title').value = title;
+    document.getElementById('input-type').value = type.charAt(0).toUpperCase() + type.slice(1);
+    document.getElementById('input-options').value = options.replace('[', '').replace(']', '').replace(/"/g, '');
+    document.getElementById('input-required').value = required;
+  }

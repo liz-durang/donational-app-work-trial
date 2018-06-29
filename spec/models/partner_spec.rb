@@ -10,6 +10,7 @@
 #  primary_branding_color  :string
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
+#  donor_questions_schema  :jsonb
 #
 
 require 'rails_helper'
