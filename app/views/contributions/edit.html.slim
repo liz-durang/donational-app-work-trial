@@ -14,9 +14,12 @@ section.section
 section.section.embossed
   .container.content
     p.has-text-centered
-      = t @view_model.recurring_contribution.frequency, scope: :next_contribution, \
-          amount: number_to_currency(@view_model.recurring_contribution.amount_dollars), \
-          date: @view_model.recurring_contribution.next_contribution_at.to_formatted_s(:long_ordinal)
+      - if @view_model.has_future_contribution
+        = t @view_model.recurring_contribution.frequency, scope: :next_contribution, \
+            amount: number_to_currency(@view_model.recurring_contribution.amount_dollars), \
+            date: @view_model.next_contribution_date.to_formatted_s(:long_ordinal)
+      - else
+        = t 'no_future_donations'
     = display_flash_messages
     = form_with model: @view_model.recurring_contribution, url: contribution_path, local: true, method: :put, class: 'form' do |f|
       .columns

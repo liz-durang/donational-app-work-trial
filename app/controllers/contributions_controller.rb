@@ -25,7 +25,8 @@ class ContributionsController < ApplicationController
       recurring_contribution: active_recurring_contribution,
       portfolio_organization_count: active_portfolio.active_allocations.count,
       cancel_link: 'Stop my ' + active_recurring_contribution.frequency + ' donation',
-      has_future_contribution: active_recurring_contribution.future_contribution_scheduled?
+      has_future_contribution: active_recurring_contribution.future_contribution_scheduled?,
+      next_contribution_date: active_recurring_contribution.next_contribution_at
     )
   end
 
