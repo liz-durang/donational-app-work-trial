@@ -9,7 +9,7 @@ class CampaignContributionsController < ApplicationController
     pipeline.chain { create_portfolio_from_template! }
     pipeline.chain { update_donor_payment_method! } if payment_token.present?
     pipeline.chain { update_recurring_contribution! }
-    pipeline.chain { schedule_first_contribution_immediately! }
+    pipeline.chain { schedule_first_contribution_immediately! } unless future_start_date?
 
     new_unprocessed_contributions = Contributions::GetUnprocessedContributions.call(donor: current_donor)
     new_unprocessed_contributions.each do |c|
@@ -70,8 +70,9 @@ class CampaignContributionsController < ApplicationController
     Contributions::CreateOrReplaceRecurringContribution.run(
       donor: current_donor,
       portfolio: active_portfolio,
-      frequency: params[:campaign_contribution][:frequency],
       amount_cents: amount_cents,
+      frequency: params[:campaign_contribution][:frequency],
+      start_at: params[:campaign_contribution][:start_at].presence,
       tips_cents: 0
     )
   end
@@ -100,6 +101,12 @@ class CampaignContributionsController < ApplicationController
 
   def payment_token
     params[:campaign_contribution][:payment_token]
+  end
+
+  def future_start_date?
+    return false if params[:campaign_contribution][:start_at].blank?
+
+    Date.parse(params[:campaign_contribution][:start_at]) > Date.today
   end
 
   def custom_question_responses

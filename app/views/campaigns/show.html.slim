@@ -14,26 +14,33 @@ section.section.embossed
         = markdown_to_html @view_model.campaign_description
     = display_flash_messages
     .card
-      header.card-header: p.card-header-title Donation
       .card-content
         = form_with model: @view_model.new_campaign_contribution, local: true, id: 'sanitized_form', method: :post, class: 'form' do |f|
           = f.hidden_field :payment_token, id: 'payment_token'
           = f.hidden_field :name_on_card, id: 'name_on_card'
           = f.hidden_field :last4, id: 'last4'
-          label.label Amount
+          label.label Donation
           .field
             .control.buttons = f.collection_radio_buttons :amount_dollars,\
               @view_model.default_contribution_amounts.map { |amt| [amt, number_to_currency(amt, precision: 0)] }, :first, :last do |b| \
                 b.radio_button(class: 'is-hidden') + b.label(class: 'is-medium button') \
               end
           .field.is-grouped.is-grouped-multiline
-            = f.collection_radio_buttons(:frequency, RecurringContribution.frequency.options, :last, :first) do |b| \
-              content_tag(:div, class: :control) do \
-                  b.label(class: 'box has-text-centered') do \
-                    content_tag(:span, b.radio_button, class: :icon) + content_tag(:div, b.text, class: :label) \
-                end \
-              end \
-            end
+            .control
+              .select = f.collection_select(:frequency, RecurringContribution.frequency.options, :last, :first)
+            .field.is-grouped data-accordion-panel-for="hide-when-show-date-is-triggered"
+              .control
+                span.input.is-static starting
+              .control
+                a.button.is-text data-accordion-trigger="show-date"
+                  = icon_tag('fas fa-calendar')
+                  span today
+            .field.is-grouped.is-hidden data-accordion-panel-for="show-date"
+              .control
+                span.input.is-static starting on
+              .control.has-icons-left
+                  = icon_tag('fas fa-calendar')
+                  = f.date_field :start_at, class: :input
           hr
           .field.is-grouped
             .control.is-expanded
@@ -124,4 +131,11 @@ section.section.embossed
       document.getElementById('name_on_card').value = $('input[data-panda="first_name"]').val() + ' ' + $('input[data-panda="last_name"]').val();
       document.getElementById('last4').value = $('input[data-panda="credit_card"]').val().slice(-4);
       document.getElementById('sanitized_form').submit();
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+      var datePickers = bulmaCalendar.attach('[type="date"]', {
+        overlay: true,
+        minDate: '#{Date.today.iso8601}',
+        maxDate: '#{1.year.from_now.to_date.iso8601}'
+      });
     });
