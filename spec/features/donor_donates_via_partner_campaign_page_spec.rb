@@ -78,11 +78,14 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     charity_1 = create(:organization, name: 'Charity 1')
     charity_2 = create(:organization, name: 'Charity 2')
     charity_3 = create(:organization, name: 'Charity 3')
-
-    PortfolioTemplate.create(
+    portfolio = create(:portfolio)
+    Portfolios::AddOrganizationsAndRebalancePortfolio.run(
+      portfolio: portfolio, organization_eins: [charity_1.ein, charity_2.ein]
+    )
+    ManagedPortfolio.create(
       partner: partner,
-      title: 'Top Picks',
-      organization_eins: [charity_1.ein, charity_2.ein]
+      portfolio: portfolio,
+      name: 'Top Picks'
     )
   end
 end

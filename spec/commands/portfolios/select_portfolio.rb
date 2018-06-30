@@ -1,15 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe Portfolios::CreateOrReplacePortfolio do
+RSpec.describe Portfolios::SelectPortfolio do
   let(:other_donor) { create(:donor) }
   let(:donor) { create(:donor) }
 
   context 'when there are no existing portfolios for the donor' do
     it 'creates a new active portfolio' do
-      expect { Portfolios::CreateOrReplacePortfolio.run(donor: donor) }
-        .to change { Portfolio.count }.from(0).to(1)
-
-      expect(SelectedPortfolio.count).to eq 1
+      expect { Portfolios::SelectPortfolio.run(donor: donor) }
+        .to change { SelectedPortfolio.count }.from(0).to(1)
 
       portfolio = Portfolios::GetActivePortfolio.call(donor: donor)
 
@@ -28,18 +26,20 @@ RSpec.describe Portfolios::CreateOrReplacePortfolio do
       create(:selected_portfolio, donor: other_donor, portfolio: portfolio_for_other_donor, deactivated_at: nil)
     end
 
+    let(:new_portfolio) { create(:portfolio) }
+
     it 'deactivates the previous portfolios for the donor' do
-      Portfolios::CreateOrReplacePortfolio.run(donor: donor)
+      Portfolios::SelectPortfolio.run(donor: donor, portfolio: new_portfolio)
 
       expect(selection_for_other_donor.reload).to be_active
       expect(existing_selection.reload).not_to be_active
     end
 
-    it 'creates a new active portfolio for the donor' do
-      expect { Portfolios::CreateOrReplacePortfolio.run(donor: donor) }.to change { Portfolio.count }.from(2).to(3)
+    it 'activates the new portfolio for the donor' do
+      Portfolios::SelectPortfolio.run(donor: donor, portfolio: new_portfolio)
 
       portfolio = Portfolios::GetActivePortfolio.call(donor: donor)
-      expect(portfolio).to be_active
+      expect(portfolio).to eq new_portfolio
     end
   end
 end

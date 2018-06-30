@@ -5,21 +5,12 @@ module Portfolios
     end
 
     def execute
-      Portfolio.transaction do
-        deactivate_existing_portfolios!
-        Portfolio.create!(donor: donor)
-      end
+      SelectPortfolio.run(
+        donor: donor,
+        portfolio: Portfolio.create!(creator: donor)
+      )
 
       nil
     end
-
-    private
-
-    def deactivate_existing_portfolios!
-      Portfolios::GetActivePortfolios
-        .call(donor: donor)
-        .update_all(deactivated_at: Time.zone.now)
-    end
-
   end
 end

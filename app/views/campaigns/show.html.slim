@@ -61,16 +61,15 @@ section.section.embossed
           = f.fields_for :donor_questions do |questions_form|
             = render @view_model.donor_questions, form: questions_form
           .field
-            = f.label :portfolio_template_id, class: :label, value: 'Portfolio'
+            = f.label :managed_portfolio_id, class: :label, value: 'Portfolio'
             .field.is-grouped.is-grouped-centered.is-grouped-multiline
-              - @view_model.portolio_templates.each do |pt|
+              - @view_model.managed_portfolios.each do |mp|
                 .control.has-text-centered
-                  label.box for="portfolio-#{pt.id}"
+                  label.box for="portfolio-#{mp.id}"
                     span.icon
-                      = f.radio_button :portfolio_template_id, pt.id, id: "portfolio-#{pt.id}"
-                    .label = pt.title
-                    = pluralize(pt.size, 'charity')
-
+                      = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}"
+                    .label = mp.name
+                    = pluralize(mp.size, 'charity')
           hr
         / This form should remain separate from the credit card details to avoid
         / accidentally leaking credit card data into our server

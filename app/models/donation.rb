@@ -16,11 +16,11 @@
 # Tracks the part of a donor's contribution that was distributed to an organization.
 class Donation < ApplicationRecord
   belongs_to :portfolio
-  has_one :donor, through: :portfolio
   belongs_to :organization, foreign_key: 'organization_ein'
   belongs_to :allocation
   belongs_to :contribution
   belongs_to :grant, optional: true
+  delegate :donor, to: :contribution
 
   scope(:unpaid, -> { where(grant: nil) })
   scope(:paid, -> { where.not(grant: nil) })

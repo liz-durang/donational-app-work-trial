@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180625161803) do
+ActiveRecord::Schema.define(version: 20180629231411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -130,6 +130,18 @@ ActiveRecord::Schema.define(version: 20180625161803) do
     t.index ["organization_ein"], name: "index_grants_on_organization_ein"
   end
 
+  create_table "managed_portfolios", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "partner_id"
+    t.uuid "portfolio_id"
+    t.string "name"
+    t.text "description"
+    t.datetime "hidden_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["partner_id"], name: "index_managed_portfolios_on_partner_id"
+    t.index ["portfolio_id"], name: "index_managed_portfolios_on_portfolio_id"
+  end
+
   create_table "organizations", id: false, force: :cascade do |t|
     t.string "ein", null: false
     t.string "name"
@@ -188,22 +200,13 @@ ActiveRecord::Schema.define(version: 20180625161803) do
     t.index ["donor_id"], name: "index_payment_methods_on_donor_id"
   end
 
-  create_table "portfolio_templates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "partner_id"
-    t.string "title"
-    t.string "organization_eins", array: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["partner_id"], name: "index_portfolio_templates_on_partner_id"
-  end
-
   create_table "portfolios", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "donor_id"
+    t.uuid "creator_id"
     t.datetime "deactivated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["donor_id"], name: "index_active_subscriptions_on_donor_id", where: "(deactivated_at IS NULL)"
-    t.index ["donor_id"], name: "index_portfolios_on_donor_id"
+    t.index ["creator_id"], name: "index_active_subscriptions_on_donor_id", where: "(deactivated_at IS NULL)"
+    t.index ["creator_id"], name: "index_portfolios_on_creator_id"
   end
 
   create_table "recurring_contributions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -221,6 +224,17 @@ ActiveRecord::Schema.define(version: 20180625161803) do
     t.index ["portfolio_id"], name: "index_recurring_contributions_on_portfolio_id"
   end
 
+  create_table "selected_portfolios", force: :cascade do |t|
+    t.uuid "donor_id"
+    t.uuid "portfolio_id"
+    t.datetime "deactivated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deactivated_at"], name: "index_selected_portfolios_on_deactivated_at"
+    t.index ["donor_id"], name: "index_selected_portfolios_on_donor_id"
+    t.index ["portfolio_id"], name: "index_selected_portfolios_on_portfolio_id"
+  end
+
   add_foreign_key "allocations", "organizations", column: "organization_ein", primary_key: "ein"
   add_foreign_key "allocations", "portfolios"
   add_foreign_key "campaigns", "partners"
@@ -233,13 +247,16 @@ ActiveRecord::Schema.define(version: 20180625161803) do
   add_foreign_key "donations", "organizations", column: "organization_ein", primary_key: "ein"
   add_foreign_key "donations", "portfolios"
   add_foreign_key "grants", "organizations", column: "organization_ein", primary_key: "ein"
+  add_foreign_key "managed_portfolios", "partners"
+  add_foreign_key "managed_portfolios", "portfolios"
   add_foreign_key "organizations", "donors", column: "suggested_by_donor_id"
   add_foreign_key "partner_affiliations", "campaigns"
   add_foreign_key "partner_affiliations", "donors"
   add_foreign_key "partner_affiliations", "partners"
   add_foreign_key "payment_methods", "donors"
-  add_foreign_key "portfolio_templates", "partners"
-  add_foreign_key "portfolios", "donors"
+  add_foreign_key "portfolios", "donors", column: "creator_id"
   add_foreign_key "recurring_contributions", "donors"
   add_foreign_key "recurring_contributions", "portfolios"
+  add_foreign_key "selected_portfolios", "donors"
+  add_foreign_key "selected_portfolios", "portfolios"
 end

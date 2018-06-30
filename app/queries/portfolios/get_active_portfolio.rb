@@ -1,11 +1,15 @@
 module Portfolios
   class GetActivePortfolio < ApplicationQuery
-    def initialize(relation = Portfolio.all)
+    def initialize(relation = SelectedPortfolio.all)
       @relation = relation
     end
 
     def call(donor:)
-      GetActivePortfolios.new(@relation).call(donor: donor).first
+      @relation
+        .where(donor: donor, deactivated_at: nil)
+        .order(:id)
+        .last
+        &.portfolio
     end
   end
 end

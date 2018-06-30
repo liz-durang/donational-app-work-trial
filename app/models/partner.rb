@@ -14,8 +14,8 @@
 #
 
 class Partner < ApplicationRecord
-  has_many :portfolio_templates
   has_many :campaigns
+  has_many :managed_portfolios
   # Partner administrators
   has_and_belongs_to_many :donors
 
