@@ -36,9 +36,7 @@ RSpec.describe Payments::UpdateCustomerCard do
       command = Payments::UpdateCustomerCard.run(customer_id: 'test_cus_1', payment_token: payment_token)
 
       expect(command).to be_success
-      expect(command.result[:sources][:data][0][:customer]).to eq('test_cus_1')
-      expect(command.result[:sources][:data][0][:object]).to eq('card')
-      expect(command.result[:sources][:data][0][:last4]).to eq('4242')
+      expect(command.result[:last4]).to eq('4242')
     end
   end
 

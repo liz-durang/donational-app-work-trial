@@ -31,7 +31,7 @@ RSpec.describe Payments::UpdatePaymentMethod do
     let(:customer_id) { 'test_cus_1' }
 
     before do
-      Payments::CreateCustomer.run(email: 'donor@example.com')
+      Payments::CreateCustomer.run
       donor.payment_methods.create(payment_processor_customer_id: customer_id)
     end
 

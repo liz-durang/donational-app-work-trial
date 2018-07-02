@@ -15,11 +15,10 @@ RSpec.describe Payments::FindCustomerById do
     StripeMock.stop
   end
 
-  let(:email) { 'user@example.com' }
   let(:customer_id) { 'test_cus_1' }
 
   before do
-    Payments::CreateCustomer.run(email: email)
+    Payments::CreateCustomer.run
   end
 
   context 'when the Stripe response is successful' do
@@ -28,7 +27,6 @@ RSpec.describe Payments::FindCustomerById do
 
       expect(command).to be_success
       expect(command.result[:id]).to eq(customer_id)
-      expect(command.result[:email]).to eq(email)
     end
   end
 

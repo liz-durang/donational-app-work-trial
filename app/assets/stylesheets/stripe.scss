@@ -1,5 +1,8 @@
+$family-sans-serif: "Lato", Helvetica, Arial, sans-serif;
+$family-primary: $family-sans-serif;
+
 .StripeElement {
-  font-family: inherit;
+  font-family: $family-primary;
   background-color: white;
   height: 40px;
   padding: 10px 12px;

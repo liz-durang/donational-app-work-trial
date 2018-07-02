@@ -32,8 +32,6 @@
     "HEROKU_PARENT_APP_NAME": {
       "required": true
     },
-    "PANDAPAY_SECRET_KEY": "sk_test_F6XU6b5IKNfJRjHEi-XMeQ",
-    "PANDAPAY_PUBLIC_KEY": "pk_test_5suAzK7SjOWHudXvZ_04CA",
     "STRIPE_SECRET_KEY": "sk_test_QaS3Ao4UjJPLuhWA86UfHNyS",
     "STRIPE_PUBLIC_KEY": "pk_test_JvMXIo3Rfg1pV1r1WaMVP3Za"
   },
@@ -46,7 +44,9 @@
         "AUTH0_DOMAIN": "donatedirectly.auth0.com",
         "SEGMENT_RUBY_WRITE_KEY": "Pe9TTOBFO0pjhJJ6dJBZzUgB2hVwbzlE",
         "SEGMENT_JAVASCRIPT_WRITE_KEY": "NVjy3azUr5S6AhhhXeWsaWd7m0SeewQo",
-        "DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL": "true"
+        "DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL": "true",
+        "STRIPE_SECRET_KEY": "sk_test_QaS3Ao4UjJPLuhWA86UfHNyS",
+        "STRIPE_PUBLIC_KEY": "pk_test_JvMXIo3Rfg1pV1r1WaMVP3Za"
       },
       "scripts": {
         "test": "bin/test"

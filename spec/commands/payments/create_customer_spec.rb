@@ -15,16 +15,13 @@ RSpec.describe Payments::CreateCustomer do
     StripeMock.stop
   end
 
-  context 'when an email is supplied' do
-    let(:email) { 'user@example.com' }
-
+  context 'without customer data' do
     context 'and the Stripe response is successful' do
       it 'returns the newly created customer' do
-        command = Payments::CreateCustomer.run(email: email)
+        command = Payments::CreateCustomer.run
 
         expect(command).to be_success
         expect(command.result[:id]).to eq('test_cus_1')
-        expect(command.result[:email]).to eq('user@example.com')
       end
     end
 
@@ -35,7 +32,7 @@ RSpec.describe Payments::CreateCustomer do
         stripe_error = Stripe::StripeError.new(error_message)
         StripeMock.prepare_error(stripe_error, :new_customer)
 
-        command = Payments::CreateCustomer.run(email: email)
+        command = Payments::CreateCustomer.run
 
         expect(command).not_to be_success
         expect(command.errors.symbolic).to include(customer: :stripe_error)

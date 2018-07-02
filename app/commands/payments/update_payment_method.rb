@@ -22,8 +22,8 @@ module Payments
         PaymentMethod.create!(
           donor: donor,
           payment_processor_customer_id: customer[:id],
-          name_on_card: credit_card_data(@response).first,
-          last4: credit_card_data(@response).last
+          name_on_card: @response.result[:name_on_card],
+          last4: @response.result[:last4]
         )
       end
 
@@ -40,10 +40,6 @@ module Payments
       @payment_method ||= Payments::GetActivePaymentMethod.call(donor: donor)
     end
 
-    def credit_card_data(response)
-      return response.result[:sources][:data][0][:name], response.result[:sources][:data][0][:last4]
-    end
-
     def customer_by_id
       return nil unless payment_method&.payment_processor_customer_id.present?
 
@@ -53,9 +49,7 @@ module Payments
     end
 
     def create_customer
-      return nil unless donor.email.present?
-
-      create_customer = Payments::CreateCustomer.run(email: donor.email)
+      create_customer = Payments::CreateCustomer.run
       return nil unless create_customer.success?
       create_customer.result
     end
