@@ -16,7 +16,7 @@ section.section.embossed
     p.has-text-centered
       - if @view_model.has_future_contribution
         = t @view_model.recurring_contribution.frequency, scope: :next_contribution, \
-            amount: number_to_currency(@view_model.recurring_contribution.amount_dollars), \
+            amount: cents_to_currency(@view_model.recurring_contribution.amount_cents), \
             date: @view_model.next_contribution_date.to_formatted_s(:long_ordinal)
       - else
         = t 'no_future_donations'

@@ -3,9 +3,8 @@ document.addEventListener('turbolinks:load', function() {
     return Array.prototype.slice.call(document.querySelectorAll(selector), 0);
   }
 
-  const $accordions = getAll('[data-behavior="accordion"]');
-  const $accordionTriggers = getAll('[data-behavior="accordion"] [data-accordion-trigger]');
-  const $accordionPanels = getAll('[data-behavior="accordion"] [data-accordion-panel-for]');
+  const $accordionTriggers = getAll('[data-accordion-trigger]');
+  const $accordionPanels = getAll('[data-accordion-panel-for]');
 
   if ($accordionTriggers.length > 0) {
     $accordionTriggers.forEach(function($el) {
@@ -17,7 +16,7 @@ document.addEventListener('turbolinks:load', function() {
 
         if (!currentlyActive) {
           activateToggle($el);
-          showPanel($el.dataset['accordion-trigger']);
+          showPanel($el.dataset.accordionTrigger);
         }
       });
     });
