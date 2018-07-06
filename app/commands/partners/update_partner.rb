@@ -8,6 +8,7 @@ module Partners
       string :name
       string :website_url
       string :description
+      string :payment_processor_account_id
     end
 
     def execute

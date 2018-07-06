@@ -19,17 +19,10 @@ RSpec.describe 'Donors updates payment method', type: :feature do
   end
 
   def he_should_add_credit_card_information_and_click_save
-    fill_in 'first_name', with: 'Donatello'
-    fill_in 'last_name', with: "DonatorCard"
-    fill_in 'credit_card', with: '4111 1111 1111 1111'
-    fill_in 'cvv', with: '999'
-    select '12', from: 'month'
-    select '2025', from: 'year'
-    click_button 'Update card'
+    fill_in 'cardholder_name', with: 'Donatello DonatorCard'
   end
 
   def then_credit_card_should_be_updated
-    sleep(2)
     expect(page).to have_content("Thanks, we've updated your payment information")
     expect(page).to have_field(disabled:true, with: 'Donatello DonatorCard')
   end

@@ -1,11 +1,10 @@
-require 'panda_pay'
+require 'stripe'
 
 module Payments
   class ChargeCustomer < ApplicationCommand
-    SENSITIVE_PARAMETERS = %i(payment_token)
-
     required do
       string :customer_id, empty: false
+      string :account_id, empty: false
       string :email, empty: false
       integer :donation_amount_cents
     end
@@ -16,30 +15,21 @@ module Payments
     end
 
     def execute
-      payment = pandapay_donations.post(
-        source: customer_id,
-        amount: donation_amount_cents + tips_cents,
-        platform_fee: platform_fee_cents + tips_cents,
-        currency: 'usd',
-        receipt_email: email
+      Stripe.api_key = ENV.fetch('STRIPE_SECRET_KEY')
+      charge = Stripe::Charge.create(
+        {
+          customer: customer_id,
+          amount: donation_amount_cents + tips_cents,
+          application_fee: platform_fee_cents + tips_cents,
+          currency: 'usd',
+          receipt_email: email
+        },
+        stripe_account: account_id
       )
-
-      JSON.parse(payment.body, symbolize_names: true).except(*SENSITIVE_PARAMETERS)
-    rescue RestClient::ExceptionWithResponse => e
-      PandaPay.errors_from_response(e.response.body).each do |error|
-        add_error(:customer, error[:type].to_sym, error[:message])
-      end
+    rescue Stripe::InvalidRequestError, Stripe::StripeError => e
+      add_error(:customer, :stripe_error, e.message)
 
       nil
-    end
-
-    private
-
-    def pandapay_donations
-      RestClient::Resource.new(
-        'https://api.pandapay.io/v1/donations',
-        ENV.fetch('PANDAPAY_SECRET_KEY')
-      )
     end
   end
 end
