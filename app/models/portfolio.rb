@@ -15,7 +15,7 @@
 #   Portfolios are never updated nor destroyed when the donation rate or amount changes.
 #   Instead, we deactivate it and create a new portfolio which helps to keep a clear audit trail
 class Portfolio < ApplicationRecord
-  belongs_to :donor
+  belongs_to :creator, class_name: 'Donor', optional: true
 
   has_many :contributions
   has_many :allocations
@@ -24,14 +24,11 @@ class Portfolio < ApplicationRecord
            class_name: 'Allocation'
   has_many :donations
 
-  scope :active, Portfolios::GetActivePortfolios
-
-  extend Enumerize
-  enumerize :contribution_frequency,
-            in: %w[once monthly quarterly annually never],
-            predicates: true
-
   def active?
     deactivated_at.blank?
+  end
+
+  def size
+    active_allocations.count
   end
 end

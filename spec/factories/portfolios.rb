@@ -11,6 +11,6 @@
 
 FactoryBot.define do
   factory :portfolio do
-    donor
+    creator factory: :donor
   end
 end

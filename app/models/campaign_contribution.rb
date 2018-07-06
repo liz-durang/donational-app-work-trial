@@ -7,5 +7,5 @@ class CampaignContribution
                 :amount_dollars,
                 :frequency,
                 :start_at,
-                :portfolio_template_id
+                :managed_portfolio_id
 end

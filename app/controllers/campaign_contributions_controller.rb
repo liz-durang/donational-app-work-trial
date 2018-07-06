@@ -6,7 +6,7 @@ class CampaignContributionsController < ApplicationController
     pipeline.chain { update_donor! }
     pipeline.chain { associate_donor_with_partner! }
     pipeline.chain { store_custom_donor_information! }
-    pipeline.chain { create_portfolio_from_template! }
+    pipeline.chain { subscribe_donor_to_managed_portfolio! }
     pipeline.chain { update_donor_payment_method! } if payment_token.present?
     pipeline.chain { update_recurring_contribution! }
     pipeline.chain { schedule_first_contribution_immediately! } unless future_start_date?
@@ -48,12 +48,10 @@ class CampaignContributionsController < ApplicationController
     )
   end
 
-  def create_portfolio_from_template!
-    template = PortfolioTemplate.find(params[:campaign_contribution][:portfolio_template_id])
-    Portfolios::CreateOrReplacePortfolio.run(donor: current_donor)
-    Portfolios::AddOrganizationsAndRebalancePortfolio.run(
-      portfolio: active_portfolio,
-      organization_eins: template.organization_eins
+  def subscribe_donor_to_managed_portfolio!
+    Portfolios::SelectPortfolio.run(
+      donor: current_donor,
+      portfolio: Partners::GetManagedPortfolioById.call(id: managed_portfolio_id).portfolio
     )
   end
 
@@ -93,6 +91,10 @@ class CampaignContributionsController < ApplicationController
 
   def active_recurring_contribution
     @active_contribution ||= Contributions::GetActiveRecurringContribution.call(donor: current_donor)
+  end
+
+  def managed_portfolio_id
+    params[:campaign_contribution][:managed_portfolio_id]
   end
 
   def amount_cents

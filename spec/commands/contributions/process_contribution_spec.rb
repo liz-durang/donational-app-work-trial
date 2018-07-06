@@ -42,7 +42,7 @@ RSpec.describe Contributions::ProcessContribution do
 
     let(:payment_method_query_result) { double(payment_processor_customer_id: 'cus_123') }
 
-    let(:portfolio) { create(:portfolio, donor: donor) }
+    let(:portfolio) { create(:portfolio) }
     let(:contribution) do
       create(:contribution, donor: donor, portfolio: portfolio, amount_cents: 1_000, tips_cents: 200, processed_at: nil)
     end

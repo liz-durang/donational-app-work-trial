@@ -1,16 +1,23 @@
 require 'rails_helper'
 
 RSpec.describe Portfolios::GetActivePortfolio do
+  let(:other_donor) { create(:donor) }
   let(:donor) { create(:donor) }
 
   subject { Portfolios::GetActivePortfolio.call(donor: donor) }
 
-  context 'when there are no active portfolios' do
+  context 'when there are no selected portfolios for the donor' do
+    before { create(:portfolio, creator: other_donor) }
+
+    it 'returns nil' do
+      expect(subject).to be_nil
+    end
+  end
+
+  context "when all of the donor's selected portfolios are deactivated" do
     before do
-      allow_any_instance_of(Portfolios::GetActivePortfolios)
-        .to receive(:call)
-        .with(donor: donor)
-        .and_return(Portfolio.none)
+      create(:selected_portfolio, donor: donor, portfolio: create(:portfolio), deactivated_at: 2.days.ago)
+      create(:selected_portfolio, donor: donor, portfolio: create(:portfolio), deactivated_at: 1.day.ago)
     end
 
     it 'returns nil' do
@@ -18,19 +25,17 @@ RSpec.describe Portfolios::GetActivePortfolio do
     end
   end
 
-  context 'when there are an existing active portfolios' do
+  context 'when there is an existing active portfolio' do
+    let(:active_portfolio) { create(:portfolio, deactivated_at: nil) }
+
     before do
-      allow_any_instance_of(Portfolios::GetActivePortfolios)
-        .to receive(:call)
-        .with(donor: donor)
-        .and_return([portfolio_1, portfolio_2])
+      create(:selected_portfolio, donor: donor, portfolio: active_portfolio, deactivated_at: nil)
+      create(:selected_portfolio, donor: donor, portfolio: create(:portfolio), deactivated_at: 2.days.ago)
+      create(:selected_portfolio, donor: donor, portfolio: create(:portfolio), deactivated_at: 1.day.ago)
     end
 
-    let(:portfolio_1) { instance_double(Portfolio) }
-    let(:portfolio_2) { instance_double(Portfolio) }
-
-    it 'returns the first active portfolio' do
-      expect(subject).to eq portfolio_1
+    it 'returns the active portfolio' do
+      expect(subject).to eq active_portfolio
     end
   end
 end

@@ -38,13 +38,26 @@ end
 
 Organizations::CreateOrUpdateOrganizationsFromGoogleSheets.run
 
-PortfolioTemplate.create(
+def create_portfolio_with_charities(charity_eins)
+  Portfolio.create!.tap do |portfolio|
+    Portfolios::AddOrganizationsAndRebalancePortfolio.run(
+      portfolio: portfolio,
+      organization_eins: charity_eins
+    )
+  end
+end
+ManagedPortfolio.create(
   partner: one_for_the_world,
-  title: 'Random Picks',
-  organization_eins: Organization.all.pluck(:ein).sample(8)
+  name: 'Random Picks',
+  portfolio: create_portfolio_with_charities(Organization.all.pluck(:ein).sample(8))
 )
-PortfolioTemplate.create(
+ManagedPortfolio.create(
   partner: one_for_the_world,
-  title: "One charity - #{Organization.first.name}",
-  organization_eins: [Organization.first.ein]
+  name: "One charity - #{Organization.first.name}",
+  portfolio: create_portfolio_with_charities([Organization.last.ein])
+)
+ManagedPortfolio.create(
+  partner: one_for_the_world,
+  name: "All Charities",
+  portfolio: create_portfolio_with_charities(Organization.all.pluck(:ein))
 )

@@ -26,11 +26,8 @@
 #
 
 class Donor < ApplicationRecord
-  has_many :portfolios
-  has_one :active_portfolio, -> { where(deactivated_at: nil) }, class_name: 'Portfolio'
-  has_many :contributions, through: :portfolios
-  has_many :donations, through: :portfolios
-  has_many :active_allocations, through: :active_portfolio
+  has_many :selected_portfolios, -> { where(deactivated_at: nil)}
+  has_many :portfolios, through: :selected_portfolios
   has_many :payment_methods
   # Partner administrator
   has_and_belongs_to_many :partners
