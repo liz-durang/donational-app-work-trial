@@ -25,7 +25,7 @@ section.section.embossed
               | 1. Enter donation amount
             .field.has-addons
               .control.has-icons-left
-                = f.number_field :amount_dollars, class: 'input', value: (@view_model.recurring_contribution.amount_cents / 100.0).ceil
+                = f.number_field :amount_dollars, class: 'input', value: cents_to_dollars(@view_model.recurring_contribution.amount_cents)
                 span.icon.is-left $
             .control.buttons
               = f.collection_radio_buttons(:frequency, RecurringContribution.frequency.options, :last, :first) do |b| \

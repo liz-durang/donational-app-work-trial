@@ -62,8 +62,14 @@ module ApplicationHelper
   def cents_to_currency(cents)
     return '' unless cents
 
-    dollars = (cents / 100.0).ceil
+    dollars = cents_to_dollars(cents)
     number_to_currency(dollars, precision: 0)
+  end
+
+  def cents_to_dollars(cents)
+    return if cents.blank?
+
+    (cents / 100.0).ceil
   end
 
   def markdown_to_html(markdown)
