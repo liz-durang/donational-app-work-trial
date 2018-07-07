@@ -40,7 +40,7 @@ section.section.embossed
                 span.input.is-static starting on
               .control.has-icons-left
                   = icon_tag('fas fa-calendar')
-                  = f.date_field :start_at, class: :input
+                  = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 1.year.from_now.to_date.iso8601
           hr
           .field.is-grouped
             .control.is-expanded
@@ -130,11 +130,4 @@ section.section.embossed
       document.getElementById('name_on_card').value = $('input[data-panda="first_name"]').val() + ' ' + $('input[data-panda="last_name"]').val();
       document.getElementById('last4').value = $('input[data-panda="credit_card"]').val().slice(-4);
       document.getElementById('sanitized_form').submit();
-    });
-    document.addEventListener('DOMContentLoaded', function () {
-      var datePickers = bulmaCalendar.attach('[type="date"]', {
-        overlay: true,
-        minDate: '#{Date.today.iso8601}',
-        maxDate: '#{1.year.from_now.to_date.iso8601}'
-      });
     });
