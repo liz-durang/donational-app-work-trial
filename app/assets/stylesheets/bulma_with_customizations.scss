@@ -23,12 +23,6 @@ html {
   height: 100vh;
 }
 
-.column.is-vertically-centered {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
 .card.is-fullheight {
    display:flex;
    flex-direction: column;

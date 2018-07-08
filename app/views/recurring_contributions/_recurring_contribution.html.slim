@@ -1,0 +1,37 @@
+.content
+  - if recurring_contribution.future_contribution_scheduled?
+    p = t recurring_contribution.frequency, scope: :next_contribution, \
+        amount: cents_to_currency(recurring_contribution.amount_cents), \
+        date: recurring_contribution.next_contribution_at.to_formatted_s(:long_ordinal)
+  - else
+    p = t 'no_future_donations'
+  = form_with model: recurring_contribution, url: contributions_path, local: true, method: :post, class: 'form' do |f|
+    .columns
+      .column
+        .field
+          label.control
+            .label Donation amount
+            .control.has-icons-left
+              = f.number_field :amount_dollars, class: 'input', value: (recurring_contribution.amount_cents / 100.0).ceil
+              span.icon.is-left $
+      .column
+        .field
+          - unless recurring_contribution.started?
+            label.control
+              .label Starting on
+              .control.has-icons-left
+                  = icon_tag('fas fa-calendar')
+                  = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 1.year.from_now.to_date.iso8601
+
+    .field
+      label.control
+        .label Frequency
+        .control.buttons
+          = f.collection_radio_buttons(:frequency, RecurringContribution.frequency.options, :last, :first) do |b| \
+              b.radio_button(class: 'is-hidden') + b.label(class: 'button is-outlined') \
+            end
+
+    .has-text-right
+      p = f.submit 'Save', class: %w(button is-primary)
+      - if recurring_contribution.future_contribution_scheduled?
+        p = link_to 'Cancel my upcoming donations', contribution_path(id: recurring_contribution), class: 'is-danger', method: :delete, data: { confirm: 'Are you sure you want to cancel your recurring donation?' }

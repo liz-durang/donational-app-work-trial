@@ -21,7 +21,31 @@ class AccountsController < ApplicationController
   def edit
     @view_model = OpenStruct.new(
       donor: current_donor,
-      accounts_path: accounts_path
+      accounts_path: accounts_path,
+      payment_method: active_payment_method || new_payment_method,
+      recurring_contribution: active_recurring_contribution,
+      target_amount_cents: target_amount_cents
+    )
+  end
+
+  private
+
+  def new_payment_method
+    current_donor.payment_methods.new
+  end
+
+  def active_payment_method
+    @active_payment_method ||= Payments::GetActivePaymentMethod.call(donor: current_donor)
+  end
+
+  def active_recurring_contribution
+    @active_contribution ||= Contributions::GetActiveRecurringContribution.call(donor: current_donor)
+  end
+
+  def target_amount_cents
+    Contributions::GetTargetContributionAmountCents.call(
+      donor: current_donor,
+      frequency: active_recurring_contribution&.frequency || current_donor.contribution_frequency
     )
   end
 end

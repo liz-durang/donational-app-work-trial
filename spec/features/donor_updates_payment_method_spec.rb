@@ -10,12 +10,12 @@ RSpec.describe 'Donors updates payment method', type: :feature do
 
   def given_a_signed_in_donor_wants_to_update_payment_method
     sign_in_as!(first_name: 'Donny', last_name: 'Donator')
-    visit new_payment_methods_path
+    visit edit_accounts_path
   end
 
   def when_he_does_not_have_any_credit_card_added
     expect(page).to have_content('Donny Donator')
-    expect(page).to have_content('There is no active payment method. Please add your credit card using the form below.')
+    expect(page).to have_content("You don't have any payment method on file. Please add your credit card using the form below.")
   end
 
   def he_should_add_credit_card_information_and_click_save
@@ -25,14 +25,13 @@ RSpec.describe 'Donors updates payment method', type: :feature do
     fill_in 'cvv', with: '999'
     select '12', from: 'month'
     select '2025', from: 'year'
-    click_button 'Save this card'
+    click_button 'Update card'
   end
 
   def then_credit_card_should_be_updated
     sleep(5)
     expect(page).to have_content("Thanks, we've updated your payment information")
-    expect(page).to have_content('Active Payment Method')
-    expect(page).to have_content('Name on card: Donny Donator')
+    expect(page).to have_content('Name: Donny Donator')
   end
 
 

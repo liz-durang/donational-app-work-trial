@@ -77,4 +77,8 @@ module ApplicationHelper
 
     CommonMarker.render_html(markdown).html_safe
   end
+
+  def masked_card_number(last4:)
+    ('&bull;&bull;&bull;&bull; '*3 + last4).html_safe
+  end
 end

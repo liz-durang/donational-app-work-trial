@@ -1,60 +1,67 @@
 section.section
-  .container.has-text-centered
-    h1.title.is-spaced
-      => icon_tag('fa-clipboard')
-      br
-      ' Your Donations
+  .container
+    .content.has-text-centered
+      h1.title.is-spaced
+        = current_donor.name
 
-    - if @contributions.count == 0
-      p Make your first contribution to your portfolio:
+    .tabs.is-centered
+      ul
+        li = link_to edit_accounts_path do
+          = icon_tag('fa-cog')
+          | Account settings
+        li.is-active: a
+          = icon_tag('fa-clipboard')
+          | Donation history
 
-    - else
-      p
-        ' You have made
-        strong => pluralize(@contributions.count, 'donation')
-        | to your charity portfolio.
-- if @contributions.present?
-  section.section.embossed
-    .container
+    .content.has-text-centered
+      - if @contributions.count == 0
+        p Make your first contribution to your portfolio:
+      - else
+        p
+          ' You have made
+          strong => pluralize(@contributions.count, 'donation')
+          | to your charity portfolio.
+section.section.embossed
+  .container
+    - if @contributions.present?
       = display_flash_messages
-      table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
-        - @contributions.each_with_index do |contribution, index|
-          tr data-accordion-trigger="contribution-#{contribution.id}"
-            td
-              p
-                strong>
-                  | Contribution #
-                  = @contributions.count - index
-              small.hint
-                ' Ref:
-                = contribution.id
-            td
-              p
-                a
-                  ' You made a positive impact at
-                  = pluralize(contribution.donations.count, 'charity')
-            td.has-text-right
-              strong = number_to_currency(contribution.total_charges_cents / 100.0)
-            td
-              - if contribution.processed_at?
-                => time_ago_in_words(contribution.processed_at)
-                | ago
-          - contribution.donations.each do |donation|
-            tr.is-hidden data-accordion-panel-for="contribution-#{contribution.id}"
-              td.has-text-right colspan=2
-                em => donation.organization.name
+      .box
+        table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
+          - @contributions.each_with_index do |contribution, index|
+            tr data-accordion-trigger="contribution-#{contribution.id}"
+              td
+                p
+                  strong>
+                    | Contribution #
+                    = @contributions.count - index
+                small.hint
+                  ' Ref:
+                  = contribution.id
+              td
+                - if contribution.processed_at?
+                  => time_ago_in_words(contribution.processed_at)
+                  | ago
               td.has-text-right
-                em = number_to_currency(donation.amount_cents / 100.0)
-              td &nbsp;
-          - if contribution.tips_cents > 0
-            tr.is-hidden data-accordion-panel-for="contribution-#{contribution.id}"
-              td.has-text-right colspan=2
-                em Tip to Donational
+                strong> = number_to_currency(contribution.total_charges_cents / 100.0)
                 br
-                small Thanks for helping us grow!
-              td.has-text-right
-                em = number_to_currency(contribution.tips_cents / 100.0)
-              td &nbsp;
+                ' to
+                = pluralize(contribution.donations.count, 'charity')
+            - contribution.donations.each do |donation|
+              tr.is-hidden data-accordion-panel-for="contribution-#{contribution.id}"
+                td.has-text-right colspan=2
+                  em => donation.organization.name
+                td.has-text-right
+                  em = number_to_currency(donation.amount_cents / 100.0)
+                td &nbsp;
+            - if contribution.tips_cents > 0
+              tr.is-hidden data-accordion-panel-for="contribution-#{contribution.id}"
+                td.has-text-right colspan=2
+                  em Tip to Donational
+                  br
+                  small Thanks for helping us grow!
+                td.has-text-right
+                  em = number_to_currency(contribution.tips_cents / 100.0)
+                td &nbsp;
 section.section
   .container.content.has-text-centered style="max-width: 40rem;"
     p.help
