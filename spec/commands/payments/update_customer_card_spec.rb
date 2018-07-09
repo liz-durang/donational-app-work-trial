@@ -1,21 +1,17 @@
 require 'rails_helper'
+require 'stripe_mock'
 
 RSpec.describe Payments::UpdateCustomerCard do
   around do |example|
-    ClimateControl.modify(STRIPE_SECRET_KEY: 'sk_test_QaS3Ao4UjJPLuhWA86UfHNyS') do
+    ClimateControl.modify(STRIPE_SECRET_KEY: 'sk_test_123') do
       example.run
     end
   end
 
-  before(:all) do
-    StripeMock.start
-  end
-
-  after(:all) do
-    StripeMock.stop
-  end
-
+  before { StripeMock.start }
+  after { StripeMock.stop }
   let(:stripe_helper) { StripeMock.create_test_helper }
+
   let(:card_params) do
     {
       number: '4242424242424242',

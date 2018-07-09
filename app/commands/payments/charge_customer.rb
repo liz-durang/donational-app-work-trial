@@ -15,21 +15,33 @@ module Payments
     end
 
     def execute
-      Stripe.api_key = ENV.fetch('STRIPE_SECRET_KEY')
-      charge = Stripe::Charge.create(
-        {
-          customer: customer_id,
-          amount: donation_amount_cents + tips_cents,
-          application_fee: platform_fee_cents + tips_cents,
-          currency: 'usd',
-          receipt_email: email
-        },
-        stripe_account: account_id
-      )
-    rescue Stripe::InvalidRequestError, Stripe::StripeError => e
-      add_error(:customer, :stripe_error, e.message)
+      begin
+        Stripe.api_key = ENV.fetch('STRIPE_SECRET_KEY')
 
-      nil
+        token = Stripe::Token.create(
+          {
+            customer: customer_id
+          },
+          {
+            stripe_account: account_id
+          }
+        )
+
+        charge = Stripe::Charge.create(
+          {
+            source: token.id,
+            amount: donation_amount_cents + tips_cents,
+            application_fee: platform_fee_cents + tips_cents,
+            currency: 'usd',
+            receipt_email: email
+          },
+          stripe_account: account_id
+        )
+      rescue Stripe::InvalidRequestError, Stripe::StripeError => e
+        add_error(:customer, :stripe_error, e.message)
+
+        nil
+      end
     end
   end
 end

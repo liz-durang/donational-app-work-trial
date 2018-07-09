@@ -1,5 +1,5 @@
 module Payments
-  class UpdatePartnerAccount < ApplicationCommand
+  class ConnectPartnerAccount < ApplicationCommand
     required do
       model :partner
       string :authorization_code
@@ -14,10 +14,14 @@ module Payments
         }
       )
 
-      Partners::UpdatePartner.run(
-        partner: partner,
-        payment_processor_account_id: response.stripe_user_id
-      )
+      chain do
+        Partners::UpdatePartner.run(
+          partner: partner,
+          payment_processor_account_id: response.stripe_user_id
+        )
+      end
+
+      nil
     rescue Stripe::InvalidRequestError, Stripe::StripeError => e
       add_error(:partner, :stripe_error, e.message)
 

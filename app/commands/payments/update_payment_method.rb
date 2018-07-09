@@ -8,12 +8,14 @@ module Payments
     def execute
       unless customer
         add_error(:customer, :empty, 'Customer does not exist and could not be created')
-
         return
       end
 
-      chain do
-        @response = Payments::UpdateCustomerCard.run(customer_id: customer[:id], payment_token: payment_token)
+      outcome = Payments::UpdateCustomerCard.run(customer_id: customer[:id], payment_token: payment_token)
+
+      unless outcome.success?
+        add_error(:customer, :payment_error, 'Could not update card')
+        return
       end
 
       PaymentMethod.transaction do
@@ -22,8 +24,8 @@ module Payments
         PaymentMethod.create!(
           donor: donor,
           payment_processor_customer_id: customer[:id],
-          name_on_card: @response.result[:name_on_card],
-          last4: @response.result[:last4]
+          name_on_card: outcome.result[:name_on_card],
+          last4: outcome.result[:last4]
         )
       end
 

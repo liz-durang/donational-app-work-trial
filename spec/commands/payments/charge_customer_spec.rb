@@ -1,40 +1,44 @@
 require 'rails_helper'
+require 'stripe_mock'
 
 RSpec.describe Payments::ChargeCustomer do
   around do |example|
-    ClimateControl.modify(PANDAPAY_SECRET_KEY: 'sk_test_123') do
+    ClimateControl.modify(STRIPE_SECRET_KEY: 'sk_test_123') do
       example.run
     end
   end
 
-  context 'when the customer id and receipt email are supplied' do
-    let(:customer_id) { 'cus_123' }
+  let(:stripe_helper) { StripeMock.create_test_helper }
+  before { StripeMock.start }
+  after { StripeMock.stop }
+
+  let(:card_params) do
+    {
+      number: '4242424242424242',
+      exp_month: 12,
+      exp_year: 1.year.from_now.year,
+      cvc: '999'
+    }
+  end
+
+  before do
+    Payments::CreateCustomer.run
+    Payments::UpdateCustomerCard.run(
+      customer_id: 'test_cus_1',
+      payment_token: stripe_helper.generate_card_token(card_params)
+    )
+  end
+
+  context 'when the customer id, account id and receipt email are supplied' do
+    let(:customer_id) { 'test_cus_1' }
+    let(:account_id) { 'test_acc_1' }
     let(:email) { 'user@example.com' }
-    let(:donations_resource) { instance_double(RestClient::Resource) }
 
-    before do
-      allow(RestClient::Resource)
-        .to receive(:new)
-        .with('https://api.pandapay.io/v1/donations', 'sk_test_123')
-        .and_return(donations_resource)
-    end
-
-    context 'and the pandapay response is successful' do
-      let(:successful_response) { double(:successful_response, body: '{ "some": "json_receipt" }') }
-
-      it "charges the donor's credit card with Payments" do
-        expect(donations_resource)
-          .to receive(:post)
-          .with(
-            receipt_email: 'user@example.com',
-            source: 'cus_123',
-            amount: 123,
-            platform_fee: 25,
-            currency: 'usd'
-          ).and_return(successful_response)
-
+    context 'and the stripe response is successful' do
+      it "charges the donor's credit card" do
         command = Payments::ChargeCustomer.run(
           customer_id: customer_id,
+          account_id: account_id,
           email: email,
           donation_amount_cents: 100,
           tips_cents: 23,
@@ -42,51 +46,44 @@ RSpec.describe Payments::ChargeCustomer do
         )
 
         expect(command).to be_success
-        expect(command.result).to eq({ some: 'json_receipt' })
-      end
-
-      it "filters out sensitive data (ie payment_token) from the receipt" do
-        unfiltered_json = '{ "payment_token": "this_is_sensitive", "id": 123 }'
-        expect(donations_resource).to receive(:post).and_return(double(body: unfiltered_json))
-
-        command = Payments::ChargeCustomer.run(customer_id: customer_id, email: email, donation_amount_cents: 100)
-
-        expect(command.result.keys).not_to include('payment_token')
       end
     end
 
-    context 'and the pandapay response is unsuccessful' do
-      let(:unsuccessful_response) do
-        double(
-          :unsuccessful_response,
-          body: %q({"errors":[{"type":"some_pandapay_error_type","message":"Some message"}]})
-        )
-      end
-
-      before do
-        allow(donations_resource)
-          .to receive(:post)
-          .and_raise(RestClient::ExceptionWithResponse.new(unsuccessful_response))
-      end
+    context 'and the stripe response is unsuccessful' do
+      let(:error_message) { 'Some error message' }
 
       it 'fails with errors' do
-        command = Payments::ChargeCustomer.run(customer_id: customer_id, email: email, donation_amount_cents: 100)
+        stripe_error = Stripe::StripeError.new(error_message)
+        StripeMock.prepare_card_error(:card_declined)
+
+        command = Payments::ChargeCustomer.run(
+          customer_id: customer_id,
+          account_id: account_id,
+          email: email,
+          donation_amount_cents: 100
+        )
 
         expect(command).not_to be_success
-        expect(command.errors.symbolic).to include(customer: :some_pandapay_error_type)
+        expect(command.errors.symbolic).to include(customer: :stripe_error)
       end
     end
   end
 
-  context 'when the customer_id and email are not supplied' do
+  context 'when the customer id, account id and email are not supplied' do
     let(:customer_id) { '' }
+    let(:account_id) { '' }
     let(:email) { '' }
 
     it 'fails with errors' do
-      command = Payments::ChargeCustomer.run(customer_id: customer_id, email: email, donation_amount_cents: 100)
+      command = Payments::ChargeCustomer.run(
+        customer_id: customer_id,
+        account_id: account_id,
+        email: email,
+        donation_amount_cents: 100)
 
       expect(command).not_to be_success
       expect(command.errors.symbolic).to include(customer_id: :empty)
+      expect(command.errors.symbolic).to include(account_id: :empty)
       expect(command.errors.symbolic).to include(email: :empty)
     end
   end

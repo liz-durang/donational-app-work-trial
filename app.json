@@ -33,7 +33,8 @@
       "required": true
     },
     "STRIPE_SECRET_KEY": "sk_test_QaS3Ao4UjJPLuhWA86UfHNyS",
-    "STRIPE_PUBLIC_KEY": "pk_test_JvMXIo3Rfg1pV1r1WaMVP3Za"
+    "STRIPE_PUBLIC_KEY": "pk_test_JvMXIo3Rfg1pV1r1WaMVP3Za",
+    "DEFAULT_PAYMENT_PROCESSOR_ACCOUNT_ID": "acct_1CkEP6CqQ8lwp5WU"
   },
   "environments": {
     "test": {

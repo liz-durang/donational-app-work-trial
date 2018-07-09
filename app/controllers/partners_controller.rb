@@ -32,7 +32,7 @@ class PartnersController < ApplicationController
   end
 
   def account_connection
-    Payments::UpdatePartnerAccount.run(
+    Payments::ConnectPartnerAccount.run(
       partner: partner,
       authorization_code: params[:code]
     )
@@ -57,7 +57,7 @@ class PartnersController < ApplicationController
   end
 
   def stripe_connect_url
-    "https://connect.stripe.com/express/oauth/authorize?redirect_uri=http://localhost:3000/partners/account_connection&client_id=" + ENV.fetch('STRIPE_CLIENT_ID') + "&state=" + partner.id
+    "https://connect.stripe.com/express/oauth/authorize?redirect_uri=" + account_connection_partners_url + "&client_id=" + ENV.fetch('STRIPE_CLIENT_ID') + "&state=" + partner.id
   end
 
   def update_partner!

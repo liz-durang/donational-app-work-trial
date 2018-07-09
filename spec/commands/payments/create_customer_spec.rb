@@ -1,19 +1,16 @@
 require 'rails_helper'
+require 'stripe_mock'
 
 RSpec.describe Payments::CreateCustomer do
   around do |example|
-    ClimateControl.modify(STRIPE_SECRET_KEY: 'sk_test_QaS3Ao4UjJPLuhWA86UfHNyS') do
+    ClimateControl.modify(STRIPE_SECRET_KEY: 'sk_test_123') do
       example.run
     end
   end
 
-  before(:all) do
-    StripeMock.start
-  end
 
-  after(:all) do
-    StripeMock.stop
-  end
+  before { StripeMock.start }
+  after { StripeMock.stop }
 
   context 'without customer data' do
     context 'and the Stripe response is successful' do

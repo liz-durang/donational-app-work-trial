@@ -1,22 +1,19 @@
 require 'rails_helper'
+require 'stripe_mock'
 
 RSpec.describe Payments::UpdatePaymentMethod do
   around do |example|
-    ClimateControl.modify(STRIPE_SECRET_KEY: 'sk_test_QaS3Ao4UjJPLuhWA86UfHNyS') do
+    ClimateControl.modify(STRIPE_SECRET_KEY: 'sk_test_123') do
       example.run
     end
   end
 
-  before(:all) do
-    StripeMock.start
-  end
-
-  after(:all) do
-    StripeMock.stop
-  end
+  let(:stripe_helper) { StripeMock.create_test_helper }
+  before { StripeMock.start }
+  after { StripeMock.stop }
 
   let(:donor) { Donor.create(email: 'donor@example.com') }
-  let(:stripe_helper) { StripeMock.create_test_helper }
+
   let(:card_params) do
     {
       number: '4242424242424242',
@@ -58,7 +55,7 @@ RSpec.describe Payments::UpdatePaymentMethod do
         )
 
         expect(command).not_to be_success
-        expect(command.errors.symbolic).to include(customer: :stripe_error)
+        expect(command.errors.symbolic).to include(customer: :payment_error)
       end
     end
   end
@@ -115,7 +112,6 @@ RSpec.describe Payments::UpdatePaymentMethod do
 
     it 'fails with errors' do
       expect(Payments::FindCustomerById).not_to receive(:run)
-      expect(Payments::FindCustomerByEmail).not_to receive(:run)
       expect(Payments::CreateCustomer).not_to receive(:run)
 
       command = Payments::UpdatePaymentMethod.run(

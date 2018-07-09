@@ -11,9 +11,7 @@ module Payments
       Stripe.api_key = ENV.fetch('STRIPE_SECRET_KEY')
       response = Stripe::Customer.update(
         customer_id,
-        {
-          source: payment_token
-        }
+        { source: payment_token }
       )
       OpenStruct.new(
         name_on_card: response[:sources][:data][0][:name],

@@ -1,19 +1,15 @@
 require 'rails_helper'
-
+require 'stripe_mock'
 RSpec.describe Payments::FindCustomerById do
   around do |example|
-    ClimateControl.modify(STRIPE_SECRET_KEY: 'sk_test_QaS3Ao4UjJPLuhWA86UfHNyS') do
+    ClimateControl.modify(STRIPE_SECRET_KEY: 'sk_test_123') do
       example.run
     end
   end
 
-  before(:all) do
-    StripeMock.start
-  end
 
-  after(:all) do
-    StripeMock.stop
-  end
+  before { StripeMock.start }
+  after { StripeMock.stop }
 
   let(:customer_id) { 'test_cus_1' }
 

@@ -1,6 +1,11 @@
 require 'rails_helper'
+require 'stripe_mock'
 
 RSpec.describe 'Donors updates payment method', type: :feature do
+  let(:stripe_helper) { StripeMock.create_test_helper }
+  before { StripeMock.start }
+  after { StripeMock.stop }
+
   scenario 'with valid credit card', js: true do
     given_a_signed_in_donor_wants_to_update_payment_method
     when_he_does_not_have_any_credit_card_added
@@ -20,11 +25,16 @@ RSpec.describe 'Donors updates payment method', type: :feature do
 
   def he_should_add_credit_card_information_and_click_save
     fill_in 'cardholder_name', with: 'Donatello DonatorCard'
+    fill_stripe_element('4242424242424242', "01#{DateTime.now.year + 1}", '999')
+
+    card_token = stripe_helper.generate_card_token(last4: '9191', name: 'Donatello')
+    page.execute_script("document.getElementById('payment_token').value = '#{card_token}';")
+    page.execute_script("document.getElementById('payment-form').submit();")
   end
 
   def then_credit_card_should_be_updated
     expect(page).to have_content("Thanks, we've updated your payment information")
-    expect(page).to have_field(disabled:true, with: 'Donatello DonatorCard')
+    expect(page).to have_field(disabled:true, with: 'Donatello')
   end
 
 
@@ -37,5 +47,23 @@ RSpec.describe 'Donors updates payment method', type: :feature do
     )
 
     visit auth_oauth2_callback_path
+  end
+
+  def fill_stripe_element(card, exp, cvc)
+    card_iframe = all('iframe')[0]
+
+    within_frame card_iframe do
+      card.chars.each do |piece|
+        find_field('cardnumber').send_keys(piece)
+      end
+
+      exp.chars.each do |piece|
+        find_field('exp-date').send_keys(piece)
+      end
+
+      cvc.chars.each do |piece|
+        find_field('cvc').send_keys(piece)
+      end
+    end
   end
 end
