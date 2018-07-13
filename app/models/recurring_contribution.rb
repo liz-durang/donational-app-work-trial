@@ -25,6 +25,10 @@ class RecurringContribution < ApplicationRecord
     deactivated_at.blank?
   end
 
+  def started?
+    start_at <= Date.today
+  end
+
   def future_contribution_scheduled?
     return false if next_contribution_at.nil?
 

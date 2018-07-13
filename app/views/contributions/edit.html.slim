@@ -31,13 +31,21 @@ section.section.embossed
               .control.has-icons-left
                 = f.number_field :amount_dollars, class: 'input', value: (@view_model.recurring_contribution.amount_cents / 100.0).ceil
                 span.icon.is-left $
+
             .control.buttons
               = f.collection_radio_buttons(:frequency, RecurringContribution.frequency.options, :last, :first) do |b| \
                   b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
                 end
+              - unless @view_model.recurring_contribution.started?
+                .field.is-grouped
+                  .control
+                    span.input.is-static starting on
+                  .control.has-icons-left
+                      = icon_tag('fas fa-calendar')
+                      = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 1.year.from_now.to_date.iso8601
             .field
                .control
-                 = f.submit "Update my recurring donation", class: %w(button is-primary is-medium)
+                 = f.submit "Update my recurring donation", class: %w(button is-primary is-outlined)
         .column
           - if current_donor.annual_income_cents.present? && current_donor.donation_rate.present?
              = render 'how_much_give_note'

@@ -52,10 +52,12 @@ class ContributionsController < ApplicationController
   end
 
   def update
-    Contributions::UpdateRecurringContribution.run(
-      recurring_contribution: active_recurring_contribution,
-      frequency: frequency,
-      amount_cents: amount_cents
+    Contributions::CreateOrReplaceRecurringContribution.run(
+      portfolio: active_recurring_contribution.portfolio,
+      donor: active_recurring_contribution.donor,
+      amount_cents: amount_cents,
+      start_at: start_at.presence,
+      frequency: frequency
     )
 
     flash[:success] = "We've updated your recurring donation"
@@ -146,6 +148,10 @@ class ContributionsController < ApplicationController
 
   def frequency
     params[:recurring_contribution][:frequency]
+  end
+
+  def start_at
+    params[:recurring_contribution][:start_at]
   end
 
   def name_on_card
