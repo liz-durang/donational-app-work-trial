@@ -1,0 +1,161 @@
+section.section
+  .container
+    .content.has-text-centered
+      h1.title.is-spaced
+        => icon_tag('fa-address-book')
+        br
+        ' Edit Portfolio
+
+section.embossed.section
+  .container
+    = display_flash_messages
+    .box.flat-card style='background: #fafafa'
+      = form_with url: @view_model.managed_portfolio_path, local: true, method: :put, class: 'form' do |f|
+        = f.hidden_field :charities, id: 'charities'
+        .form
+          .columns
+            .column
+              .field
+                label.control
+                  = f.label :title, class: :label
+                  = f.text_field :title, class: :input, value: @view_model.managed_portfolio.name
+            .column
+              .field
+                label.control
+                  = f.label :description, class: :label
+                  = f.text_area :description, class: :input, value: @view_model.managed_portfolio.description
+          .columns
+            .column
+              label.control
+                = f.label :select_a_charity, class: :label
+                .select.control.is-fullwidth = f.select :charity, Organizations::GetAllOrganizations.call.collect { |o| [o.name, o.ein] }, { include_blank: true, class: :input }, id: 'select-charity'
+            .column
+              label.control
+                = f.label :search_for_a_charity, class: :label
+                #search-input
+              p.help You can add any 501(c)3 recognized organization to your portfolio
+          .columns
+            .column
+              label.control
+                .has-text-right = link_to 'Add', 'javascript:;', class:  %w(button is-primary), onClick: "addCharity();"
+            .column
+              label.control
+          .field
+            label.control
+              = f.label :charities, class: :label
+              table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion" id="charities-table"
+                tr
+                  td
+                    p
+                      strong>
+                        | Name
+                  td
+                    p
+                      strong>
+                        | EIN
+                  td
+                    p
+                      strong>
+                        | Action
+                - Allocation.active(portfolio: @view_model.managed_portfolio.portfolio).each do |allocation|
+                  tr
+                    td
+                      = Organizations::GetOrganizationByEin.call(ein: allocation.organization_ein).name
+                    td
+                      = allocation.organization_ein
+                    td
+                      = link_to 'Remove', 'javascript:;', onClick: "removeCharity('#{allocation.organization_ein}');"
+          p.has-text-right
+            = f.submit "Save", class: %w(button is-primary), onClick: "save();"
+
+    = render 'search_result'
+    #search-hits
+
+javascript:
+  function addCharity() {
+    var charity = document.getElementById("select-charity");
+    var table = document.getElementById("charities-table");
+    var row = table.insertRow(table.getElementsByTagName("tr").length);
+    var cellName = row.insertCell(0);
+    var cellEIN = row.insertCell(1);
+    var cellRemove = row.insertCell(2);
+    cellName.innerHTML = charity.options[charity.selectedIndex].innerHTML;
+    cellEIN.innerHTML = charity.value;
+    cellRemove.innerHTML = "Remove";
+    cellRemove.style.color = "#8600ED";
+    cellRemove.addEventListener("click", function() {
+      document.getElementById("charities-table").deleteRow(cellRemove.parentElement.rowIndex);
+    });
+  }
+
+  function removeCharity(ein) {
+    var table = document.getElementById("charities-table");
+    for (var i = 1; i < table.rows.length; i++) {
+      if (table.rows[i].cells.length) {
+        if (table.rows[i].cells[1].textContent === ein) {
+          document.getElementById("charities-table").deleteRow(table.rows[i].cells[1].parentElement.rowIndex);
+        }
+      }
+    }
+    document.getElementById("charities-table").deleteRow(rowIndex + 1);
+  }
+
+  function save() {
+    var charities = "";
+    var table = document.getElementById("charities-table");
+    for (var i = 1; i < table.rows.length; i++) {
+      if (table.rows[i].cells.length) {
+        charities += table.rows[i].cells[0].textContent.trim() + ",";
+        charities += table.rows[i].cells[1].textContent.trim() + "|";
+      }
+    }
+    document.getElementById('charities').value = charities;
+    document.getElementById('form').submit();
+  }
+
+  var search = instantsearch({
+    appId: 'EZ0RKGG8TJ',
+    apiKey: 'c8a2dbd3c43a16b24b63d52875582b7e',
+    indexName: 'Publication78',
+    searchFunction(helper) {
+      if (helper.state.query === '') {
+        return;
+      }
+      helper.search();
+    },
+  });
+
+  search.addWidget(
+    instantsearch.widgets.searchBox({
+      container: '#search-input',
+      cssClasses: { input: 'input is-small' },
+      magnifier: false,
+      reset: false
+    })
+  );
+
+  search.addWidget(
+    instantsearch.widgets.hits({
+      container: '#search-hits',
+      cssClasses: {
+        item: ['column', 'is-4'],
+        root: ['columns', 'is-multiline']
+      },
+      templates: {
+        item: document.getElementById('hit_template').innerHTML,
+        empty: 'no results'
+      },
+      transformData: function(result) {
+        result.formattedEin = result.ein.toString().substring(0, 2) + '-' + result.ein.toString().substring(2, 9);
+        if (result.npo.business_master) {
+          result.state = result.npo.business_master.state;
+          result.classifications = result.npo.business_master.classifications;
+        } else if (result.npo.form990_n) {
+          result.state = result.npo.form990_n.org_state;
+          result.classifications = [];
+        }
+        return result;
+      }
+    })
+  );
+  search.start();

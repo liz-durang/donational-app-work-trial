@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   resources :partners, only: %i[edit update] do
     resource :campaigns, only: %i[new create]
     get :account_connection, on: :collection
+    resources :managed_portfolios, only: %i[new create edit update]
   end
   # Retention
 
