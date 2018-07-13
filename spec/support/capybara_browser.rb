@@ -1,6 +1,6 @@
-require "selenium/webdriver"
+require 'selenium/webdriver'
 
-Capybara.register_driver :chrome do |app|
+Capybara.register_driver :headless_chrome do |app|
   capabilities = { chromeOptions: { args: %w(headless disable-gpu window-size=1920,1080) } }
 
   # Set path to chrome binary when running on Heroku CI
@@ -15,4 +15,8 @@ Capybara.register_driver :chrome do |app|
   )
 end
 
-Capybara.javascript_driver = :chrome
+Capybara.register_driver :chrome do |app|
+  Capybara::Selenium::Driver.new(app, browser: :chrome)
+end
+
+Capybara.javascript_driver = ENV['CI'] ? :headless_chrome : :chrome

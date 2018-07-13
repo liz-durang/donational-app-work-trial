@@ -1,10 +1,4 @@
 .content
-  - if recurring_contribution.future_contribution_scheduled?
-    p = t recurring_contribution.frequency, scope: :next_contribution, \
-        amount: cents_to_currency(recurring_contribution.amount_cents), \
-        date: recurring_contribution.next_contribution_at.to_formatted_s(:long_ordinal)
-  - else
-    p = t 'no_future_donations'
   = form_with model: recurring_contribution, url: contributions_path, local: true, method: :post, class: 'form' do |f|
     .columns
       .column

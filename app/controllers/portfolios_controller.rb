@@ -33,7 +33,7 @@ class PortfoliosController < ApplicationController
 
     track_analytics_event_via_browser('Goal: Viewed portfolio')
 
-    @portfolio = OpenStruct.new(
+    @view_model = OpenStruct.new(
       donor_first_name: current_donor.first_name,
       organizations: organizations_by_cause_area
     )

@@ -84,13 +84,13 @@ h1, h2, h3, h4, h5, h6, .title {
   font-weight: 300;
 }
 
-.tabs.is-sticky {
-  position: -webkit-sticky;
-  position: sticky;
+.is-sticky.is-fixed {
+  position: fixed;
   top: 0;
-  z-index: 1;
-  background: white;
-  padding-top: 1px;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background-color: #fafafa;
 }
 
 .buttons input:checked + label {

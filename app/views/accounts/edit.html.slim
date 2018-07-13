@@ -4,14 +4,15 @@ section.section
       h1.title.is-spaced
         = current_donor.name
 
-    .tabs.is-centered
-      ul
-        li.is-active: a
-          = icon_tag('fa-cog')
-          | Account settings
-        li = link_to contributions_path do
-          = icon_tag('fa-clipboard')
-          | Donation history
+.is-sticky
+  .tabs.is-centered
+    ul
+      li.is-active: a
+        = icon_tag('fa-cog')
+        | Account settings
+      li = link_to contributions_path do
+        = icon_tag('fa-clipboard')
+        | Donation history
 
 section.embossed.section
   .container
@@ -53,11 +54,13 @@ section.embossed.section
         .column.has-text-centered
           p: span.far.fa-calendar.fa-2x
           h3 Your donation plan
+          br
         .column style='background: #fff;'
+          = render 'recurring_contributions/next_contribution', recurring_contribution: @view_model.recurring_contribution
+          hr
           - if @view_model.recurring_contribution
             = render @view_model.recurring_contribution
           - else
             .content.has-text-centered
-              p You don't have any planned donations to your portfolio
               p = link_to new_contribution_path, class: 'button is-primary' do
                 | Donate now

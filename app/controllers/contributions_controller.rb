@@ -3,14 +3,13 @@ class ContributionsController < ApplicationController
   include ClientSideAnalytics
 
   def index
-    @contributions = Contributions::GetProcessedContributions.call(donor: current_donor)
-
-    redirect_to new_contributions_path if @contributions.empty?
+    @view_model = OpenStruct.new(
+      contributions: Contributions::GetProcessedContributions.call(donor: current_donor),
+      recurring_contribution: active_recurring_contribution
+    )
   end
 
   def new
-    redirect_to edit_accounts_path if active_recurring_contribution
-
     @view_model = OpenStruct.new(
       target_amount_cents: target_amount_cents,
       recurring_contribution: active_recurring_contribution || new_recurring_donation,
@@ -37,7 +36,7 @@ class ContributionsController < ApplicationController
       flash[:success] = "We've updated your donation plan"
       redirect_to edit_accounts_path
     else
-      redirect_to new_contributions_path, alert: outcome.errors.message_list.join('\n')
+      redirect_to new_contribution_path, alert: outcome.errors.message_list.join('\n')
     end
   end
 

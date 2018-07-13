@@ -1,49 +1,53 @@
 section.section
-  .container
-    .content.has-text-centered
-      h1.title.is-spaced
-        => icon_tag('fa-balance-scale')
-        br
-        ' Charity Allocations
+  .container.has-text-centered
+      h1.title Your personal charity portfolio
 
-      p.subtitle
-        ' Make a single or recurring donation, and we'll automatically divide it between the
-        strong => pluralize(@allocations.count, 'charity')
-        | in your portfolio.
-
-      p Have a preferred charity? Adjust your portfolio's allocation below and we'll handle the rest.
+.is-sticky
+  .tabs.is-centered
+    ul
+      li = link_to portfolio_path do
+        = icon_tag('fa-address-book')
+        | Charities
+      li.is-active: a
+        = icon_tag('fa-balance-scale')
+        | Portfolio Allocation
+      li = link_to new_contribution_path do
+        = icon_tag('fa-heart')
+        | Donate
 
 section.embossed.section
-  .container
+  .container.has-text-centered
+    p.content
+      ' Your donations are automatically distributed to the
+      strong => pluralize(@allocations.count, 'charity')
+      | in your portfolio.
+
     = display_flash_messages
+    .columns.is-centered
+      .column.is-narrow
+        = form_with scope: 'allocations', url: allocations_path, local: true, method: :put, class: 'form box' do |f|
+          table.table.is-centered
+            - @allocations.each_with_index do |allocation, index|
+              = f.fields index.to_s, model: allocation do |allocation_form|
+                tr
+                  = allocation_form.hidden_field :organization_ein
+                  td
+                    strong = allocation.organization.name
+                    br
+                    small = I18n.t('title', scope: ['cause_areas', allocation.organization.cause_area])
+                  td width='30%'
+                    progress class="progress is-large is-success" value=allocation.percentage max="100"
+                      = allocation.percentage
+                  td width='100'
+                    .select.is-small
+                      = allocation_form.select :percentage, (0..100).map { |n| ["#{n}%", n]}, {}, { 'data-behavior' => 'allocation-select' }
+          .has-text-centered
+            article.message.is-danger.is-hidden data-behavior='allocation-warning'
+              .message-body
+                p The allocations should add up to 100%
+                small
+                  ' (Currently, you have
+                  span data-behavior='allocation-total' 100
+                  | % allocated)
 
-    = form_with scope: 'allocations', url: allocations_path, local: true, method: :put, class: 'form' do |f|
-      table.table.is-fullwidth
-        thead
-          tr
-            th Organization
-            th colspan=2 Allocation
-        - @allocations.each_with_index do |allocation, index|
-          = f.fields index.to_s, model: allocation do |allocation_form|
-            tr
-              = allocation_form.hidden_field :organization_ein
-              td
-                strong = allocation.organization.name
-                br
-                small = I18n.t('title', scope: ['cause_areas', allocation.organization.cause_area])
-              td width='30%'
-                progress class="progress is-large is-success" value=allocation.percentage max="100"
-                  = allocation.percentage
-              td width='100'
-                .select.is-small
-                  = allocation_form.select :percentage, (0..100).map { |n| ["#{n}%", n]}, {}, { 'data-behavior' => 'allocation-select' }
-      .has-text-centered
-        article.message.is-danger.is-hidden data-behavior='allocation-warning'
-          .message-body
-            p The allocations should add up to 100%
-            small
-              ' (Currently, you have
-              span data-behavior='allocation-total' 100
-              | % allocated)
-
-        = f.submit class: 'button is-primary', value: 'Save allocations', data: { behavior: 'allocation-submit' }
+          = f.submit class: 'button is-primary', value: 'Save allocations', data: { behavior: 'allocation-submit' }

@@ -4,36 +4,40 @@ section.section
       h1.title.is-spaced
         = current_donor.name
 
-    .tabs.is-centered
-      ul
-        li = link_to edit_accounts_path do
-          = icon_tag('fa-cog')
-          | Account settings
-        li.is-active: a
-          = icon_tag('fa-clipboard')
-          | Donation history
+.is-sticky
+  .tabs.is-centered
+    ul
+      li = link_to edit_accounts_path do
+        = icon_tag('fa-cog')
+        | Account settings
+      li.is-active: a
+        = icon_tag('fa-clipboard')
+        | Donation history
 
+section.section.embossed
+  .container
     .content.has-text-centered
-      - if @contributions.count == 0
+      - if @view_model.contributions.count == 0
         p Make your first contribution to your portfolio:
       - else
         p
           ' You have made
-          strong => pluralize(@contributions.count, 'donation')
+          strong => pluralize(@view_model.contributions.count, 'donation')
           | to your charity portfolio.
-section.section.embossed
-  .container
-    - if @contributions.present?
+    .box
+      = render 'recurring_contributions/next_contribution', recurring_contribution: @view_model.recurring_contribution
+
+    - if @view_model.contributions.present?
       = display_flash_messages
       .box
         table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
-          - @contributions.each_with_index do |contribution, index|
+          - @view_model.contributions.each_with_index do |contribution, index|
             tr data-accordion-trigger="contribution-#{contribution.id}"
               td
                 p
                   strong>
                     | Contribution #
-                    = @contributions.count - index
+                    = @view_model.contributions.count - index
                 small.hint
                   ' Ref:
                   = contribution.id

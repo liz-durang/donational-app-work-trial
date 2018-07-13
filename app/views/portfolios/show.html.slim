@@ -1,39 +1,42 @@
 section.section
-  .container
-    .content.has-text-centered
-      h1.title.is-spaced
+  .container.has-text-centered
+      h1.title Your personal charity portfolio
+
+.is-sticky
+  .tabs.is-centered
+    ul
+      li.is-active: a
         = icon_tag('fa-address-book')
-        br
-        = @portfolio.donor_first_name
-        | , meet your personalized charitable portfolio
-        | !
-      p
-        ' Every charity in your portfolio has been
-        strong vetted by industry experts
-        ' , is
-        strong> transparent
-        ' about their financials, and is one of the
-        strong> most efficient
-        ' organizations for
-        strong> improving
-        ' and for
-        strong saving lives.
+        | Charities
+      li = link_to edit_allocations_path do
+        = icon_tag('fa-balance-scale')
+        | Portfolio Allocation
+      li = link_to new_contribution_path do
+        = icon_tag('fa-heart')
+        | Donate
 
-      p.help Let's explore your portfolio
-      p
-        a href="#my-portfolio"
-          span.icon.is-medium: i.fa.fa-arrow-circle-down
-
-    = display_flash_messages
 section.section.embossed#my-portfolio
   .container.has-text-centered
-    h4.subtitle.is-4
-      span.icon.is-size-4>: i.fa.fa-heart
-      br
-      | Charities that align with your values & beliefs
+    = display_flash_messages
+    p.content
+      = @view_model.donor_first_name
+      ' , here are the
+      strong> = pluralize(@view_model.organizations.count, 'charity')
+      | in your personalized charitable portfolio!
+    / p
+    /   ' Every charity in your portfolio has been
+    /   strong vetted by industry experts
+    /   ' , is
+    /   strong> transparent
+    /   ' about their financials, and is one of the
+    /   strong> most efficient
+    /   ' organizations for
+    /   strong> improving
+    /   ' and for
+    /   strong saving lives.
 
     ul.columns.is-multiline.is-centered.book-list
-      - @portfolio.organizations.each do |organization|
+      - @view_model.organizations.each do |organization|
         li.column.is-4
           = render 'book', organization: organization
           hr
@@ -51,6 +54,6 @@ section.section
 
     p Connect your credit card and easily donate to all of the charities in your portfolio.
 
-    a.button.is-large.is-primary href=new_contributions_path
+    a.button.is-large.is-primary href=new_contribution_path
       span Donate to your portfolio
       span.icon.is-small &rarr;
