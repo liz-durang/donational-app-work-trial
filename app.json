@@ -57,6 +57,7 @@
         "test": "bin/test"
       },
       "buildpacks": [
+        { "url": "heroku/nodejs" },
         { "url": "heroku/ruby" },
         { "url": "https://github.com/heroku/heroku-buildpack-chromedriver" },
         { "url": "https://github.com/heroku/heroku-buildpack-google-chrome" }
