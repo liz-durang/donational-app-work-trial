@@ -1,24 +1,20 @@
-default: &default
+shared:
   adapter: postgresql
   encoding: unicode
   pool: 5
   timeout: 5000
 
 development:
-  <<: *default
   database: donate-deliberately-dev
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  <<: *default
   database: donate-deliberately-test
 
 staging:
-  <<: *default
   database: donate-deliberately-staging
 
 production:
-  <<: *default
   database: donate-deliberately
