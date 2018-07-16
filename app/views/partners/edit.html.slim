@@ -35,9 +35,14 @@ section.embossed.section
                 label.control
                   = f.label :description, class: :label
                   = f.text_area :description, class: :input, value: @view_model.partner.description
-              p.has-text-right
-                = link_to "Connect with Stripe", @view_model.stripe_connect_url, class: %w(button is-primary is-medium)
-                = f.submit "Save", class: %w(button is-primary)
+              br
+              .columns
+                .column
+                  p.has-text-left
+                  = link_to "Connect with Stripe", @view_model.stripe_connect_url, class: %w(button is-primary)
+                .column.has-text-right
+                  p.has-text-rigth
+                  = f.submit "Save", class: %w(button is-primary)
 
 section.section
   .container
@@ -111,7 +116,6 @@ section.embossed.section
                 = campaign.description
       p
         .has-text-right = link_to "Create Campaign", new_partner_campaigns_path(@view_model.partner), class: %w(button is-primary)
->>>>>>> 303fd37... Create and edit managed portfolios
 
 section.section
   .container

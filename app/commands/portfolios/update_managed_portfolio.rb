@@ -1,7 +1,7 @@
-module ManagedPortfolios
-  class CreateManagedPortfolio < ApplicationCommand
+module Portfolios
+  class UpdateManagedPortfolio < ApplicationCommand
     required do
-      model :partner
+      model :managed_portfolio
       model :donor
       string :title
       string :description
@@ -9,14 +9,19 @@ module ManagedPortfolios
     end
 
     def execute
-      chain { find_or_create_charities }
-      chain { create_portoflio }
-      chain { create_managed_portfolio }
+      deactivate_existing_portfolio
+      find_or_create_charities
+      create_portoflio
+      update_managed_portoflio
 
       nil
     end
 
     private
+
+    def deactivate_existing_portfolio
+      managed_portfolio.portfolio.update!(deactivated_at: Time.zone.now)
+    end
 
     def find_or_create_charities
       @organization_eins = []
@@ -29,8 +34,6 @@ module ManagedPortfolios
 
         @organization_eins << organization.ein
       end
-
-      Mutations::Outcome.new(true, nil, [], nil)
     end
 
     def create_portoflio
@@ -40,19 +43,14 @@ module ManagedPortfolios
           organization_eins: @organization_eins
         )
       end
-
-      Mutations::Outcome.new(true, nil, [], nil)
     end
 
-    def create_managed_portfolio
-      ManagedPortfolio.create(
-        partner: partner,
+    def update_managed_portoflio
+      managed_portfolio.update!(
         name: title,
         description: description,
         portfolio: @portfolio
       )
-
-      Mutations::Outcome.new(true, nil, [], nil)
     end
   end
 end

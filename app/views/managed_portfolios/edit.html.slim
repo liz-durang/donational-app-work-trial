@@ -60,7 +60,7 @@ section.embossed.section
                 - Allocation.active(portfolio: @view_model.managed_portfolio.portfolio).each do |allocation|
                   tr
                     td
-                      = Organizations::GetOrganizationByEin.call(ein: allocation.organization_ein).name
+                      = allocation.organization_name
                     td
                       = allocation.organization_ein
                     td
@@ -114,8 +114,8 @@ javascript:
   }
 
   var search = instantsearch({
-    appId: 'EZ0RKGG8TJ',
-    apiKey: 'c8a2dbd3c43a16b24b63d52875582b7e',
+    appId: "#{ENV.fetch('SEARCH_APP_ID')}",
+    apiKey: "#{ENV.fetch('SEARCH_APP_KEY')}",
     indexName: 'Publication78',
     searchFunction(helper) {
       if (helper.state.query === '') {

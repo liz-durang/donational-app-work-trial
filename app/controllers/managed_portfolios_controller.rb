@@ -2,7 +2,7 @@ class ManagedPortfoliosController < ApplicationController
   before_action :ensure_donor_has_permission!
 
   def create
-    command = ManagedPortfolios::CreateManagedPortfolio.run(
+    command = Portfolios::CreateManagedPortfolio.run(
       partner: partner,
       donor: current_donor,
       title: params[:title],
@@ -16,7 +16,7 @@ class ManagedPortfoliosController < ApplicationController
   end
 
   def update
-    command = ManagedPortfolios::UpdateManagedPortfolio.run(
+    command = Portfolios::UpdateManagedPortfolio.run(
       managed_portfolio: managed_portfolio,
       donor: current_donor,
       title: params[:title],
@@ -41,7 +41,7 @@ class ManagedPortfoliosController < ApplicationController
   def ensure_donor_has_permission!
     unless current_donor.partners.exists?(id: partner.id)
       flash[:error] = "Sorry, you don't have permission to create a portfolio for this partner."
-      redirect_to new_partner_managed_portfolios_path(partner)
+      redirect_to new_partner_managed_portfolio_path(partner)
     end
   end
 

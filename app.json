@@ -34,7 +34,9 @@
     },
     "STRIPE_SECRET_KEY": "sk_test_QaS3Ao4UjJPLuhWA86UfHNyS",
     "STRIPE_PUBLIC_KEY": "pk_test_JvMXIo3Rfg1pV1r1WaMVP3Za",
-    "DEFAULT_PAYMENT_PROCESSOR_ACCOUNT_ID": "acct_1CkEP6CqQ8lwp5WU"
+    "DEFAULT_PAYMENT_PROCESSOR_ACCOUNT_ID": "acct_1CkEP6CqQ8lwp5WU",
+    "SEARCH_APP_ID": "EZ0RKGG8TJ",
+    "SEARCH_APP_KEY": "c8a2dbd3c43a16b24b63d52875582b7e"
   },
   "environments": {
     "test": {
@@ -47,7 +49,9 @@
         "SEGMENT_JAVASCRIPT_WRITE_KEY": "NVjy3azUr5S6AhhhXeWsaWd7m0SeewQo",
         "DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL": "true",
         "STRIPE_SECRET_KEY": "sk_test_QaS3Ao4UjJPLuhWA86UfHNyS",
-        "STRIPE_PUBLIC_KEY": "pk_test_JvMXIo3Rfg1pV1r1WaMVP3Za"
+        "STRIPE_PUBLIC_KEY": "pk_test_JvMXIo3Rfg1pV1r1WaMVP3Za",
+        "SEARCH_APP_ID": "EZ0RKGG8TJ",
+        "SEARCH_APP_KEY": "c8a2dbd3c43a16b24b63d52875582b7e"
       },
       "scripts": {
         "test": "bin/test"

@@ -10,7 +10,7 @@ section.embossed.section
   .container
     = display_flash_messages
     .box.flat-card style='background: #fafafa'
-      = form_with url: partner_managed_portfolios_path, local: true, method: :post, class: 'form' do |f|
+      = form_with url: partner_managed_portfolios_path, id: 'form', local: true, method: :post, class: 'form' do |f|
         = f.hidden_field :charities, id: 'charities'
         .form
           .columns
@@ -94,8 +94,8 @@ javascript:
   }
 
   var search = instantsearch({
-    appId: 'EZ0RKGG8TJ',
-    apiKey: 'c8a2dbd3c43a16b24b63d52875582b7e',
+    appId: "#{ENV.fetch('SEARCH_APP_ID')}",
+    apiKey: "#{ENV.fetch('SEARCH_APP_KEY')}",
     indexName: 'Publication78',
     searchFunction(helper) {
       if (helper.state.query === '') {
