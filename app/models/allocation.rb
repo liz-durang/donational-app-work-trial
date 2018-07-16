@@ -20,6 +20,8 @@ class Allocation < ApplicationRecord
 
   scope :active, Portfolios::GetActiveAllocations
 
+  delegate :name, to: :organization, prefix: true
+
   def active?
     deactivated_at.blank?
   end

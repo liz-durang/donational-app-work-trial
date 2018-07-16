@@ -7,29 +7,115 @@ section.section
         ' Partner Account
 
       p.subtitle
-        ' Information, Donor Questions & Campaigns
+        ' Basic Information, Portfolios, Campaigns & Donor Questions
 
 section.embossed.section
   .container
-    p.subtitle.is-spaced.has-text-centered
-      ' Basic Information
-      = display_flash_messages
+    = display_flash_messages
+    .box.flat-card style='background: #fafafa'
       = form_with model: @view_model.partner, url: @view_model.partner_path, local: true, method: :put, class: 'form' do |f|
-        .columns
-          .column.is-3.container
-            p.field
-              = f.text_field :name, class: 'input', value: @view_model.partner.name, placeholder: 'Name'
-            p.field
-              = f.text_field :website_url, class: 'input', value: @view_model.partner.website_url, placeholder: 'Website URL'
-            p.field
-              = f.text_area :description, class: 'input', value: @view_model.partner.description, placeholder: 'Description'
-            p.field
-              .control.has-text-centered
-                = f.submit "Save", class: %w(button is-primary is-medium)
-            br
-            p.field
-              .control.has-text-centered
-                = link_to "Connect with Stripe", @view_model.stripe_connect_url, class: %w(button is-primary is-medium)
+        .columns.is-vcentered
+          .column.has-text-centered
+            p: span.far.fa-address-book.fa-2x
+            h3.subtitle.is-spaced Basic Information
+          .column style='background: #fff;'
+            .form
+              .columns
+                .column
+                  .field
+                    label.control
+                      = f.label :name, class: :label
+                      = f.text_field :name, class: :input, value: @view_model.partner.name
+                .column
+                  .field
+                    label.control
+                      = f.label :website_url, class: :label
+                      = f.text_field :website_url, class: :input, value: @view_model.partner.website_url
+              .field
+                label.control
+                  = f.label :description, class: :label
+                  = f.text_area :description, class: :input, value: @view_model.partner.description
+              br
+              .columns
+                .column
+                  p.has-text-left
+                  = link_to "Connect with Stripe", @view_model.stripe_connect_url, class: %w(button is-primary)
+                .column.has-text-right
+                  p.has-text-rigth
+                  = f.submit "Save", class: %w(button is-primary)
+
+section.section
+  .container
+    p.subtitle.has-text-centered
+      ' Portfolios
+    .box.flat-card style='background: #fafafa'
+      table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
+        tr
+          td
+            p
+              strong>
+                | Title
+          td
+            p
+              strong>
+                | Description
+          td
+            p
+              strong>
+                | Charities
+          td
+            p
+              strong>
+                | Action
+        - @view_model.partner.managed_portfolios.each do |managed_portfolio|
+          tr data-accordion-trigger="managed_portfolio-#{managed_portfolio.id}"
+            td
+              p
+                = managed_portfolio.name
+            td
+              p
+                = managed_portfolio.description
+            td
+              p
+                a
+                  = pluralize(Allocation.active(portfolio: managed_portfolio.portfolio).count, 'charity')
+            td
+              p = link_to 'Edit', edit_partner_managed_portfolio_path(@view_model.partner, managed_portfolio)
+          - Allocation.active(portfolio: managed_portfolio.portfolio).each do |allocation|
+            tr.is-hidden data-accordion-panel-for="managed_portfolio-#{managed_portfolio.id}"
+              td &nbsp;
+              td &nbsp;
+              td
+                em => allocation.organization.name
+              td &nbsp;
+      p
+        .has-text-right = link_to "Create Portfolio", new_partner_managed_portfolio_path(@view_model.partner), class: %w(button is-primary)
+
+section.embossed.section
+  .container
+    p.subtitle.has-text-centered
+      ' Campaigns
+    .box.flat-card style='background: #fafafa'
+      table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
+        tr
+          td
+            p
+              strong>
+                | Title
+          td
+            p
+              strong>
+                | Description
+        - @view_model.partner.campaigns.each do |campaign|
+          tr
+            td
+              p
+                = link_to campaign.title, campaigns_path(campaign.slug)
+            td
+              p
+                = campaign.description
+      p
+        .has-text-right = link_to "Create Campaign", new_partner_campaigns_path(@view_model.partner), class: %w(button is-primary)
 
 section.section
   .container
@@ -87,61 +173,38 @@ section.section
             td
               p
                 = link_to 'Delete', partner_path(question: question.name), method: :put, data: { confirm: 'Are you sure you want to delete the question?' }
-      br
-      = form_with url: @view_model.partner_path, local: true, method: :put, class: 'form' do |f|
-        .columns
-          .column.is-12
-            .field.is-grouped
-              label.subtitle.control
-                | Name
-              p.field.control.is-expanded
-                = f.text_field :name, id: 'input-name', class: :input, placeholder: 'i.e. school'
-              label.subtitle.control
-                | Title
-              p.field.control.is-expanded
-                = f.text_field :title, id: 'input-title', class: :input, placeholder: 'i.e. What organization/school are you affiliated with?'
-            .field.is-grouped
-              label.subtitle.control
-                | Type
-              p.field
-                .select.control = f.select :type, ['Text', 'Select'], { }, { id: 'input-type', class: :input }
-              label.subtitle.control
-                | Required
-              p.field
-                .select.control = f.select :required, [['Yes', true], ['No', false]], { }, { id: 'input-required', class: :input }
-              label.subtitle.control
-                | Options
-              p.field.control.is-expanded
-                = f.text_field :options, id: 'input-options', class: :input, placeholder: 'i.e. Harvard, Wharton, Other'
-            span.help.has-text-right
-              | This field is required only if type is Select. Please enter values separated by comma.
-            p.field
-              .control.has-text-centered
-                = f.submit 'Add question', class: %w(button is-primary is-medium)
 
-- if @view_model.partner.campaigns.any?
-  section.embossed.section
-    .container
-      p.subtitle.has-text-centered
-        ' Campaigns
-      table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
-        tr
-          td
-            p
-              strong>
-                | Title
-          td
-            p
-              strong>
-                | Description
-        - @view_model.partner.campaigns.each do |campaign|
-          tr
-            td
-              p
-                = link_to campaign.title, campaigns_path(campaign.slug)
-            td
-              p
-                = campaign.description
+    .box.flat-card style='background: #fafafa'
+      = form_with url: @view_model.partner_path, local: true, method: :put, class: 'form' do |f|
+        .form
+          .columns
+            .column
+              .field
+                label.control
+                  = f.label :name, class: :label
+                  = f.text_field :name, id: 'input-name', class: :input, placeholder: 'i.e. school'
+            .column
+              .field
+                label.control
+                  = f.label :title, class: :label
+                  = f.text_field :title, id: 'input-title', class: :input, placeholder: 'i.e. What organization/school are you affiliated with?'
+          .columns
+            .column
+              label.control
+                = f.label :type, class: :label
+                .select.control = f.select :type, ['Text', 'Select'], { }, { id: 'input-type', class: :input }
+            .column
+              label.control
+                = f.label :required, class: :label
+                .select.control = f.select :required, [['Yes', true], ['No', false]], { }, { id: 'input-required', class: :input }
+          .field
+            label.control
+              = f.label :options, class: :label
+              = f.text_field :options, id: 'input-options', class: :input, placeholder: 'i.e. Harvard, Wharton, Other'
+              span.help
+                | This field is required only if type is Select. Please enter values separated by comma.
+          p.has-text-right
+            = f.submit "Add question", class: %w(button is-primary)
 
 javascript:
   function fillForm(name, title, type, options, required) {
