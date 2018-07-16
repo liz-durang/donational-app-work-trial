@@ -26,7 +26,9 @@ class RecurringContribution < ApplicationRecord
   end
 
   def started?
-    start_at <= Date.today
+    return true if start_at.nil?
+
+    start_at.to_date <= Date.today
   end
 
   def future_contribution_scheduled?

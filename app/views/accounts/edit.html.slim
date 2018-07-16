@@ -2,31 +2,65 @@ section.section
   .container
     .content.has-text-centered
       h1.title.is-spaced
-        => icon_tag('fa-user')
-        br
-        ' Account Information
+        = current_donor.name
 
-      p.subtitle
-        ' Basic Contact Information
+.is-sticky
+  .tabs.is-centered
+    ul
+      li.is-active: a
+        = icon_tag('fa-cog')
+        | Account settings
+      li = link_to contributions_path do
+        = icon_tag('fa-clipboard')
+        | Donation history
 
 section.embossed.section
   .container
     = display_flash_messages
-    = form_with model: @view_model.donor, url: @view_model.accounts_path, local: true, method: :put, class: 'form' do |f|
-      .columns
-        .column.is-3.container
-          p.field
-            label.subtitle
-              | First name
-              = f.text_field :first_name, class: 'input', value: @view_model.donor.first_name
-          p.field
-            label.subtitle
-              | Last name
-              = f.text_field :last_name, class: 'input', value: @view_model.donor.last_name
-          p.field
-            label.subtitle
-              | Email
-              = f.email_field :email, class: 'input', value: @view_model.donor.email
-          p.field
-            .control.has-text-centered
-              = f.submit "Save", class: %w(button is-primary is-medium)
+    .box.flat-card style='background: #fafafa'
+      = form_with model: @view_model.donor, url: @view_model.accounts_path, local: true, method: :put do |f|
+        .columns.is-vcentered
+          .column.has-text-centered
+            p: span.far.fa-address-book.fa-2x
+            h3 Contact Information
+          .column style='background: #fff;'
+            .form
+              .columns
+                .column
+                  .field
+                    label.control
+                      = f.label :first_name, class: :label
+                      = f.text_field :first_name, class: :input
+                .column
+                  .field
+                    label.control
+                      = f.label :last_name, class: :label
+                      = f.text_field :last_name, class: :input
+              .field
+                label.control
+                  = f.label :email, class: :label
+                  = f.email_field :email, class: :input
+              p.has-text-right
+                = f.submit "Save", class: %w(button is-primary)
+    .box.flat-card style='background: #fafafa'
+      .columns.is-vcentered
+        .column.has-text-centered
+          p: span.far.fa-credit-card.fa-2x
+          h3 Payment Information
+        .column style='background: #fff;'
+          = render @view_model.payment_method
+    .box.flat-card style='background: #fafafa'
+      .columns.is-vcentered
+        .column.has-text-centered
+          p: span.far.fa-calendar.fa-2x
+          h3 Your donation plan
+          br
+        .column style='background: #fff;'
+          = render 'recurring_contributions/next_contribution', recurring_contribution: @view_model.recurring_contribution
+          hr
+          - if @view_model.recurring_contribution
+            = render @view_model.recurring_contribution
+          - else
+            .content.has-text-centered
+              p = link_to new_contribution_path, class: 'button is-primary' do
+                | Donate now

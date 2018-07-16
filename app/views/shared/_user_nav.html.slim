@@ -5,23 +5,14 @@
       = current_donor.name
     .navbar-dropdown
       a.navbar-item href=edit_accounts_path
-        = icon_tag('fa-user')
+        => icon_tag('fa-user')
         | Your Account
-      a.navbar-item href=new_payment_methods_path
-        = icon_tag('fa-credit-card')
-        | Your Payment Methods
       a.navbar-item href=portfolio_path
-        = icon_tag('fa-address-book')
+        => icon_tag('fa-address-book')
         | Your Portfolio
       a.navbar-item href=new_contribution_path
-        = icon_tag('fa-credit-card')
+        = icon_tag('fa-heart')
         | Donate
-      a.navbar-item href=contributions_path
-        = icon_tag('fa-clipboard')
-        | Donation history
-      a.navbar-item href=edit_allocations_path
-        = icon_tag('fa-balance-scale')
-        | Allocations
       - if current_donor.partners.any?
         a.navbar-item href=edit_partner_path(current_donor.partners.first)
           = icon_tag('fa-handshake')

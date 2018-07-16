@@ -29,7 +29,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     expect(page).to have_content('Which city will you be living in when your donation commences?')
     fill_in 'campaign_contribution[donor_questions][city]', with: 'London'
-    select 'Harvard'
+    select 'Wharton'
     click_on_label 'Top Picks'
 
     fill_in 'Card Number', with: '4111111111111111'

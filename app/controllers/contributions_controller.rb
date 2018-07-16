@@ -3,30 +3,18 @@ class ContributionsController < ApplicationController
   include ClientSideAnalytics
 
   def index
-    @contributions = Contributions::GetProcessedContributions.call(donor: current_donor)
-
-    redirect_to new_contribution_path if @contributions.empty?
+    @view_model = OpenStruct.new(
+      contributions: Contributions::GetProcessedContributions.call(donor: current_donor),
+      recurring_contribution: active_recurring_contribution
+    )
   end
 
   def new
-    redirect_to edit_contribution_path(active_recurring_contribution) if active_recurring_contribution
-
     @view_model = OpenStruct.new(
       target_amount_cents: target_amount_cents,
       recurring_contribution: active_recurring_contribution || new_recurring_donation,
       active_payment_method: payment_method.present?,
       portfolio_organization_count: active_portfolio.active_allocations.count
-    )
-  end
-
-  def edit
-    @view_model = OpenStruct.new(
-      target_amount_cents: target_amount_cents,
-      recurring_contribution: active_recurring_contribution,
-      portfolio_organization_count: active_portfolio.active_allocations.count,
-      cancel_link: 'Stop my ' + active_recurring_contribution.frequency + ' donation',
-      has_future_contribution: active_recurring_contribution.future_contribution_scheduled?,
-      next_contribution_date: active_recurring_contribution.next_contribution_at&.to_date
     )
   end
 
@@ -45,30 +33,18 @@ class ContributionsController < ApplicationController
 
     if outcome.success?
       track_analytics_event_via_browser('Goal: Donation', { revenue: amount_dollars })
-      redirect_to contributions_path
+      flash[:success] = "We've updated your donation plan"
+      redirect_to edit_accounts_path
     else
       redirect_to new_contribution_path, alert: outcome.errors.message_list.join('\n')
     end
   end
 
-  def update
-    Contributions::CreateOrReplaceRecurringContribution.run(
-      portfolio: active_recurring_contribution.portfolio,
-      donor: active_recurring_contribution.donor,
-      amount_cents: amount_cents,
-      start_at: start_at.presence,
-      frequency: frequency
-    )
-
-    flash[:success] = "We've updated your recurring donation"
-    redirect_to edit_contribution_path(active_recurring_contribution)
-  end
-
   def destroy
     Contributions::DeactivateRecurringContribution.run(recurring_contribution: active_recurring_contribution)
 
-    flash[:success] = "We've cancelled your recurring donation"
-    redirect_to new_contribution_path
+    flash[:success] = "We've cancelled your donation plan"
+    redirect_to edit_accounts_path
   end
 
   private
@@ -88,7 +64,8 @@ class ContributionsController < ApplicationController
       portfolio: active_portfolio,
       frequency: frequency,
       amount_cents: amount_cents,
-      tips_cents: tips_cents
+      tips_cents: tips_cents,
+      start_at: start_at.presence
     )
   end
 

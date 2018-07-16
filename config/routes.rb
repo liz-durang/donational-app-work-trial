@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   resource :portfolio
   resource :allocations, only: %i[new edit create update]
   resource :accounts, only: %i[edit update]
-  resource :payment_methods, only: %i[new create]
+  resource :payment_methods, only: :create
   resources :partners, only: %i[edit update] do
     resource :campaigns, only: %i[new create]
   end
