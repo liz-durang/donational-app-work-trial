@@ -1,79 +1,87 @@
-section.section
-  .container
-    .content.has-text-centered
-      h1.title
-        ' Donate with
-        = @view_model.partner_name
-      h3.subtitle = @view_model.campaign_title
-      p = @view_model.partner_description
+- content_for :hero do
+  section.hero.has-background
+    .hero-background
+      figure
+    .hero-head
+      = render 'shared/nav'
+    .hero-body
+      .container
+        .columns
+          .column.is-6
+            h1.title.is-2.is-spaced = @view_model.partner_name
+            h2.subtitle = @view_model.partner_description
 section.section.embossed
-  .container.content
-    .message.is-info
-      .message-body
-        = markdown_to_html @view_model.campaign_description
+  .container
     = display_flash_messages
-    .card
-      .card-content
-        = form_with model: @view_model.new_campaign_contribution, local: true, id: 'payment-form', method: :post, class: 'form' do |f|
-          = f.hidden_field :payment_token, id: 'payment_token'
-          label.label Donation
-          .field
-            .control.buttons = f.collection_radio_buttons :amount_dollars,\
-              @view_model.default_contribution_amounts.map { |amt| [amt, number_to_currency(amt, precision: 0)] }, :first, :last do |b| \
-                b.radio_button(class: 'is-hidden') + b.label(class: 'is-medium button') \
-              end
-          .field.is-grouped.is-grouped-multiline
-            .control
-              .select = f.collection_select(:frequency, RecurringContribution.frequency.options, :last, :first)
-            .field.is-grouped data-accordion-panel-for="hide-when-show-date-is-triggered"
-              .control
-                span.input.is-static starting
-              .control
-                a.button.is-text data-accordion-trigger="show-date"
-                  = icon_tag('fas fa-calendar')
-                  span today
-            .field.is-grouped.is-hidden data-accordion-panel-for="show-date"
-              .control
-                span.input.is-static starting on
-              .control.has-icons-left
-                  = icon_tag('fas fa-calendar')
-                  = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 1.year.from_now.to_date.iso8601
-          hr
-          .field.is-grouped
-            .control.is-expanded
-              label.label First name
-              .control.has-icons-left
-                = icon_tag('fas fa-user')
-                = f.text_field :first_name, class: :input
-            .control.is-expanded
-              label.label Last name
-              = f.text_field :last_name, class: :input
-          .field.is-grouped
-            .control.is-expanded
-              label.label Email
-              .control.has-icons-left
-                = icon_tag('fas fa-envelope')
-                = f.email_field :email, class: :input
-          hr
-          = f.fields_for :donor_questions do |questions_form|
-            = render @view_model.donor_questions, form: questions_form
-          .field
-            = f.label :managed_portfolio_id, class: :label, value: 'Portfolio'
-            .field.is-grouped.is-grouped-centered.is-grouped-multiline
-              - @view_model.managed_portfolios.each do |mp|
-                .control.has-text-centered
-                  label.box for="portfolio-#{mp.id}"
-                    span.icon
-                      = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}"
-                    .label = mp.name
-                    = pluralize(mp.size, 'charity')
-          hr
-          = render 'payment_methods/credit_card_form'
-          hr
-            .field.has-text-right
-              = f.submit class: %w(button is-primary is-large is-expanded), value: 'Donate'
+    .columns
+      .column.is-6
+        .box
+          h3.subtitle = @view_model.campaign_title
+          .content = markdown_to_html @view_model.campaign_description
+      .column.is-offset-1 style='margin-top: -6em'
 
-    p.has-text-centered.help
-      | We use smart and secure online payments to ensure that your donations are simple, secure, and avoid fees.
-    p.has-text-centered.help
-      | All donations are tax-deductible operating under the Social Good Fund, a 501(c)3 public charity, EIN 46-1323531.
+        .card
+          .card-content
+            = form_with model: @view_model.new_campaign_contribution, local: true, id: 'payment-form', method: :post, class: 'form' do |f|
+              = f.hidden_field :payment_token, id: 'payment_token'
+              label.label Donation
+              .field
+                .control.buttons = f.collection_radio_buttons :amount_dollars,\
+                  @view_model.default_contribution_amounts.map { |amt| [amt, number_to_currency(amt, precision: 0)] }, :first, :last do |b| \
+                    b.radio_button(class: 'is-hidden') + b.label(class: 'is-medium button') \
+                  end
+              .field.is-grouped.is-grouped-multiline
+                .control
+                  .select = f.collection_select(:frequency, RecurringContribution.frequency.options, :last, :first)
+                .field.is-grouped data-accordion-panel-for="hide-when-show-date-is-triggered"
+                  .control
+                    span.input.is-static starting
+                  .control
+                    a.button.is-text data-accordion-trigger="show-date"
+                      = icon_tag('fas fa-calendar')
+                      span today
+                .field.is-grouped.is-hidden data-accordion-panel-for="show-date"
+                  .control
+                    span.input.is-static starting on
+                  .control.has-icons-left
+                      = icon_tag('fas fa-calendar')
+                      = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 1.year.from_now.to_date.iso8601
+              hr
+              .field.is-grouped
+                .control.is-expanded
+                  label.label First name
+                  .control.has-icons-left
+                    = icon_tag('fas fa-user')
+                    = f.text_field :first_name, class: :input
+                .control.is-expanded
+                  label.label Last name
+                  = f.text_field :last_name, class: :input
+              .field.is-grouped
+                .control.is-expanded
+                  label.label Email
+                  .control.has-icons-left
+                    = icon_tag('fas fa-envelope')
+                    = f.email_field :email, class: :input
+              hr
+              = f.fields_for :donor_questions do |questions_form|
+                = render @view_model.donor_questions, form: questions_form
+              .field
+                = f.label :managed_portfolio_id, class: :label, value: 'Portfolio'
+                .field.is-grouped.is-grouped-centered.is-grouped-multiline
+                  - @view_model.managed_portfolios.each do |mp|
+                    .control.has-text-centered
+                      label.box for="portfolio-#{mp.id}"
+                        span.icon
+                          = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}"
+                        .label = mp.name
+                        = pluralize(mp.size, 'charity')
+              hr
+              = render 'payment_methods/credit_card_form'
+              hr
+                .field.has-text-right
+                  = f.submit class: %w(button is-primary is-large is-expanded), value: 'Donate'
+
+        p.has-text-centered.help
+          | We use smart and secure online payments to ensure that your donations are simple, secure, and avoid fees.
+        p.has-text-centered.help
+          | All donations are tax-deductible operating under the Social Good Fund, a 501(c)3 public charity, EIN 46-1323531.
