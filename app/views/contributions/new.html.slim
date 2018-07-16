@@ -22,10 +22,8 @@ section.section.embossed
       .column.is-8
         p.content We use smart and secure online payments to ensure that your donations are simple, secure, and avoid fees.
         .box
-          = form_with model: @view_model.recurring_contribution, url: contributions_path, local: true, id: 'sanitized_create_payment_method_form', method: :post, class: 'form' do |f|
+          = form_with model: @view_model.recurring_contribution, url: contributions_path, local: true, id: 'payment-form', method: :post, class: 'form' do |f|
             = f.hidden_field :payment_token, id: 'payment_token'
-            = f.hidden_field :name_on_card, id: 'name_on_card'
-            = f.hidden_field :last4, id: 'last4'
             .columns
               .column.is-4
                 label.field
@@ -42,106 +40,24 @@ section.section.embossed
                       end
             p.has-text-centered.help All donations are tax-deductible operating under the Social Good Fund, a 501(c)3 public charity, EIN 46-1323531.
 
-            = render 'how_much_give_note'
-
+            hr
+            = render 'payment_methods/credit_card_form'
             hr
 
-            .columns.is-vcentered
-              .column.is-4
-                .label Help us grow!
-                p.help
-                  ' Donational is run at-cost. We only make money if you choose to tip us, allowing us to help you — and to help others — make a greater impact.
-              .column
-                .control.buttons = f.collection_radio_buttons :tips_cents,\
-                  [[0, 'No tip'], [200, '$2'], [500, '$5'], [1_000, '$10']], :first, :last do |b| \
-                    b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
-                  end
-
-            - if @view_model.active_payment_method
-              p.field
-                .control
-                  = f.submit "Donate", class: %w(button is-primary is-medium)
-          - unless @view_model.active_payment_method
+            .field
+              .label Help us grow!
+              p.help.content
+                ' Donational is run at-cost. We only make money if you choose to tip us, allowing us to help you — and to help others — make a greater impact.
+              .control.buttons = f.collection_radio_buttons :tips_cents,\
+                [[0, 'No tip'], [200, '$2'], [500, '$5'], [1_000, '$10']], :first, :last do |b| \
+                  b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
+                end
             hr
-            / This form should remain separate from the credit card details to avoid
-            / accidentally leaking credit card data into our server
-            form#panda_cc_form.panda_cc_form.form
-              label.field
-                .label Payment Details
-                .field.is-grouped
-                  .control.is-expanded.has-icons-left
-                    input.input id="credit_card" type="text" data-panda="credit_card" placeholder="Card Number"
-                    span.icon.is-left.is-small: i.fa.fa-credit-card
-                  .control
-                    .select
-                      select data-panda="month"
-                        option selected=true disabled=true mm
-                        - (1..12).each do |i|
-                          option value=i
-                            = i
-                  .control
-                    .select
-                      select data-panda="year"
-                        option selected=true disabled=true yyyy
-                        - (Time.zone.now.year..2030).each do |i|
-                          option value=i
-                            = i
-                .field.is-grouped
-                  p.control.is-expanded.has-icons-left
-                    input.input id="first_name" type="text" data-panda="first_name" placeholder="First name"
-                    span.icon.is-left.is-small: i.fa.fa-user
-                  p.control.is-expanded
-                    input.input id="last_name" type="text" data-panda="last_name" placeholder="Last name"
-                  p.control.has-icons-left
-                    input.input type="text" data-panda="cvv" placeholder="CVV" size=4
-                    span.icon.is-left.is-small: i.fa.fa-lock
-                hr
-                .field.has-text-centered.content
-                  p.help
-                    ' We'll distribute your donation to the charities in your portfolio,
-                    | and send you a tax-deductible receipt right away!
-                  .control.has-text-centered
-                    button.button.is-primary.is-large type="submit" Donate
-                .card-wrapper.is-hidden
+            .field.has-text-centered.content
+              .control.has-text-centered
+                = f.submit "Donate", class: %w(button is-primary is-medium)
+              p.help
+                ' We'll distribute your donation to the charities in your portfolio,
+                | and send you a tax-deductible receipt right away!
 
-        javascript:
-          new Card({
-            form: '#panda_cc_form',
-            container: '.card-wrapper',
-            formSelectors: {
-              nameInput: 'input[data-panda="first_name"], input[data-panda="last_name"]',
-              numberInput: 'input[data-panda="credit_card"]',
-              expiryInput: 'input[data-panda="month"], input[data-panda="year"]',
-              cvcInput: 'input[data-panda="cvv"]'
-            }
-        	});
-
-        	Panda.init("#{ENV.fetch('PANDAPAY_PUBLIC_KEY')}", 'panda_cc_form');
-
-          Panda.on('success', function(cardToken) {
-            document.getElementById('payment_token').value = cardToken;
-            document.getElementById('name_on_card').value = document.getElementById('first_name').value + ' ' + document.getElementById('last_name').value;
-            document.getElementById('last4').value = document.getElementById('credit_card').value.slice(-4);
-            document.getElementById('sanitized_create_payment_method_form').submit();
-          });
-
-          Panda.on('error', function(errors) {
-            var message = "";
-            errors.forEach(function(error) { message += "\n" + error.message; })
-            alert("There was an error processing your payment: " + message);
-          });
-
-        p.help.has-text-centered
-
-        article.message.is-info
-          .message-body
-            .media
-              .media-left: span.icon.is-medium: i.fa.fa-info
-              .media-content
-                p
-                  strong> Worried that a small donation is inefficient? We've got you covered!
-                  br
-                  ' Charities incur overhead costs whenever they process a donation.
-                  ' We
-                  em> hate
-                  ' unnecessary fees, so we pool your donation to a charity with donations by other users on the platform.
+        = render 'how_much_give_note'

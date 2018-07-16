@@ -2,6 +2,10 @@ require 'rails_helper'
 require 'support/capybara_form_helpers'
 
 RSpec.describe "Donor makes a donation from a partner's campaign page", type: :feature do
+  let(:stripe_helper) { StripeMock.create_test_helper }
+  before { StripeMock.start }
+  after { StripeMock.stop }
+
   before do
     create_new_partner!
   end
@@ -32,14 +36,10 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     select 'Wharton'
     click_on_label 'Top Picks'
 
-    fill_in 'Card Number', with: '4111111111111111'
-    select 12
-    select 1.year.from_now.year
-    fill_in 'First name', with: 'Ian'
-    fill_in 'Last name', with: 'Yamey'
-    fill_in 'CVV', with: 123
-    click_on 'Donate'
-    sleep 2
+    card_token = stripe_helper.generate_card_token(last4: '9191', name: 'Donatello')
+    page.execute_script("document.getElementById('payment_token').value = '#{card_token}';")
+    page.execute_script("document.getElementById('payment-form').submit();")
+
     date_in_two_months_on_the_12th = Date.new(Date.today.year, Date.today.month + 3, 12).to_formatted_s(:long_ordinal)
     expect(page).to have_content("Your next annual donation of $20 is scheduled for #{date_in_two_months_on_the_12th}")
   end

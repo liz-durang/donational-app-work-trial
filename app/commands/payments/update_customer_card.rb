@@ -1,4 +1,4 @@
-require 'panda_pay'
+require 'stripe'
 
 module Payments
   class UpdateCustomerCard < ApplicationCommand
@@ -8,24 +8,19 @@ module Payments
     end
 
     def execute
-      card_json = pandapay_customers["#{customer_id}/cards"].post(source: payment_token).body
-
-      JSON.parse(card_json, symbolize_names: true)
-    rescue RestClient::ExceptionWithResponse => e
-      PandaPay.errors_from_response(e.response.body).each do |error|
-        add_error(:customer, error[:type].to_sym, error[:message])
-      end
+      Stripe.api_key = ENV.fetch('STRIPE_SECRET_KEY')
+      response = Stripe::Customer.update(
+        customer_id,
+        { source: payment_token }
+      )
+      OpenStruct.new(
+        name_on_card: response[:sources][:data][0][:name],
+        last4: response[:sources][:data][0][:last4]
+      )
+    rescue Stripe::InvalidRequestError, Stripe::StripeError => e
+      add_error(:customer, :stripe_error, e.message)
 
       nil
-    end
-
-    private
-
-    def pandapay_customers
-      RestClient::Resource.new(
-        'https://api.pandapay.io/v1/customers',
-        ENV.fetch('PANDAPAY_SECRET_KEY')
-      )
     end
   end
 end

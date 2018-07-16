@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   resource :payment_methods, only: :create
   resources :partners, only: %i[edit update] do
     resource :campaigns, only: %i[new create]
+    get :account_connection, on: :collection
   end
   # Retention
 

@@ -22,6 +22,7 @@ module Contributions
     def charge_customer_and_update_receipt!
       Payments::ChargeCustomer.run(
         customer_id: payment_method.payment_processor_customer_id,
+        account_id: payment_processor_account_id,
         email: contribution.donor.email,
         donation_amount_cents: contribution.amount_cents,
         tips_cents: contribution.tips_cents,
@@ -49,6 +50,14 @@ module Contributions
 
     def payment_fees
       @payment_fees ||= Contributions::CalculatePaymentFees.call(contribution: contribution)
+    end
+
+    def payment_processor_account_id
+      @payment_processor_account_id ||= Payments::GetPaymentProcessorAccountId.call(donor: contribution.donor)
+    end
+
+    def payment_method
+      @payment_method ||= Payments::GetActivePaymentMethod.call(donor: contribution.donor)
     end
 
     def create_donations_based_on_active_allocations
@@ -80,10 +89,6 @@ module Contributions
         event: 'Donation processed',
         traits: { revenue: contribution.amount_dollars, tip_dollars: contribution.tips_cents / 100 }
       )
-    end
-
-    def payment_method
-      @payment_method ||= Payments::GetActivePaymentMethod.call(donor: contribution.donor)
     end
   end
 end

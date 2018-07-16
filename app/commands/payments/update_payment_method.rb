@@ -1,17 +1,20 @@
 module Payments
   class UpdatePaymentMethod < ApplicationCommand
     required do
-      model :donor do
-        string :email, empty: false
-      end
+      model :donor
       string :payment_token, empty: false
-      string :name_on_card
-      string :last4
     end
 
     def execute
       unless customer
         add_error(:customer, :empty, 'Customer does not exist and could not be created')
+        return
+      end
+
+      outcome = Payments::UpdateCustomerCard.run(customer_id: customer[:id], payment_token: payment_token)
+
+      unless outcome.success?
+        add_error(:customer, :payment_error, 'Could not update card')
         return
       end
 
@@ -21,13 +24,9 @@ module Payments
         PaymentMethod.create!(
           donor: donor,
           payment_processor_customer_id: customer[:id],
-          name_on_card: name_on_card,
-          last4: last4
+          name_on_card: outcome.result[:name_on_card],
+          last4: outcome.result[:last4]
         )
-      end
-
-      chain do
-        Payments::UpdateCustomerCard.run(customer_id: customer[:id], payment_token: payment_token)
       end
 
       nil
@@ -36,7 +35,7 @@ module Payments
     private
 
     def customer
-      @customer ||= (customer_by_id || create_customer || customer_by_email)
+      @customer ||= (customer_by_id || create_customer)
     end
 
     def payment_method
@@ -51,18 +50,8 @@ module Payments
       find_by_id.result
     end
 
-    def customer_by_email
-      return nil unless donor.email.present?
-
-      find_by_email = Payments::FindCustomerByEmail.run(email: donor.email)
-      return nil unless find_by_email.success?
-      find_by_email.result
-    end
-
     def create_customer
-      return nil unless donor.email.present?
-
-      create_customer = Payments::CreateCustomer.run(email: donor.email)
+      create_customer = Payments::CreateCustomer.run
       return nil unless create_customer.success?
       create_customer.result
     end

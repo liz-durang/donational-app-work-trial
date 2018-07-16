@@ -3,6 +3,12 @@ require 'rails_helper'
 RSpec.describe Contributions::ProcessContribution do
   include ActiveSupport::Testing::TimeHelpers
 
+  around do |example|
+    ClimateControl.modify(DEFAULT_PAYMENT_PROCESSOR_ACCOUNT_ID: 'acc_123') do
+      example.run
+    end
+  end
+
   context 'when the donor has no payment method' do
     let(:contribution) { create(:contribution, processed_at: nil) }
 
@@ -109,6 +115,7 @@ RSpec.describe Contributions::ProcessContribution do
           .with(
             email: 'user@example.com',
             customer_id: 'cus_123',
+            account_id: 'acc_123',
             donation_amount_cents: 1_000,
             platform_fee_cents: 0,
             tips_cents: 200)

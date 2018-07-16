@@ -11,10 +11,12 @@
  * It is generally better to create a new file per style scope.
  *
  *= require bulma_with_customizations
+ *= require stripe
  *= require conversations
  *= require allocations
  *= require bookshelf
  *= require hero_background
  *= require datepicker
+ *= require stripe
  *= require_self
  */

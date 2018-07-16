@@ -26,6 +26,10 @@ section.embossed.section
             p.field
               .control.has-text-centered
                 = f.submit "Save", class: %w(button is-primary is-medium)
+            br
+            p.field
+              .control.has-text-centered
+                = link_to "Connect with Stripe", @view_model.stripe_connect_url, class: %w(button is-primary is-medium)
 
 section.section
   .container

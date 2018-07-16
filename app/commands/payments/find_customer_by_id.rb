@@ -1,4 +1,4 @@
-require 'panda_pay'
+require 'stripe'
 
 module Payments
   class FindCustomerById < ApplicationCommand
@@ -7,23 +7,12 @@ module Payments
     end
 
     def execute
-      customer_json = pandapay_customers[customer_id].get.body
-      JSON.parse(customer_json, symbolize_names: true)
-    rescue RestClient::ExceptionWithResponse => e
-      PandaPay.errors_from_response(e.response.body).each do |error|
-        add_error(:customer, error[:type].to_sym, error[:message])
-      end
+      Stripe.api_key = ENV.fetch('STRIPE_SECRET_KEY')
+      response = Stripe::Customer.retrieve(customer_id)
+    rescue Stripe::InvalidRequestError, Stripe::StripeError => e
+      add_error(:customer, :stripe_error, e.message)
 
       nil
-    end
-
-    private
-
-    def pandapay_customers
-      RestClient::Resource.new(
-        'https://api.pandapay.io/v1/customers',
-        ENV.fetch('PANDAPAY_SECRET_KEY')
-      )
     end
   end
 end

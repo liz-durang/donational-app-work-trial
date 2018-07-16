@@ -50,11 +50,9 @@ class ContributionsController < ApplicationController
   private
 
   def update_donor_payment_method!
-    Payments::UpdatePaymentMethod.run!(
+    Payments::UpdatePaymentMethod.run(
       donor: current_donor,
-      payment_token: payment_token,
-      name_on_card: name_on_card,
-      last4: last4
+      payment_token: payment_token
     )
   end
 
@@ -129,13 +127,5 @@ class ContributionsController < ApplicationController
 
   def start_at
     params[:recurring_contribution][:start_at]
-  end
-
-  def name_on_card
-    params[:recurring_contribution][:name_on_card]
-  end
-
-  def last4
-    params[:recurring_contribution][:last4]
   end
 end

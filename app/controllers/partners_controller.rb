@@ -1,7 +1,7 @@
 class PartnersController < ApplicationController
   include Secured
 
-  before_action :ensure_donor_has_permission!
+  before_action :ensure_donor_has_permission!, except: :account_connection
 
   def update
     pipeline = Flow.new
@@ -26,8 +26,19 @@ class PartnersController < ApplicationController
     @view_model = OpenStruct.new(
       donor: current_donor,
       partner: partner,
-      partner_path: partner_path
+      partner_path: partner_path,
+      stripe_connect_url: stripe_connect_url
     )
+  end
+
+  def account_connection
+    Payments::ConnectPartnerAccount.run(
+      partner: partner,
+      authorization_code: params[:code]
+    )
+
+    flash[:success] = "Thanks, your Stripe account was connected successfully"
+    redirect_to edit_partner_path(partner)
   end
 
   private
@@ -40,7 +51,13 @@ class PartnersController < ApplicationController
   end
 
   def partner
-    @partner ||= Partners::GetPartnerById.call(id: params[:id])
+    # Partner ID from Stripe response is retrieved as params[:state]
+    id = params[:id] || params[:state]
+    @partner ||= Partners::GetPartnerById.call(id: id)
+  end
+
+  def stripe_connect_url
+    "https://connect.stripe.com/express/oauth/authorize?redirect_uri=" + account_connection_partners_url + "&client_id=" + ENV.fetch('STRIPE_CLIENT_ID') + "&state=" + partner.id
   end
 
   def update_partner!
