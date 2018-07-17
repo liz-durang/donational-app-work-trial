@@ -1,13 +1,19 @@
 section.section
-  .container
-    .content.has-text-centered
-      h1.title.is-spaced
-        => icon_tag('fa-handshake')
-        br
-        ' Partner Account
+  .container.has-text-centered
+      h1.title Partner Account
 
-      p.subtitle
-        ' Basic Information, Portfolios, Campaigns & Donor Questions
+.is-sticky
+  .tabs.is-centered
+    ul
+      li.is-active: a
+        = icon_tag('fa-user')
+        | Basic Information
+      li = link_to partner_managed_portfolios_path(@view_model.partner) do
+        = icon_tag('fa-address-book')
+        | Portfolios
+      li = link_to partner_campaigns_path(@view_model.partner) do
+        = icon_tag('fa-globe')
+        | Campaigns
 
 section.embossed.section
   .container
@@ -46,133 +52,61 @@ section.embossed.section
 
 section.section
   .container
-    p.subtitle.has-text-centered
-      ' Portfolios
-    .box.flat-card style='background: #fafafa'
-      table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
-        tr
-          td
-            p
-              strong>
-                | Title
-          td
-            p
-              strong>
-                | Description
-          td
-            p
-              strong>
-                | Charities
-          td
-            p
-              strong>
-                | Action
-        - @view_model.partner.managed_portfolios.each do |managed_portfolio|
-          tr data-accordion-trigger="managed_portfolio-#{managed_portfolio.id}"
-            td
-              p
-                = managed_portfolio.name
-            td
-              p
-                = managed_portfolio.description
-            td
-              p
-                a
-                  = pluralize(Allocation.active(portfolio: managed_portfolio.portfolio).count, 'charity')
-            td
-              p = link_to 'Edit', edit_partner_managed_portfolio_path(@view_model.partner, managed_portfolio)
-          - Allocation.active(portfolio: managed_portfolio.portfolio).each do |allocation|
-            tr.is-hidden data-accordion-panel-for="managed_portfolio-#{managed_portfolio.id}"
-              td &nbsp;
-              td &nbsp;
-              td
-                em => allocation.organization.name
-              td &nbsp;
-      p
-        .has-text-right = link_to "Create Portfolio", new_partner_managed_portfolio_path(@view_model.partner), class: %w(button is-primary)
-
-section.embossed.section
-  .container
-    p.subtitle.has-text-centered
-      ' Campaigns
-    .box.flat-card style='background: #fafafa'
-      table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
-        tr
-          td
-            p
-              strong>
-                | Title
-          td
-            p
-              strong>
-                | Description
-        - @view_model.partner.campaigns.each do |campaign|
-          tr
-            td
-              p
-                = link_to campaign.title, campaigns_path(campaign.slug)
-            td
-              p
-                = campaign.description
-      p
-        .has-text-right = link_to "Create Campaign", new_partner_campaigns_path(@view_model.partner), class: %w(button is-primary)
-
-section.section
-  .container
     p.subtitle.is-spaced.has-text-centered
       ' Donor Questions
-      table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
-        tr
-          td
-            p
-              strong>
-                | Name
-          td
-            p
-              strong>
-                | Title
-          td
-            p
-              strong>
-                | Type
-          td
-            p
-              strong>
-                | Options
-          td
-            p
-              strong>
-                | Required
-          td colspan=2
-            p
-              strong>
-                | Actions
-        - @view_model.partner.donor_questions.each do |question|
+      .box
+        table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
           tr
             td
               p
-                = question.name
+                strong>
+                  | Name
             td
               p
-                = question.title
+                strong>
+                  | Title
             td
               p
-                = question.type
+                strong>
+                  | Type
             td
               p
-                - if question.type == 'select'
-                  = question.options.join(', ')
-                - else
-                  = question.options
+                strong>
+                  | Options
             td
               p
-                = question.required
-            td
+                strong>
+                  | Required
+            td colspan=2
               p
-                = link_to 'Edit', 'javascript:;', class: 'btn-edit', onClick: "fillForm('#{question.name}', '#{question.title}', '#{question.type}', '#{question.options}', '#{question.required}');"
-            td
-              p
-                = link_to 'Delete', partner_path(question: question.name), method: :put, data: { confirm: 'Are you sure you want to delete the question?' }
+                strong>
+                  | Actions
+          - @view_model.partner.donor_questions.each do |question|
+            tr
+              td
+                p
+                  = question.name
+              td
+                p
+                  = question.title
+              td
+                p
+                  = question.type
+              td
+                p
+                  - if question.type == 'select'
+                    = question.options.join(', ')
+                  - else
+                    = question.options
+              td
+                p
+                  = question.required
+              td
+                p
+                  = link_to 'Edit', 'javascript:;', class: 'btn-edit', onClick: "fillForm('#{question.name}', '#{question.title}', '#{question.type}', '#{question.options}', '#{question.required}');"
+              td
+                p
+                  = link_to 'Delete', partner_path(question: question.name), method: :put, data: { confirm: 'Are you sure you want to delete the question?' }
 
     .box.flat-card style='background: #fafafa'
       = form_with url: @view_model.partner_path, local: true, method: :put, class: 'form' do |f|

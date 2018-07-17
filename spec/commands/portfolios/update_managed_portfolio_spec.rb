@@ -12,7 +12,10 @@ RSpec.describe Portfolios::UpdateManagedPortfolio do
       donor: donor,
       title: "Title",
       description: "Description",
-      charities: ["#{organization.name}, #{organization.ein}", "#{another_organization.name}, #{another_organization.ein}"]
+      charities: [
+        "#{organization.name}, #{organization.ein}",
+        "#{another_organization.name}, #{another_organization.ein}"
+      ]
     )
   end
 
@@ -28,13 +31,17 @@ RSpec.describe Portfolios::UpdateManagedPortfolio do
         donor: donor,
         title: "New Title",
         description: "New Description",
-        charities: ["#{organization.name}, #{organization.ein}", "#{new_organization.name}, #{new_organization.ein}"]
+        charities: [
+          "#{organization.name}, #{organization.ein}",
+          "#{another_organization.name}, #{another_organization.ein}",
+          "#{new_organization.name}, #{new_organization.ein}"
+        ]
       )
 
       expect(portfolio.reload).not_to be_active
       expect(managed_portfolio.reload.name).to eq "New Title"
       expect(managed_portfolio.reload.description).to eq "New Description"
-      expect(managed_portfolio.reload.portfolio.allocations.last.organization).to eq new_organization
+      expect(managed_portfolio.reload.portfolio.allocations.count).to eq 3
     end
   end
 end

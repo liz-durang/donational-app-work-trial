@@ -1,6 +1,22 @@
 class ManagedPortfoliosController < ApplicationController
   before_action :ensure_donor_has_permission!
 
+  def index
+    @view_model = OpenStruct.new(partner: partner)
+  end
+
+  def new
+    @view_model = OpenStruct.new(partner: partner)
+  end
+
+  def edit
+    @view_model = OpenStruct.new(
+      partner: partner,
+      managed_portfolio: managed_portfolio,
+      managed_portfolio_path: partner_managed_portfolio_path
+    )
+  end
+
   def create
     command = Portfolios::CreateManagedPortfolio.run(
       partner: partner,
@@ -24,16 +40,9 @@ class ManagedPortfoliosController < ApplicationController
       charities: organizations
     )
 
-    flash[:success] = "Portfolio edited successfully." if command.success?
+    flash[:success] = "Portfolio updated successfully." if command.success?
     flash[:error] = command.errors.message_list.join('. ') unless command.success?
     redirect_to edit_partner_managed_portfolio_path(partner, managed_portfolio)
-  end
-
-  def edit
-    @view_model = OpenStruct.new(
-      managed_portfolio: managed_portfolio,
-      managed_portfolio_path: partner_managed_portfolio_path
-    )
   end
 
   private

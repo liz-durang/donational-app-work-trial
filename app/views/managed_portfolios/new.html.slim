@@ -1,10 +1,19 @@
 section.section
-  .container
-    .content.has-text-centered
-      h1.title.is-spaced
-        => icon_tag('fa-address-book')
-        br
-        ' Create Portfolio
+  .container.has-text-centered
+      h1.title Create Portfolio
+
+.is-sticky
+  .tabs.is-centered
+    ul
+      li = link_to edit_partner_path(@view_model.partner) do
+        = icon_tag('fa-user')
+        | Basic Information
+      li.is-active = link_to partner_managed_portfolios_path(@view_model.partner) do
+        = icon_tag('fa-address-book')
+        | Portfolios
+      li = link_to partner_campaigns_path(@view_model.partner) do
+        = icon_tag('fa-globe')
+        | Campaigns
 
 section.embossed.section
   .container
