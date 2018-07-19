@@ -1,0 +1,65 @@
+section.section
+  .container.has-text-centered
+      h1.title Partner Account
+
+.is-sticky
+  .tabs.is-centered
+    ul
+      li = link_to edit_partner_path(@view_model.partner) do
+        = icon_tag('fa-user')
+        | Basic Information
+      li.is-active: a
+        = icon_tag('fa-address-book')
+        | Portfolios
+      li = link_to partner_campaigns_path(@view_model.partner) do
+        = icon_tag('fa-globe')
+        | Campaigns
+
+section.section.embossed
+  .container
+    = display_flash_messages
+    .columns.is-centered
+      .column.is-8
+        .box
+          table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
+            tr
+              td
+                p
+                  strong>
+                    | Title
+              td
+                p
+                  strong>
+                    | Description
+              td
+                p
+                  strong>
+                    | Charities
+              td
+                p
+                  strong>
+                    | Action
+            - @view_model.partner.managed_portfolios.each do |managed_portfolio|
+              tr data-accordion-trigger="managed_portfolio-#{managed_portfolio.id}"
+                td
+                  p
+                    = managed_portfolio.name
+                td
+                  p
+                    = managed_portfolio.description
+                td
+                  p
+                    a
+                      = pluralize(Allocation.active(portfolio: managed_portfolio.portfolio).count, 'charity')
+                td
+                  p = link_to 'Edit', edit_partner_managed_portfolio_path(@view_model.partner, managed_portfolio)
+              - Allocation.active(portfolio: managed_portfolio.portfolio).each do |allocation|
+                tr.is-hidden data-accordion-panel-for="managed_portfolio-#{managed_portfolio.id}"
+                  td &nbsp;
+                  td &nbsp;
+                  td
+                    em => allocation.organization.name
+                  td &nbsp;
+          .field.has-text-centered.content
+            .control.has-text-centered
+              = link_to "Create Portfolio", new_partner_managed_portfolio_path(@view_model.partner), class: %w(button is-primary)

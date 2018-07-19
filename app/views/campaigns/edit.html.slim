@@ -1,6 +1,6 @@
 section.section
   .container.has-text-centered
-      h1.title Create Campaign
+      h1.title Edit Campaign
 
 .is-sticky
   .tabs.is-centered
@@ -21,29 +21,29 @@ section.embossed.section
     .columns.is-centered
       .column.is-8
         .box
-          = form_with url: partner_campaigns_path, local: true, method: :post, class: 'form' do |f|
+          = form_with url: partner_campaign_path, local: true, method: :put, class: 'form' do |f|
             .columns
               .column.is-6
                 label.field
                   .label Title
                   .control
-                    = f.text_field :title, class: :input
+                    = f.text_field :title, class: :input, value: @view_model.campaign.title
               .column.is-6
                 label.field
                   .label Description
                   .control
-                    = f.text_area :description, class: :input
+                    = f.text_area :description, class: :input, value: @view_model.campaign.description
             .columns
               .column.is-6
                 label.field
                   .label Slug
                   .control
-                    = f.text_field :slug, class: :input, placeholder: 'i.e. 1ftw-wharton'
+                    = f.text_field :slug, class: :input, placeholder: 'i.e. 1ftw-wharton', value: @view_model.campaign.slug
               .column.is-6
                 label.field
                   .label Default contribution amounts
                   .control
-                    = f.text_field :default_contribution_amounts, class: :input, placeholder: 'i.e. 10, 20, 50, 100'
+                    = f.text_field :default_contribution_amounts, class: :input, placeholder: 'i.e. 10, 20, 50, 100', value: @view_model.default_contribution_amounts
                   p.help Please, enter values separated by comma.
             .field.has-text-centered.content
               .control.has-text-centered

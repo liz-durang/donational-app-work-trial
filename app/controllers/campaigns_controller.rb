@@ -1,18 +1,8 @@
 class CampaignsController < ApplicationController
   before_action :ensure_donor_has_permission!, except: :show
 
-  def create
-    command = Campaigns::CreateCampaign.run(
-      partner: current_donor.partners.first,
-      title: params[:title],
-      description: params[:description],
-      slug: params[:slug],
-      default_contribution_amounts: default_contribution_amounts
-    )
-
-    flash[:success] = "Campaign created successfully." if command.success?
-    flash[:error] = command.errors.message_list.join('. ') unless command.success?
-    redirect_to new_partner_campaigns_path(partner)
+  def index
+    @view_model = OpenStruct.new(partner: partner)
   end
 
   def show
@@ -30,6 +20,46 @@ class CampaignsController < ApplicationController
       managed_portfolios: partner.managed_portfolios,
       donor_questions: partner.donor_questions
     )
+  end
+
+  def new
+    @view_model = OpenStruct.new(partner: partner)
+  end
+
+  def edit
+    @view_model = OpenStruct.new(
+      partner: partner,
+      campaign: campaign_by_id,
+      default_contribution_amounts: campaign_by_id.default_contribution_amounts.join(", ")
+    )
+  end
+
+  def create
+    command = Campaigns::CreateCampaign.run(
+      partner: partner,
+      title: params[:title],
+      description: params[:description],
+      slug: params[:slug],
+      default_contribution_amounts: default_contribution_amounts
+    )
+
+    flash[:success] = "Campaign created successfully." if command.success?
+    flash[:error] = command.errors.message_list.join('. ') unless command.success?
+    redirect_to new_partner_campaign_path(partner)
+  end
+
+  def update
+    command = Campaigns::UpdateCampaign.run(
+      campaign: campaign_by_id,
+      title: params[:title],
+      description: params[:description],
+      slug: params[:slug],
+      default_contribution_amounts: default_contribution_amounts
+    )
+
+    flash[:success] = "Campaign updated successfully." if command.success?
+    flash[:error] = command.errors.message_list.join('. ') unless command.success?
+    redirect_to edit_partner_campaign_path(partner, campaign_by_id)
   end
 
   private
@@ -51,6 +81,10 @@ class CampaignsController < ApplicationController
 
   def campaign
     @campaign ||= Partners::GetCampaignBySlug.call(slug: params[:campaign_slug])
+  end
+
+  def campaign_by_id
+    @campaign_by_id ||= Partners::GetCampaignById.call(id: params[:id])
   end
 
   def partner

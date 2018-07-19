@@ -1,0 +1,50 @@
+section.section
+  .container.has-text-centered
+      h1.title Partner Account
+
+.is-sticky
+  .tabs.is-centered
+    ul
+      li = link_to edit_partner_path(@view_model.partner) do
+        = icon_tag('fa-user')
+        | Basic Information
+      li = link_to partner_managed_portfolios_path(@view_model.partner) do
+        = icon_tag('fa-address-book')
+        | Portfolios
+      li.is-active: a
+        = icon_tag('fa-globe')
+        | Campaigns
+
+section.section.embossed
+  .container
+    = display_flash_messages
+    .columns.is-centered
+      .column.is-8
+        .box
+          table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
+            tr
+              td
+                p
+                  strong>
+                    | Title
+              td
+                p
+                  strong>
+                    | Description
+              td
+                p
+                  strong>
+                    | Action
+            - @view_model.partner.campaigns.each do |campaign|
+              tr
+                td
+                  p
+                    = link_to campaign.title, campaigns_path(campaign.slug)
+                td
+                  p
+                    = campaign.description
+                td
+                  p = link_to 'Edit', edit_partner_campaign_path(@view_model.partner, campaign)
+          .field.has-text-centered.content
+            .control.has-text-centered
+              = link_to "Create Campaign", new_partner_campaign_path(@view_model.partner), class: %w(button is-primary)
