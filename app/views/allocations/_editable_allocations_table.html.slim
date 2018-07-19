@@ -1,0 +1,29 @@
+= display_flash_messages
+.columns.is-centered
+  .column.is-narrow
+    = form_with scope: 'allocations', url: allocations_path, local: true, method: :put, class: 'form box' do |f|
+      table.table.is-centered
+        - @view_model.allocations.each_with_index do |allocation, index|
+          = f.fields index.to_s, model: allocation do |allocation_form|
+            tr
+              = allocation_form.hidden_field :organization_ein
+              td
+                strong = allocation.organization.name
+                br
+                small = I18n.t('title', scope: ['cause_areas', allocation.organization.cause_area])
+              td width='30%'
+                progress class="progress is-large is-success" value=allocation.percentage max="100"
+                  = allocation.percentage
+              td width='100'
+                .select.is-small
+                  = allocation_form.select :percentage, (0..100).map { |n| ["#{n}%", n]}, {}, { 'data-behavior' => 'allocation-select' }
+      .has-text-centered
+        article.message.is-danger.is-hidden data-behavior='allocation-warning'
+          .message-body
+            p The allocations should add up to 100%
+            small
+              ' (Currently, you have
+              span data-behavior='allocation-total' 100
+              | % allocated)
+
+      = f.submit class: 'button is-primary', value: 'Save allocations', data: { behavior: 'allocation-submit' }
