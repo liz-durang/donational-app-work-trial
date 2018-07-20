@@ -22,14 +22,21 @@ section.section.embossed
 
         .card
           .card-content
+
             = form_with model: @view_model.new_campaign_contribution, local: true, id: 'payment-form', method: :post, class: 'form' do |f|
               = f.hidden_field :payment_token, id: 'payment_token'
               label.label Donation
-              .field
-                .control.buttons = f.collection_radio_buttons :amount_dollars,\
-                  @view_model.default_contribution_amounts.map { |amt| [amt, number_to_currency(amt, precision: 0)] }, :first, :last do |b| \
-                    b.radio_button(class: 'is-hidden') + b.label(class: 'is-medium button') \
-                  end
+              .field data-controller="radio-select"
+                .field.is-grouped.is-grouped-multiline
+                  - @view_model.default_contribution_amounts.each do |amount|
+                    a.control.button.is-expanded data-action='radio-select#select' data-radio-select-value=amount
+                      = number_to_currency(amount, precision: 0)
+                .field
+                  .control.has-icons-left
+                    = f.number_field :amount_dollars,
+                      class: %w(input is-medium),
+                      data: { target: 'radio-select.output', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection' }
+                    span.icon.is-left $
               .field.is-grouped.is-grouped-multiline
                 .control
                   .select = f.collection_select(:frequency, RecurringContribution.frequency.options, :last, :first)
