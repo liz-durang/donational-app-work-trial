@@ -1,12 +1,12 @@
 script src="https://js.stripe.com/v3/"
 
 label.label Card Details
-p.control.has-icons-left
-  input.input.StripeElement id="cardholder_name" type="text" placeholder="Cardholder name"
-  span.icon.is-left.is-small: i.fa.fa-user
 .control
   #card-element
   #card-errors role="alert"
+p.control.has-icons-left
+  input.input.StripeElement id="cardholder_name" type="text" placeholder="Cardholder name"
+  span.icon.is-left.is-small: i.fa.fa-user
 
 javascript:
   var stripe = Stripe("#{ENV.fetch('STRIPE_PUBLIC_KEY')}");

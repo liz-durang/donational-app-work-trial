@@ -1,7 +1,7 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-  static targets = [ "output" ]
+  static targets = [ "output", "button" ]
 
   select() {
     this.clearSelection();
@@ -10,14 +10,6 @@ export default class extends Controller {
   }
 
   clearSelection() {
-    this.removeClassFromElements('[data-radio-select-value]', 'is-active');
-  }
-
-  private
-
-  removeClassFromElements(selector, cssClass) {
-    Array.prototype.forEach.call(document.querySelectorAll(selector), (el) =>
-      el.classList.remove(cssClass)
-    );
+    this.buttonTargets.forEach(el => el.classList.remove('is-active'))
   }
 }
