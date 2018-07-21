@@ -56,6 +56,8 @@
     "sendgrid"
   ],
   "buildpacks": [
+    { "url": "heroku/nodejs" },
+    { "url": "heroku/imagemagick" },
     { "url": "heroku/ruby" }
   ]
 }

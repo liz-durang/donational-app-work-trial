@@ -9,14 +9,17 @@ module Partners
       string :website_url
       string :description
       string :payment_processor_account_id
+      string :logo
     end
 
     def execute
-      partner.update!(updateable_attributes)
-    end
-
-    def updateable_attributes
-      inputs.except(:partner)
+      partner.logo.attach(logo)
+      partner.update!(
+        name: name,
+        website_url: website_url,
+        description: description,
+        payment_processor_account_id: payment_processor_account_id
+      )
     end
   end
 end

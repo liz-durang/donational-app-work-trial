@@ -32,6 +32,7 @@ gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 gem 'slim-rails'
 gem 'webpacker'
+gem 'mini_magick'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-bulma'
