@@ -12,6 +12,7 @@ module Contributions
     def execute
       chain { charge_customer_and_update_receipt! }
       chain { create_donations_based_on_active_allocations }
+      chain { send_tax_deductible_receipt }
       chain { track_contribution_processed_event }
 
       nil
@@ -74,6 +75,11 @@ module Contributions
           )
         end
       end
+      Mutations::Outcome.new(true, nil, [], nil)
+    end
+
+    def send_tax_deductible_receipt
+      ReceiptsMailer.send_receipt(contribution, payment_method).deliver_now
       Mutations::Outcome.new(true, nil, [], nil)
     end
 

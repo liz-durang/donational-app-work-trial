@@ -49,6 +49,9 @@ gem 'jbuilder', '~> 2.5'
 gem 'rest-client'
 gem 'stripe'
 
+# Mailer
+gem 'premailer-rails'
+
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'pry'
@@ -72,6 +75,6 @@ group :test do
   gem 'climate_control'
   gem 'capybara'
   gem 'capybara-selenium'
-  gem 'selenium-webdriver', '~> 3.12.0' 
+  gem 'selenium-webdriver', '~> 3.12.0'
   gem 'stripe-ruby-mock', '~> 2.5.4', require: 'stripe_mock'
 end
