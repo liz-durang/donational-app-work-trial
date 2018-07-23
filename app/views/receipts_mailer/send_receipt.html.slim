@@ -1,28 +1,43 @@
 = render "header"
 
-h1 Receipt for Social Good Fund
+h1 Your tax-deductible donation to Social Good Fund
 h4 Powered by Donational.org
 
 .total-donation
   span.label
   = number_to_currency(@contribution.total_charges_cents / 100.0)
 
+table border="0" cellpadding="0" cellspacing="0" width="100%"
+  tr.summary-item
+    td align="left"
+      b Donation to Social Good Fund
+    td align="right"
+      b = number_to_currency(@contribution.total_charges_cents / 100.0)
+  tr.summary-item
+    td colspan="2"
+      ' Name:
+      = @contribution.donor.name
+  tr.summary-item
+    td colspan="2"
+      ' Date:
+      = @contribution.processed_at.to_formatted_s(:long_ordinal)
+  tr.summary-item
+    td colspan="2"
+      span
+      ' Charged to credit card: **** **** ****
+      = @payment_method.last4
+  tr.summary-item
+    td colspan="2"
+      ' Receipt #:
+      = @contribution.id
+
+h3 Charities in your Portfolio
 h4 Your donation has been distributed to the charities in your portfolio, and pooled with contributions of other Donational.org users to save time and money.
 table border="0" cellpadding="0" cellspacing="0" width="100%"
-    - @contribution.donations.each do |donation|
-      tr.summary-item
-        td colspan="2"
-          = donation.organization.name
-    tr.summary-item.top-border
-      td align="left"
-        b Donation
-      td align="right"
-        b = number_to_currency(@contribution.total_charges_cents / 100.0)
-    tr.summary-item.no-border.credit-card
-      td align="left" colspan="2"
-        span
-        ' Charged to credit card **** **** ****
-        = @payment_method.last4
+  - @contribution.donations.each do |donation|
+    tr.summary-item
+      td colspan="2"
+        = donation.organization.name
 
 h4 Tax-Time
 .fine-print
