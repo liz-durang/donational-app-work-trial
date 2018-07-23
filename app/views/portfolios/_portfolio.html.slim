@@ -1,0 +1,8 @@
+p.content
+  ' Your portfolio is managed by
+  strong => @view_model.managed_portfolio.partner.name
+
+ul.columns.is-multiline.is-centered.book-list
+  - @view_model.organizations.each do |organization|
+    li.column.is-4
+      = render 'book', organization: organization

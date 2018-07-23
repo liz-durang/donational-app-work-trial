@@ -1,0 +1,17 @@
+p.content
+  = @view_model.donor_first_name
+  ' , here are the
+  strong> = pluralize(@view_model.organizations.count, 'charity')
+  | in your personalized charitable portfolio!
+
+ul.columns.is-multiline.is-centered.book-list
+  - @view_model.organizations.each do |organization|
+    li.column.is-4
+      = render 'book', organization: organization
+      hr
+  li.column.is-4
+    .book-placeholder
+      h3.subtitle
+        | Want to add another high-impact charity to your portfolio?
+      p: a.button.is-info href=new_allocations_path
+        | Add a charity

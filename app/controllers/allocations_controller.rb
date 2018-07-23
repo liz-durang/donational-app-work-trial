@@ -43,7 +43,10 @@ class AllocationsController < ApplicationController
   def edit
     Analytics::TrackEvent.run(user_id: current_donor.id, event: 'Viewed allocations')
 
-    @allocations = Portfolios::GetActiveAllocations.call(portfolio: active_portfolio)
+    @view_model = OpenStruct.new(
+      allocations: Portfolios::GetActiveAllocations.call(portfolio: active_portfolio),
+      managed_portfolio: Portfolios::GetManagedPortfolio.call(portfolio: active_portfolio)
+    )
   end
 
   private

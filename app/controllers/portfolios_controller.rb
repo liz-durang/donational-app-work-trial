@@ -35,7 +35,8 @@ class PortfoliosController < ApplicationController
 
     @view_model = OpenStruct.new(
       donor_first_name: current_donor.first_name,
-      organizations: organizations_by_cause_area
+      organizations: organizations_by_cause_area,
+      managed_portfolio: Portfolios::GetManagedPortfolio.call(portfolio: active_portfolio)
     )
   end
 
