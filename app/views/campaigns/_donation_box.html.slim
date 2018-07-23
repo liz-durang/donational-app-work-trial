@@ -1,0 +1,113 @@
+= form_with model: @view_model.new_campaign_contribution, data: { controller: 'wizard' }, local: true, id: 'payment-form', method: :post, class: 'form' do |f|
+  = f.hidden_field :payment_token, id: 'payment_token'
+  fieldset.wizard-card data-target='wizard.step'
+    .wizard-card-header
+      span.icon: i.fas.fa-lock
+      h3.wizard-card-title Donate now
+      = render 'wizard_nav', step: 1, of: 5
+    .wizard-card-content
+      .field data-controller="radio-select"
+        .field.is-grouped.is-grouped-multiline
+          - @view_model.default_contribution_amounts.each do |amount|
+            a.control.button.is-expanded href='#' data-target='radio-select.button' data-action='radio-select#select' data-radio-select-value=amount
+              = number_to_currency(amount, precision: 0)
+        .field.has-addons
+          .control
+            .button.is-static.is-medium Your donation:
+          .control.has-icons-left.is-expanded
+            = f.number_field :amount_dollars,
+              class: %w(input is-medium),
+              data: { target: 'radio-select.output', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection' }
+            span.icon.is-left $
+      .field
+        label.label Donation frequency
+        .field.is-grouped
+          .control
+            .select = f.collection_select(:frequency, RecurringContribution.frequency.options, :last, :first)
+          .control
+            span.input.is-static starting
+          .control data-accordion-panel-for="hide-when-show-date-is-triggered"
+            a.button.is-text data-accordion-trigger="show-date"
+              = icon_tag('fas fa-calendar')
+              span today
+          .control.is-expanded.has-icons-left.is-hidden data-accordion-panel-for="show-date"
+              = icon_tag('fas fa-calendar')
+              = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 1.year.from_now.to_date.iso8601
+    .wizard-card-footer
+      a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
+  fieldset.wizard-card data-target='wizard.step'
+    .wizard-card-header
+      a.icon data-action="wizard#previous" &larr;
+      h3.wizard-card-title Donor Information
+      = render 'wizard_nav', step: 2, of: 5
+    .wizard-card-content
+      .field.is-horizontal
+        .field-label.is-normal
+          label.label First name
+        .field-body
+          .field
+            .control.has-icons-left
+              = icon_tag('fas fa-user')
+              = f.text_field :first_name, class: :input
+      .field.is-horizontal
+        .field-label.is-normal
+          label.label Last name
+        .field-body
+          .field
+            .control = f.text_field :last_name, class: :input
+      .field.is-horizontal
+        .field-label.is-normal
+          label.label Email
+        .field-body
+          .field
+            .control.has-icons-left
+              = icon_tag('fas fa-envelope')
+              = f.email_field :email, class: :input
+    .wizard-card-footer
+      a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
+  fieldset.wizard-card data-target='wizard.step'
+    .wizard-card-header
+      a.icon data-action="wizard#previous" &larr;
+      h3.wizard-card-title About you
+      = render 'wizard_nav', step: 3, of: 5
+    .wizard-card-content
+      = f.fields_for :donor_questions do |questions_form|
+        = render @view_model.donor_questions, form: questions_form
+    .wizard-card-footer
+      a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
+  fieldset.wizard-card data-target='wizard.step'
+    .wizard-card-header
+      a.icon data-action="wizard#previous" &larr;
+      h3.wizard-card-title Choose your portfolio
+      = render 'wizard_nav', step: 4, of: 5
+    .wizard-card-content
+      .field
+        = f.label :managed_portfolio_id, class: :label, value: 'Portfolio'
+        .field
+          - @view_model.managed_portfolios.each do |mp|
+            .control
+              label for="portfolio-#{mp.id}"
+                .level.is-mobile
+                  .level-left
+                    .label
+                      .span.icon = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}"
+                      = mp.name
+                  .level-right
+                    .help = pluralize(mp.size, 'charity')
+    .wizard-card-footer
+      a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
+  fieldset.wizard-card data-target='wizard.step'
+    .wizard-card-header
+      a.icon data-action="wizard#previous" &larr;
+      h3.wizard-card-title Payment
+      = render 'wizard_nav', step: 5, of: 5
+    .wizard-card-content = render 'payment_methods/credit_card_form'
+    .wizard-card-footer
+      = f.submit class: %w(button is-primary is-fullwidth), value: 'Donate'
+
+p.has-text-centered.help
+  | We use smart and secure online payments to ensure that your donations are simple, secure, and avoid fees.
+p.has-text-centered.help
+  | All donations are tax-deductible operating under the Social Good Fund
+  br
+  | 501(c)3 public charity, EIN 46-1323531.

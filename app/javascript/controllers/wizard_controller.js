@@ -8,12 +8,24 @@ export default class extends Controller {
   }
 
   next() {
+    event.preventDefault();
     this.showStep(this.index + 1)
+    return false;
   }
 
   previous() {
-    this.showStep(this.index - 1)
+    event.preventDefault();
+    this.showStep(this.index - 1);
+    return false;
   }
+
+  goto() {
+    event.preventDefault();
+    this.showStep(parseInt(event.currentTarget.dataset['wizard-step']))
+    return false;
+  }
+
+  private
 
   showStep(index) {
     this.index = index

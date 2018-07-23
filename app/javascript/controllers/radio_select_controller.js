@@ -4,9 +4,10 @@ export default class extends Controller {
   static targets = [ "output", "button" ]
 
   select() {
+    event.preventDefault();
     this.clearSelection();
     event.currentTarget.classList.add('is-active');
-    this.outputTarget.value = event.currentTarget.dataset['radio-select-value'];
+    this.outputTarget.value = event.currentTarget.dataset.radioSelectValue;
   }
 
   clearSelection() {

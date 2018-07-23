@@ -8,8 +8,14 @@
       .container
         .columns
           .column.is-6
-            h1.title.is-2.is-spaced
-              = image_tag @view_model.partner_logo, alt: @view_model.partner_name
+            h1.title.is-spaced
+              - if @view_model.partner_logo.attached?
+                = image_tag @view_model.partner_logo.variant(resize: '400x200'),
+                  style:'max-height: 200px',
+                  data: { target: 'file.preview' },
+                  alt: @view_model.partner
+              - else
+                = @view_model.partner_name
             h2.subtitle = @view_model.partner_description
 section.section.embossed
   .container
@@ -18,113 +24,6 @@ section.section.embossed
         .box
           h3.subtitle = @view_model.campaign_title
           .content = markdown_to_html @view_model.campaign_description
-      .column.is-offset-1 style='margin-top: -4.5em'
-        .card
-          .card-header: p.card-header-title Donate Now
-          .card-content data-controller='wizard'
-            = display_flash_messages
-            = form_with model: @view_model.new_campaign_contribution, local: true, id: 'payment-form', method: :post, class: 'form' do |f|
-              = f.hidden_field :payment_token, id: 'payment_token'
-              fieldset data-target='wizard.step'
-                .field data-controller="radio-select"
-                  .field.is-grouped.is-grouped-multiline
-                    - @view_model.default_contribution_amounts.each do |amount|
-                      a.control.button.is-expanded data-target='radio-select.button' data-action='radio-select#select' data-radio-select-value=amount
-                        = number_to_currency(amount, precision: 0)
-                  .field.has-addons
-                    .control
-                      .button.is-static.is-medium Your donation:
-                    .control.has-icons-left.is-expanded
-                      = f.number_field :amount_dollars,
-                        class: %w(input is-medium),
-                        data: { target: 'radio-select.output', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection' }
-                      span.icon.is-left $
-                  .field.is-grouped.is-grouped-centered
-                    = f.collection_radio_buttons(:frequency, RecurringContribution.frequency.options, :last, :first) do |b| \
-                        content_tag(:div, class: :control) do \
-                          b.label { b.radio_button + ' ' + b.text } \
-                        end \
-                      end
-                  .field.is-grouped.is-grouped-right data-accordion-panel-for="hide-when-show-date-is-triggered"
-                    .control
-                      span.input.is-static starting
-                    .control
-                      a.button.is-text data-accordion-trigger="show-date"
-                        = icon_tag('fas fa-calendar')
-                        span today
-                  .field.is-grouped.is-grouped-right.is-hidden data-accordion-panel-for="show-date"
-                    .control
-                      span.input.is-static starting on
-                    .control.has-icons-left
-                        = icon_tag('fas fa-calendar')
-                        = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 1.year.from_now.to_date.iso8601
-                hr
-                .level.is-mobile
-                  .level-left
-                  .level-right: a.button.is-primary.is-outlined data-action="wizard#next" Next
-              fieldset data-target='wizard.step'
-                .field.is-horizontal
-                  .field-label.is-normal
-                    label.label First name
-                  .field-body
-                    .field
-                      .control.has-icons-left
-                        = icon_tag('fas fa-user')
-                        = f.text_field :first_name, class: :input
-                .field.is-horizontal
-                  .field-label.is-normal
-                    label.label Last name
-                  .field-body
-                    .field
-                      .control = f.text_field :last_name, class: :input
-                .field.is-horizontal
-                  .field-label.is-normal
-                    label.label Email
-                  .field-body
-                    .field
-                      .control.has-icons-left
-                        = icon_tag('fas fa-envelope')
-                        = f.email_field :email, class: :input
-                hr
-                .level.is-mobile
-                  .level-left: a.is-link data-action="wizard#previous" Previous
-                  .level-right: a.button.is-primary.is-outlined data-action="wizard#next" Next
-              fieldset data-target='wizard.step'
-                = f.fields_for :donor_questions do |questions_form|
-                  = render @view_model.donor_questions, form: questions_form
-                hr
-                .level.is-mobile
-                  .level-left: a.is-link data-action="wizard#previous" Previous
-                  .level-right: a.button.is-primary.is-outlined data-action="wizard#next" Next
-              fieldset data-target='wizard.step'
-                .field
-                  = f.label :managed_portfolio_id, class: :label, value: 'Portfolio'
-                  .field
-                    - @view_model.managed_portfolios.each do |mp|
-                      .control
-                        label for="portfolio-#{mp.id}"
-                          .level.is-mobile
-                            .level-left
-                              .label
-                                .span.icon = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}"
-                                = mp.name
-                            .level-right
-                              .help = pluralize(mp.size, 'charity')
-                hr
-                .level.is-mobile
-                  .level-left: a.is-link data-action="wizard#previous" Previous
-                  .level-right: a.button.is-primary.is-outlined data-action="wizard#next" Next
-              fieldset data-target='wizard.step'
-                = render 'payment_methods/credit_card_form'
-                hr
-                .level.is-mobile
-                  .level-left: a.is-link data-action="wizard#previous" Previous
-                  .level-right
-                    = f.submit class: %w(button is-primary is-expanded), value: 'Donate'
-
-        p.has-text-centered.help
-          | We use smart and secure online payments to ensure that your donations are simple, secure, and avoid fees.
-        p.has-text-centered.help
-          | All donations are tax-deductible operating under the Social Good Fund
-          br
-          | 501(c)3 public charity, EIN 46-1323531.
+      .column.is-offset-1
+        = display_flash_messages
+        = render 'donation_box'

@@ -39,7 +39,8 @@ section.embossed.section
                       = f.text_field :website_url, class: :input, value: @view_model.partner.website_url
               .field data-controller="file"
                 labal.label Logo
-                p = image_tag @view_model.partner.logo.variant(resize: '400x200'), style:'max-height: 200px', data: { target: 'file.preview' }
+                - if @view_model.partner.logo.attached?
+                  p = image_tag @view_model.partner.logo.variant(resize: '400x200'), style:'max-height: 200px', data: { target: 'file.preview' }
                 .control
                   .file.has-name
                     label.file-label
