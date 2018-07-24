@@ -1,0 +1,27 @@
+#css-only-modals
+  input#thank_you_modal.css-only-modal-check checked="" type="checkbox"
+  .css-only-modal
+    p.has-text-centered = image_tag('thank-you-header.png')
+    h1 Thanks for using Donational.org
+    hr
+    .content
+      .box = render 'recurring_contributions/next_contribution', recurring_contribution: @view_model.recurring_contribution
+      p
+        ' Welcome to our community of high-impact givers.
+        ' You now have your very own charity portfolio, managed by
+        strong = @view_model.portfolio_manager_name
+        | !
+      p
+        ' With your Donational.org account, you can
+      ul.has-text-left
+        li Update your profile, payment method and donation frequency
+        li View your previous donations
+        li Explore the charities in your portfolio
+
+      p
+        ' Feel free to send your questions, comments and suggestions to
+        a href='mailto:hello@donational.org' hello@donational.org
+
+      p.has-text-centered
+        label.css-only-modal-btn.button.is-primary.is-large for="thank_you_modal"  View my portfolio
+  #screen-shade

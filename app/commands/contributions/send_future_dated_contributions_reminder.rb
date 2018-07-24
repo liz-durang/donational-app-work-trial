@@ -16,10 +16,10 @@ module Contributions
     private
 
     def get_entity_from_portfolio(contribution)
-      portfolio ||= Portfolios::GetActivePortfolio.call(donor: contribution.donor)
-      managed_portfolio ||= Portfolios::GetManagedPortfolio.call(portfolio: portfolio)
+      portfolio = Portfolios::GetActivePortfolio.call(donor: contribution.donor)
+      portfolio_manager = Portfolios::GetPortfolioManager.call(portfolio: portfolio)
 
-      entity = managed_portfolio.present? ? managed_portfolio.partner.name : "Donational.org"
+      entity = portfolio_manager.present? ? portfolio_manager.name : "Donational.org"
     end
   end
 end

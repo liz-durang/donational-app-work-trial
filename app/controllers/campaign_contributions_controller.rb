@@ -19,7 +19,7 @@ class CampaignContributionsController < ApplicationController
     outcome = pipeline.run
 
     if outcome.success?
-      redirect_to contributions_path
+      redirect_to portfolio_path(show_modal: true)
     else
       redirect_to campaigns_path(campaign.slug), alert: outcome.errors.message_list.join('\n')
     end
