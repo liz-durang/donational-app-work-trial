@@ -50,7 +50,8 @@ section.embossed.section
                           i.fas.fa-upload
                         span.file-label
                           | Choose a file&hellip;
-                      span.file-name data-target='file.filename' = @view_model.partner.logo.filename
+                      - if @view_model.partner.logo.attached?
+                        span.file-name data-target='file.filename' = @view_model.partner.logo.filename
               .field
                 label.control
                   = f.label :description, class: :label
