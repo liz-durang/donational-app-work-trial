@@ -1,0 +1,24 @@
+section.section
+  .container.has-text-centered
+      h1.title Partner Account
+
+.is-sticky
+  .tabs.is-centered
+    ul
+      li = link_to edit_partner_path(@view_model.partner) do
+        = icon_tag('fa-user')
+        | Basic Information
+      li = link_to partner_managed_portfolios_path(@view_model.partner) do
+        = icon_tag('fa-address-book')
+        | Portfolios
+      li = link_to partner_campaigns_path(@view_model.partner) do
+        = icon_tag('fa-globe')
+        | Campaigns
+      li.is-active = link_to partner_reports_path(@view_model.partner) do
+        = icon_tag('fa-folder')
+        | Reports
+
+section.embossed.section
+  .container
+    = display_flash_messages
+    = link_to 'Donors', donors_partner_reports_path(format: :csv)

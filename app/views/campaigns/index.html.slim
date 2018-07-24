@@ -14,6 +14,9 @@ section.section
       li.is-active: a
         = icon_tag('fa-globe')
         | Campaigns
+      li = link_to partner_reports_path(@view_model.partner) do
+        = icon_tag('fa-folder')
+        | Reports
 
 section.section.embossed
   .container
