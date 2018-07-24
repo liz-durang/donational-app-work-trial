@@ -1,0 +1,11 @@
+nav.wizard-card-nav
+  - of.times do |i|
+    - if i < (step - 1)
+      a.icon data-action='wizard#goto' data-wizard-step=i
+        i.fas.fa-circle
+    - elsif i == (step - 1)
+      a.icon.is-active data-action='wizard#goto' data-wizard-step=i
+        i.fas.fa-circle
+    - else
+      a.icon data-action='wizard#goto' data-wizard-step=i
+        i.far.fa-circle

@@ -22,14 +22,6 @@ $footer-background-color: none;
 html {
   height: 100vh;
 }
-.card.is-fullheight {
-   display:flex;
-   flex-direction: column;
-   height: 100%;
-   .card-footer {
-     margin-top: auto;
-   }
-}
 
 .box.is-fullheight {
   height: 100%;

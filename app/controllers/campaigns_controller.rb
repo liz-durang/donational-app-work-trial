@@ -12,6 +12,7 @@ class CampaignsController < ApplicationController
       partner_name: partner.name,
       partner_description: partner.description,
       partner_website_url: partner.website_url,
+      partner_logo: partner.logo,
       campaign_title: campaign.title,
       campaign_description: campaign.description,
       default_contribution_amounts: campaign.default_contribution_amounts,

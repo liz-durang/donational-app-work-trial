@@ -18,6 +18,7 @@ class Partner < ApplicationRecord
   has_many :managed_portfolios
   # Partner administrators
   has_and_belongs_to_many :donors
+  has_one_attached :logo
 
   def donor_questions
     return if donor_questions_schema.nil?

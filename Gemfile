@@ -10,14 +10,16 @@ end
 # Base stack
 gem 'pg'
 gem 'puma', '~> 3.0'
-gem 'rails', '~> 5.1.0'
+gem 'rails', '~> 5.2.0'
 gem 'redis', '~> 3.3.3'
+gem 'bootsnap', require: false
 
 # Models
 gem 'enumerize', '~> 2.1'
 
 # Views
 gem 'commonmarker', '~> 0.17.9'
+gem 'premailer-rails'
 
 # Authentication
 gem 'omniauth'
@@ -29,6 +31,8 @@ gem 'sass-rails', '~> 5.0'
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 gem 'slim-rails'
+gem 'webpacker'
+gem 'mini_magick'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-bulma'
@@ -46,11 +50,7 @@ gem 'mutations'
 gem 'jbuilder', '~> 2.5'
 
 # Payments
-gem 'rest-client'
 gem 'stripe'
-
-# Mailer
-gem 'premailer-rails'
 
 group :development, :test do
   gem 'byebug', platform: :mri
