@@ -23,10 +23,15 @@ en:
   hello: "Hello world"
   no_future_donations: "You don't have any future donations scheduled. Become a recurring donor today!"
   next_contribution:
-    once: "Your donation of %{amount} is scheduled for %{date}"
-    monthly: "Your next donation of %{amount} is scheduled for %{date}"
-    quarterly: "Your next quarterly donation of %{amount} is scheduled for %{date}"
-    annually: "Your next annual donation of %{amount} is scheduled for %{date}"
+    once: "Your donation of %{amount} is scheduled for %{date}."
+    monthly: "Your next donation of %{amount} is scheduled for %{date}."
+    quarterly: "Your next quarterly donation of %{amount} is scheduled for %{date}."
+    annually: "Your next annual donation of %{amount} is scheduled for %{date}."
+  reminder_next_contribution:
+    once: On %{date}, you pledged to make a %{amount} donation to your %{entity} charity portfolio. Thank you for your generosity.
+    monthly: On %{date}, you pledged to make a monthly %{amount} donation to your %{entity} charity portfolio. Thank you for your generosity.
+    quarterly: On %{date}, you pledged to make a quarterly %{amount} donation to your %{entity} charity portfolio. Thank you for your generosity.
+    annually: On %{date}, you pledged to make an annually %{amount} donation to your %{entity} charity portfolio. Thank you for your generosity.
 
   enumerize:
     recurring_contribution:
