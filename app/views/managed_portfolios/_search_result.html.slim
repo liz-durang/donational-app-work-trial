@@ -27,7 +27,7 @@ script#hit_template type="text/html"
         | {{/classifications}}
     .card-footer
       .card-footer-item
-        = f.submit class:'button is-success is-outlined is-fullwidth', value: 'Add to portfolio', onClick: "addSearchedCharity('#{@organization_name}', '#{@organization_ein}');"
+        = link_to 'Add to portfolio', 'javascript:;', class:'button is-success is-outlined is-fullwidth', onClick: "addSearchedCharity('#{@organization_name}', '#{@organization_ein}');"
 script#no_results_template type="text/html"
   div#no_results_message
     p
