@@ -5,9 +5,11 @@ module Contributions
     end
 
     def call
+      date = Date.today + 7.days
       @relation
         .where(deactivated_at: nil)
-        .where(start_at: Date.today + 7.days)
+        .where(last_reminded_at: nil)
+        .where(start_at: date.beginning_of_day..date.end_of_day)
     end
   end
 end

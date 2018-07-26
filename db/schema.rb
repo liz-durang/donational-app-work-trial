@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_21_133606) do
+ActiveRecord::Schema.define(version: 2018_07_26_160408) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -241,6 +241,7 @@ ActiveRecord::Schema.define(version: 2018_07_21_133606) do
     t.integer "tips_cents", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "last_reminded_at"
     t.index ["deactivated_at"], name: "index_recurring_contributions_on_deactivated_at"
     t.index ["donor_id"], name: "index_recurring_contributions_on_donor_id"
     t.index ["portfolio_id"], name: "index_recurring_contributions_on_portfolio_id"

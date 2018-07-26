@@ -7,6 +7,7 @@ module Contributions
         entity = get_entity_from_portfolio(contribution)
 
         RemindersMailer.send_reminder(contribution, payment_method, entity).deliver_now
+        contribution.update!(last_reminded_at: Time.zone.now)
       end
 
       nil
