@@ -3,7 +3,7 @@
 # Table name: portfolios
 #
 #  id             :uuid             not null, primary key
-#  donor_id       :uuid
+#  creator_id     :uuid
 #  deactivated_at :datetime
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null

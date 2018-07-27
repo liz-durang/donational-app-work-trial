@@ -1,0 +1,62 @@
+= render "receipts_mailer/header"
+
+h1
+  ' Your upcoming donation to your
+  = @entity
+  |  charity portfolio
+
+- if @entity != "Donational.org"
+  h4 Powered by Donational.org
+
+hr
+
+h4
+  = t @contribution.frequency, scope: :reminder_next_contribution, \
+  amount: number_to_currency(@contribution.amount_dollars), \
+  date: @contribution.created_at.strftime("%Y/%m/%d"), \
+  entity: @entity
+
+h4
+  = t @contribution.frequency, scope: :next_contribution, \
+    amount: number_to_currency(@contribution.amount_dollars), \
+    date: @contribution.start_at.strftime("%Y/%m/%d")
+  '  On this date, we will charge
+  = number_to_currency(@contribution.amount_dollars)
+  |  to your registered credit card. Once the donation is processed, we will send you an email receipt for your records.
+
+table border="0" cellpadding="0" cellspacing="0" width="100%"
+  tr.summary-item
+    td align="left"
+      b
+        ' Donation to
+        = @entity
+    td align="right"
+      b = number_to_currency(@contribution.amount_dollars)
+  tr.summary-item
+    td colspan="2"
+      ' Name:
+      = @contribution.donor.name
+  tr.summary-item
+    td colspan="2"
+      ' Date:
+      = @contribution.start_at.strftime("%Y/%m/%d")
+  tr.summary-item
+    td colspan="2"
+      span
+      ' Credit card: **** **** ****
+      = @payment_method.last4
+
+h3 Charities in your Portfolio
+h4 Your donation will be distributed to the charities in your portfolio.
+table border="0" cellpadding="0" cellspacing="0" width="100%"
+  - @contribution.portfolio.allocations.each do |allocation|
+    tr.summary-item
+      td colspan="2"
+        = allocation.organization_name
+
+h4 How it works?
+.fine-print
+  p Your donation on Donational.org is managed by a program of the Social Good Fund, a 501(c)3 public charity, EIN 46-1323531. Social Good Fund ("SGF") makes every reasonable effort to respect the wishes of its donors. However, to comply with federal tax laws and Internal Revenue Service regulations, the SGF must retain the exclusive authority, discretion, and legal control over all donated funds.
+  p In the rare event that the charity you have advised does not satisfy SGF's criteria or otherwise enable SGF to pay them (reasons for this include issues like: they do not or cannot accept donations, are not recognized by the IRS as a public charity, or are not in good standing with federal or state regulators, etc.), SGF may select an alternate nonprofit organization to receive the donation or have the donation allocated to a fund maintained by SGF and used solely for charitable purposes including, but not limited to, mission-based activities and grants. SGF's distributions to or for the benefit of your advised charity and/or purpose must not be used for the personal benefit of you, or any other donor advisor, or any other purpose conferring impermissible private benefit.
+
+h3 Thanks for using Donational.org!
