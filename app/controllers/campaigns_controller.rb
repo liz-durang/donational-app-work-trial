@@ -1,6 +1,8 @@
 class CampaignsController < ApplicationController
   before_action :ensure_donor_has_permission!, except: :show
 
+  layout "minimal", only: :donation_box
+
   def index
     @view_model = OpenStruct.new(partner: partner)
   end
@@ -21,6 +23,9 @@ class CampaignsController < ApplicationController
       managed_portfolios: partner.managed_portfolios,
       donor_questions: partner.donor_questions
     )
+
+    response.headers["X-Content-Security-Policy"] = "frame-ancestors #{partner.website_url}";
+    response.headers["Content-Security-Policy"] = "frame-ancestors #{partner.website_url}";
   end
 
   def new
@@ -61,6 +66,27 @@ class CampaignsController < ApplicationController
     flash[:success] = "Campaign updated successfully." if command.success?
     flash[:error] = command.errors.message_list.join('. ') unless command.success?
     redirect_to edit_partner_campaign_path(partner, campaign_by_id)
+  end
+
+  def donation_box
+    not_found unless campaign
+
+    @view_model = OpenStruct.new(
+      partner_name: partner.name,
+      partner_description: partner.description,
+      partner_website_url: partner.website_url,
+      partner_logo: partner.logo,
+      campaign_title: campaign.title,
+      campaign_description: campaign.description,
+      default_contribution_amounts: campaign.default_contribution_amounts,
+      campaign_contributions_path: campaign_contributions_path(campaign.slug),
+      new_campaign_contribution: new_campaign_contribution,
+      managed_portfolios: partner.managed_portfolios,
+      donor_questions: partner.donor_questions
+    )
+
+    response.headers["X-Content-Security-Policy"] = "frame-ancestors #{partner.website_url}";
+    response.headers["Content-Security-Policy"] = "frame-ancestors #{partner.website_url}";
   end
 
   private
