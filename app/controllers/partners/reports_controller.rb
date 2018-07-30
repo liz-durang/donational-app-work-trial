@@ -22,11 +22,26 @@ module Partners
       end
     end
 
+    def donations
+      start_date = Date.parse(params[:start_at])
+      end_date = Date.parse(params[:end_at])
+      filename = "#{partner.name.parameterize}-donations-#{start_date.iso8601}-to-#{end_date.iso8601}.csv"
+      respond_to do |format|
+        format.csv do
+          donations = Partners::GetDonationsExport.call(
+            partner: partner,
+            donated_between: start_date.at_beginning_of_day..end_date.at_end_of_day
+          )
+          stream_sql_data_as_csv(donations.to_sql, filename: filename)
+        end
+      end
+    end
+
     private
 
     def ensure_donor_has_permission!
       unless current_donor.partners.exists?(id: partner.id)
-        flash[:error] = "Sorry, you don't have permission to update this partner account"
+        flash[:error] = "Sorry, you don't have permission to export data from this partner account"
         redirect_to edit_partner_path(partner)
       end
     end

@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     resources :reports, module: :partners, only: :index do
       collection do
         get 'donors', format: :csv
+        get 'donations', format: :csv
       end
     end
   end
