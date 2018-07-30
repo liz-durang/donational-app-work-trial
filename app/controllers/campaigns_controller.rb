@@ -1,4 +1,6 @@
 class CampaignsController < ApplicationController
+  protect_from_forgery unless: -> { request.format.js? }
+
   before_action :ensure_donor_has_permission!, except: :show
 
   layout "minimal", only: :donation_box
@@ -16,6 +18,7 @@ class CampaignsController < ApplicationController
       partner_website_url: partner.website_url,
       partner_logo: partner.logo,
       campaign_title: campaign.title,
+      campaign_slug: campaign.slug,
       campaign_description: campaign.description,
       default_contribution_amounts: campaign.default_contribution_amounts,
       campaign_contributions_path: campaign_contributions_path(campaign.slug),
@@ -23,6 +26,11 @@ class CampaignsController < ApplicationController
       managed_portfolios: partner.managed_portfolios,
       donor_questions: partner.donor_questions
     )
+
+    respond_to do |format|
+      format.js
+      format.html
+    end
 
     response.headers["X-Content-Security-Policy"] = "frame-ancestors #{partner.website_url}";
     response.headers["Content-Security-Policy"] = "frame-ancestors #{partner.website_url}";
@@ -72,18 +80,17 @@ class CampaignsController < ApplicationController
     not_found unless campaign
 
     @view_model = OpenStruct.new(
-      partner_name: partner.name,
-      partner_description: partner.description,
-      partner_website_url: partner.website_url,
-      partner_logo: partner.logo,
-      campaign_title: campaign.title,
-      campaign_description: campaign.description,
       default_contribution_amounts: campaign.default_contribution_amounts,
-      campaign_contributions_path: campaign_contributions_path(campaign.slug),
       new_campaign_contribution: new_campaign_contribution,
       managed_portfolios: partner.managed_portfolios,
-      donor_questions: partner.donor_questions
+      donor_questions: partner.donor_questions,
+      campaign_slug: campaign.slug,
     )
+
+    respond_to do |format|
+      format.js
+      format.html
+    end
 
     response.headers["X-Content-Security-Policy"] = "frame-ancestors #{partner.website_url}";
     response.headers["Content-Security-Policy"] = "frame-ancestors #{partner.website_url}";
