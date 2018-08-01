@@ -25,6 +25,7 @@ Rails.application.routes.draw do
       end
     end
   end
+  resources :searchable_organizations, only: :index
   # Retention
 
   # Revenue

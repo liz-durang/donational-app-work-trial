@@ -84,6 +84,17 @@ h1, h2, h3, h4, h5, h6, .title {
   background-color: #fafafa;
 }
 
+.column.is-4.search-result {
+  margin: 10px 0;
+  width: 32%;
+}
+
+.results {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
 .buttons input:checked + label {
   @extend .is-primary;
 }

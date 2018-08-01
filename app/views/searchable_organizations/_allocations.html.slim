@@ -1,0 +1,28 @@
+- @organizations.each do |organization|
+  = form_with url: allocations_path, local: true, method: :post, class: 'card is-fullheight column is-4 search-result' do |f|
+    = f.fields :organization do |organization_form|
+      = organization_form.hidden_field :ein, value: organization.ein[0..1] + '-' + organization.ein[2..8]
+      = organization_form.hidden_field :name, value: organization.name.titleize
+      - @organization_name = organization.name.titleize
+      - @organization_ein = organization.ein[0..1] + '-' + organization.ein[2..8]
+    .card-content.is-4
+      h3.title.is-4
+        = organization.name.titleize
+      .field.is-grouped.is-grouped-multiline
+        .control
+          span.tags.has-addons
+            span.tag.is-dark EIN
+            span.tag.is-light
+              = organization.ein[0..1] + '-' + organization.ein[2..8]
+        .control
+          span.tags.has-addons
+            span.tag.is-dark State
+            span.tag.is-light
+              = organization.state
+    .card-footer
+      .card-footer-item
+        = f.submit class:'button is-success is-outlined is-fullwidth', value: 'Add to portfolio'
+
+- if @organizations.empty?
+  h3.subtitle
+    | We didn't find any results for the search

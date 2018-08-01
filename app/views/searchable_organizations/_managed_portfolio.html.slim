@@ -1,41 +1,31 @@
-script#hit_template type="text/html"
-  = form_with class: 'card is-fullheight', method: :get do |f|
+- @organizations.each do |organization|
+  = form_with class: 'card is-fullheight column is-4 search-result', method: :get do |f|
     = f.fields :organization do |organization_form|
-      = organization_form.hidden_field :ein, value:"{{formattedEin}}"
-      = organization_form.hidden_field :name, value:"{{name}}"
-      - @organization_name = "{{name}}"
-      - @organization_ein = "{{formattedEin}}"
-    .card-content
+      = organization_form.hidden_field :ein, value: organization.ein[0..1] + '-' + organization.ein[2..8]
+      = organization_form.hidden_field :name, value: organization.name.titleize
+      - @organization_name = organization.name.titleize
+      - @organization_ein = organization.ein[0..1] + '-' + organization.ein[2..8]
+    .card-content.is-4
       h3.title.is-4
-        | {{{_highlightResult.name.value}}}
+        = organization.name.titleize
       .field.is-grouped.is-grouped-multiline
         .control
           span.tags.has-addons
             span.tag.is-dark EIN
             span.tag.is-light
-              | {{formattedEin}}
+              = organization.ein[0..1] + '-' + organization.ein[2..8]
         .control
           span.tags.has-addons
             span.tag.is-dark State
             span.tag.is-light
-              | {{state}}
-      .field.is-grouped.is-grouped-multiline
-        | {{#classifications}}
-        .control
-          span.tag
-            | {{.}}
-        | {{/classifications}}
+              = organization.state
     .card-footer
       .card-footer-item
         = link_to 'Add to portfolio', 'javascript:;', class:'button is-success is-outlined is-fullwidth', onClick: "addSearchedCharity('#{@organization_name}', '#{@organization_ein}');"
-script#no_results_template type="text/html"
-  div#no_results_message
-    p
-      ' We didn't find any results for the search
-      em
-        | {{query}}
-      | .
-    a href="." class="clear-all" Clear search
+
+- if @organizations.empty?
+  h3.subtitle
+    | We didn't find any results for the search
 
 javascript:
   function addSearchedCharity(charityName, charityEIN) {
