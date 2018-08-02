@@ -9,14 +9,14 @@ section.section
       p Do you have charities that you'd like to add to your portfolio?
 
 section.section.embossed
-  .container.has-text-centered
+  .container.has-text-centered data-controller='autocomplete'
     .level
       .level-item
         span.icon.is-large: i.fas.fa-search
         .field
-          input class='input' placeholder="Search for a charity" data-target='autocomplete.text' data-action='keypress->autocomplete#pressKey' data-autocomplete-url=searchable_organizations_path data-autocomplete-from='allocations' data-controller="autocomplete"
+          input class='input' placeholder="Search for a charity" data-target='autocomplete.text' data-action='keypress->autocomplete#pressKey' data-autocomplete-url=searchable_organizations_path data-autocomplete-from='allocations'
     p.help You can add any 501(c)3 recognized organization to your portfolio
-    #results class="results"
+    #results class="results" data-target='autocomplete.results'
     hr
     p.is-4.has-text-centered OR
     hr

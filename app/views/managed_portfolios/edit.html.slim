@@ -19,7 +19,7 @@ section.section
         | Reports
 
 section.embossed.section
-  .container
+  .container data-controller='autocomplete'
     = display_flash_messages
     .box.flat-card style='background: #fafafa'
       = form_with url: @view_model.managed_portfolio_path, local: true, method: :put, class: 'form' do |f|
@@ -44,7 +44,7 @@ section.embossed.section
             .column
               label.control
                 = f.label :search_for_a_charity, class: :label
-                input class='input' data-target='autocomplete.text' data-action='keypress->autocomplete#pressKey' data-autocomplete-url=searchable_organizations_path data-autocomplete-from='portfolios' data-controller="autocomplete"
+                input class='input' data-target='autocomplete.text' data-action='keypress->autocomplete#pressKey' data-autocomplete-url=searchable_organizations_path data-autocomplete-from='portfolios'
               p.help You can add any 501(c)3 recognized organization to your portfolio
           .columns
             .column
@@ -80,7 +80,7 @@ section.embossed.section
           p.has-text-right
             = f.submit "Save", class: %w(button is-primary), onClick: "save();"
 
-    #results class="results"
+    #results class="results" data-target='autocomplete.results'
 
 javascript:
   function addCharity() {
