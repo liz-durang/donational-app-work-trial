@@ -23,6 +23,7 @@ class Portfolio < ApplicationRecord
            -> { where(deactivated_at: nil) },
            class_name: 'Allocation'
   has_many :donations
+  has_one :managed_portfolio
 
   def active?
     deactivated_at.blank?

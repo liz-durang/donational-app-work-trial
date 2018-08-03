@@ -18,6 +18,12 @@ Rails.application.routes.draw do
     resources :campaigns, only: %i[index new edit create update]
     get :account_connection, on: :collection
     resources :managed_portfolios, only: %i[index new edit create update]
+    resources :reports, module: :partners, only: :index do
+      collection do
+        get 'donors', format: :csv
+        get 'donations', format: :csv
+      end
+    end
   end
   # Retention
 
