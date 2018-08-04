@@ -22,10 +22,10 @@ section.embossed.section
       strong => pluralize(@view_model.allocations.count, 'charity')
       | in your portfolio
 
-    - if @view_model.managed_portfolio.present?
+    - if @view_model.managed_portfolio?
       p.content
         ' Your portfolio is managed by
-        strong => @view_model.managed_portfolio.partner.name
+        strong => @view_model.portfolio_manager_name
       = render "allocations_table"
     - else
       = render "editable_allocations_table"

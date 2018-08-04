@@ -45,11 +45,16 @@ class AllocationsController < ApplicationController
 
     @view_model = OpenStruct.new(
       allocations: Portfolios::GetActiveAllocations.call(portfolio: active_portfolio),
-      managed_portfolio: Portfolios::GetManagedPortfolio.call(portfolio: active_portfolio)
+      managed_portfolio?: portfolio_manager.present?,
+      portfolio_manager_name: portfolio_manager.try(:name)
     )
   end
 
   private
+
+  def portfolio_manager
+    @portfolio_manager ||= Portfolios::GetPortfolioManager.call(portfolio: active_portfolio)
+  end
 
   def organizations_available_to_add_to_portfolio
     Organizations::GetRecommendedOrganizationsThatAreNotInPortfolio.call(portfolio: active_portfolio)

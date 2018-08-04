@@ -36,11 +36,18 @@ class PortfoliosController < ApplicationController
     @view_model = OpenStruct.new(
       donor_first_name: current_donor.first_name,
       organizations: organizations_by_cause_area,
-      managed_portfolio: Portfolios::GetManagedPortfolio.call(portfolio: active_portfolio)
+      managed_portfolio?: portfolio_manager.present?,
+      portfolio_manager_name: portfolio_manager.try(:name),
+      recurring_contribution: active_recurring_contribution,
+      show_modal: params[:show_modal].to_s == 'true'
     )
   end
 
   private
+
+  def portfolio_manager
+    @portfolio_manager ||= Portfolios::GetPortfolioManager.call(portfolio: active_portfolio)
+  end
 
   def recommended_allocations
     @recommended_allocations ||= Portfolios::GetRecommendedAllocations.call(donor: current_donor)
@@ -56,5 +63,9 @@ class PortfoliosController < ApplicationController
 
   def active_portfolio
     @active_portfolio ||= Portfolios::GetActivePortfolio.call(donor: current_donor)
+  end
+
+  def active_recurring_contribution
+    @active_contribution ||= Contributions::GetActiveRecurringContribution.call(donor: current_donor)
   end
 end

@@ -1,5 +1,5 @@
 module Portfolios
-  class GetManagedPortfolio < ApplicationQuery
+  class GetPortfolioManager < ApplicationQuery
     def initialize(relation = ManagedPortfolio.all)
       @relation = relation
     end
@@ -9,6 +9,7 @@ module Portfolios
         .where(portfolio: portfolio)
         .order(:id)
         .last
+        .try(:partner)
     end
   end
 end
