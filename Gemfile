@@ -14,6 +14,10 @@ gem 'rails', '~> 5.2.0'
 gem 'redis', '~> 3.3.3'
 gem 'bootsnap', require: false
 
+# Uploads
+gem 'active_storage-postgresql', github: 'lsylvester/active_storage-postgresql'
+gem 'mini_magick'
+
 # Models
 gem 'enumerize', '~> 2.1'
 
@@ -32,7 +36,6 @@ gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 gem 'slim-rails'
 gem 'webpacker'
-gem 'mini_magick'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-bulma'
