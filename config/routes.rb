@@ -40,5 +40,6 @@ Rails.application.routes.draw do
 
   get '/:campaign_slug' => 'campaigns#show', as: :campaigns
   post '/:campaign_slug/contributions' => 'campaign_contributions#create', as: :campaign_contributions
+  get '/:campaign_slug/donation-box' => 'campaigns#donation_box', as: :campaigns_donation_box
 
 end

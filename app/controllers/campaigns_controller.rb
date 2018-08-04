@@ -1,5 +1,9 @@
 class CampaignsController < ApplicationController
-  before_action :ensure_donor_has_permission!, except: :show
+  protect_from_forgery unless: -> { request.format.js? }
+
+  before_action :ensure_donor_has_permission!, except: [:show, :donation_box]
+
+  layout "minimal", only: :donation_box
 
   def index
     @view_model = OpenStruct.new(partner: partner)
@@ -14,6 +18,7 @@ class CampaignsController < ApplicationController
       partner_website_url: partner.website_url,
       partner_logo: partner.logo,
       campaign_title: campaign.title,
+      campaign_slug: campaign.slug,
       campaign_description: campaign.description,
       default_contribution_amounts: campaign.default_contribution_amounts,
       campaign_contributions_path: campaign_contributions_path(campaign.slug),
@@ -21,6 +26,13 @@ class CampaignsController < ApplicationController
       managed_portfolios: partner.managed_portfolios,
       donor_questions: partner.donor_questions
     )
+
+    respond_to do |format|
+      format.js
+      format.html {
+        allow_iframe_embedding_on_partner_website!
+      }
+    end
   end
 
   def new
@@ -63,6 +75,25 @@ class CampaignsController < ApplicationController
     redirect_to edit_partner_campaign_path(partner, campaign_by_id)
   end
 
+  def donation_box
+    not_found unless campaign
+
+    @view_model = OpenStruct.new(
+      default_contribution_amounts: campaign.default_contribution_amounts,
+      new_campaign_contribution: new_campaign_contribution,
+      managed_portfolios: partner.managed_portfolios,
+      donor_questions: partner.donor_questions,
+      campaign_slug: campaign.slug,
+    )
+
+    respond_to do |format|
+      format.js
+      format.html {
+        allow_iframe_embedding_on_partner_website!
+      }
+    end
+  end
+
   private
 
   def ensure_donor_has_permission!
@@ -70,6 +101,11 @@ class CampaignsController < ApplicationController
       flash[:error] = "Sorry, you don't have permission to create a campaign for this partner"
       redirect_to edit_partner_path(partner)
     end
+  end
+
+  def allow_iframe_embedding_on_partner_website!
+    response.headers["X-Content-Security-Policy"] = "frame-ancestors #{partner.website_url}";
+    response.headers["Content-Security-Policy"] = "frame-ancestors #{partner.website_url}";
   end
 
   def new_campaign_contribution

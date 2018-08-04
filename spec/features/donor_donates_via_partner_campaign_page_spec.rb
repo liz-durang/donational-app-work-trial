@@ -50,7 +50,6 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     page.execute_script("document.getElementById('payment_token').value = '#{card_token}';")
     page.execute_script("document.getElementById('payment-form').submit();")
 
-    binding.pry
     date_in_two_months_on_the_12th = Date.new(Date.today.year, Date.today.month + 3, 12).to_formatted_s(:long_ordinal)
     expect(page).to have_content("Your next annual donation of $200 is scheduled for #{date_in_two_months_on_the_12th}")
   end
