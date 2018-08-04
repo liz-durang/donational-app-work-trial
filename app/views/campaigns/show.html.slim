@@ -1,7 +1,10 @@
 - content_for :hero do
   section.hero.has-background
     .hero-background
-      figure
+      - if @view_model.banner_image.attached? && @view_model.banner_image.variable?
+        - banner_image_url = rails_representation_url(@view_model.banner_image.variant(resize: '1024x768'))
+        figure style="background-image: url(#{banner_image_url})"
+
     .hero-head
       = render 'shared/nav'
     .hero-body
@@ -9,9 +12,8 @@
         .columns
           .column.is-6
             h1.title.is-spaced
-              - if @view_model.partner_logo.attached?
+              - if @view_model.partner_logo.attached? && @view_model.partner_logo.variable?
                 = image_tag @view_model.partner_logo.variant(resize: '400x200'),
-                  style:'max-height: 200px',
                   data: { target: 'file.preview' },
                   alt: @view_model.partner
               - else

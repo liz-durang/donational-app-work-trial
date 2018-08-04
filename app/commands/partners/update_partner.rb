@@ -13,13 +13,13 @@ module Partners
     end
 
     def execute
-      partner.logo.attach(logo)
       partner.update!(
         name: name,
         website_url: website_url,
         description: description,
         payment_processor_account_id: payment_processor_account_id
       )
+      partner.logo.attach(logo) if logo.present?
     end
   end
 end
