@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/lsylvester/active_storage-postgresql.git
+  revision: 0109bb718a40dea676936bde2dc6a016e1c97cf4
+  specs:
+    active_storage-postgresql (0.1.0)
+      pg (~> 1.0)
+      rails (~> 5.2)
+
 GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
@@ -311,6 +319,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_storage-postgresql!
   analytics-ruby
   annotate
   appsignal
@@ -358,4 +367,4 @@ RUBY VERSION
    ruby 2.4.1p111
 
 BUNDLED WITH
-   1.16.2
+   1.16.3
