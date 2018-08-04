@@ -1,7 +1,7 @@
 class CampaignsController < ApplicationController
   protect_from_forgery unless: -> { request.format.js? }
 
-  before_action :ensure_donor_has_permission!, except: :show
+  before_action :ensure_donor_has_permission!, except: [:show, :donation_box]
 
   layout "minimal", only: :donation_box
 
@@ -29,11 +29,10 @@ class CampaignsController < ApplicationController
 
     respond_to do |format|
       format.js
-      format.html
+      format.html {
+        allow_iframe_embedding_on_partner_website!
+      }
     end
-
-    response.headers["X-Content-Security-Policy"] = "frame-ancestors #{partner.website_url}";
-    response.headers["Content-Security-Policy"] = "frame-ancestors #{partner.website_url}";
   end
 
   def new
@@ -89,11 +88,10 @@ class CampaignsController < ApplicationController
 
     respond_to do |format|
       format.js
-      format.html
+      format.html {
+        allow_iframe_embedding_on_partner_website!
+      }
     end
-
-    response.headers["X-Content-Security-Policy"] = "frame-ancestors #{partner.website_url}";
-    response.headers["Content-Security-Policy"] = "frame-ancestors #{partner.website_url}";
   end
 
   private
@@ -103,6 +101,11 @@ class CampaignsController < ApplicationController
       flash[:error] = "Sorry, you don't have permission to create a campaign for this partner"
       redirect_to edit_partner_path(partner)
     end
+  end
+
+  def allow_iframe_embedding_on_partner_website!
+    response.headers["X-Content-Security-Policy"] = "frame-ancestors #{partner.website_url}";
+    response.headers["Content-Security-Policy"] = "frame-ancestors #{partner.website_url}";
   end
 
   def new_campaign_contribution

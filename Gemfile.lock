@@ -69,6 +69,11 @@ GEM
     capybara-selenium (0.0.6)
       capybara
       selenium-webdriver
+    capybara-webmock (0.4.4)
+      capybara (>= 2.4, < 4)
+      rack (>= 1.4)
+      rack-proxy (>= 0.6.0)
+      selenium-webdriver (~> 3.0)
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
     climate_control (0.2.0)
@@ -78,6 +83,7 @@ GEM
     commonmarker (0.17.9)
       ruby-enum (~> 0.5)
     concurrent-ruby (1.0.5)
+    cookiejar (0.3.3)
     crass (1.0.4)
     css_parser (1.6.0)
       addressable
@@ -88,9 +94,21 @@ GEM
     dotenv-rails (2.5.0)
       dotenv (= 2.5.0)
       railties (>= 3.2, < 6.0)
+    em-http-request (1.1.5)
+      addressable (>= 2.3.4)
+      cookiejar (!= 0.3.1)
+      em-socksify (>= 0.3)
+      eventmachine (>= 1.0.3)
+      http_parser.rb (>= 0.6.0)
+    em-socksify (0.3.2)
+      eventmachine (>= 1.0.0.beta.4)
+    em-synchrony (1.0.6)
+      eventmachine (>= 1.0.0.beta.1)
     enumerize (2.2.2)
       activesupport (>= 3.2)
     erubi (1.7.1)
+    eventmachine (1.0.9.1)
+    eventmachine_httpserver (0.2.1)
     execjs (2.7.0)
     factory_bot (4.10.0)
       activesupport (>= 3.0.0)
@@ -105,6 +123,7 @@ GEM
     hashie (3.5.7)
     highline (1.7.10)
     htmlentities (4.3.4)
+    http_parser.rb (0.6.0)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.1)
@@ -171,6 +190,14 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
     public_suffix (3.0.2)
+    puffing-billy (1.1.2)
+      addressable (~> 2.5)
+      em-http-request (~> 1.1, >= 1.1.0)
+      em-synchrony
+      eventmachine (~> 1.0.4)
+      eventmachine_httpserver
+      http_parser.rb (~> 0.6.0)
+      multi_json
     puma (3.12.0)
     rack (2.0.5)
     rack-proxy (0.6.4)
@@ -318,6 +345,7 @@ DEPENDENCIES
   byebug
   capybara
   capybara-selenium
+  capybara-webmock
   climate_control
   commonmarker (~> 0.17.9)
   database_cleaner
@@ -334,6 +362,7 @@ DEPENDENCIES
   pg
   premailer-rails
   pry
+  puffing-billy
   puma (~> 3.0)
   rails (~> 5.2.0)
   rails-assets-bulma!

@@ -77,4 +77,6 @@ group :test do
   gem 'capybara-selenium'
   gem 'selenium-webdriver', '~> 3.12.0'
   gem 'stripe-ruby-mock', '~> 2.5.4', require: 'stripe_mock'
+  gem 'capybara-webmock'
+  gem 'puffing-billy'
 end
