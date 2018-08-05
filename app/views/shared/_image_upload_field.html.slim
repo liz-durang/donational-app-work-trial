@@ -1,0 +1,15 @@
+.field data-controller="file"
+  labal.label = field.to_s.titleize
+  - if attachment.attached? && attachment.variable?
+    p = image_tag attachment.variant(resize: thumbnail_preview_size), data: { target: 'file.preview' }
+  .control
+    .file.has-name
+      label.file-label
+        = form.file_field field, direct_upload: true, class: 'file-input', data: { action: 'change->file#preview' }
+        span.file-cta
+          span.file-icon
+            i.fas.fa-upload
+          span.file-label
+            | Choose a file&hellip;
+        - if attachment.attached?
+          span.file-name data-target='file.filename' = attachment.filename

@@ -15,6 +15,7 @@
 
 class Campaign < ApplicationRecord
   belongs_to :partner
+  has_one_attached :banner_image
 
   validates :slug, uniqueness: true
 end

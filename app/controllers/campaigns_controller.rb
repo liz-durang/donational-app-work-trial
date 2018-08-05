@@ -17,6 +17,7 @@ class CampaignsController < ApplicationController
       partner_description: partner.description,
       partner_website_url: partner.website_url,
       partner_logo: partner.logo,
+      banner_image: campaign.banner_image,
       campaign_title: campaign.title,
       campaign_slug: campaign.slug,
       campaign_description: campaign.description,
@@ -36,13 +37,14 @@ class CampaignsController < ApplicationController
   end
 
   def new
-    @view_model = OpenStruct.new(partner: partner)
+    @view_model = OpenStruct.new(partner: partner, campaign: Campaign.new)
   end
 
   def edit
     @view_model = OpenStruct.new(
       partner: partner,
       campaign: campaign_by_id,
+      banner_image: campaign_by_id.banner_image,
       default_contribution_amounts: campaign_by_id.default_contribution_amounts.join(", ")
     )
   end
@@ -53,6 +55,7 @@ class CampaignsController < ApplicationController
       title: params[:title],
       description: params[:description],
       slug: params[:slug],
+      banner_image: params[:banner_image],
       default_contribution_amounts: default_contribution_amounts
     )
 
@@ -67,6 +70,7 @@ class CampaignsController < ApplicationController
       title: params[:title],
       description: params[:description],
       slug: params[:slug],
+      banner_image: params[:banner_image],
       default_contribution_amounts: default_contribution_amounts
     )
 

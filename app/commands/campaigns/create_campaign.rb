@@ -9,6 +9,10 @@ module Campaigns
       array :default_contribution_amounts
     end
 
+    optional do
+      string :banner_image
+    end
+
     def validate
       return unless slug_unique?
 
@@ -16,13 +20,14 @@ module Campaigns
     end
 
     def execute
-      Campaign.create!(
+      campaign = Campaign.create!(
         partner: partner,
         title: title,
         description: description,
         slug: slug,
-        default_contribution_amounts: default_contribution_amounts
+        default_contribution_amounts: default_contribution_amounts,
       )
+      campaign.banner_image.attach(banner_image) if banner_image.present?
 
       nil
     end

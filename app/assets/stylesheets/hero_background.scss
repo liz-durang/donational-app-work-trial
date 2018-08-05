@@ -36,15 +36,6 @@
     z-index: 0;
     position: absolute;
   }
-
-  figure:nth-child(1) { background-image: image_url('hero-image-1.jpg'); }
-  figure:nth-child(2) { background-image: image_url('hero-image-2.jpg'); }
-  figure:nth-child(3) { background-image: image_url('hero-image-3.jpg'); }
-  figure:nth-child(4) { background-image: image_url('hero-image-4.jpg'); }
-  figure:nth-child(5) { background-image: image_url('hero-image-5.jpg'); }
-  figure:nth-child(6) { background-image: image_url('hero-image-6.jpg'); }
-  figure:nth-child(7) { background-image: image_url('hero-image-7.jpg'); }
-  figure:nth-child(8) { background-image: image_url('hero-image-8.jpg'); }
 }
 
 .has-background-animated {

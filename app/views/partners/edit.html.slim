@@ -40,21 +40,11 @@ section.embossed.section
                     label.control
                       = f.label :website_url, class: :label
                       = f.text_field :website_url, class: :input, value: @view_model.partner.website_url
-              .field data-controller="file"
-                labal.label Logo
-                - if @view_model.partner.logo.attached?
-                  p = image_tag @view_model.partner.logo.variant(resize: '400x200'), style:'max-height: 200px', data: { target: 'file.preview' }
-                .control
-                  .file.has-name
-                    label.file-label
-                      = f.file_field :logo, direct_upload: true, class: 'file-input', data: { action: 'change->file#preview' }
-                      span.file-cta
-                        span.file-icon
-                          i.fas.fa-upload
-                        span.file-label
-                          | Choose a file&hellip;
-                      - if @view_model.partner.logo.attached?
-                        span.file-name data-target='file.filename' = @view_model.partner.logo.filename
+              = render 'shared/image_upload_field',
+                  attachment: @view_model.partner.logo,
+                  field: :logo,
+                  thumbnail_preview_size: '400x200',
+                  form: f
               .field
                 label.control
                   = f.label :description, class: :label
