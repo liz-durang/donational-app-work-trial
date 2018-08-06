@@ -253,6 +253,39 @@ ActiveRecord::Schema.define(version: 2018_08_04_020606) do
     t.index ["portfolio_id"], name: "index_recurring_contributions_on_portfolio_id"
   end
 
+  create_table "searchable_organizations", id: false, force: :cascade do |t|
+    t.string "ein", null: false
+    t.string "name", null: false
+    t.string "ico"
+    t.string "street"
+    t.string "city"
+    t.string "state"
+    t.string "zip"
+    t.string "org_group"
+    t.string "subsection"
+    t.string "affiliation"
+    t.string "classification"
+    t.string "ruling"
+    t.string "deductibility"
+    t.string "foundation"
+    t.string "activity"
+    t.string "organization"
+    t.string "status"
+    t.string "tax_period"
+    t.string "asset_cd"
+    t.string "income_cd"
+    t.string "filing_req_cd"
+    t.string "pf_filing_req_cd"
+    t.string "acct_pd"
+    t.string "asset_amt"
+    t.string "income_amt"
+    t.string "revenue_amt"
+    t.string "ntee_cd"
+    t.string "sort_name"
+    t.index ["ein"], name: "index_searchable_organizations_on_ein", unique: true
+    t.index ["name"], name: "index_searchable_organizations_on_name"
+  end
+
   create_table "selected_portfolios", force: :cascade do |t|
     t.uuid "donor_id"
     t.uuid "portfolio_id"

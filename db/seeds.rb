@@ -38,6 +38,8 @@ end
 
 Organizations::CreateOrUpdateOrganizationsFromGoogleSheets.run
 
+Organizations::CreateOrUpdateTaxExemptOrganizationsFromCSV.run
+
 def create_portfolio_with_charities(charity_eins)
   Portfolio.create!.tap do |portfolio|
     Portfolios::AddOrganizationsAndRebalancePortfolio.run(

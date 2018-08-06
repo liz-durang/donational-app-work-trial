@@ -55,6 +55,9 @@ gem 'jbuilder', '~> 2.5'
 # Payments
 gem 'stripe'
 
+# Search
+gem 'pg_search'
+
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'pry'

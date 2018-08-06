@@ -16,7 +16,7 @@ section.section
         | Campaigns
 
 section.embossed.section
-  .container
+  .container data-controller='autocomplete'
     = display_flash_messages
     .box.flat-card style='background: #fafafa'
       = form_with url: partner_managed_portfolios_path, id: 'form', local: true, method: :post, class: 'form' do |f|
@@ -41,7 +41,7 @@ section.embossed.section
             .column
               label.control
                 = f.label :search_for_a_charity, class: :label
-                #search-input
+                input class='input' data-target='autocomplete.text' data-action='keypress->autocomplete#pressKey' data-autocomplete-url=searchable_organizations_path data-autocomplete-from='portfolios'
               p.help You can add any 501(c)3 recognized organization to your portfolio
           .columns
             .column
@@ -69,8 +69,7 @@ section.embossed.section
           p.has-text-right
             = f.submit "Save", class: %w(button is-primary), onClick: "save();"
 
-    = render 'search_result'
-    #search-hits
+    #results class="results" data-target='autocomplete.results'
 
 javascript:
   function addCharity() {
@@ -101,50 +100,3 @@ javascript:
     document.getElementById('charities').value = charities;
     document.getElementById('form').submit();
   }
-
-  var search = instantsearch({
-    appId: "#{ENV.fetch('SEARCH_APP_ID')}",
-    apiKey: "#{ENV.fetch('SEARCH_APP_KEY')}",
-    indexName: 'Publication78',
-    searchFunction(helper) {
-      if (helper.state.query === '') {
-        return;
-      }
-      helper.search();
-    },
-  });
-
-  search.addWidget(
-    instantsearch.widgets.searchBox({
-      container: '#search-input',
-      cssClasses: { input: 'input is-small' },
-      magnifier: false,
-      reset: false
-    })
-  );
-
-  search.addWidget(
-    instantsearch.widgets.hits({
-      container: '#search-hits',
-      cssClasses: {
-        item: ['column', 'is-4'],
-        root: ['columns', 'is-multiline']
-      },
-      templates: {
-        item: document.getElementById('hit_template').innerHTML,
-        empty: 'no results'
-      },
-      transformData: function(result) {
-        result.formattedEin = result.ein.toString().substring(0, 2) + '-' + result.ein.toString().substring(2, 9);
-        if (result.npo.business_master) {
-          result.state = result.npo.business_master.state;
-          result.classifications = result.npo.business_master.classifications;
-        } else if (result.npo.form990_n) {
-          result.state = result.npo.form990_n.org_state;
-          result.classifications = [];
-        }
-        return result;
-      }
-    })
-  );
-  search.start();
