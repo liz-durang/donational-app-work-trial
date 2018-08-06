@@ -32,12 +32,17 @@ class PartnersController < ApplicationController
   end
 
   def account_connection
-    Payments::ConnectPartnerAccount.run(
-      partner: partner,
-      authorization_code: params[:code]
-    )
+    if params[:error].present?
+      flash[:error] = params[:error_description]
+    else
+      Payments::ConnectPartnerAccount.run(
+        partner: partner,
+        authorization_code: params[:code]
+      )
 
-    flash[:success] = "Thanks, your Stripe account was connected successfully"
+      flash[:success] = "Thanks, your Stripe account was connected successfully"
+    end
+
     redirect_to edit_partner_path(partner)
   end
 
@@ -57,7 +62,7 @@ class PartnersController < ApplicationController
   end
 
   def stripe_connect_url
-    "https://connect.stripe.com/express/oauth/authorize?redirect_uri=" + account_connection_partners_url + "&client_id=" + ENV.fetch('STRIPE_CLIENT_ID') + "&state=" + partner.id
+    "https://connect.stripe.com/oauth/authorize?response_type=code&client_id=" + ENV.fetch('STRIPE_CLIENT_ID') + "&scope=read_write&state=" + partner.id
   end
 
   def update_partner!
