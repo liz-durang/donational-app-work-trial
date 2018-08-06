@@ -2,13 +2,33 @@ require 'csv'
 
 module Organizations
   class CreateOrUpdateTaxExemptOrganizationsFromCSV < ApplicationCommand
-    def execute
-      delete_sql = "DELETE FROM searchable_organizations;"
-      ActiveRecord::Base.connection.execute(delete_sql)
+    BASE_DIR = Rails.root.join('db', 'tax_exempt_organizations')
 
-      import_searchable_organizations_from_zipped_csv('db/tax_exempt_organizations/eo1.csv.zip')
-      import_searchable_organizations_from_zipped_csv('db/tax_exempt_organizations/eo2.csv.zip')
-      import_searchable_organizations_from_zipped_csv('db/tax_exempt_organizations/eo3.csv.zip')
+    required do
+      array :files, default: %w(eo1.csv.zip eo2.csv.zip eo3.csv.zip)
+    end
+
+    def execute
+      ActiveRecord::Base.connection.execute <<-SQL
+        DELETE FROM searchable_organizations;
+        DROP INDEX IF EXISTS index_searchable_organizations_on_tsv;
+        ALTER TABLE searchable_organizations DROP COLUMN IF EXISTS tsv;
+      SQL
+
+      puts "Importing searchable organizations from IRS Exempt Organizations Business Master File Extract (EO BMF)"
+
+      files.each do |zipped_csv_file|
+        import_searchable_organizations_from_zipped_csv(zipped_csv_file)
+      end
+      puts "Imported #{SearchableOrganization.count} searchable organizations"
+
+      ActiveRecord::Base.connection.execute <<-SQL
+        ALTER TABLE searchable_organizations ADD COLUMN tsv tsvector;
+        UPDATE searchable_organizations SET tsv=to_tsvector('pg_catalog.english', coalesce(name,''));
+        CREATE INDEX index_searchable_organizations_on_name_tsv ON searchable_organizations USING gin(tsv);
+      SQL
+
+      puts "Indexed #{SearchableOrganization.count} searchable organizations"
 
       nil
     end
@@ -16,8 +36,8 @@ module Organizations
     private
 
     def import_searchable_organizations_from_zipped_csv(zipped_csv_file)
-      %x{ unzip -o #{zipped_csv_file} -d /tmp }
-      unzipped_csv = "/tmp/#{zipped_csv_file.split('/').last.gsub('.zip', '')}"
+      %x{ unzip -o #{BASE_DIR.join(zipped_csv_file)} -d /tmp }
+      unzipped_csv = "/tmp/#{zipped_csv_file.gsub('.zip', '')}"
       import_searchable_organizations_from_csv(unzipped_csv)
     end
 
@@ -31,6 +51,10 @@ module Organizations
           end
         end
       end
+    end
+
+    def execute_sql(sql)
+      ActiveRecord::Base.connection.execute(sql)
     end
   end
 end
