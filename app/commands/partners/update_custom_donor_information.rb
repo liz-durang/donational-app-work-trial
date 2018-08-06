@@ -4,7 +4,7 @@ module Partners
       model :donor
       model :partner
       hash :responses do
-        string :*, max_length: 255, strip: true, strict: true
+        string :*, max_length: 255, strip: true, strict: true, empty: true
       end
     end
 

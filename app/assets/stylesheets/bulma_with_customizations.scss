@@ -195,3 +195,15 @@ select.greyColor option:first-child {
 select.greyColor option:not(:first-child) {
   color: black;
 }
+
+.field-with-errors {
+  border-color: red;
+}
+
+.display-when-errors {
+  display: none
+}
+
+.field-with-errors .display-when-errors {
+  display: block
+}
