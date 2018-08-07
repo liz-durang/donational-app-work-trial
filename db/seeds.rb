@@ -38,7 +38,7 @@ end
 
 Organizations::CreateOrUpdateOrganizationsFromGoogleSheets.run
 
-Organizations::CreateOrUpdateTaxExemptOrganizationsFromCSV.run
+Organizations::CreateOrUpdateTaxExemptOrganizationsFromCSV.run(files: ['small_sample_for_testing.csv.zip'])
 
 def create_portfolio_with_charities(charity_eins)
   Portfolio.create!.tap do |portfolio|

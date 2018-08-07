@@ -3,5 +3,13 @@ class SearchableOrganization < ApplicationRecord
 
   self.primary_key = 'ein'
 
-  pg_search_scope :search_for, against: :name
+  pg_search_scope :search_for,
+    against: :name,
+    using: {
+      tsearch: {
+        prefix: true,
+        dictionary: 'english',
+        tsvector_column: 'tsv'
+      }
+    }
 end
