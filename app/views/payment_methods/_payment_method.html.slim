@@ -21,10 +21,8 @@
             input.input disabled=true value=masked_card_number(last4: payment_method.last4)
             span.icon.is-left.is-small: i.fa.fa-credit-card
 
-      .column
-        .field.has-text-right
-          .label &nbsp;
-          a.button.is-warning data-accordion-trigger='update-card' Use a different card
+    .field.has-text-right
+      a.button.is-warning data-accordion-trigger='update-card' Use a different card
 
   .is-hidden data-accordion-panel-for='update-card'
     = render 'payment_methods/form'

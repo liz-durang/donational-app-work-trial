@@ -17,3 +17,7 @@ $family-primary: $family-sans-serif;
 .StripeElement--invalid {
   border-color: #fa755a;
 }
+
+.StripeElement.no-padding {
+  padding: 0
+}
