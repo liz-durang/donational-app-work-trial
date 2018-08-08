@@ -25,6 +25,10 @@ gem 'enumerize', '~> 2.1'
 gem 'commonmarker', '~> 0.17.9'
 gem 'premailer-rails'
 
+# Jobs
+gem 'sidekiq'
+gem 'sidekiq-scheduler'
+
 # Authentication
 gem 'omniauth'
 gem 'omniauth-auth0'
