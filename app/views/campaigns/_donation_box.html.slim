@@ -17,8 +17,9 @@
           .control.has-icons-left.is-expanded
             = f.number_field :amount_dollars,
               class: %w(input is-medium),
-              data: { target: 'radio-select.output', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection' }
+              data: { target: 'radio-select.output wizard.required_field_0', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection' }
             span.icon.is-left $
+            span.help.display-when-errors This field is required
       .field
         label.label Donation frequency
         .field.is-grouped
@@ -48,13 +49,17 @@
           .field
             .control.has-icons-left
               = icon_tag('fas fa-user')
-              = f.text_field :first_name, class: :input
+              = f.text_field :first_name, class: :input, data: { target: 'wizard.required_field_1' }
+              span.help.display-when-errors This field is required
       .field.is-horizontal
         .field-label.is-normal
           label.label Last name
         .field-body
           .field
-            .control = f.text_field :last_name, class: :input
+            .control.has-icons-left
+              = icon_tag('fas fa-user')
+              = f.text_field :last_name, class: :input, data: { target: 'wizard.required_field_1' }
+              span.help.display-when-errors This field is required
       .field.is-horizontal
         .field-label.is-normal
           label.label Email
@@ -62,7 +67,8 @@
           .field
             .control.has-icons-left
               = icon_tag('fas fa-envelope')
-              = f.email_field :email, class: :input
+              = f.email_field :email, class: :input, data: { target: 'wizard.required_field_1' }
+              span.help.display-when-errors This field is required
     .wizard-card-footer
       a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
   fieldset.wizard-card data-target='wizard.step'
@@ -90,10 +96,12 @@
                 .level.is-mobile
                   .level-left
                     .label
-                      .span.icon = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}"
+                      .span.icon = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}", data: { action: 'wizard#selectPortfolio' }
                       = mp.name
                   .level-right
                     .help = pluralize(mp.size, 'charity')
+        = f.hidden_field :portfolio_selected, data: { target: "wizard.portfolioSelected wizard.required_field_3" }
+        span.help.display-when-errors This field is required
     .wizard-card-footer
       a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
   fieldset.wizard-card data-target='wizard.step'

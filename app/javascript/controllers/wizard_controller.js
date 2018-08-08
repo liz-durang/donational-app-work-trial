@@ -1,7 +1,7 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-  static targets = [ "step" ]
+  static targets = [ "step", "portfolioSelected" ]
 
   initialize() {
     this.showStep(0)
@@ -9,8 +9,11 @@ export default class extends Controller {
 
   next() {
     event.preventDefault();
-    this.showStep(this.index + 1)
-    return false;
+    this.validateRequiredFields()
+    if (this.valid) {
+      this.showStep(this.index + 1)
+      return false;
+    }
   }
 
   previous() {
@@ -25,6 +28,10 @@ export default class extends Controller {
     return false;
   }
 
+  selectPortfolio() {
+    this.portfolioSelectedTarget.value = true.toString()
+  }
+
   private
 
   showStep(index) {
@@ -32,5 +39,28 @@ export default class extends Controller {
     this.stepTargets.forEach((el, i) => {
       el.classList.toggle("is-hidden", index !== i)
     })
+  }
+
+  validateRequiredFields() {
+    let anyEmpty = false
+    let required_field = "required_field_" + this.index;
+    this.targets.findAll(required_field).forEach((element) => {
+      let isEmpty = element.value === ""
+      element.classList.toggle("field-with-errors", isEmpty)
+      element.parentElement.classList.toggle("field-with-errors", isEmpty)
+
+      if (isEmpty) {
+        anyEmpty = isEmpty
+      }
+    })
+    this.valid = !anyEmpty
+  }
+
+  get valid() {
+    return this.data.valid
+  }
+
+  set valid(value) {
+    this.data.valid = value
   }
 }
