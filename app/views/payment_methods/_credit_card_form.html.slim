@@ -8,20 +8,27 @@ p.control.has-icons-left
 p.control.has-icons-left
   input.input.StripeElement id="billing_address" type="text" placeholder="Billing address"
   span.icon.is-left.is-small: i.fa.fa-address-card
-.columns
-  .column
-    p.control.has-icons-left
-      input.input.StripeElement id="city" type="text" placeholder="City"
-      span.icon.is-left.is-small: i.fa.fa-building
-  .column
-    p.control.has-icons-left
-      = select_tag "state", options_for_select(Constants::GetUsStates.call.map { |state| [state[0], state[1]] }), { class: 'input StripeElement no-padding control greyColor noValue', include_blank: 'State' }
-      span.icon.is-left.is-small: i.fa.fa-university
-  .column
-    p.control.has-icons-left
-      = select_tag "country", options_for_select(Constants::GetCountries.call.map { |country| [country[0], country[1]] }), { class: 'input StripeElement no-padding control greyColor noValue', include_blank: 'Country' }
-      span.icon.is-left.is-small: i.fa.fa-globe
-
+.field data-controller="payment-method"
+  .columns style="margin-bottom: 0"
+    .column style="padding-bottom: 0"
+      p.control.has-icons-left
+        input.input.StripeElement id="city" type="text" placeholder="City"
+        span.icon.is-left.is-small: i.fa.fa-building
+    .column style="padding-bottom: 0"
+      p.control.has-icons-left
+        = select_tag "country",
+          options_for_select(Constants::GetCountries.call.map { |country| [country[0], country[1]] }, 'US'),
+          class: 'input StripeElement no-padding control',
+          data: { target: 'payment-method.country', action: 'payment-method#displayState' }
+        span.icon.is-left.is-small: i.fa.fa-globe
+  p.control.has-icons-left data-target='payment-method.selectState'
+    = select_tag "selectState", options_for_select(Constants::GetUsStates.call.map { |state| [state[0], state[1]] }),
+      class: 'input StripeElement no-padding control greyColor noValue',
+      include_blank: 'State'
+    span.icon.is-left.is-small: i.fa.fa-university
+  p.control.has-icons-left.is-hidden data-target='payment-method.inputState'
+    input.input.StripeElement id="inputState" type="text" placeholder="State"
+    span.icon.is-left.is-small: i.fa.fa-university
 
 javascript:
   var stripe = Stripe("#{ENV.fetch('STRIPE_PUBLIC_KEY')}");
@@ -54,7 +61,7 @@ javascript:
       name: document.getElementById('cardholder_name').value,
       address_line1: document.getElementById('billing_address').value,
       address_city: document.getElementById('city').value,
-      address_state: document.getElementById('state').value,
+      address_state: document.getElementById('selectState').value || document.getElementById('inputState').value,
       address_country: document.getElementById('country').value
     }
     stripe.createToken(card, tokenData).then(function(result) {
