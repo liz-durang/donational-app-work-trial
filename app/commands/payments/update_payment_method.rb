@@ -25,7 +25,12 @@ module Payments
           donor: donor,
           payment_processor_customer_id: customer[:id],
           name_on_card: outcome.result[:name_on_card],
-          last4: outcome.result[:last4]
+          last4: outcome.result[:last4],
+          billing_address: outcome.result[:billing_address],
+          address_city: outcome.result[:address_city],
+          address_state: outcome.result[:address_state],
+          address_country: outcome.result[:address_country],
+          address_zip_code: outcome.result[:address_zip_code]
         )
       end
 

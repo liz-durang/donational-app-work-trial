@@ -5,6 +5,23 @@ label.label Card Details
 p.control.has-icons-left
   input.input.StripeElement id="cardholder_name" type="text" placeholder="Cardholder name"
   span.icon.is-left.is-small: i.fa.fa-user
+p.control.has-icons-left
+  input.input.StripeElement id="billing_address" type="text" placeholder="Billing address"
+  span.icon.is-left.is-small: i.fa.fa-address-card
+.columns
+  .column
+    p.control.has-icons-left
+      input.input.StripeElement id="city" type="text" placeholder="City"
+      span.icon.is-left.is-small: i.fa.fa-building
+  .column
+    p.control.has-icons-left
+      = select_tag "state", options_for_select(Constants::GetUsStates.call.map { |state| [state[0], state[1]] }), { class: 'input StripeElement no-padding control greyColor noValue', include_blank: 'State' }
+      span.icon.is-left.is-small: i.fa.fa-university
+  .column
+    p.control.has-icons-left
+      = select_tag "country", options_for_select(Constants::GetCountries.call.map { |country| [country[0], country[1]] }), { class: 'input StripeElement no-padding control greyColor noValue', include_blank: 'Country' }
+      span.icon.is-left.is-small: i.fa.fa-globe
+
 
 javascript:
   var stripe = Stripe("#{ENV.fetch('STRIPE_PUBLIC_KEY')}");
@@ -18,7 +35,7 @@ javascript:
     }
   };
 
-  var card = elements.create('card', { style: style, hidePostalCode: true });
+  var card = elements.create('card', { style: style });
   card.mount('#card-element');
 
   card.addEventListener('change', function(event) {
@@ -33,7 +50,13 @@ javascript:
   var form = document.getElementById('payment-form');
   form.addEventListener('submit', function(event) {
     event.preventDefault();
-    var tokenData = { name: document.getElementById('cardholder_name').value }
+    var tokenData = {
+      name: document.getElementById('cardholder_name').value,
+      address_line1: document.getElementById('billing_address').value,
+      address_city: document.getElementById('city').value,
+      address_state: document.getElementById('state').value,
+      address_country: document.getElementById('country').value
+    }
     stripe.createToken(card, tokenData).then(function(result) {
       if (result.error) {
         var errorElement = document.getElementById('card-errors');
@@ -43,4 +66,13 @@ javascript:
         form.submit();
       }
     });
+  });
+
+  $('select').on('change', function() {
+    var $this = $(this);
+    if (!$this.val()) {
+        $this.addClass('noValue');
+    } else {
+        $this.removeClass('noValue');
+    }
   });
