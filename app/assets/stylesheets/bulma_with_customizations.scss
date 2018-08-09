@@ -207,3 +207,7 @@ select.greyColor option:not(:first-child) {
 .field-with-errors .display-when-errors {
   display: block
 }
+
+.new-line {
+  white-space: pre-wrap;
+}
