@@ -16,7 +16,8 @@ section.section
 
 section.embossed.section
   .container
-    = display_flash_messages
+    .new-line = display_flash_messages
+    br
     .box.flat-card style='background: #fafafa'
       = form_with model: @view_model.donor, url: @view_model.accounts_path, local: true, method: :put do |f|
         .columns.is-vcentered
@@ -64,3 +65,24 @@ section.embossed.section
             .content.has-text-centered
               p = link_to new_contribution_path, class: 'button is-primary' do
                 | Donate now
+    - if @view_model.partner_affiliation.present?
+      .box.flat-card style='background: #fafafa'
+        .columns.is-vcentered
+          .column.has-text-centered
+            p: span.far.fa-address-book.fa-2x
+            h3 About you
+            br
+          .column style='background: #fff;'
+            = form_for :donor_questions, url: @view_model.accounts_path, local: true, method: :put do |f|
+              - @view_model.partner_affiliation.partner.donor_questions.each do |donor_question|
+                .field
+                  = f.label donor_question.name do
+                    .label = donor_question.title
+                    - if donor_question.type == 'select'
+                      .select = f.collection_select donor_question.name, donor_question.options.zip(donor_question.options), :first, :last,
+                                selected: @view_model.donor_responses["#{donor_question.name}"] || @view_model.partner_affiliation.custom_donor_info["#{donor_question.name}"]
+                    - else
+                      = f.text_field donor_question.name, class: :input,
+                        value: @view_model.donor_responses["#{donor_question.name}"] || @view_model.partner_affiliation.custom_donor_info["#{donor_question.name}"]
+              p.has-text-right
+                = f.submit "Save", class: %w(button is-primary), data: { action: 'donor_question#validateRequiredFields' }
