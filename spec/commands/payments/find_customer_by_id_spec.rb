@@ -26,7 +26,7 @@ RSpec.describe Payments::FindCustomerById do
     end
   end
 
-  context 'when the pandapay response is unsuccessful' do
+  context 'when the Stripe response is unsuccessful' do
     it 'fails with errors' do
       command = Payments::FindCustomerById.run(customer_id: 'incorrect_cus_id')
 
