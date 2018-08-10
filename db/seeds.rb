@@ -5,6 +5,7 @@
 one_for_the_world = Partner.find_or_create_by(name: 'One For The World') do |p|
   p.website_url = 'http://1fortheworld.org'
   p.platform_fee_percentage = 0.02
+  p.payment_processor_account_id = 'acct_1Cq2tLDFX5Cbjrb9'
   p.donor_questions_schema = {
     questions: [
       {
@@ -18,7 +19,7 @@ one_for_the_world = Partner.find_or_create_by(name: 'One For The World') do |p|
         name: 'city',
         title: 'Which city will you be living in when your donation commences?',
         type: 'text',
-        required: false
+        required: true
       }
     ]
   }
