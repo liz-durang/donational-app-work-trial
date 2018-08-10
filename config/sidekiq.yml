@@ -1,0 +1,5 @@
+schedule:
+  ProcessScheduledContributions:
+    every: '10s'
+  SendContributionReminders:
+    every: '10m'

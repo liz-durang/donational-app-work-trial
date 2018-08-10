@@ -24,11 +24,6 @@ class ContributionsController < ApplicationController
     pipeline.chain { update_recurring_contribution! }
     pipeline.chain { schedule_first_contribution_immediately! }
 
-    new_unprocessed_contributions = Contributions::GetUnprocessedContributions.call(donor: current_donor)
-    new_unprocessed_contributions.each do |c|
-      pipeline.chain { Contributions::ProcessContribution.run(contribution: c) }
-    end
-
     outcome = pipeline.run
 
     if outcome.success?

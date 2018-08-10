@@ -4,12 +4,11 @@ module Contributions
       @relation = relation
     end
 
-    def call(donor:, scheduled_after: Time.new(0))
+    def call(scheduled_after: Time.new(0), scheduled_before: Float::INFINITY)
       @relation.where(
         processed_at: nil,
         failed_at: nil,
-        donor: donor,
-        scheduled_at: scheduled_after..Float::INFINITY
+        scheduled_at: scheduled_after..scheduled_before
       )
     end
   end
