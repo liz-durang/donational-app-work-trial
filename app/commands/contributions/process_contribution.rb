@@ -32,6 +32,7 @@ module Contributions
         if command.success?
           contribution.update(receipt: command.result, processed_at: Time.zone.now)
         else
+          Appsignal.set_error(command.errors.to_json, contribution_id: contribution.id)
           contribution.update(receipt: command.errors.to_json, failed_at: Time.zone.now)
         end
       end
