@@ -20,6 +20,8 @@ module Contributions
 
     private
 
+    class ChargeCustomerError < RuntimeError; end
+
     def charge_customer_and_update_receipt!
       Payments::ChargeCustomer.run(
         customer_id: payment_method.payment_processor_customer_id,
@@ -32,7 +34,7 @@ module Contributions
         if command.success?
           contribution.update(receipt: command.result, processed_at: Time.zone.now)
         else
-          Appsignal.set_error(command.errors.to_json, contribution_id: contribution.id)
+          Appsignal.set_error(ChargeCustomerError.new(command.errors.to_json), contribution_id: contribution.id)
           contribution.update(receipt: command.errors.to_json, failed_at: Time.zone.now)
         end
       end
