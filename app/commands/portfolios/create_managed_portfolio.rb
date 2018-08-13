@@ -4,8 +4,11 @@ module Portfolios
       model :partner
       model :donor
       string :title
-      string :description
       array :charities
+    end
+
+    optional do
+      string :description
     end
 
     def execute
@@ -44,7 +47,7 @@ module Portfolios
       ManagedPortfolio.create(
         partner: partner,
         name: title,
-        description: description,
+        description: description || '',
         portfolio: @portfolio
       )
     end

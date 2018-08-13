@@ -25,20 +25,5 @@
 
 - if @organizations.empty?
   h3.subtitle
+  h3.subtitle
     | We didn't find any results for the search
-
-javascript:
-  function addSearchedCharity(charityName, charityEIN) {
-    var table = document.getElementById("charities-table");
-    var row = table.insertRow(table.getElementsByTagName("tr").length);
-    var cellName = row.insertCell(0);
-    var cellEIN = row.insertCell(1);
-    var cellRemove = row.insertCell(2);
-    cellName.innerHTML = charityName;
-    cellEIN.innerHTML = charityEIN;
-    cellRemove.innerHTML = "Remove";
-    cellRemove.style.color = "#8600ED";
-    cellRemove.addEventListener("click", function() {
-      document.getElementById("charities-table").deleteRow(cellRemove.parentElement.rowIndex);
-    });
-  }
