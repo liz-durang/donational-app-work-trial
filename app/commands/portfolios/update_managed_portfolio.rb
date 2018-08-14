@@ -4,8 +4,11 @@ module Portfolios
       model :managed_portfolio
       model :donor
       string :title
-      string :description
       array :charities
+    end
+
+    optional do
+      string :description
     end
 
     def execute
@@ -48,7 +51,7 @@ module Portfolios
     def update_managed_portoflio
       managed_portfolio.update!(
         name: title,
-        description: description,
+        description: description || '',
         portfolio: @portfolio
       )
     end

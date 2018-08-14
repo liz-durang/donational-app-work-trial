@@ -6,6 +6,7 @@ module Portfolios
     end
 
     def execute
+      return if organization_eins.empty?
       new_allocations = adjust_to_ensure_100_percent(
         scaled_existing_allocations + allocations_for_new_organizations
       )

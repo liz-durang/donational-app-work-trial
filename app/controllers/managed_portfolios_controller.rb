@@ -22,7 +22,7 @@ class ManagedPortfoliosController < ApplicationController
       partner: partner,
       donor: current_donor,
       title: params[:title],
-      description: params[:description],
+      description: params[:description].presence,
       charities: organizations
     )
 
@@ -36,7 +36,7 @@ class ManagedPortfoliosController < ApplicationController
       managed_portfolio: managed_portfolio,
       donor: current_donor,
       title: params[:title],
-      description: params[:description],
+      description: params[:description].presence,
       charities: organizations
     )
 
@@ -63,6 +63,6 @@ class ManagedPortfoliosController < ApplicationController
   end
 
   def organizations
-    params[:charities].split('|')
+    params[:charities].split(';')
   end
 end

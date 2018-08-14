@@ -88,13 +88,29 @@ javascript:
     });
   }
 
+
+  function addSearchedCharity(charityName, charityEIN) {
+    var table = document.getElementById("charities-table");
+    var row = table.insertRow(table.getElementsByTagName("tr").length);
+    var cellName = row.insertCell(0);
+    var cellEIN = row.insertCell(1);
+    var cellRemove = row.insertCell(2);
+    cellName.innerHTML = charityName;
+    cellEIN.innerHTML = charityEIN;
+    cellRemove.innerHTML = "Remove";
+    cellRemove.style.color = "#8600ED";
+    cellRemove.addEventListener("click", function() {
+      document.getElementById("charities-table").deleteRow(cellRemove.parentElement.rowIndex);
+    });
+  }
+
   function save() {
     var charities = "";
     var table = document.getElementById("charities-table");
     for (var i = 1; i < table.rows.length; i++) {
       if (table.rows[i].cells.length) {
         charities += table.rows[i].cells[0].textContent.trim() + ",";
-        charities += table.rows[i].cells[1].textContent.trim() + "|";
+        charities += table.rows[i].cells[1].textContent.trim() + ";";
       }
     }
     document.getElementById('charities').value = charities;

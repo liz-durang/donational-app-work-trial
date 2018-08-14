@@ -76,7 +76,7 @@ section.hero.is-warning
                         i.fa.fa-angle-down
                   .card-content id="organization_#{organization.id}" class=(index == 0 ? nil : 'is-hidden')
                     .content
-                      p = organization.description
+                      p = organization.why_you_should_care
                       p
                         - if organization.local_impact?
                           span.tag
