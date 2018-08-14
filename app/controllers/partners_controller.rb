@@ -81,7 +81,7 @@ class PartnersController < ApplicationController
       name: params[:name],
       title: params[:title],
       type: params[:type].downcase,
-      options: params[:options].gsub(' ', '').split(','),
+      options: params[:options].gsub(' ,', ',').split(','),
       required: params[:required]
     )
   end
