@@ -14,7 +14,7 @@ module Campaigns
     end
 
     def validate
-      return unless slug_unique?
+      return unless slug_already_used?
 
       add_error(:campaign, :slug_already_used, 'The slug has already been taken')
     end
@@ -23,7 +23,7 @@ module Campaigns
       campaign.update!(
         title: title,
         description: description,
-        slug: slug,
+        slug: normalized_slug,
         default_contribution_amounts: default_contribution_amounts,
       )
       campaign.banner_image.attach(banner_image) if banner_image.present?
@@ -33,8 +33,14 @@ module Campaigns
 
     private
 
-    def slug_unique?
-      Partners::GetCampaignBySlug.call(slug: slug).present? && campaign.slug != slug
+    def slug_already_used?
+      return false if campaign.slug == normalized_slug
+
+      Partners::GetCampaignBySlug.call(slug: normalized_slug).present?
+    end
+
+    def normalized_slug
+      slug.parameterize
     end
   end
 end
