@@ -12,7 +12,7 @@ one_for_the_world = Partner.find_or_create_by(name: 'One For The World') do |p|
         name: 'school',
         title: 'What organization/school are you affiliated with?',
         type: 'select',
-        options: ['Harvard', 'Wharton', 'Other'],
+        options: ['Harvard', 'The Wharton School', 'Other'],
         required: true
       },
       {
