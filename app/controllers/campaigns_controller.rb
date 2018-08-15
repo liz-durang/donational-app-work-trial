@@ -21,6 +21,8 @@ class CampaignsController < ApplicationController
       campaign_title: campaign.title,
       campaign_slug: campaign.slug,
       campaign_description: campaign.description,
+      contribution_amount_help_text: campaign.contribution_amount_help_text,
+      donation_frequencies: available_donation_frequencies,
       default_contribution_amounts: campaign.default_contribution_amounts,
       campaign_contributions_path: campaign_contributions_path(campaign.slug),
       new_campaign_contribution: new_campaign_contribution,
@@ -56,12 +58,14 @@ class CampaignsController < ApplicationController
       description: params[:description],
       slug: params[:slug],
       banner_image: params[:banner_image],
-      default_contribution_amounts: default_contribution_amounts
+      default_contribution_amounts: default_contribution_amounts,
+      contribution_amount_help_text: params[:contribution_amount_help_text].presence,
+      allow_one_time_contributions: params[:allow_one_time_contributions]
     )
 
     flash[:success] = "Campaign created successfully." if command.success?
     flash[:error] = command.errors.message_list.join('. ') unless command.success?
-    redirect_to new_partner_campaign_path(partner)
+    redirect_to partner_campaigns_path(partner)
   end
 
   def update
@@ -71,7 +75,9 @@ class CampaignsController < ApplicationController
       description: params[:description],
       slug: params[:slug],
       banner_image: params[:banner_image],
-      default_contribution_amounts: default_contribution_amounts
+      default_contribution_amounts: default_contribution_amounts,
+      contribution_amount_help_text: params[:contribution_amount_help_text].presence,
+      allow_one_time_contributions: params[:allow_one_time_contributions]
     )
 
     flash[:success] = "Campaign updated successfully." if command.success?
@@ -118,6 +124,12 @@ class CampaignsController < ApplicationController
       last_name: current_donor.try(:last_name),
       email: current_donor.try(:email)
     )
+  end
+
+  def available_donation_frequencies
+    return RecurringContribution.frequency.options if campaign.allow_one_time_contributions?
+
+    RecurringContribution.frequency.options.reject { |k,v| v == 'once' }
   end
 
   def campaign
