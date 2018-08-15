@@ -121,7 +121,7 @@ class CampaignContributionsController < ApplicationController
   end
 
   def campaign
-    @campaign ||= Partners::GetCampaignBySlug.call(slug: params[:campaign_slug])
+    @campaign ||= Partners::GetCampaignBySlug.call(slug: params[:campaign_slug].parameterize)
   end
 
   def partner

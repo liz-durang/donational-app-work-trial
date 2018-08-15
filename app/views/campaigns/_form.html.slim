@@ -1,0 +1,43 @@
+.columns
+  .column.is-6
+    label.field
+      .label Title
+      .control
+        = f.text_field :title, class: :input, value: @view_model.campaign.title
+  .column.is-6
+    label.field
+      .label Slug
+      .control
+        = f.text_field :slug, class: :input, placeholder: 'i.e. 1ftw-wharton', value: @view_model.campaign.slug
+.field
+  .label Description
+  .control
+    = f.text_area :description, class: :textarea, rows: 10, value: @view_model.campaign.description
+.field
+  .label Default contribution amounts
+  .control
+    = f.text_field :default_contribution_amounts, class: :input, placeholder: 'i.e. 10, 20, 50, 100', value: @view_model.default_contribution_amounts
+  p.help Please, enter values separated by comma.
+.columns
+  .column.is-6
+    label.field
+      .label Donation hint text
+      .control
+        = f.text_field :contribution_amount_help_text, class: :input, placeholder: 'e.g. Our average donor gives $100 monthly (1% of their income)', value: @view_model.campaign.contribution_amount_help_text
+      p.help Use this to educate donors about suggested amounts
+  .column.is-6
+    label.field
+      .label Allow one-time donations
+      .control
+        = f.check_box :allow_one_time_contributions, class: :checkbox, checked: @view_model.campaign.allow_one_time_contributions
+      p.help Uncheck this if you only want to allow recurring donations
+.columns
+  .column
+    = render 'shared/image_upload_field',
+        attachment: @view_model.campaign.banner_image,
+        field: :banner_image,
+        thumbnail_preview_size: '400x200',
+        form: f
+.field.has-text-centered.content
+  .control.has-text-centered
+    = f.submit class: %w(button is-primary is-medium)

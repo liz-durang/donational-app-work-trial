@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_13_185606) do
+ActiveRecord::Schema.define(version: 2018_08_15_013407) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -64,6 +64,8 @@ ActiveRecord::Schema.define(version: 2018_08_13_185606) do
     t.string "default_contribution_amounts", array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "contribution_amount_help_text"
+    t.boolean "allow_one_time_contributions", default: true, null: false
     t.index ["partner_id"], name: "index_campaigns_on_partner_id"
   end
 
@@ -225,10 +227,6 @@ ActiveRecord::Schema.define(version: 2018_08_13_185606) do
     t.string "name_on_card"
     t.string "last4"
     t.datetime "deactivated_at"
-    t.string "billing_address"
-    t.string "address_city"
-    t.string "address_state"
-    t.string "address_country"
     t.string "address_zip_code"
     t.index ["deactivated_at"], name: "index_payment_methods_on_deactivated_at"
     t.index ["donor_id"], name: "index_payment_methods_on_donor_id"

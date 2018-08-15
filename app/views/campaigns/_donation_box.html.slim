@@ -20,11 +20,12 @@
               data: { target: 'radio-select.output wizard.required_field_0', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection' }
             span.icon.is-left $
             span.help.display-when-errors This field is required
+        p.help = @view_model.contribution_amount_help_text
       .field
         label.label Donation frequency
         .field.is-grouped
           .control
-            .select = f.collection_select(:frequency, RecurringContribution.frequency.options, :last, :first)
+            .select = f.collection_select(:frequency, @view_model.donation_frequencies, :last, :first)
           .control
             span.input.is-static starting
           .control data-accordion-panel-for="hide-when-show-date-is-triggered"
@@ -109,9 +110,10 @@
       a.icon data-action="wizard#previous" &larr;
       h3.wizard-card-title Payment
       = render 'wizard_nav', step: 5, of: 5
-    .wizard-card-content = render 'payment_methods/credit_card_form'
+    .wizard-card-content
+      = render 'payment_methods/credit_card_form'
     .wizard-card-footer
-      = f.submit class: %w(button is-primary is-fullwidth), value: 'Donate'
+      = f.submit class: %w(button is-primary is-fullwidth), value: 'Donate', data: { 'disable-with': 'Donate' }
 
 p.has-text-centered.help
   | We use smart and secure online payments to ensure that your donations are simple, secure, and avoid fees.

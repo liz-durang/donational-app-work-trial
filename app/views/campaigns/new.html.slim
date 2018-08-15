@@ -22,36 +22,4 @@ section.embossed.section
       .column.is-8
         .box
           = form_with url: partner_campaigns_path, local: true, method: :post, class: 'form' do |f|
-            .columns
-              .column.is-6
-                label.field
-                  .label Title
-                  .control
-                    = f.text_field :title, class: :input
-              .column.is-6
-                label.field
-                  .label Description
-                  .control
-                    = f.text_area :description, class: :input
-            .columns
-              .column.is-6
-                label.field
-                  .label Slug
-                  .control
-                    = f.text_field :slug, class: :input, placeholder: 'i.e. 1ftw-wharton'
-              .column.is-6
-                label.field
-                  .label Default contribution amounts
-                  .control
-                    = f.text_field :default_contribution_amounts, class: :input, placeholder: 'i.e. 10, 20, 50, 100'
-                  p.help Please, enter values separated by comma.
-            .columns
-              .column
-                = render 'shared/image_upload_field',
-                    attachment: @view_model.campaign.banner_image,
-                    field: :banner_image,
-                    thumbnail_preview_size: '400x200',
-                    form: f
-            .field.has-text-centered.content
-              .control.has-text-centered
-                = f.submit "Save", class: %w(button is-primary is-medium)
+            = render 'form', f: f

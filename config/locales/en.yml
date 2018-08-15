@@ -37,6 +37,6 @@ en:
     recurring_contribution:
       frequency:
         monthly: 'Monthly'
-        quarterly: 'Every quarter'
+        quarterly: 'Quarterly'
         annually: 'Yearly'
         once: 'One-time'

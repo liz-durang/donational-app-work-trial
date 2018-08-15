@@ -45,12 +45,16 @@ export default class extends Controller {
     let anyEmpty = false
     let required_field = "required_field_" + this.index;
     this.targets.findAll(required_field).forEach((element) => {
-      let isEmpty = element.value === ""
-      element.classList.toggle("field-with-errors", isEmpty)
-      element.parentElement.classList.toggle("field-with-errors", isEmpty)
-
-      if (isEmpty) {
-        anyEmpty = isEmpty
+      if (element.tagName === "INPUT") {
+        let isEmpty = element.value === ""
+        element.classList.toggle("is-danger", isEmpty)
+        element.parentElement.classList.toggle("field-with-errors", isEmpty)
+        anyEmpty = anyEmpty || isEmpty
+      } else if (element.tagName === "SELECT") {
+        let isEmpty = element[element.selectedIndex].value === ""
+        element.parentElement.classList.toggle("is-danger", isEmpty)
+        element.parentElement.classList.toggle("field-with-errors", isEmpty)
+        anyEmpty = anyEmpty || isEmpty
       }
     })
     this.valid = !anyEmpty
