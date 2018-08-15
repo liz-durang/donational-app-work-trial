@@ -40,6 +40,7 @@ javascript:
       if (result.error) {
         var errorElement = document.getElementById('card-errors');
         errorElement.textContent = result.error.message;
+        document.querySelector('#payment-form input[type=submit]').disabled = false;
       } else {
         document.getElementById('payment_token').value = result.token.id;
         form.submit();
