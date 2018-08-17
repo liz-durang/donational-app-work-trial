@@ -45,6 +45,14 @@ class ManagedPortfoliosController < ApplicationController
     redirect_to edit_partner_managed_portfolio_path(partner, managed_portfolio)
   end
 
+  def order
+    ManagedPortfolio.transaction do
+      params[:managed_portfolio_ids_in_display_order].each_with_index do |id, index|
+        ManagedPortfolio.where(id: id).update(display_order: index)
+      end
+    end
+  end
+
   private
 
   def ensure_donor_has_permission!

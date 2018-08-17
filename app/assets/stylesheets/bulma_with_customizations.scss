@@ -204,3 +204,11 @@ select.greyColor option:not(:first-child) {
 .new-line {
   white-space: pre-wrap;
 }
+
+[draggable] .icon {
+  cursor: move;
+}
+
+.is-dragging {
+  color: $primary;
+}

@@ -23,27 +23,19 @@ section.section.embossed
     = display_flash_messages
     .columns.is-centered
       .column.is-8
-        .box
-          table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
+        .box = form_with url: order_partner_managed_portfolios_path, method: :put, class: 'form' do |f|
+          table.table.is-hoverable.is-fullwidth.has-cells-centered
             tr
               td
-                p
-                  strong>
-                    | Title
-              td
-                p
-                  strong>
-                    | Description
-              td
-                p
-                  strong>
-                    | Charities
-              td
-                p
-                  strong>
-                    | Action
+              th Title
+              th Description
+              th Charities
+              th Action
             - @view_model.partner.managed_portfolios.each do |managed_portfolio|
-              tr data-accordion-trigger="managed_portfolio-#{managed_portfolio.id}"
+              tr draggable="true" data-drag-item-id=managed_portfolio.id data-controller="drag-item" data-action="dragstart->drag-item#dragstart dragover->drag-item#dragover dragenter->drag-item#dragenter drop->drag-item#drop dragend->drag-item#dragend"
+                = f.hidden_field "managed_portfolio_ids_in_display_order[]", value: managed_portfolio.id
+                td title="Drag to adjust the display order"
+                  = icon_tag('fas fa-ellipsis-h')
                 td
                   p
                     = managed_portfolio.name
@@ -56,13 +48,6 @@ section.section.embossed
                       = pluralize(Allocation.active(portfolio: managed_portfolio.portfolio).count, 'charity')
                 td
                   p = link_to 'Edit', edit_partner_managed_portfolio_path(@view_model.partner, managed_portfolio)
-              - Allocation.active(portfolio: managed_portfolio.portfolio).each do |allocation|
-                tr.is-hidden data-accordion-panel-for="managed_portfolio-#{managed_portfolio.id}"
-                  td &nbsp;
-                  td &nbsp;
-                  td
-                    em => allocation.organization.name
-                  td &nbsp;
           .field.has-text-centered.content
             .control.has-text-centered
               = link_to "Create Portfolio", new_partner_managed_portfolio_path(@view_model.partner), class: %w(button is-primary)
