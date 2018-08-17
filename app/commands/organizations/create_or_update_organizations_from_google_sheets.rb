@@ -8,7 +8,7 @@ module Organizations
         puts row['name']
         Organization
           .find_or_create_by(ein: row['ein'])
-          .update(
+          .update!(
             ein: row['ein'],
             name: row['name'],
             cause_area: row['cause_area'],
@@ -20,6 +20,8 @@ module Organizations
             annual_report_url: row['annual_report_url'],
             financials_url: row['financials_url'],
             form_990_url: row['form_990_url'],
+            routing_organization_name: row['routing_organization_name'],
+            program_restriction: row['program_restriction'],
             recommended_by: {
               give_well: row['recommended_by_givewell'],
               lycs: row['recommended_by_lycs'],
