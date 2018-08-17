@@ -33,7 +33,6 @@ module Payments
             amount: donation_amount_cents + tips_cents,
             application_fee: platform_fee_cents + tips_cents,
             currency: 'usd',
-            receipt_email: email
           },
           stripe_account: account_id
         )
