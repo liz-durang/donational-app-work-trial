@@ -1,21 +1,26 @@
 - if logged_in?
   .navbar-item.has-dropdown.is-hoverable
     a.navbar-link
-      => icon_tag('fa-user')
+      = icon_tag('fa-user')
+      | &nbsp;
       = current_donor.name
-    .navbar-dropdown
+    .navbar-dropdown.is-right
       a.navbar-item href=edit_accounts_path
-        => icon_tag('fa-user')
+        = icon_tag('fa-user')
+        | &nbsp;
         | Your Account
       a.navbar-item href=portfolio_path
-        => icon_tag('fa-address-book')
+        = icon_tag('fa-address-book')
+        | &nbsp;
         | Your Portfolio
       a.navbar-item href=new_contribution_path
         = icon_tag('fa-heart')
+        | &nbsp;
         | Donate
       - if current_donor.partners.any?
         a.navbar-item href=edit_partner_path(current_donor.partners.first)
           = icon_tag('fa-handshake')
+          | &nbsp;
           | Partner Account
       .navbar-divider
       = sign_out_link(css_class: 'navbar-item')

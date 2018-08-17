@@ -16,7 +16,7 @@ module ApplicationHelper
       data: { confirm: 'Are you sure you want to sign out?' },
       class: css_class
     ) do
-      icon_tag('fa-sign-out-alt') + ' Sign out'
+      icon_tag('fa-sign-out-alt') + '&nbsp;'.html_safe + 'Sign out'
     end
   end
 

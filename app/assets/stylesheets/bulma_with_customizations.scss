@@ -16,9 +16,6 @@ $footer-background-color: none;
 // Bulma
 @import "bulma";
 
-.container {
-  max-width: $desktop + (2 * $gap);
-}
 html {
   height: 100vh;
 }
