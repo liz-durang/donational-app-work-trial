@@ -62,97 +62,30 @@ section.section
   .container
     p.subtitle.is-spaced.has-text-centered
       ' Donor Questions
-      .box
-        table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
-          tr
-            td
-              p
-                strong>
-                  | Name
-            td
-              p
-                strong>
-                  | Title
-            td
-              p
-                strong>
-                  | Type
-            td
-              p
-                strong>
-                  | Options
-            td
-              p
-                strong>
-                  | Required
-            td colspan=2
-              p
-                strong>
-                  | Actions
-          - @view_model.partner.donor_questions.each do |question|
+      .box = form_with url: @view_model.partner_path, scope: 'donor_questions', local: true, method: :put, class: 'form' do |f|
+        table.table.is-hoverable.is-fullwidth
+          thead
             tr
-              td
-                p
-                  = question.name
-              td
-                p
-                  = question.title
-              td
-                p
-                  = question.type
-              td
-                p
-                  - if question.type == 'select'
-                    = question.options.join(', ')
-                  - else
-                    = question.options
-              td
-                p
-                  = question.required
-              td
-                p
-                  = link_to 'Edit', 'javascript:;', class: 'btn-edit', onClick: "fillForm('#{question.name}', '#{question.title}', '#{question.type}', '#{question.options}', '#{question.required}');"
-              td
-                p
-                  = link_to 'Delete', partner_path(question: question.name), method: :put, data: { confirm: 'Are you sure you want to delete the question?' }
-
-    .box.flat-card style='background: #fafafa'
-      = form_with url: @view_model.partner_path, local: true, method: :put, class: 'form' do |f|
-        .form
-          .columns
-            .column
-              .field
-                label.control
-                  = f.label :name, class: :label
-                  = f.text_field :name, id: 'input-name', class: :input, placeholder: 'i.e. school'
-            .column
-              .field
-                label.control
-                  = f.label :title, class: :label
-                  = f.text_field :title, id: 'input-title', class: :input, placeholder: 'i.e. What organization/school are you affiliated with?'
-          .columns
-            .column
-              label.control
-                = f.label :type, class: :label
-                .select.control = f.select :type, ['Text', 'Select'], { }, { id: 'input-type', class: :input }
-            .column
-              label.control
-                = f.label :required, class: :label
-                .select.control = f.select :required, [['Yes', true], ['No', false]], { }, { id: 'input-required', class: :input }
-          .field
-            label.control
-              = f.label :options, class: :label
-              = f.text_field :options, id: 'input-options', class: :input, placeholder: 'i.e. Harvard, Wharton, Other'
-              span.help
-                | This field is required only if type is Select. Please enter values separated by comma.
-          p.has-text-right
-            = f.submit "Add question", class: %w(button is-primary)
-
-javascript:
-  function fillForm(name, title, type, options, required) {
-    document.getElementById('input-name').value = name;
-    document.getElementById('input-title').value = title;
-    document.getElementById('input-type').value = type.charAt(0).toUpperCase() + type.slice(1);
-    document.getElementById('input-options').value = options.replace('[', '').replace(']', '').replace(/"/g, '');
-    document.getElementById('input-required').value = required;
-  }
+              th Name
+              th Title
+              th Type
+              th Options
+              th Required
+              th Actions
+          tbody
+            - @view_model.donor_questions_with_blank_new_question.each_with_index do |donor_question, index|
+              tr data-controller='deletable-element' data-delete-element-confirmation='Are you sure you want to delete the question?'
+                = f.fields index.to_s, model: donor_question do |q|
+                  td
+                    = q.text_field :name, class: :input, placeholder: 'eg favorite_color'
+                  td
+                    = q.text_field :title, class: :input, placeholder: 'eg What is your favorite color?'
+                  td
+                    .select.control = q.select :type, [['Text', 'text'], ['Drop-down', 'select']]
+                  td
+                    = q.text_field :options, class: :input, placeholder: 'i.e. Red, Blue, Green, Other'
+                  td
+                    = q.check_box :required, class: :checkbox, checked: donor_question.required
+                  td
+                    a href='javascript:;' data-action='deletable-element#remove' Delete
+        = f.submit class: %w(button is-primary)

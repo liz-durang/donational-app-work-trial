@@ -24,7 +24,19 @@ class Partner < ApplicationRecord
   def donor_questions
     return if donor_questions_schema.nil?
 
-    donor_questions_schema['questions'].map { |q| DonorQuestion.new(q) }
+    donor_questions_schema['questions'].map do |q|
+      DonorQuestion.new(
+        name: q['name'],
+        title: q['title'],
+        type: q['type'],
+        options: q['options'],
+        required: q['required']
+      )
+    end
+  end
+
+  def donor_questions=(questions)
+    donor_questions_schema['questions'] = questions
   end
 
   class DonorQuestion
@@ -32,12 +44,12 @@ class Partner < ApplicationRecord
 
     attr_reader :name, :title, :type, :options, :required
 
-    def initialize(h)
-      @name = h['name']
-      @title = h['title']
-      @type = h['type']
-      @options = h['options']
-      @required = h['required'] || false
+    def initialize(name: nil, title: nil, type: nil, options: nil, required: nil)
+      @name = name
+      @title = title
+      @type = type
+      @options = options || []
+      @required = required || false
     end
   end
 end
