@@ -66,6 +66,7 @@ section.section
         table.table.is-hoverable.is-fullwidth
           thead
             tr
+              th
               th Name
               th Title
               th Type
@@ -74,7 +75,9 @@ section.section
               th Actions
           tbody
             - @view_model.donor_questions_with_blank_new_question.each_with_index do |donor_question, index|
-              tr data-controller='deletable-element' data-delete-element-confirmation='Are you sure you want to delete the question?'
+              tr draggable="true" data-controller='deletable-element drag-item' data-drag-item-id="item-#{index}" data-delete-element-confirmation='Are you sure you want to delete the question?' data-action="dragstart->drag-item#dragstart dragover->drag-item#dragover dragenter->drag-item#dragenter drop->drag-item#drop dragend->drag-item#dragend"
+                td title="Drag to adjust the display order"
+                  .input.is-static = icon_tag('fas fa-ellipsis-h')
                 = f.fields index.to_s, model: donor_question do |q|
                   td
                     = q.text_field :name, class: :input, placeholder: 'eg favorite_color'

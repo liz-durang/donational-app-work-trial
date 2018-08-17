@@ -22,12 +22,20 @@ export default class extends Controller {
     var data = event.dataTransfer.getData("application/drag-key")
     const draggedItem = this.element.parentElement.querySelector(`[data-drag-item-id='${data}']`)
     const positionComparison = this.element.compareDocumentPosition(draggedItem)
-    if ( positionComparison & 4) {
+    if (positionComparison & 4) {
       this.element.insertAdjacentElement('beforebegin', draggedItem);
-    } else if ( positionComparison & 2) {
+    } else if (positionComparison & 2) {
       this.element.insertAdjacentElement('afterend', draggedItem);
     }
-    this.element.closest('form').submit()
+    if (this.element.dataset.autosubmit === "true") {
+      this.submitForm();
+    }
     event.preventDefault()
+  }
+
+  private
+
+  submitForm() {
+    this.element.closest('form').submit()
   }
 }

@@ -32,7 +32,7 @@ section.section.embossed
               th Charities
               th Action
             - @view_model.partner.managed_portfolios.each do |managed_portfolio|
-              tr draggable="true" data-drag-item-id=managed_portfolio.id data-controller="drag-item" data-action="dragstart->drag-item#dragstart dragover->drag-item#dragover dragenter->drag-item#dragenter drop->drag-item#drop dragend->drag-item#dragend"
+              tr draggable="true" data-drag-item-id=managed_portfolio.id data-autosubmit="true" data-controller="drag-item" data-action="dragstart->drag-item#dragstart dragover->drag-item#dragover dragenter->drag-item#dragenter drop->drag-item#drop dragend->drag-item#dragend"
                 = f.hidden_field "managed_portfolio_ids_in_display_order[]", value: managed_portfolio.id
                 td title="Drag to adjust the display order"
                   = icon_tag('fas fa-ellipsis-h')
