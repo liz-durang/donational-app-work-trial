@@ -6,25 +6,27 @@ one_for_the_world = Partner.find_or_create_by(name: 'One For The World') do |p|
   p.website_url = 'http://1fortheworld.org'
   p.platform_fee_percentage = 0.02
   p.payment_processor_account_id = 'acct_1Cq2tLDFX5Cbjrb9'
-  p.donor_questions_schema = {
-    questions: [
-      {
-        name: 'school',
-        title: 'What organization/school are you affiliated with?',
-        type: 'select',
-        options: ['Harvard', 'The Wharton School', 'Other'],
-        required: true
-      },
-      {
-        name: 'city',
-        title: 'Which city will you be living in when your donation commences?',
-        type: 'text',
-        required: true
-      }
-    ]
-  }
   p.description = "1% of the developed world's income can eliminate extreme poverty. Let it start with you."
 end
+
+Partners::UpdateCustomDonorQuestions.run(
+  partner: one_for_the_world,
+  donor_questions: [
+    Partner::DonorQuestion.new(
+      name: 'school',
+      title: 'What organization/school are you affiliated with?',
+      type: 'select',
+      options: ['Harvard', 'The Wharton School', 'Other'],
+      required: true
+    ),
+    Partner::DonorQuestion.new(
+      name: 'city',
+      title: 'Which city will you be living in when your donation commences?',
+      type: 'text',
+      required: true
+    )
+  ]
+)
 
 Campaign.find_or_create_by(slug: '1ftw-wharton') do |c|
   c.partner = one_for_the_world

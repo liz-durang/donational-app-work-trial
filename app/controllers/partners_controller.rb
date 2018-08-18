@@ -6,15 +6,12 @@ class PartnersController < ApplicationController
   def update
     pipeline = Flow.new
     pipeline.chain { update_partner! } if params[:partner].present?
-    pipeline.chain { create_or_update_question! } if params[:name].present?
-    pipeline.chain { delete_question! } if params[:question].present?
+    pipeline.chain { update_donor_questions! } if params[:donor_questions].present?
 
     outcome = pipeline.run
 
     if outcome.success?
-      flash[:success] = "Thanks, we've updated your information" if params[:partner].present?
-      flash[:success] = "Question was added successfully" if params[:name].present?
-      flash[:success] = "Question was deleted successfully" if params[:question].present?
+      flash[:success] = "Thanks, we've updated your information"
     else
       flash[:error] = outcome.errors.message_list.join('. ')
     end
@@ -27,7 +24,8 @@ class PartnersController < ApplicationController
       donor: current_donor,
       partner: partner,
       partner_path: partner_path,
-      stripe_connect_url: stripe_connect_url
+      stripe_connect_url: stripe_connect_url,
+      donor_questions_with_blank_new_question: partner.donor_questions + [Partner::DonorQuestion.new]
     )
   end
 
@@ -75,21 +73,19 @@ class PartnersController < ApplicationController
     )
   end
 
-  def create_or_update_question!
-    command = Partners::CreateOrUpdateCustomDonorQuestion.run(
-      partner: partner,
-      name: params[:name],
-      title: params[:title],
-      type: params[:type].downcase,
-      options: params[:options].gsub(' ,', ',').split(','),
-      required: params[:required]
-    )
-  end
+  def update_donor_questions!
+    questions = params[:donor_questions].values
+      .reject { |q| q[:name].blank? }
+      .map do |q|
+        Partner::DonorQuestion.new(
+          name: q[:name],
+          title: q[:title],
+          type: q[:type],
+          options: q[:options].split(',').map(&:strip),
+          required: q[:required] == '1'
+        )
+      end
 
-  def delete_question!
-    command = Partners::DeleteCustomDonorQuestion.run(
-      partner: partner,
-      name: params[:question]
-    )
+    Partners::UpdateCustomDonorQuestions.run(partner: partner, donor_questions: questions)
   end
 end

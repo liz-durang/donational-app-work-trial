@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_15_013407) do
+ActiveRecord::Schema.define(version: 2018_08_17_183215) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -167,6 +167,7 @@ ActiveRecord::Schema.define(version: 2018_08_15_013407) do
     t.datetime "hidden_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "display_order"
     t.index ["partner_id"], name: "index_managed_portfolios_on_partner_id"
     t.index ["portfolio_id"], name: "index_managed_portfolios_on_portfolio_id"
   end
