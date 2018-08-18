@@ -23,6 +23,7 @@ class AccountsController < ApplicationController
       accounts_path: accounts_path,
       payment_method: active_payment_method || new_payment_method,
       recurring_contribution: active_recurring_contribution,
+      first_contribution: Contributions::GetFirstContribution.call(donor: current_donor),
       target_amount_cents: target_amount_cents,
       partner_affiliation: partner_affiliation,
       donor_responses: donor_responses

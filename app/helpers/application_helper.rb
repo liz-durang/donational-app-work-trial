@@ -81,4 +81,11 @@ module ApplicationHelper
   def masked_card_number(last4:)
     ('&bull;&bull;&bull;&bull; '*3 + last4).html_safe
   end
+
+  def humanized_date(datetime)
+    return 'today' if datetime.to_date.today?
+    return 'tomorrow' if datetime.to_date == Date.tomorrow
+
+    datetime.to_formatted_s(:long_ordinal)
+  end
 end

@@ -22,6 +22,7 @@
 en:
   hello: "Hello world"
   no_future_donations: "You don't have any future donations scheduled. Become a recurring donor today!"
+  first_contribution_message: "Your first donation of %{amount} will be processed today"
   next_contribution:
     once: "Your donation of %{amount} is scheduled for %{date}."
     monthly: "Your next donation of %{amount} is scheduled for %{date}."

@@ -39,6 +39,7 @@ class PortfoliosController < ApplicationController
       managed_portfolio?: portfolio_manager.present?,
       portfolio_manager_name: portfolio_manager.try(:name),
       recurring_contribution: active_recurring_contribution,
+      first_contribution: Contributions::GetFirstContribution.call(donor: current_donor),
       show_modal: params[:show_modal].to_s == 'true'
     )
   end

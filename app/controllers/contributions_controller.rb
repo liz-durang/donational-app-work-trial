@@ -4,7 +4,8 @@ class ContributionsController < ApplicationController
 
   def index
     @view_model = OpenStruct.new(
-      contributions: Contributions::GetProcessedContributions.call(donor: current_donor),
+      contributions: Contributions::GetContributions.call(donor: current_donor),
+      first_contribution: Contributions::GetFirstContribution.call(donor: current_donor),
       recurring_contribution: active_recurring_contribution
     )
   end

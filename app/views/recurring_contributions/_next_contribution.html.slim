@@ -1,6 +1,9 @@
+- if first_contribution.present? && first_contribution.scheduled_at.to_date.today?
+  p = t :first_contribution_message, amount: cents_to_currency(first_contribution.amount_cents)
+
 - if recurring_contribution&.future_contribution_scheduled?
   p = t recurring_contribution.frequency, scope: :next_contribution, \
       amount: cents_to_currency(recurring_contribution.amount_cents), \
-      date: recurring_contribution.next_contribution_at.to_formatted_s(:long_ordinal)
+      date: humanized_date(recurring_contribution.next_contribution_at)
 - else
   p = t 'no_future_donations'
