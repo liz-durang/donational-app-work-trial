@@ -6,7 +6,6 @@
       h1.has-text-centered.title Thanks for using Donational.org
       hr
       .content
-        .box = render 'recurring_contributions/next_contribution', recurring_contribution: @view_model.recurring_contribution
         p
           ' Welcome to our community of high-impact givers.
           ' You now have your very own charity portfolio, managed by
@@ -22,6 +21,10 @@
         p
           ' Feel free to send your questions, comments and suggestions to
           a href='mailto:hello@donational.org' hello@donational.org
+        .box
+          = render 'recurring_contributions/next_contribution',
+            first_contribution: @view_model.first_contribution,
+            recurring_contribution: @view_model.recurring_contribution
     footer.modal-card-foot
       button.button.is-primary View my portfolio
   button.modal-close.is-large aria-label="close"

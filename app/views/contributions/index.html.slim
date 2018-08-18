@@ -25,7 +25,9 @@ section.section.embossed
           strong => pluralize(@view_model.contributions.count, 'donation')
           | to your charity portfolio.
     .box
-      = render 'recurring_contributions/next_contribution', recurring_contribution: @view_model.recurring_contribution
+      = render 'recurring_contributions/next_contribution',
+        first_contribution: @view_model.first_contribution,
+        recurring_contribution: @view_model.recurring_contribution
 
     - if @view_model.contributions.present?
       = display_flash_messages
@@ -48,8 +50,11 @@ section.section.embossed
               td.has-text-right
                 strong> = number_to_currency(contribution.total_charges_cents / 100.0)
                 br
-                ' to
-                = pluralize(contribution.donations.count, 'charity')
+                - if contribution.processed_at?
+                  ' to
+                  = pluralize(contribution.donations.count, 'charity')
+                - else
+                  .tag processing
             - contribution.donations.each do |donation|
               tr.is-hidden data-accordion-panel-for="contribution-#{contribution.id}"
                 td.has-text-right colspan=2

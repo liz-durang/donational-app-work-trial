@@ -1,5 +1,5 @@
 module Contributions
-  class GetProcessedContributions < ApplicationQuery
+  class GetFirstContribution < ApplicationQuery
     def initialize(relation = Contribution.all)
       @relation = relation
     end
@@ -7,10 +7,8 @@ module Contributions
     def call(donor:)
       @relation
         .where(donor: donor)
-        .where.not(processed_at: nil)
-        .preload(:donations)
-        .preload(:organizations)
-        .order(created_at: :desc)
+        .order(created_at: :asc)
+        .first
     end
   end
 end
