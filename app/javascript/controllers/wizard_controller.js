@@ -24,7 +24,7 @@ export default class extends Controller {
 
   goto() {
     event.preventDefault();
-    this.showStep(parseInt(event.currentTarget.dataset['wizard-step']))
+    this.showStep(parseInt(event.currentTarget.dataset.wizardStep))
     return false;
   }
 
