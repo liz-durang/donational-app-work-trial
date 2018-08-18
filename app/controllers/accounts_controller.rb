@@ -4,7 +4,7 @@ class AccountsController < ApplicationController
   def update
     pipeline = Flow.new
     pipeline.chain { update_donor! } if params[:donor].present?
-    pipeline.chain { update_custom_responses! } if params[:donor_questions].present?
+    pipeline.chain { update_custom_responses! } if params[:donor_responses].present?
 
     outcome = pipeline.run
 
@@ -14,7 +14,7 @@ class AccountsController < ApplicationController
       flash[:error] = outcome.errors.message_list.join("\n")
     end
 
-    redirect_to edit_accounts_path(custom_question_responses)
+    redirect_to edit_accounts_path
   end
 
   def edit
@@ -25,7 +25,7 @@ class AccountsController < ApplicationController
       recurring_contribution: active_recurring_contribution,
       target_amount_cents: target_amount_cents,
       partner_affiliation: partner_affiliation,
-      donor_responses: donor_responses || { }
+      donor_responses: donor_responses
     )
   end
 
@@ -41,29 +41,21 @@ class AccountsController < ApplicationController
   end
 
   def update_custom_responses!
+    responses = partner.donor_questions.map do |q|
+      PartnerAffiliation::DonorResponse.new(question: q, value: params[:donor_responses][q.name])
+    end
+
     Partners::UpdateCustomDonorInformation.run(
       donor: current_donor,
       partner: partner,
-      responses: custom_question_responses
+      responses: responses
     )
   end
 
-  def custom_question_responses
-    permitted_question_keys = partner.donor_questions.map(&:name)
-    params
-      .permit(donor_questions: permitted_question_keys)[:donor_questions]
-      .to_h
-  end
-
   def donor_responses
-    responses = { }
-    if partner_affiliation.present?
-      permitted_question_keys = partner.donor_questions.map(&:name)
-      permitted_question_keys.each do |name|
-        responses[name] = params[name]
-      end
-    end
-    responses
+    return [] unless partner_affiliation
+
+    partner_affiliation.donor_responses
   end
 
   def new_payment_method

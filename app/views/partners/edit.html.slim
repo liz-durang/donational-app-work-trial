@@ -86,7 +86,7 @@ section.section
                   td
                     .select.control = q.select :type, [['Text', 'text'], ['Drop-down', 'select']]
                   td
-                    = q.text_field :options, class: :input, placeholder: 'i.e. Red, Blue, Green, Other'
+                    = q.text_field :options, class: :input, placeholder: 'i.e. Red, Blue, Green, Other', value: donor_question.options.join(', ')
                   td
                     = q.check_box :required, class: :checkbox, checked: donor_question.required
                   td
