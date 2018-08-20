@@ -37,7 +37,7 @@ class ManagedPortfoliosController < ApplicationController
       donor: current_donor,
       title: params[:title],
       description: params[:description].presence,
-      charities: organizations
+      organizations: organizations
     )
 
     flash[:success] = "Portfolio updated successfully." if command.success?

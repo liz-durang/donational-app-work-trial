@@ -5,6 +5,8 @@ RSpec.describe Portfolios::UpdateManagedPortfolio do
   let(:donor) { create(:donor) }
   let(:organization) { create(:organization) }
   let(:another_organization) { create(:organization) }
+  let(:portfolio) { create(:portfolio) }
+  let(:managed_portfolio) { create(:managed_portfolio, portfolio: portfolio) }
 
   before do
     Portfolios::CreateManagedPortfolio.run(
@@ -12,7 +14,7 @@ RSpec.describe Portfolios::UpdateManagedPortfolio do
       donor: donor,
       title: "Title",
       description: "Description",
-      charities: [
+      organizations: [
         "#{organization.name}, #{organization.ein}",
         "#{another_organization.name}, #{another_organization.ein}"
       ]
@@ -20,28 +22,26 @@ RSpec.describe Portfolios::UpdateManagedPortfolio do
   end
 
   context 'when there is an existing active portfolio' do
+    let!(:existing_allocation) { create(:allocation, organization: organization, portfolio: portfolio, percentage: 100)}
     let!(:new_organization) { create(:organization) }
 
-    it 'deactivates the previous portfolios and creates a new one' do
-      managed_portfolio = partner.managed_portfolios.last
-      portfolio = managed_portfolio.portfolio
-
+    it 'deactivates the previous allocations' do
       command = Portfolios::UpdateManagedPortfolio.run(
         managed_portfolio: managed_portfolio,
         donor: donor,
         title: "New Title",
         description: "New Description",
-        charities: [
+        organizations: [
           "#{organization.name}, #{organization.ein}",
           "#{another_organization.name}, #{another_organization.ein}",
           "#{new_organization.name}, #{new_organization.ein}"
         ]
       )
-
-      expect(portfolio.reload).not_to be_active
-      expect(managed_portfolio.reload.name).to eq "New Title"
-      expect(managed_portfolio.reload.description).to eq "New Description"
-      expect(managed_portfolio.reload.portfolio.allocations.count).to eq 3
+      managed_portfolio.reload
+      expect(existing_allocation.reload.deactivated_at).to be_present
+      expect(managed_portfolio.name).to eq "New Title"
+      expect(managed_portfolio.description).to eq "New Description"
+      expect(managed_portfolio.portfolio.allocations.where(deactivated_at: nil).count).to eq 3
     end
   end
 end
