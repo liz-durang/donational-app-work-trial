@@ -19,7 +19,7 @@ module Partners
           :email,
           'partners.name as partner',
           'campaigns.title as campaign',
-          "COALESCE(managed_portfolios.name, 'Unmanaged Portfolio') AS current_portfolio",
+          "COALESCE(managed_portfolios.name, 'Custom Portfolio') AS current_portfolio",
           :frequency,
           'CAST(CAST(amount_cents / 100.0 AS DECIMAL(10,2)) AS VARCHAR) AS contribution_amount',
           'start_at AS donation_plan_start_date',

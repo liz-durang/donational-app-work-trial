@@ -4,7 +4,7 @@ module Portfolios
       model :managed_portfolio
       model :donor
       string :title
-      array :charities
+      array :organizations
     end
 
     optional do
@@ -12,26 +12,28 @@ module Portfolios
     end
 
     def execute
-      deactivate_existing_portfolio
-      find_or_create_charities
-      create_portoflio
-      update_managed_portoflio
+      Portfolio.transaction do
+        find_or_create_organizations
+        deactivate_existing_allocations
+        add_organizations_to_portfolio
+        update_managed_portoflio
+      end
 
       nil
     end
 
     private
 
-    def deactivate_existing_portfolio
-      managed_portfolio.portfolio.update!(deactivated_at: Time.zone.now)
+    def deactivate_existing_allocations
+      managed_portfolio.portfolio.allocations.update_all(deactivated_at: Time.zone.now)
     end
 
-    def find_or_create_charities
+    def find_or_create_organizations
       @organization_eins = []
-      charities.each do |charity|
+      organizations.each do |organization|
         organization = Organizations::FindOrCreateDonorSuggestedCharity.run!(
-          name: charity.split(",").first,
-          ein: charity.split(",").last,
+          name: organization.split(",").first,
+          ein: organization.split(",").last,
           suggested_by: donor
         )
 
@@ -39,20 +41,17 @@ module Portfolios
       end
     end
 
-    def create_portoflio
-      @portfolio = Portfolio.create!.tap do |portfolio|
-        Portfolios::AddOrganizationsAndRebalancePortfolio.run(
-          portfolio: portfolio,
-          organization_eins: @organization_eins
-        )
-      end
+    def add_organizations_to_portfolio
+      Portfolios::AddOrganizationsAndRebalancePortfolio.run(
+        portfolio: managed_portfolio.portfolio,
+        organization_eins: @organization_eins
+      )
     end
 
     def update_managed_portoflio
       managed_portfolio.update!(
         name: title,
-        description: description || '',
-        portfolio: @portfolio
+        description: description || ''
       )
     end
   end

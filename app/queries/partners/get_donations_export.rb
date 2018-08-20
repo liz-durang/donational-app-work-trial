@@ -10,6 +10,7 @@ module Partners
       @relation
         .where(created_at: donated_between)
         .left_joins(:organization)
+        .left_joins(portfolio: [:managed_portfolio])
         .left_joins(contribution: { donor: { partner_affiliations: [:partner, :campaign] } })
         .where(contributions: { donor: PartnerAffiliation.where(partner: partner).pluck(:donor_id) })
         .select(
@@ -23,6 +24,7 @@ module Partners
           'CAST(CAST(donations.amount_cents / 100.0 AS DECIMAL(10,2)) AS VARCHAR) AS donation_amount',
           :organization_ein,
           'organizations.name as organization_name',
+          "COALESCE(managed_portfolios.name, 'Custom Portfolio') AS portfolio_name",
           :created_at
         )
     end
