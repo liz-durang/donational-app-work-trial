@@ -82,7 +82,10 @@ module Contributions
     end
 
     def send_tax_deductible_receipt
-      ReceiptsMailer.send_receipt(contribution, payment_method).deliver_now
+      portfolio_manager = Portfolios::GetPortfolioManager.call(portfolio: contribution.portfolio)
+      partner_name = portfolio_manager.try(:name) || "Donational.org"
+
+      ReceiptsMailer.send_receipt(contribution, payment_method, partner_name).deliver_now
       Mutations::Outcome.new(true, nil, [], nil)
     end
 

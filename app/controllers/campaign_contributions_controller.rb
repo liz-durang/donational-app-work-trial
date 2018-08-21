@@ -63,7 +63,7 @@ class CampaignContributionsController < ApplicationController
       portfolio: active_portfolio,
       amount_cents: amount_cents,
       frequency: params[:campaign_contribution][:frequency],
-      start_at: params[:campaign_contribution][:start_at].presence,
+      start_at: start_at,
       tips_cents: 0
     )
   end
@@ -98,10 +98,14 @@ class CampaignContributionsController < ApplicationController
     params[:campaign_contribution][:payment_token]
   end
 
-  def future_start_date?
-    return false if params[:campaign_contribution][:start_at].blank?
+  def start_at
+    params[:campaign_contribution][:start_at]
+  end
 
-    Date.parse(params[:campaign_contribution][:start_at]) > Date.today
+  def future_start_date?
+    return false if start_at.blank?
+
+    start_at.to_date > Time.zone.today
   end
 
   def custom_question_responses

@@ -66,4 +66,8 @@ class Donor < ApplicationRecord
   def contribution_frequency
     super || 'monthly'
   end
+
+  def time_zone
+    'Eastern Time (US & Canada)'
+  end
 end

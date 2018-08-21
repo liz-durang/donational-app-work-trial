@@ -45,7 +45,7 @@ class RecurringContribution < ApplicationRecord
   def next_contribution_at
     today = Date.today
 
-    return start_at.to_date if start_at.to_date > today
+    return start_at if start_at.to_date > today
 
     if monthly?
       # Since we make a contribution immediately, the earlist start date for the
