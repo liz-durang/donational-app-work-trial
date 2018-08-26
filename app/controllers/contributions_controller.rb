@@ -14,7 +14,7 @@ class ContributionsController < ApplicationController
     @view_model = OpenStruct.new(
       target_amount_cents: target_amount_cents,
       recurring_contribution: active_recurring_contribution || new_recurring_donation,
-      active_payment_method: payment_method.present?,
+      active_payment_method?: payment_method.present?,
       portfolio_organization_count: active_portfolio.active_allocations.count
     )
   end
