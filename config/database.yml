@@ -18,3 +18,4 @@ staging:
 
 production:
   database: donate-deliberately
+  pool: 15
