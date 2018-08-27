@@ -114,8 +114,9 @@ class CampaignsController < ApplicationController
   end
 
   def allow_iframe_embedding_on_partner_website!
-    response.headers["X-Content-Security-Policy"] = "frame-ancestors #{partner.website_url}";
-    response.headers["Content-Security-Policy"] = "frame-ancestors #{partner.website_url}";
+    response.headers["X-Content-Security-Policy"] = "frame-ancestors #{partner.website_url}"
+    response.headers["Content-Security-Policy"] = "frame-ancestors #{partner.website_url}"
+    response.headers.delete "X-Frame-Options"
   end
 
   def new_campaign_contribution
