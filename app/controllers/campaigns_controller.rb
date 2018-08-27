@@ -89,11 +89,14 @@ class CampaignsController < ApplicationController
     not_found unless campaign
 
     @view_model = OpenStruct.new(
+      campaign_slug: campaign.slug,
+      contribution_amount_help_text: campaign.contribution_amount_help_text,
+      donation_frequencies: available_donation_frequencies,
       default_contribution_amounts: campaign.default_contribution_amounts,
+      campaign_contributions_path: campaign_contributions_path(campaign.slug),
       new_campaign_contribution: new_campaign_contribution,
       managed_portfolios: partner.managed_portfolios,
-      donor_questions: partner.donor_questions,
-      campaign_slug: campaign.slug,
+      donor_questions: partner.donor_questions
     )
 
     respond_to do |format|
