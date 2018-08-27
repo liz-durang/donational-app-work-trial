@@ -98,6 +98,7 @@
                   .level-left
                     .label
                       .span.icon = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}", data: { action: 'wizard#selectPortfolio' }
+                  .level-left style='flex-shrink: initial; flex-grow: 1; margin: 0 0.5rem'
                       = mp.name
                   .level-right
                     .help = pluralize(mp.size, 'charity')
