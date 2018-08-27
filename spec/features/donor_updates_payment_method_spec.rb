@@ -37,7 +37,6 @@ RSpec.describe 'Donors updates payment method', type: :feature do
     expect(page).to have_field(disabled:true, with: 'Donatello')
   end
 
-
   def sign_in_as!(first_name:, last_name:, email: 'user@example.com')
     OmniAuth.config.add_mock(
       :auth0,
