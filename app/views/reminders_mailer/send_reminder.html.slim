@@ -2,34 +2,33 @@
 
 h1
   ' Your upcoming donation to your
-  = @entity
+  = @partner_name
   |  charity portfolio
 
-- if @entity != "Donational.org"
+- if @partner_name != "Donational.org"
   h4 Powered by Donational.org
 
 hr
 
 h4
   = t @contribution.frequency, scope: :reminder_next_contribution, \
-  amount: number_to_currency(@contribution.amount_dollars), \
-  date: @contribution.created_at.strftime("%Y/%m/%d"), \
-  entity: @entity
+    amount: number_to_currency(@contribution.amount_dollars), \
+    date: @contribution.created_at.strftime("%Y/%m/%d"), \
+    partner_name: @partner_name
 
 h4
-  = t @contribution.frequency, scope: :next_contribution, \
+  => t @contribution.frequency, scope: :next_contribution, \
     amount: number_to_currency(@contribution.amount_dollars), \
-    date: @contribution.start_at.strftime("%Y/%m/%d")
-  '  On this date, we will charge
-  = number_to_currency(@contribution.amount_dollars)
-  |  to your registered credit card. Once the donation is processed, we will send you an email receipt for your records.
+    date: humanized_date(@contribution.start_at)
+  ' On this date, we will charge your registered credit card.
+  ' Once the donation is processed, we will send you a tax-deductible email receipt for your records.
 
 table border="0" cellpadding="0" cellspacing="0" width="100%"
   tr.summary-item
     td align="left"
       b
         ' Donation to
-        = @entity
+        = @partner_name
     td align="right"
       b = number_to_currency(@contribution.amount_dollars)
   tr.summary-item
@@ -53,6 +52,11 @@ table border="0" cellpadding="0" cellspacing="0" width="100%"
     tr.summary-item
       td colspan="2"
         = allocation.organization_name
+
+h4 Your account
+p
+  ' To update your preferences, donation frequency and payment method,
+  = link_to 'Log in to your Donational account', edit_accounts_url
 
 h4 How it works?
 .fine-print

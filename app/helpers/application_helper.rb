@@ -86,6 +86,6 @@ module ApplicationHelper
     return 'today' if datetime.to_date.today?
     return 'tomorrow' if datetime.to_date == Date.tomorrow
 
-    datetime.to_formatted_s(:long_ordinal)
+    datetime.utc.to_date.to_formatted_s(:long_ordinal)
   end
 end

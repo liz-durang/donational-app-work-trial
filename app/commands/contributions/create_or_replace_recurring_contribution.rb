@@ -11,7 +11,7 @@ module Contributions
     end
 
     optional do
-      date :start_at
+      time :start_at
     end
 
     def execute

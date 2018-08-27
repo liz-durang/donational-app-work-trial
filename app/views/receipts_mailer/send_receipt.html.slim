@@ -39,6 +39,11 @@ table border="0" cellpadding="0" cellspacing="0" width="100%"
       td colspan="2"
         = donation.organization.name
 
+h4 Your account
+p
+  ' To update your preferences, donation frequency and payment method,
+  = link_to 'Log in to your Donational account', edit_accounts_url
+
 h4 Tax-Time
 .fine-print
   p Please retain this information for your tax records. No goods or services were received for this donation, so it is tax-deductible to the fullest extent of the law.
