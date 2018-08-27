@@ -52,6 +52,11 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     date_in_two_months_on_the_12th = Date.new(Date.today.year, Date.today.month + 3, 12).to_formatted_s(:long_ordinal)
     expect(page).to have_content("Your next annual donation of $200 is scheduled for #{date_in_two_months_on_the_12th}")
+
+    click_on 'View my portfolio'
+
+    visit edit_accounts_path
+    expect(find_field('donor_responses[city]').value).to eq 'London'
   end
 
   def create_new_partner!
