@@ -11,9 +11,10 @@ module Partners
         .joins(partner_affiliations: [:partner, :campaign])
         .where(partner_affiliations: { partner: partner })
         .left_joins(recurring_contributions: { portfolio: [:managed_portfolio]})
-        .where(recurring_contributions: { deactivated_at: nil })
+        .where('recurring_contributions.created_at = (SELECT MAX(recurring_contributions.created_at) FROM recurring_contributions WHERE recurring_contributions.donor_id = donors.id)')
         .select(
           'donors.id as donor_id',
+          'donors.created_at as donor_joined_at',
           :first_name,
           :last_name,
           :email,
@@ -22,10 +23,12 @@ module Partners
           "COALESCE(managed_portfolios.name, 'Custom Portfolio') AS current_portfolio",
           :frequency,
           'CAST(CAST(amount_cents / 100.0 AS DECIMAL(10,2)) AS VARCHAR) AS contribution_amount',
-          'start_at AS donation_plan_start_date',
-          'recurring_contributions.deactivated_at AS donation_plan_stop_date',
+          'start_at AS donations_start_at',
+          'recurring_contributions.created_at AS plan_updated_at',
+          'recurring_contributions.deactivated_at AS plan_cancelled_at',
           *custom_donor_fields_for(partner)
         )
+        .order('donors.created_at')
     end
 
     private
