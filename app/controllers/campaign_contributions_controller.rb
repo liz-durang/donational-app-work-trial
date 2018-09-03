@@ -99,7 +99,7 @@ class CampaignContributionsController < ApplicationController
   end
 
   def start_at
-    params[:campaign_contribution][:start_at]
+    params[:campaign_contribution][:start_at].presence
   end
 
   def future_start_date?
