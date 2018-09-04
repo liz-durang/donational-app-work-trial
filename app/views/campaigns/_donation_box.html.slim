@@ -17,7 +17,7 @@
           .control.has-icons-left.is-expanded
             = f.number_field :amount_dollars,
               class: %w(input is-medium),
-              data: { target: 'radio-select.output wizard.required_field_0', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection' }
+              data: { controller: 'integer-field', target: 'radio-select.output wizard.required_field_0', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection keypress->integer-field#allowKeypressWhenInteger' }
             span.icon.is-left $
             span.help.display-when-errors This field is required
         p.help = @view_model.contribution_amount_help_text
