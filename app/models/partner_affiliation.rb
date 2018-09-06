@@ -14,7 +14,7 @@
 class PartnerAffiliation < ApplicationRecord
   belongs_to :partner
   belongs_to :donor
-  belongs_to :campaign
+  belongs_to :campaign, optional: true
 
   def donor_responses
     partner.donor_questions.map do |q|

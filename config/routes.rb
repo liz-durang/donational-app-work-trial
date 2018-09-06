@@ -55,4 +55,17 @@ Rails.application.routes.draw do
   get '/:campaign_slug' => 'campaigns#show', as: :campaigns, defaults: { format: :html }
   post '/:campaign_slug/contributions' => 'campaign_contributions#create', as: :campaign_contributions
   get '/:campaign_slug/donation-box' => 'campaigns#donation_box', as: :campaigns_donation_box, defaults: { format: :html }
+  
+  # API
+  namespace :api do
+    namespace :v1, defaults: { format: :json } do
+      resources :donors, only: :create
+      resources :organizations, only: %i[] do
+        resources :contributions, module: :organization_contributions, only: :create
+      end
+      resources :portfolios, only: %i[] do
+        resources :contributions, module: :portfolio_contributions, only: :create
+      end
+    end
+  end
 end

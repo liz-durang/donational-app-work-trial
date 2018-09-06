@@ -1,0 +1,60 @@
+{
+  "resource": "Contributions",
+  "resource_explanation": null,
+  "http_method": "POST",
+  "route": "/api/v1/organizations/:id/contributions",
+  "description": "Succesfull request: Make a contribution to a single organization",
+  "explanation": null,
+  "parameters": [
+    {
+      "type": "string",
+      "required": true,
+      "name": "donor_id",
+      "description": "Donor who makes the contribution"
+    },
+    {
+      "type": "string",
+      "required": true,
+      "name": "amount",
+      "description": "Contribution amount in USD"
+    }
+  ],
+  "response_fields": [
+
+  ],
+  "requests": [
+    {
+      "request_method": "POST",
+      "request_path": "/api/v1/organizations/org_6_ae9d7ab/contributions",
+      "request_body": "{\"contribution\":{\"donor_id\":\"4fc3fef9-7f34-4e3c-bf1a-5ae25eb3d9c4\",\"amount\":20}}",
+      "request_headers": {
+        "Content-Type": "application/json",
+        "X-Api-Key": "XS96vrkw7uT94y6Xx8wQ5Att",
+        "Host": "example.org",
+        "Cookie": ""
+      },
+      "request_query_parameters": {
+      },
+      "request_content_type": "application/json",
+      "response_status": 200,
+      "response_status_text": "OK",
+      "response_body": "{\n  \"contribution\": {\n    \"id\": \"15d5e739-50a6-42ef-87d0-802ba226b17f\",\n    \"portfolio_id\": \"372f34c0-af3a-43f7-9eb0-96b1408e093e\",\n    \"donor_id\": \"4fc3fef9-7f34-4e3c-bf1a-5ae25eb3d9c4\",\n    \"amount\": 20.0,\n    \"scheduled_at\": \"2018-09-06T17:12:20.207Z\"\n  }\n}",
+      "response_headers": {
+        "X-Frame-Options": "SAMEORIGIN",
+        "X-XSS-Protection": "1; mode=block",
+        "X-Content-Type-Options": "nosniff",
+        "X-Download-Options": "noopen",
+        "X-Permitted-Cross-Domain-Policies": "none",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Content-Type": "application/json; charset=utf-8",
+        "ETag": "W/\"41096cde2b274d4f52c7033d9a52805c\"",
+        "Cache-Control": "max-age=0, private, must-revalidate",
+        "X-Request-Id": "a103ba86-2991-479e-bd94-ec0faaca911d",
+        "X-Runtime": "0.063060",
+        "Content-Length": "222"
+      },
+      "response_content_type": "application/json; charset=utf-8",
+      "curl": null
+    }
+  ]
+}

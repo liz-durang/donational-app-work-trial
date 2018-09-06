@@ -54,7 +54,7 @@ gem 'appsignal'
 gem 'mutations'
 
 # API
-gem 'jbuilder', '~> 2.5'
+gem 'jbuilder', '~> 2.7.0'
 
 # Payments
 gem 'stripe'
@@ -69,6 +69,8 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'rspec-rails'
   gem 'rubocop-rspec'
+  gem 'rspec_api_documentation'
+  gem 'apitome'
 end
 
 group :development do

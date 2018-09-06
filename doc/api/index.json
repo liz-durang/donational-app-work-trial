@@ -1,0 +1,72 @@
+{
+  "resources": [
+    {
+      "name": "Contributions",
+      "explanation": null,
+      "examples": [
+        {
+          "description": "Invalid request: Make a contribution to a portfolio without amount",
+          "link": "contributions/invalid_request:_make_a_contribution_to_a_portfolio_without_amount.json",
+          "groups": "all",
+          "route": "/api/v1/portfolios/:id/contributions",
+          "method": "post"
+        },
+        {
+          "description": "Invalid request: Make a contribution to a portfolio without donor",
+          "link": "contributions/invalid_request:_make_a_contribution_to_a_portfolio_without_donor.json",
+          "groups": "all",
+          "route": "/api/v1/portfolios/:id/contributions",
+          "method": "post"
+        },
+        {
+          "description": "Invalid request: Make a contribution to a single organization without amount",
+          "link": "contributions/invalid_request:_make_a_contribution_to_a_single_organization_without_amount.json",
+          "groups": "all",
+          "route": "/api/v1/organizations/:id/contributions",
+          "method": "post"
+        },
+        {
+          "description": "Invalid request: Make a contribution to a single organization without donor",
+          "link": "contributions/invalid_request:_make_a_contribution_to_a_single_organization_without_donor.json",
+          "groups": "all",
+          "route": "/api/v1/organizations/:id/contributions",
+          "method": "post"
+        },
+        {
+          "description": "Succesfull request: Make a contribution to a portfolio",
+          "link": "contributions/succesfull_request:_make_a_contribution_to_a_portfolio.json",
+          "groups": "all",
+          "route": "/api/v1/portfolios/:id/contributions",
+          "method": "post"
+        },
+        {
+          "description": "Succesfull request: Make a contribution to a single organization",
+          "link": "contributions/succesfull_request:_make_a_contribution_to_a_single_organization.json",
+          "groups": "all",
+          "route": "/api/v1/organizations/:id/contributions",
+          "method": "post"
+        }
+      ]
+    },
+    {
+      "name": "Donors",
+      "explanation": null,
+      "examples": [
+        {
+          "description": "Invalid request: Create a donor",
+          "link": "donors/invalid_request:_create_a_donor.json",
+          "groups": "all",
+          "route": "/api/v1/donors",
+          "method": "post"
+        },
+        {
+          "description": "Succesfull request: Create a donor",
+          "link": "donors/succesfull_request:_create_a_donor.json",
+          "groups": "all",
+          "route": "/api/v1/donors",
+          "method": "post"
+        }
+      ]
+    }
+  ]
+}
