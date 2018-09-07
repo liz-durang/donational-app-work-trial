@@ -12,7 +12,6 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
   scenario 'as a new visitor', js: true do
     visit campaigns_path('1ftw-wharton')
-    expect(page).to have_content('The Wharton School')
 
     find('a', text: '$200').click
 
