@@ -24,7 +24,6 @@ section.section.embossed
     .columns
       .column.is-6
         .box
-          h3.subtitle = @view_model.campaign_title
           .content = markdown_to_html @view_model.campaign_description
       .column.is-offset-1
         = display_flash_messages
