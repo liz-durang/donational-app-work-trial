@@ -3,7 +3,7 @@ window.onload = function() {
   var iframe = document.createElement('iframe');
   iframe.style.width = "100%";
   iframe.style.height = "600px";
-  iframe.style.frameBorder = 0;
+  iframe.frameBorder = 0;
   iframe.src = "<%= campaigns_donation_box_url(@view_model.campaign_slug, format: :html) %>"
 
   script.parentNode.insertBefore(iframe, script);
