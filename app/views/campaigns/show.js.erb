@@ -3,6 +3,7 @@ window.onload = function() {
   var iframe = document.createElement('iframe');
   iframe.style.width = "100%";
   iframe.style.height = "800px";
+  iframe.style.frameBorder = 0;
   iframe.src = "<%= campaigns_url(@view_model.campaign_slug, format: :html) %>"
 
   script.parentNode.insertBefore(iframe, script);

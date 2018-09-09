@@ -3,7 +3,7 @@ class CampaignsController < ApplicationController
 
   before_action :ensure_donor_has_permission!, except: [:show, :donation_box]
 
-  layout "minimal", only: :donation_box
+  layout "embeddable", only: :donation_box
 
   def index
     @view_model = OpenStruct.new(partner: partner)
