@@ -105,7 +105,7 @@ RSpec.describe Contributions::ProcessContribution do
 
     context 'and the payment is successful' do
       let(:successful_charge) do
-        double(success?: true, result: '{ "some": "receipt" }')
+        double(success?: true, result: JSON.parse('{"balance_transaction": { "fee_details":[{"amount":56, "description":"Stripe processing fees", "type":"stripe_fee"}]}}'))
       end
 
       let(:successful_track_event) { double(success?: true) }
@@ -127,7 +127,7 @@ RSpec.describe Contributions::ProcessContribution do
         expect(command).to be_success
 
         contribution.reload
-        expect(contribution.receipt).to eq '{ "some": "receipt" }'
+        expect(contribution.receipt).to eq JSON.parse('{"balance_transaction": { "fee_details":[{"amount":56, "description":"Stripe processing fees", "type":"stripe_fee"}]}}')
         expect(contribution.processed_at).to eq Time.zone.now
         expect(contribution.failed_at).to be nil
       end
@@ -138,13 +138,13 @@ RSpec.describe Contributions::ProcessContribution do
 
         expect { Contributions::ProcessContribution.run(contribution: contribution) }.to change { Donation.count }.by(2)
 
-        # (1000 - (1200 * 0.029 + 30) - (1000 * 0.01)) * 0.6
+        # (1000 - (1200 * 0.022 + 30) - (1000 * 0.01)) * 0.6
         expect(Donation.where(organization: org_1).first)
-          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 555)
+          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 560 )
 
-        # (1000 - (1200 * 0.029 + 30) - (1000 * 0.01)) * 0.4
+        # (1000 - (1200 * 0.022 + 30) - (1000 * 0.01)) * 0.4
         expect(Donation.where(organization: org_2).first)
-          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 370)
+          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 373)
       end
     end
   end
