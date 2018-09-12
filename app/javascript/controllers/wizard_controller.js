@@ -7,7 +7,7 @@ export default class extends Controller {
     this.showStep(0)
   }
 
-  next() {
+  next(event) {
     event.preventDefault();
     this.validateRequiredFields()
     if (this.valid) {
@@ -16,19 +16,19 @@ export default class extends Controller {
     }
   }
 
-  previous() {
+  previous(event) {
     event.preventDefault();
     this.showStep(this.index - 1);
     return false;
   }
 
-  goto() {
+  goto(event) {
     event.preventDefault();
     this.showStep(parseInt(event.currentTarget.dataset.wizardStep))
     return false;
   }
 
-  selectPortfolio() {
+  selectPortfolio(event) {
     this.portfolioSelectedTarget.value = true.toString()
   }
 

@@ -3,7 +3,7 @@ import { Controller } from "stimulus"
 export default class extends Controller {
   static targets = [ "filename", "preview" ]
 
-  preview() {
+  preview(event) {
     const file = event.currentTarget.files[0];
 
     if (file) {
