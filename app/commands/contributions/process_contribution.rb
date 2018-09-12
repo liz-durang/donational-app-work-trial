@@ -32,7 +32,8 @@ module Contributions
         platform_fee_cents: payment_fees.platform_fee_cents
       ).tap do |command|
         if command.success?
-          contribution.update(receipt: command.result, processed_at: Time.zone.now)
+          fee = command.result['balance_transaction']['fee_details'].detect { |fee| fee['type'] == 'stripe_fee' }
+          contribution.update(receipt: command.result, processed_at: Time.zone.now, payment_processor_fees_cents: fee['amount'])
         else
           Appsignal.set_error(ChargeCustomerError.new(command.errors.to_json), contribution_id: contribution.id)
           contribution.update(receipt: command.errors.to_json, failed_at: Time.zone.now)
@@ -53,7 +54,7 @@ module Contributions
     end
 
     def payment_fees
-      @payment_fees ||= Contributions::CalculatePaymentFees.call(contribution: contribution)
+      @payment_fees = Contributions::CalculatePaymentFees.call(contribution: contribution)
     end
 
     def payment_processor_account_id
