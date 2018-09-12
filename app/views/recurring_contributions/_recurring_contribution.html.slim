@@ -15,7 +15,7 @@
               .label Starting on
               .control.has-icons-left
                   = icon_tag('fas fa-calendar')
-                  = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 1.year.from_now.to_date.iso8601
+                  = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 3.year.from_now.to_date.iso8601
 
     .field
       label.control

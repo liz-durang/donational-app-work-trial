@@ -34,7 +34,7 @@
               span today
           .control.is-expanded.has-icons-left.is-hidden data-accordion-panel-for="show-date"
               = icon_tag('fas fa-calendar')
-              = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 1.year.from_now.to_date.iso8601
+              = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 3.year.from_now.to_date.iso8601
     .wizard-card-footer
       a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
   fieldset.wizard-card data-target='wizard.step'
