@@ -31,7 +31,7 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
       expect(recurring_contribution.amount_cents).to eq 8000
       expect(recurring_contribution.tips_cents).to eq 100
       expect(recurring_contribution.frequency).to eq 'annually'
-      expect(recurring_contribution.start_at).to eq Date.new(2000, 1, 1)
+      expect(recurring_contribution.start_at.to_date).to eq Date.new(2000, 1, 1)
     end
 
     context 'and there is no start date provided' do
