@@ -3,3 +3,5 @@ schedule:
     every: '10s'
   SendContributionReminders:
     every: '10m'
+  ProcessFailedContributions:
+    cron: '0 0 5 * * *'
