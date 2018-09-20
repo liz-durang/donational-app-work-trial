@@ -44,9 +44,8 @@ module Contributions
     def send_confirmation_email!
       payment_method = Payments::GetActivePaymentMethod.call(donor: @contribution.donor)
       portfolio_manager = Portfolios::GetPortfolioManager.call(portfolio: @contribution.portfolio)
-      partner_name = portfolio_manager.try(:name) || "Donational.org"
 
-      ConfirmationsMailer.send_confirmation(@contribution, payment_method, partner_name).deliver_now
+      ConfirmationsMailer.send_confirmation(@contribution, payment_method, portfolio_manager).deliver_now
     end
   end
 end
