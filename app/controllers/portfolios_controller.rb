@@ -27,8 +27,6 @@ class PortfoliosController < ApplicationController
   end
 
   def show
-    redirect_to onboarding_path unless active_portfolio.present?
-
     Analytics::TrackEvent.run(user_id: current_donor.id, event: 'Viewed portfolio')
 
     track_analytics_event_via_browser('Goal: Viewed portfolio')
@@ -40,7 +38,8 @@ class PortfoliosController < ApplicationController
       portfolio_manager_name: portfolio_manager.try(:name),
       recurring_contribution: active_recurring_contribution,
       first_contribution: Contributions::GetFirstContribution.call(donor: current_donor),
-      show_modal: params[:show_modal].to_s == 'true'
+      show_modal: params[:show_modal].to_s == 'true',
+      show_blank_state: active_portfolio.blank?
     )
   end
 
