@@ -3,6 +3,7 @@
   "scripts": {
     "postdeploy": "bin/rails db:schema:load db:seed"
   },
+  "stack": "heroku-18",
   "env": {
     "AUTH0_CLIENT_ID": { "required": true },
     "AUTH0_CLIENT_SECRET": { "required": true },

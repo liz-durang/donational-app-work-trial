@@ -91,7 +91,13 @@
     <div width="100%" style='text-align: center;'>
       <div class='header' width="100%" style='text-align: center'>
         <div style='width:100%; max-width: 90%; margin: 0 auto; text-align: center;'>
-          <img src="<%= image_url('receipt-header.png')%>" alt="Donational" width="100%" style="border: 0; margin: 0; padding: 0;">
+          <% if @partner.present? && @partner.email_banner.attached? && @partner.email_banner.variable? %>
+            <div alt="Donational" width="100%" style="border: 0; margin: 0; padding: 0;">
+              <%= image_tag @partner.email_banner.variant(resize: '1196x305') %>
+            </div>
+          <% else %>
+            <img src="<%= image_url('receipt-header.png')%>" alt="Donational" width="100%" style="border: 0; margin: 0; padding: 0;">
+          <% end %>
         </div>
       </div>
 

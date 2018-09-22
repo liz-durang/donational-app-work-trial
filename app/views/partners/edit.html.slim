@@ -45,6 +45,11 @@ section.embossed.section
                   field: :logo,
                   thumbnail_preview_size: '400x200',
                   form: f
+              = render 'shared/image_upload_field',
+                  attachment: @view_model.partner.email_banner,
+                  field: :email_banner,
+                  thumbnail_preview_size: '400x200',
+                  form: f
               .field
                 label.control
                   = f.label :description, class: :label

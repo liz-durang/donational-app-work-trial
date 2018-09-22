@@ -6,9 +6,8 @@ class SendContributionReminders < ApplicationJob
       payment_method = Payments::GetActivePaymentMethod.call(donor: contribution.donor)
 
       portfolio_manager = Portfolios::GetPortfolioManager.call(portfolio: contribution.portfolio)
-      partner_name = portfolio_manager.try(:name) || "Donational.org"
 
-      RemindersMailer.send_reminder(contribution, payment_method, partner_name).deliver_now
+      RemindersMailer.send_reminder(contribution, payment_method, portfolio_manager).deliver_now
 
       contribution.update!(last_reminded_at: Time.zone.now)
     end

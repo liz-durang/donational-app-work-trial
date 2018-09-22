@@ -20,6 +20,7 @@ class Partner < ApplicationRecord
   # Partner administrators
   has_and_belongs_to_many :donors
   has_one_attached :logo
+  has_one_attached :email_banner
 
   def donor_questions
     return if donor_questions_schema.nil?
