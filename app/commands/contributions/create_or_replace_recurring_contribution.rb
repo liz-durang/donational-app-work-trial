@@ -18,7 +18,7 @@ module Contributions
       RecurringContribution.transaction do
         deactivate_existing_recurring_contributions!
 
-        RecurringContribution.create!(
+        @contribution = RecurringContribution.create!(
           donor: donor,
           portfolio: portfolio,
           frequency: frequency,
@@ -26,6 +26,8 @@ module Contributions
           amount_cents: amount_cents,
           tips_cents: tips_cents
         )
+
+        send_confirmation_email!
       end
 
       nil
@@ -39,5 +41,11 @@ module Contributions
         .update_all(deactivated_at: Time.zone.now)
     end
 
+    def send_confirmation_email!
+      payment_method = Payments::GetActivePaymentMethod.call(donor: @contribution.donor)
+      portfolio_manager = Portfolios::GetPortfolioManager.call(portfolio: @contribution.portfolio)
+
+      ConfirmationsMailer.send_confirmation(@contribution, payment_method, portfolio_manager).deliver_now
+    end
   end
 end

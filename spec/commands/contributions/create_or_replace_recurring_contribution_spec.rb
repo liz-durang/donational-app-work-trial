@@ -18,7 +18,7 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
     }
   end
   let(:other_donor) { create(:donor) }
-  let(:donor) { create(:donor) }
+  let(:donor) { create(:donor, email: 'user@example.com') }
   let(:portfolio) { create(:portfolio) }
 
   context 'when there are no existing recurring donations for the donor' do
