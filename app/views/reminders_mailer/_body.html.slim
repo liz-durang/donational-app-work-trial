@@ -36,7 +36,7 @@ table border="0" cellpadding="0" cellspacing="0" width="100%"
 h3 Charities in your Portfolio
 h4 Your donation will be distributed to the charities in your portfolio.
 table border="0" cellpadding="0" cellspacing="0" width="100%"
-  - @contribution.portfolio.allocations.each do |allocation|
+  - @contribution.portfolio.active_allocations.each do |allocation|
     tr.summary-item
       td colspan="2"
         = allocation.organization_name
