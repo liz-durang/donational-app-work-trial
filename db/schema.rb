@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_10_150436) do
+ActiveRecord::Schema.define(version: 2018_09_14_155633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -231,6 +231,7 @@ ActiveRecord::Schema.define(version: 2018_09_10_150436) do
     t.string "last4"
     t.datetime "deactivated_at"
     t.string "address_zip_code"
+    t.integer "retry_count", default: 0
     t.index ["deactivated_at"], name: "index_payment_methods_on_deactivated_at"
     t.index ["donor_id"], name: "index_payment_methods_on_donor_id"
   end

@@ -35,8 +35,7 @@ module Contributions
           fee = command.result['balance_transaction']['fee_details'].detect { |fee| fee['type'] == 'stripe_fee' }
           contribution.update(receipt: command.result, processed_at: Time.zone.now, payment_processor_fees_cents: fee['amount'])
         else
-          Appsignal.set_error(ChargeCustomerError.new(command.errors.to_json), contribution_id: contribution.id)
-          contribution.update(receipt: command.errors.to_json, failed_at: Time.zone.now)
+          payment_failed!(errors: command.errors.to_json)
         end
       end
     end
@@ -65,6 +64,14 @@ module Contributions
       @payment_method ||= Payments::GetActivePaymentMethod.call(donor: contribution.donor)
     end
 
+    def partner
+      portfolio_manager = Portfolios::GetPortfolioManager.call(portfolio: contribution.portfolio)
+    end
+
+    def active_recurring_contribution
+      @active_contribution ||= Contributions::GetActiveRecurringContribution.call(donor: contribution.donor)
+    end
+
     def create_donations_based_on_active_allocations
       # TODO: Move this into a Donations::CreateDonationsFromContributionIntoPortfolio command
       Donation.transaction do
@@ -83,16 +90,23 @@ module Contributions
     end
 
     def send_tax_deductible_receipt
-      portfolio_manager = Portfolios::GetPortfolioManager.call(portfolio: contribution.portfolio)
-
-      ReceiptsMailer.send_receipt(contribution, payment_method, portfolio_manager).deliver_now
+      ReceiptsMailer.send_receipt(contribution, payment_method, partner).deliver_now
       Mutations::Outcome.new(true, nil, [], nil)
     end
 
-    def payment_failed!
-      add_error(:contribution, :payment_failed, "Could not charge customer '#{payment_method.payment_processor_customer_id}'")
+    def payment_failed!(errors:)
+      # Track error
+      Appsignal.set_error(ChargeCustomerError.new(errors), contribution_id: contribution.id)
+      contribution.update(receipt: errors, failed_at: Time.zone.now)
 
-      nil
+      # Send payment failed email
+      PaymentMethodsMailer.send_payment_failed(contribution, payment_method, partner).deliver_now
+
+      # Update payment method retry count and cancel donation plan
+      Payments::IncrementRetryCount.run(payment_method: payment_method)
+      if active_recurring_contribution.present? && payment_method.retry_count_limit_reached?
+        Contributions::DeactivateRecurringContribution.run(recurring_contribution: active_recurring_contribution)
+      end
     end
 
     def track_contribution_processed_event

@@ -33,7 +33,7 @@ en:
     monthly: On %{date}, you pledged to make a monthly %{amount} donation to your %{partner_name} charity portfolio. Thank you for your generosity.
     quarterly: On %{date}, you pledged to make a quarterly %{amount} donation to your %{partner_name} charity portfolio. Thank you for your generosity.
     annually: On %{date}, you pledged to make an annually %{amount} donation to your %{partner_name} charity portfolio. Thank you for your generosity.
-
+  payment_method_failed: "Your donation of %{amount} to your %{partner_name} charity portfolio could not be processed because we could not charge your credit card **** **** **** %{last4}."
   enumerize:
     recurring_contribution:
       frequency:

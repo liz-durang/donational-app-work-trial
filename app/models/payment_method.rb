@@ -17,4 +17,8 @@
 
 class PaymentMethod < ApplicationRecord
   belongs_to :donor
+
+  def retry_count_limit_reached?
+    retry_count == 3
+  end
 end
