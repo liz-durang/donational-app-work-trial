@@ -42,15 +42,18 @@ class AccountsController < ApplicationController
   end
 
   def update_custom_responses!
-    responses = partner.donor_questions.map do |q|
-      PartnerAffiliation::DonorResponse.new(question: q, value: params[:donor_responses][q.name])
-    end
-
     Partners::UpdateCustomDonorInformation.run(
       donor: current_donor,
       partner: partner,
-      responses: responses
+      responses: custom_responses
     )
+  end
+
+  def custom_responses
+    permitted_question_keys = partner.donor_questions.map(&:name)
+    params
+      .permit(donor_responses: permitted_question_keys)[:donor_responses]
+      .to_h
   end
 
   def donor_responses
