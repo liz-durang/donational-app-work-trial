@@ -45,7 +45,12 @@ module Contributions
       payment_method = Payments::GetActivePaymentMethod.call(donor: @contribution.donor)
       portfolio_manager = Portfolios::GetPortfolioManager.call(portfolio: @contribution.portfolio)
 
-      ConfirmationsMailer.send_confirmation(@contribution, payment_method, portfolio_manager).deliver_now
+      ConfirmationsMailer.send_confirmation(
+        contribution: @contribution,
+        payment_method: payment_method,
+        partner: portfolio_manager,
+        cancelation: false
+      ).deliver_now
     end
   end
 end

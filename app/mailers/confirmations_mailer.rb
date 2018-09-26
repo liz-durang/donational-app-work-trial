@@ -1,9 +1,10 @@
 class ConfirmationsMailer < ApplicationMailer
-  def send_confirmation(contribution, payment_method, partner)
+  def send_confirmation(contribution:, payment_method:, partner:, cancelation:)
     @contribution = contribution
     @payment_method = payment_method
     @partner_name = partner.try(:name) || "Donational.org"
     @partner = partner
+    @cancelation = cancelation
 
     Time.use_zone(contribution.donor.time_zone) do
       mail(
