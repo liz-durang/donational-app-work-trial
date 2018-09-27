@@ -1,21 +1,13 @@
 module Grants
   class ScheduleGrant < ApplicationCommand
-    required do
-      model :organization
-      time :scheduled_at, after: Time.zone.now
-    end
-
     def execute
-      Donation.transaction do
-        unpaid_donations = Donations::GetUnpaidDonations.call(organization: organization)
-
+      unpaid_donations.each do |organization, donations|
         grant = Grant.create!(
           organization: organization,
-          amount_cents: unpaid_donations.sum(:amount_cents),
-          scheduled_at: scheduled_at
+          amount_cents: donations.sum(&:amount_cents)
         )
 
-        unpaid_donations.each do |donation|
+        donations.each do |donation|
           chain do
             Donations::MarkDonationAsProcessed.run(donation: donation, processed_by: grant)
           end
@@ -23,6 +15,12 @@ module Grants
       end
 
       nil
+    end
+
+    private
+
+    def unpaid_donations
+      Donations::GetUnpaidDonations.call
     end
   end
 end
