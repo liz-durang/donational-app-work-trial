@@ -5,7 +5,7 @@ class ProcessFailedContributions < ApplicationJob
     unprocessed_failed_contributions.each do |contribution|
       Contributions::ProcessContribution.run!(contribution: contribution)
     end
-    puts "Processed #{unprocessed_contributions.count} contributions"
+    puts "Processed #{unprocessed_failed_contributions.count} contributions"
   end
 
   private
