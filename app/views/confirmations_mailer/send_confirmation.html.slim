@@ -1,14 +1,25 @@
 = render "receipts_mailer/header"
 
-h1
-  ' Your donation plan to your
-  = @partner_name
-  '  charity portfolio was
-  - if @contribution.donor.recurring_contributions.count > 1
-    ' updated succesfully
-  - else
-    ' created succesfully
-
-hr
-
-= render "reminders_mailer/body"
+- if @cancelation
+  h1
+    ' Your donation plan to your
+    = @partner_name
+    '  charity portfolio was canceled succesfully
+  hr
+  p
+    ' To become a recurring donor,
+    = link_to 'Log in to your Donational account', edit_accounts_url
+  br
+  p Thanks for using Donational.org!
+  
+- else
+  h1
+    ' Your donation plan to your
+    = @partner_name
+    '  charity portfolio was
+    - if @contribution.donor.recurring_contributions.count > 1
+      ' updated succesfully
+    - else
+      ' created succesfully
+  hr
+  = render "reminders_mailer/body"
