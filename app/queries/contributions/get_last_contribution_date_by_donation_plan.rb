@@ -8,8 +8,8 @@ module Contributions
       @relation
         .where(donor: recurring_contribution.donor)
         .where(portfolio: recurring_contribution.portfolio)
-        .order(created_at: :desc)
-        .first&.created_at&.to_date
+        .order(scheduled_at: :desc)
+        .first&.scheduled_at&.to_date
     end
   end
 end
