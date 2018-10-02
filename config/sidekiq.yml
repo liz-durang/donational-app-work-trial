@@ -5,3 +5,5 @@ schedule:
     every: '10m'
   ProcessFailedContributions:
     cron: '0 0 5 * * *'
+  ProcessDonationPlans:
+    cron: '0 0 10 * * *'
