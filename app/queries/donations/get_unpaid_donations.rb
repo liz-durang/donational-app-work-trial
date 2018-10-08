@@ -4,8 +4,10 @@ module Donations
       @relation = relation
     end
 
-    def call(organization:)
-      @relation.where(organization: organization, grant: nil)
+    def call
+      @relation
+        .where(grant: nil)
+        .group_by { |donation| donation.organization }
     end
   end
 end
