@@ -32,6 +32,7 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
       expect(recurring_contribution.tips_cents).to eq 100
       expect(recurring_contribution.frequency).to eq 'annually'
       expect(recurring_contribution.start_at.to_date).to eq Date.new(2000, 1, 1)
+      expect(recurring_contribution.last_scheduled_at).to eq nil
     end
 
     context 'and there is no start date provided' do
@@ -53,8 +54,14 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
   end
 
   context 'when there is an existing active recurring_contribution' do
+    let(:previous_plan_last_contribution_scheduled_at) { 1.day.ago }
+
     let!(:existing_recurring_contribution) do
-      create(:recurring_contribution, donor: donor, deactivated_at: nil)
+      create(:recurring_contribution,
+        donor: donor,
+        deactivated_at: nil,
+        last_scheduled_at: previous_plan_last_contribution_scheduled_at
+      )
     end
 
     let!(:recurring_contribution_for_other_donor) do
@@ -74,6 +81,13 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
       expect(recurring_contribution).to be_active
       expect(recurring_contribution.donor).to eq donor
       expect(recurring_contribution.amount_cents).to eq 8000
+    end
+
+    it 'copies the last_scheduled_at date from the previous plan' do
+      subject
+
+      recurring_contribution = Contributions::GetActiveRecurringContribution.call(donor: donor)
+      expect(recurring_contribution.last_scheduled_at).to eq previous_plan_last_contribution_scheduled_at
     end
   end
 end

@@ -15,14 +15,14 @@ RSpec.describe Contributions::ScheduleContribution do
     }
   end
 
-  context 'when the scheduled pay in date is in the past' do
-    let(:scheduled_at) { 1.day.ago }
+  context 'when the scheduled pay in date is not present' do
+    let(:scheduled_at) { nil }
 
     it 'does not run, and includes an error' do
       command = Contributions::ScheduleContribution.run(params)
 
       expect(command).not_to be_success
-      expect(command.errors.symbolic).to include(scheduled_at: :after)
+      expect(command.errors.symbolic).to include(scheduled_at: :nils)
     end
   end
 

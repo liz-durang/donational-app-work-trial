@@ -16,6 +16,8 @@ module Contributions
 
     def execute
       RecurringContribution.transaction do
+        # ensure we don't force a new donation when donor updates their plan settings
+        most_recent_last_scheduled_at = previous_plans_most_recent_scheduled_at
         deactivate_existing_recurring_contributions!
 
         @contribution = RecurringContribution.create!(
@@ -24,7 +26,8 @@ module Contributions
           frequency: frequency,
           start_at: start_at || Time.zone.now,
           amount_cents: amount_cents,
-          tips_cents: tips_cents
+          tips_cents: tips_cents,
+          last_scheduled_at: frequency == 'once' ? nil : most_recent_last_scheduled_at
         )
 
         send_confirmation_email!
@@ -35,10 +38,16 @@ module Contributions
 
     private
 
+    def existing_recurring_contributions
+      Contributions::GetActiveRecurringContributions.call(donor: donor)
+    end
+
+    def previous_plans_most_recent_scheduled_at
+      existing_recurring_contributions.maximum(:last_scheduled_at)
+    end
+
     def deactivate_existing_recurring_contributions!
-      Contributions::GetActiveRecurringContributions
-        .call(donor: donor)
-        .update_all(deactivated_at: Time.zone.now)
+      existing_recurring_contributions.update_all(deactivated_at: Time.zone.now)
     end
 
     def send_confirmation_email!
