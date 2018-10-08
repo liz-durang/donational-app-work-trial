@@ -132,9 +132,9 @@ RSpec.describe Contributions::GetPlansDueRecurringContribution do
       before do
         create(:recurring_contribution,
           frequency: 'annually',
-          start_at: Date.new(2000, 1, 1),
-          last_scheduled_at: nil,
-          deactivated_at: Date.new(2000, 1, 2)
+          start_at: Date.new(1998, 1, 1),
+          last_scheduled_at: Date.new(1999, 1, 1),
+          deactivated_at: Date.new(1999, 3, 1)
         )
       end
 
@@ -143,12 +143,12 @@ RSpec.describe Contributions::GetPlansDueRecurringContribution do
       end
     end
 
-    context 'and there is an active annually plan that has had a contribution this year' do
+    context 'and there is an active annually plan that has had a contribution within the last year' do
       before do
         create(:recurring_contribution,
           frequency: 'annually',
-          start_at: Date.new(2000, 3, 21),
-          last_scheduled_at: Date.new(2000, 3, 21)
+          start_at: Date.new(1998, 10, 21),
+          last_scheduled_at: Date.new(1999, 10, 21)
         )
       end
 
@@ -161,8 +161,8 @@ RSpec.describe Contributions::GetPlansDueRecurringContribution do
       let!(:annual_plan_without_existing_contribution_this_year) {
         create(:recurring_contribution,
           frequency: 'annually',
-          start_at: Date.new(1999, 10, 1),
-          last_scheduled_at: Date.new(1999, 10, 1)
+          start_at: Date.new(1998, 5, 15),
+          last_scheduled_at: Date.new(1999, 5, 15)
         )
       }
 

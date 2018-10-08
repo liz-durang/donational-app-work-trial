@@ -39,12 +39,12 @@ module Contributions
     end
 
     def annual_plans_due_contribution
-      end_of_last_year = Time.zone.now.last_year.at_end_of_year
+      one_year_ago = Time.now - 1.year
       @relation
         .where(deactivated_at: nil)
         .where(frequency: 'annually')
-        .where(start_at: Time.new(0)..end_of_last_year)
-        .where(last_scheduled_at: Time.new(0)..end_of_last_year)
+        .where(start_at: Time.new(0)..one_year_ago)
+        .where(last_scheduled_at: Time.new(0)..one_year_ago)
     end
   end
 end

@@ -54,13 +54,11 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
   end
 
   context 'when there is an existing active recurring_contribution' do
-    let(:previous_plan_last_contribution_scheduled_at) { 1.day.ago }
-
     let!(:existing_recurring_contribution) do
       create(:recurring_contribution,
         donor: donor,
         deactivated_at: nil,
-        last_scheduled_at: previous_plan_last_contribution_scheduled_at
+        last_scheduled_at: 1.day.ago
       )
     end
 
@@ -87,7 +85,7 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
       subject
 
       recurring_contribution = Contributions::GetActiveRecurringContribution.call(donor: donor)
-      expect(recurring_contribution.last_scheduled_at).to eq previous_plan_last_contribution_scheduled_at
+      expect(recurring_contribution.last_scheduled_at).to eq existing_recurring_contribution.reload.last_scheduled_at
     end
   end
 end
