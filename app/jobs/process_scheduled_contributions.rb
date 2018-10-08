@@ -3,7 +3,7 @@ class ProcessScheduledContributions < ApplicationJob
 
   def perform
     unprocessed_contributions.each do |contribution|
-      Contributions::ProcessContribution.run!(contribution: contribution)
+      Contributions::ProcessContribution.run(contribution: contribution)
     end
     puts "Processed #{unprocessed_contributions.count} contributions"
   end

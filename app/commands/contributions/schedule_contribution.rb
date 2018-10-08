@@ -20,6 +20,5 @@ module Contributions
         scheduled_at: scheduled_at
       )
     end
-
   end
 end
