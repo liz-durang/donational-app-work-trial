@@ -9,7 +9,6 @@ class CampaignContributionsController < ApplicationController
     pipeline.chain { subscribe_donor_to_managed_portfolio! }
     pipeline.chain { update_donor_payment_method! } if payment_token.present?
     pipeline.chain { update_recurring_contribution! }
-    pipeline.chain { schedule_first_contribution_immediately! } unless future_start_date?
 
     outcome = pipeline.run
 
@@ -65,16 +64,6 @@ class CampaignContributionsController < ApplicationController
       frequency: params[:campaign_contribution][:frequency],
       start_at: start_at,
       tips_cents: 0
-    )
-  end
-
-  def schedule_first_contribution_immediately!
-    Contributions::ScheduleContribution.run(
-      donor: current_donor,
-      portfolio: active_portfolio,
-      amount_cents: amount_cents,
-      tips_cents: 0,
-      scheduled_at: Time.zone.now
     )
   end
 

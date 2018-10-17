@@ -4,7 +4,7 @@ module Contributions
       model :donor
       model :portfolio
       integer :amount_cents, min: 100
-      time :scheduled_at, after: Time.zone.now
+      time :scheduled_at
     end
 
     optional do
@@ -20,6 +20,5 @@ module Contributions
         scheduled_at: scheduled_at
       )
     end
-
   end
 end

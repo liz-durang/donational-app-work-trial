@@ -1,5 +1,5 @@
-- if first_contribution.present? && first_contribution.scheduled_at.to_date.today?
-  p = t :first_contribution_message, amount: cents_to_currency(first_contribution.amount_cents)
+- if recurring_contribution&.start_at&.to_date&.today?
+  p = t :first_contribution_message, amount: cents_to_currency(recurring_contribution.amount_cents)
 
 - if recurring_contribution&.future_contribution_scheduled?
   p = t recurring_contribution.frequency, scope: :next_contribution, \

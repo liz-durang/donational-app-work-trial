@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_14_155633) do
+ActiveRecord::Schema.define(version: 2018_10_08_154732) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -221,7 +221,6 @@ ActiveRecord::Schema.define(version: 2018_09_14_155633) do
     t.datetime "updated_at", null: false
     t.jsonb "donor_questions_schema"
     t.string "payment_processor_account_id"
-    t.string "api_key"
   end
 
   create_table "payment_methods", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -256,6 +255,7 @@ ActiveRecord::Schema.define(version: 2018_09_14_155633) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "last_reminded_at"
+    t.datetime "last_scheduled_at"
     t.index ["deactivated_at"], name: "index_recurring_contributions_on_deactivated_at"
     t.index ["donor_id"], name: "index_recurring_contributions_on_donor_id"
     t.index ["portfolio_id"], name: "index_recurring_contributions_on_portfolio_id"

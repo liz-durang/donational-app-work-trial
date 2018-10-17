@@ -7,6 +7,7 @@ one_for_the_world = Partner.find_or_create_by(name: 'One For The World') do |p|
   p.platform_fee_percentage = 0.02
   p.payment_processor_account_id = 'acct_1Cq2tLDFX5Cbjrb9'
   p.description = "1% of the developed world's income can eliminate extreme poverty. Let it start with you."
+  p.donor_questions_schema = { questions: [] }
 end
 
 Partners::UpdateCustomDonorQuestions.run(

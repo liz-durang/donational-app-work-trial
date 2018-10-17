@@ -23,7 +23,6 @@ class ContributionsController < ApplicationController
     pipeline = Flow.new
     pipeline.chain { update_donor_payment_method! } if payment_token.present?
     pipeline.chain { update_recurring_contribution! }
-    pipeline.chain { schedule_first_contribution_immediately! }
 
     outcome = pipeline.run
 
@@ -60,16 +59,6 @@ class ContributionsController < ApplicationController
       amount_cents: amount_cents,
       tips_cents: tips_cents,
       start_at: start_at.presence
-    )
-  end
-
-  def schedule_first_contribution_immediately!
-    Contributions::ScheduleContribution.run(
-      donor: current_donor,
-      portfolio: active_portfolio,
-      amount_cents: amount_cents,
-      tips_cents: tips_cents,
-      scheduled_at: Time.zone.now
     )
   end
 
