@@ -1,4 +1,4 @@
-window.onload = function() {
+(function() {
   var script = document.getElementById('load_widget');
   var iframe = document.createElement('iframe');
   iframe.style.width = "100%";
@@ -7,4 +7,4 @@ window.onload = function() {
   iframe.src = "<%= campaigns_url(@view_model.campaign_slug, format: :html) %>"
 
   script.parentNode.insertBefore(iframe, script);
-};
+}());
