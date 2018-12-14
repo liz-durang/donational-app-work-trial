@@ -11,12 +11,17 @@ class ContributionsController < ApplicationController
   end
 
   def new
-    @view_model = OpenStruct.new(
-      target_amount_cents: target_amount_cents,
-      recurring_contribution: active_recurring_contribution || new_recurring_donation,
-      active_payment_method?: payment_method.present?,
-      portfolio_organization_count: active_portfolio.active_allocations.count
-    )
+    if active_recurring_contribution.present?
+      redirect_to edit_accounts_path
+    else
+      @view_model = OpenStruct.new(
+        target_amount_cents: target_amount_cents,
+        recurring_contribution: new_recurring_donation,
+        active_payment_method?: payment_method.present?,
+        portfolio_organization_count: active_portfolio.active_allocations.count,
+        partner_affiliation?: partner_affiliation.present?
+      )
+    end
   end
 
   def create
@@ -72,6 +77,10 @@ class ContributionsController < ApplicationController
 
   def active_recurring_contribution
     @active_contribution ||= Contributions::GetActiveRecurringContribution.call(donor: current_donor)
+  end
+
+  def partner_affiliation
+    @partner_affiliation ||= Partners::GetPartnerAffiliationByDonor.call(donor: current_donor)
   end
 
   def new_recurring_donation
