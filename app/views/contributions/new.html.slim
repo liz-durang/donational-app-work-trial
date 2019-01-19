@@ -46,14 +46,23 @@ section.section.embossed
               = render 'payment_methods/credit_card_form'
               hr
 
-            .field
-              .label Help us grow!
-              p.help.content
-                ' Donational is run at-cost. We only make money if you choose to tip us, allowing us to help you — and to help others — make a greater impact.
-              .control.buttons = f.collection_radio_buttons :tips_cents,\
-                [[0, 'No tip'], [200, '$2'], [500, '$5'], [1_000, '$10']], :first, :last do |b| \
-                  b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
-                end
+
+            - if @view_model.partner_affiliation?
+              field.control
+                .label Start my contribution on
+                .control.has-icons-left
+                    = icon_tag('fas fa-calendar')
+                    = f.date_field :start_at, class: :input, value: Date.today, min: Date.today.iso8601, max: 4.years.from_now.to_date.iso8601
+
+            - unless @view_model.partner_affiliation?
+              .field
+                .label Help us grow!
+                p.help.content
+                  ' Donational is run at-cost. We only make money if you choose to tip us, allowing us to help you — and to help others — make a greater impact.
+                .control.buttons = f.collection_radio_buttons :tips_cents,\
+                  [[0, 'No tip'], [200, '$2'], [500, '$5'], [1_000, '$10']], :first, :last do |b| \
+                    b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
+                  end
             hr
             .field.has-text-centered.content
               .control.has-text-centered
