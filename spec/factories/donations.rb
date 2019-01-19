@@ -19,7 +19,7 @@ FactoryBot.define do
     organization
     allocation
     contribution
-    grant nil
-    amount_cents 1
+    grant { nil }
+    amount_cents { 1 }
   end
 end

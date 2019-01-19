@@ -16,10 +16,10 @@
 FactoryBot.define do
   factory :campaign do
     partner
-    title "MyString"
-    slug SecureRandom.uuid
-    description "MyText"
-    target_amount_cents 1
-    default_contribution_amounts ""
+    title { "MyString" }
+    slug { SecureRandom.uuid }
+    description { "MyText" }
+    target_amount_cents { 1 }
+    default_contribution_amounts { "" }
   end
 end

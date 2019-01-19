@@ -15,8 +15,8 @@
 FactoryBot.define do
   factory :grant do
     organization
-    amount_cents 123
-    scheduled_at 1.day.ago
-    processed_at nil
+    amount_cents { 123 }
+    scheduled_at { 1.day.ago }
+    processed_at { nil }
   end
 end
