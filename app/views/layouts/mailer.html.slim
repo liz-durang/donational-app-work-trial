@@ -1,10 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="https://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width"/>
-    <style>
+html
+  head
+    css:
       @import url('https://fonts.googleapis.com/css?family=Work+Sans:200,300,500,700,900');
 
       body {
@@ -84,22 +80,15 @@
       .fine-print {
         font-size: .7rem;
       }
-    </style>
-  </head>
 
-  <body bgcolor="f9fafa" style="border: 0; margin: 0; padding: 0; min-width: 100%;" override="fix">
-    <div width="100%" style='text-align: center;'>
-      <div class='header' width="100%" style='text-align: center'>
-        <div style='width:100%; max-width: 90%; margin: 0 auto; text-align: center;'>
-          <% if @partner.present? && @partner.email_banner.attached? && @partner.email_banner.variable? %>
-            <div alt="Donational" width="100%" style="border: 0; margin: 0; padding: 0;">
-              <%= image_tag @partner.email_banner.variant(resize: '1196x305') %>
-            </div>
-          <% else %>
-            <img src="<%= image_url('receipt-header.png')%>" alt="Donational" width="100%" style="border: 0; margin: 0; padding: 0;">
-          <% end %>
-        </div>
-      </div>
-
-      <!-- content -->
-      <div style='width:500px; max-width: 90%; margin: 0 auto; text-align: center;'>
+  body bgcolor="f9fafa" style="border: 0; margin: 0; padding: 0; min-width: 100%;" override="fix"
+    div width="100%"
+      div class='header' width="100%" style='text-align: center'
+        div style='width:100%; max-width: 90%; margin: 0 auto; text-align: center;'
+          - if @partner.present? && @partner.email_banner.attached? && @partner.email_banner.variable?
+            div alt="Donational" width="100%" style="border: 0; margin: 0; padding: 0;"
+              = image_tag @partner.email_banner.variant(resize: '1196x305')
+          - else
+            img src=image_url('receipt-header.png') alt="Donational" width="100%" style="border: 0; margin: 0; padding: 0;"
+      div style='width:500px; max-width: 90%; margin: 0 auto;'
+        = yield
