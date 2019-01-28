@@ -59,11 +59,10 @@ module ApplicationHelper
     end.compact.reduce(:+)
   end
 
-  def cents_to_currency(cents)
+  def cents_to_currency(cents, precision: 2)
     return '' unless cents
 
-    dollars = cents_to_dollars(cents)
-    number_to_currency(dollars, precision: 0)
+    number_to_currency(cents / 100.0, precision: precision)
   end
 
   def cents_to_dollars(cents)

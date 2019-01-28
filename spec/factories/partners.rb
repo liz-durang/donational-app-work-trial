@@ -16,9 +16,9 @@
 
 FactoryBot.define do
   factory :partner do
-    name "MyString"
-    website_url "MyString"
-    platform_fee_percentage "9.99"
-    primary_branding_color "MyString"
+    name { "MyString" }
+    website_url { "MyString" }
+    platform_fee_percentage { "9.99" }
+    primary_branding_color { "MyString" }
   end
 end

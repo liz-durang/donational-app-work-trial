@@ -16,6 +16,6 @@ FactoryBot.define do
     partner
     donor
     campaign { create(:campaign, slug: SecureRandom.uuid) }
-    custom_donor_info ""
+    custom_donor_info { "" }
   end
 end

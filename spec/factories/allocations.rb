@@ -15,6 +15,6 @@ FactoryBot.define do
   factory :allocation do
     portfolio
     organization
-    percentage 0
+    percentage { 0 }
   end
 end

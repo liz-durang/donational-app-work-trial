@@ -19,9 +19,9 @@ FactoryBot.define do
   factory :contribution do
     donor
     portfolio
-    amount_cents 123
-    tips_cents 2
-    scheduled_at 1.day.ago
-    processed_at nil
+    amount_cents { 123 }
+    tips_cents { 2 }
+    scheduled_at { 1.day.ago }
+    processed_at { nil }
   end
 end

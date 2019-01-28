@@ -1,5 +1,3 @@
-= render "receipts_mailer/header"
-
 - if @cancelation
   h1
     ' Your donation plan to your
@@ -11,7 +9,7 @@
     = link_to 'Log in to your Donational account', edit_accounts_url
   br
   p Thanks for using Donational.org!
-  
+
 - else
   h1
     ' Your donation plan to your

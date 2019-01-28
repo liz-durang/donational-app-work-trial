@@ -19,9 +19,9 @@ FactoryBot.define do
   factory :recurring_contribution do
     donor
     portfolio
-    frequency :monthly
-    amount_cents 1
-    tips_cents 1
-    start_at Time.zone.now
+    frequency { :monthly }
+    amount_cents { 1 }
+    tips_cents { 1 }
+    start_at { Time.zone.now }
   end
 end
