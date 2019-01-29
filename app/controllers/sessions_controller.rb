@@ -1,6 +1,10 @@
 class SessionsController < ApplicationController
   def new
-    redirect_to portfolio_path if logged_in?
+    if logged_in?
+      redirect_to portfolio_path
+    else
+      redirect_to '/auth/auth0'
+    end
   end
 
   def destroy
