@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/lsylvester/active_storage-postgresql.git
-  revision: c0cf5bd619ad3e5ed9c381a2fab54a47c9728d6c
+  revision: f1860138e59ed6d2e6bf103cad26f55d0d47abcb
   specs:
     active_storage-postgresql (0.1.1)
       pg (~> 1.0)
