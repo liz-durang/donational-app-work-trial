@@ -1,6 +1,7 @@
 class ContributionsSummaryMailer < ApplicationMailer
   def notify
     @contributions = params[:contributions].sort_by(&:processed_at)
+    @organizations = @contributions.flat_map { |c| c.organizations }.uniq
     @total_contributions_cents = @contributions.sum(&:total_charges_cents)
     @year = params[:year]
     @partner_name = params[:partner].try(:name) || "Donational.org"

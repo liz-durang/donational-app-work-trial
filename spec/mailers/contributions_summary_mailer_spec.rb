@@ -12,14 +12,18 @@ RSpec.describe ContributionsSummaryMailer, type: :mailer do
     end
     let(:mail) { ContributionsSummaryMailer.with(params).notify }
 
+    let(:amf) { create(:organization, name: 'Against Malaria Foundation') }
+    let(:gd) { create(:organization, name: 'Give Directly') }
+    let(:end_fund) { create(:organization, name: 'The End Fund') }
+
     context "when the donor is affiliated with a Partner" do
       let(:partner) { build(:partner, name: 'Example Partner') }
       let(:contributions) do
         [
-          build(:contribution, amount_cents: 1000, tips_cents: 0, processed_at: Date.new(2018, 2, 10)),
-          build(:contribution, amount_cents: 1625, tips_cents: 0, processed_at: Date.new(2018, 10, 1)),
-          build(:contribution, amount_cents: 1525, tips_cents: 0, processed_at: Date.new(2018, 7, 1)),
-          build(:contribution, amount_cents: 1100, tips_cents: 0, processed_at: Date.new(2018, 4, 1)),
+          create(:contribution_with_donations_to_organizations, amount_cents: 1000, tips_cents: 0, processed_at: Date.new(2018, 2, 10), organizations: [gd, amf]),
+          create(:contribution_with_donations_to_organizations, amount_cents: 1625, tips_cents: 0, processed_at: Date.new(2018, 10, 1), organizations: [gd]),
+          create(:contribution_with_donations_to_organizations, amount_cents: 1525, tips_cents: 0, processed_at: Date.new(2018, 7, 1), organizations: [end_fund]),
+          create(:contribution_with_donations_to_organizations, amount_cents: 1100, tips_cents: 0, processed_at: Date.new(2018, 4, 1), organizations: [gd, amf])
         ]
       end
 
@@ -31,9 +35,8 @@ RSpec.describe ContributionsSummaryMailer, type: :mailer do
 
       it "renders the body" do
         expect(mail.body.encoded).to include("Your 2018 contributions to your Example Partner charity portfolio")
-        expect(mail.body.encoded).to include("Powered by Donational.org")
-        expect(mail.body.encoded).to include("Hey Joe Donator,")
-        expect(mail.body.encoded).to include("In 2018, you donated a total of $52.50 to your charitable portfolio!")
+        expect(mail.body.encoded).to include("Hey Joe,")
+        expect(mail.body.encoded).to include("In 2018, you donated a total of <b>$52.50</b> to your Example Partner portfolio!")
 
         expect(mail.body.encoded).to match(
           Regexp.new(
@@ -49,6 +52,13 @@ RSpec.describe ContributionsSummaryMailer, type: :mailer do
             ].join('.*')
           )
         )
+      end
+
+      it "displays a summary of all the organizations a donor contributed to" do
+        expect(mail.body.encoded).to include("Your contributions in 2018 supported 3 charities:")
+        expect(mail.body.encoded).to include("Against Malaria Foundation")
+        expect(mail.body.encoded).to include("Give Directly")
+        expect(mail.body.encoded).to include("The End Fund")
       end
     end
 
@@ -69,8 +79,8 @@ RSpec.describe ContributionsSummaryMailer, type: :mailer do
 
       it "renders the body" do
         expect(mail.body.encoded).to include("Your 2018 contributions to your Donational.org charity portfolio")
-        expect(mail.body.encoded).to include("Hey Joe Donator,")
-        expect(mail.body.encoded).to include("In 2018, you donated a total of $31.00 to your charitable portfolio!")
+        expect(mail.body.encoded).to include("Hey Joe,")
+        expect(mail.body.encoded).to include("In 2018, you donated a total of <b>$31.00</b> to your Donational.org portfolio!")
 
         expect(mail.body.encoded).to match(
           Regexp.new(
