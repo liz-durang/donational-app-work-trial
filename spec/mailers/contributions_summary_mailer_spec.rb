@@ -66,8 +66,8 @@ RSpec.describe ContributionsSummaryMailer, type: :mailer do
       let(:partner) { nil }
       let(:contributions) do
         [
-          build(:contribution, amount_cents: 1000, tips_cents: 100, processed_at: Time.new(2018, 12, 31, 1)),
-          build(:contribution, amount_cents: 2000, tips_cents: 0, processed_at: Time.new(2018, 12, 31, 4)),
+          build(:contribution, amount_cents: 1000, tips_cents: 100, processed_at: Time.new(2018, 12, 31, 1), organizations: [amf]),
+          build(:contribution, amount_cents: 2000, tips_cents: 0, processed_at: Time.new(2018, 12, 31, 4), organizations: [amf]),
         ]
       end
 
@@ -92,6 +92,11 @@ RSpec.describe ContributionsSummaryMailer, type: :mailer do
             ].join('.*')
           )
         )
+      end
+
+      it "displays a summary of all the organizations a donor contributed to" do
+        expect(mail.body.encoded).to include("Your contributions in 2018 supported 1 charity:")
+        expect(mail.body.encoded).to include("Against Malaria Foundation")
       end
     end
   end

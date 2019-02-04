@@ -45,7 +45,7 @@ p
   ' Your contributions in
   => @year
   ' supported
-  = pluralize(@organizations.count, 'charities')
+  = pluralize(@organizations.count, 'charity')
   | :
 ul
   - @organizations.each do |organization|
