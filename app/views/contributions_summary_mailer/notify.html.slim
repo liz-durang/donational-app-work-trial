@@ -3,34 +3,35 @@ h3
   = @partner_name
   |  charity portfolio
 
-- unless @partner_name == "Donational.org"
-  h4 Powered by Donational.org
+hr
 
 p
   ' Hey
-  = @donor.name
+  = @donor.first_name
   | ,
 
 p
   ' In
   = @year
   ' , you donated a total of
-  => cents_to_currency(@total_contributions_cents)
-  ' to your charitable portfolio!
+  b => cents_to_currency(@total_contributions_cents)
+  ' to your
+  => @partner_name
+  | portfolio!
 
 p
-
+  ' When entering this as a deduction on your taxes, please enter "Social Good Fund" as the name of the charity.
+  | Your donations are tax-deductible in the United States, and this email serves as your official tax receipt.
+  
 p
   ' Here is a list of each contribution that you made in
-  | #{@year}
+  = @year
   | :
 
 table border="0" cellpadding="0" cellspacing="0" width="100%"
   - @contributions.each do |contribution|
       tr.summary-item
         td align="left"
-          b Donation to Social Good Fund
-          br
           .fine-print
             ' Date:
             = contribution.processed_at.to_date.to_formatted_s(:long_ordinal)
@@ -41,10 +42,16 @@ table border="0" cellpadding="0" cellspacing="0" width="100%"
           b = cents_to_currency(contribution.total_charges_cents)
 
 p
-  ' When entering this as a deduction on your taxes, please enter "Social Good Fund" as the name of the charity.
-  | Your donations are tax-deductible in the United States, and this email serves as your official tax receipt.
+  ' Your contributions in
+  => @year
+  ' supported
+  = pluralize(@organizations.count, 'charities')
+  | :
+ul
+  - @organizations.each do |organization|
+    li = organization.name
 
-p Thanks for all of your support. Wishing you the best for the year ahead!
+p Thanks for your generous support of important and impactful causes. Wishing you the best for the year ahead!
 
 hr
 
@@ -61,5 +68,5 @@ hr
 h3 Thanks for using Donational.org!
 
 p
-  ' To update your preferences, donation frequency and payment method,
+  ' To update your preferences, donation frequency or payment method,
   = link_to 'log in to your Donational account', edit_accounts_url

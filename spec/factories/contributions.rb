@@ -23,5 +23,17 @@ FactoryBot.define do
     tips_cents { 2 }
     scheduled_at { 1.day.ago }
     processed_at { nil }
+    
+    factory :contribution_with_donations_to_organizations do
+      transient do
+        organizations { [] }
+      end
+
+      after(:create) do |contribution, evaluator|
+        evaluator.organizations.each do |organization|
+          create(:donation, organization: organization, contribution: contribution)
+        end
+      end
+    end
   end
 end
