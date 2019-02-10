@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_08_154732) do
+ActiveRecord::Schema.define(version: 2019_02_10_160208) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -98,6 +98,7 @@ ActiveRecord::Schema.define(version: 2018_10_08_154732) do
     t.uuid "donor_id"
     t.datetime "failed_at"
     t.integer "payment_processor_fees_cents"
+    t.datetime "refunded_at"
     t.index ["donor_id"], name: "index_contributions_on_donor_id"
     t.index ["portfolio_id"], name: "index_contributions_on_portfolio_id"
   end

@@ -48,19 +48,24 @@ section.section.embossed
                   => time_ago_in_words(contribution.processed_at)
                   | ago
               td.has-text-right
-                strong> = number_to_currency(contribution.total_charges_cents / 100.0)
-                br
-                - if contribution.processed_at?
-                  ' to
-                  = pluralize(contribution.donations.count, 'charity')
+                - if contribution.refunded_at?
+                  strong> style="text-decoration: line-through;" = cents_to_currency(contribution.total_charges_cents)
+                  br
+                  .tag refunded
                 - else
-                  .tag processing
+                  strong> = cents_to_currency(contribution.total_charges_cents)
+                  br
+                  - if contribution.processed_at?
+                    ' to
+                    = pluralize(contribution.donations.count, 'charity')
+                  - else
+                    .tag processing
             - contribution.donations.each do |donation|
               tr.is-hidden data-accordion-panel-for="contribution-#{contribution.id}"
                 td.has-text-right colspan=2
                   em => donation.organization.name
                 td.has-text-right
-                  em = number_to_currency(donation.amount_cents / 100.0)
+                  em = cents_to_currency(contribution.total_charges_cents)
                 td &nbsp;
             - if contribution.tips_cents > 0
               tr.is-hidden data-accordion-panel-for="contribution-#{contribution.id}"
@@ -69,7 +74,7 @@ section.section.embossed
                   br
                   small Thanks for helping us grow!
                 td.has-text-right
-                  em = number_to_currency(contribution.tips_cents / 100.0)
+                  em = cents_to_currency(contribution.total_charges_cents)
                 td &nbsp;
 section.section
   .container.content.has-text-centered style="max-width: 40rem;"
