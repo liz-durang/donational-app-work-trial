@@ -28,4 +28,14 @@ RSpec.describe Contributions::GetContributionsForYear do
       expect(subject).to include(included_contribution_2)
     end
   end
+
+  context 'when the donor has refunded contributions' do
+    let!(:excluded_contribution) { create(:contribution, donor: donor, processed_at: '2018-06-01', refunded_at: '2018-06-12') }
+    let!(:included_contribution) { create(:contribution, donor: donor, processed_at: '2018-04-01') }
+    
+    it 'excludes refunded contributions' do
+      expect(subject).to include(included_contribution)
+      expect(subject).not_to include(excluded_contribution)
+    end
+  end
 end
