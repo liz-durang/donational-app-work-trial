@@ -1,7 +1,9 @@
 schedule:
   ProcessScheduledContributions:
-    every: '10s'
+    interval: '1h'
   SendContributionReminders:
-    every: '10m'
+    interval: '4h'
   ProcessFailedContributions:
-    cron: '0 0 5 * * *'
+    interval: '1h'
+  ScheduleContributionsForPastDuePlans:
+    interval: '30m'

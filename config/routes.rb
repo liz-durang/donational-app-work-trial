@@ -7,9 +7,10 @@ Rails.application.routes.draw do
 
   resources :organizations, path: 'charities', only: :index
 
-  # Activation
   mount ActionCable.server => '/cable'
   resource :onboarding, path: 'getting-started', only: :show
+
+  # Activation
   resource :portfolio
   resource :allocations, only: %i[new edit create update]
   resource :accounts, only: %i[edit update]
@@ -43,8 +44,15 @@ Rails.application.routes.draw do
   get '/auth/oauth2/callback' => 'auth0#callback'
   get '/auth/failure' => 'auth0#failure'
 
+  # Administration
+  require "sidekiq/web"
+  Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+    ActiveSupport::SecurityUtils.secure_compare(::Digest::SHA256.hexdigest(username), ::Digest::SHA256.hexdigest(ENV["SIDEKIQ_USERNAME"])) &
+      ActiveSupport::SecurityUtils.secure_compare(::Digest::SHA256.hexdigest(password), ::Digest::SHA256.hexdigest(ENV["SIDEKIQ_PASSWORD"]))
+  end if Rails.env.production?
+  mount Sidekiq::Web, at: "/sidekiq"
+
   get '/:campaign_slug' => 'campaigns#show', as: :campaigns
   post '/:campaign_slug/contributions' => 'campaign_contributions#create', as: :campaign_contributions
   get '/:campaign_slug/donation-box' => 'campaigns#donation_box', as: :campaigns_donation_box
-
 end
