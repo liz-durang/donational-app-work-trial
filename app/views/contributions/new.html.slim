@@ -48,13 +48,26 @@ section.section.embossed
 
 
             - if @view_model.partner_affiliation?
-              field.control
-                .label Start my contribution on
-                .control.has-icons-left
-                    = icon_tag('fas fa-calendar')
-                    = f.date_field :start_at, class: :input, value: Date.today, min: Date.today.iso8601, max: 4.years.from_now.to_date.iso8601
+              .columns
+                .column
+                  field
+                    .label Start my contribution on
+                    .control.has-icons-left
+                        = icon_tag('fas fa-calendar')
+                        = f.date_field :start_at, class: :input, value: Date.today, min: Date.today.iso8601, max: 4.years.from_now.to_date.iso8601
+                .column
+                  .field
+                    label.control
+                      .label Portfolio
 
-            - unless @view_model.partner_affiliation?
+                      .select 
+                        = f.collection_select :portfolio_id,
+                          @view_model.partner_affiliation.partner.managed_portfolios.order(:name),
+                          :portfolio_id,
+                          :name
+
+            - else @view_model.partner_affiliation?
+              = f.hidden_field :portfolio_id, value: @view_model.recurring_contribution.portfolio_id
               .field
                 .label Help us grow!
                 p.help.content

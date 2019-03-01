@@ -19,6 +19,7 @@ class ContributionsController < ApplicationController
         recurring_contribution: new_recurring_donation,
         active_payment_method?: payment_method.present?,
         portfolio_organization_count: active_portfolio.active_allocations.count,
+        partner_affiliation: partner_affiliation,
         partner_affiliation?: partner_affiliation.present?
       )
     end
@@ -59,7 +60,7 @@ class ContributionsController < ApplicationController
   def update_recurring_contribution!
     Contributions::CreateOrReplaceRecurringContribution.run(
       donor: current_donor,
-      portfolio: active_portfolio,
+      portfolio: Portfolio.find(portfolio_id),
       frequency: frequency,
       amount_cents: amount_cents,
       tips_cents: tips_cents,
@@ -117,6 +118,10 @@ class ContributionsController < ApplicationController
 
   def frequency
     params[:recurring_contribution][:frequency]
+  end
+
+  def portfolio_id
+    params[:recurring_contribution][:portfolio_id]
   end
 
   def start_at
