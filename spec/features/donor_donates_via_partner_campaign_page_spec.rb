@@ -41,6 +41,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     click_on 'Next'
 
+    expect(page).not_to have_content('Managed Portfolio that has been hidden')
     click_on_label 'Top Picks'
 
     click_on 'Next'
@@ -100,6 +101,14 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
       partner: partner,
       portfolio: portfolio,
       name: 'Top Picks'
+    )
+
+
+    ManagedPortfolio.create(
+      partner: partner,
+      portfolio: portfolio,
+      name: 'Managed Portfolio that has been hidden',
+      hidden_at: 1.day.ago
     )
   end
 end

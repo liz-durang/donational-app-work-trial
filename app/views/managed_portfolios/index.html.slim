@@ -39,6 +39,8 @@ section.section.embossed
                 td
                   p
                     = managed_portfolio.name
+                    - unless managed_portfolio.available_to_new_donors?
+                      span.tag Hidden
                 td
                   p
                     = managed_portfolio.description

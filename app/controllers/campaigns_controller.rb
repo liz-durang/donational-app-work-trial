@@ -26,7 +26,7 @@ class CampaignsController < ApplicationController
       default_contribution_amounts: campaign.default_contribution_amounts,
       campaign_contributions_path: campaign_contributions_path(campaign.slug),
       new_campaign_contribution: new_campaign_contribution,
-      managed_portfolios: partner.managed_portfolios,
+      managed_portfolios: partner.managed_portfolios.where(hidden_at: nil),
       donor_questions: partner.donor_questions
     )
 
