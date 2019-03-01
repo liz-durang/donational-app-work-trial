@@ -25,7 +25,21 @@
               b.radio_button(class: 'is-hidden') + b.label(class: 'button is-outlined') \
             end
 
+    - if @view_model.partner_affiliation
+      .field
+        label.control
+          .label Portfolio
+
+          .select 
+            = f.collection_select :portfolio_id,
+              @view_model.partner_affiliation.partner.managed_portfolios.order(:name),
+              :portfolio_id,
+              :name,
+              selected: @view_model.recurring_contribution.portfolio_id
+
+    - else
+      = f.hidden_field :portfolio_id, value: @view_model.recurring_contribution.portfolio_id
     .has-text-right
-      p = f.submit 'Save', class: %w(button is-primary)
+      p = f.submit 'Update donation plan', class: %w(button is-primary)
       - if recurring_contribution.future_contribution_scheduled?
         p = link_to 'Cancel my upcoming donations', contribution_path(id: recurring_contribution), class: 'is-danger', method: :delete, data: { confirm: 'Are you sure you want to cancel your recurring donation?' }

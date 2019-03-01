@@ -57,6 +57,9 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     visit edit_accounts_path
     expect(find_field('donor_responses[city]').value).to eq 'London'
+
+    select 'Other Portfolio'
+    click_on 'Update donation plan'
   end
 
   def create_new_partner!
@@ -102,13 +105,23 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
       portfolio: portfolio,
       name: 'Top Picks'
     )
-
-
     ManagedPortfolio.create(
       partner: partner,
       portfolio: portfolio,
       name: 'Managed Portfolio that has been hidden',
       hidden_at: 1.day.ago
+    )
+
+    charity_4 = create(:organization, name: 'Charity 4')
+    charity_5 = create(:organization, name: 'Charity 5')
+    other_portfolio = create(:portfolio)
+    Portfolios::AddOrganizationsAndRebalancePortfolio.run(
+      portfolio: portfolio, organization_eins: [charity_4.ein, charity_5.ein]
+    )
+    ManagedPortfolio.create(
+      partner: partner,
+      portfolio: other_portfolio,
+      name: 'Other Portfolio'
     )
   end
 end
