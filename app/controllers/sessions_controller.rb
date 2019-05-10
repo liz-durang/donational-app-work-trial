@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  skip_forgery_protection only: [:destroy]
+
   def new
     if logged_in?
       redirect_to portfolio_path
