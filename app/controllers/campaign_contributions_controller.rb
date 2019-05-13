@@ -1,4 +1,6 @@
 class CampaignContributionsController < ApplicationController
+  skip_forgery_protection only: [:create]
+
   def create
     ensure_current_donor!
 
