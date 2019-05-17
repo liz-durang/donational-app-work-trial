@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   # Acquisition
   root 'pages#index'
   %w(mission donate-with-confidence methodology faq api).each do |page_slug|
-    get page_slug => 'pages#show', page: page_slug.underscore
+    get page_slug => 'pages#show', page: page_slug.underscore, format: :html
   end
 
   resources :organizations, path: 'charities', only: :index
@@ -37,7 +37,7 @@ Rails.application.routes.draw do
   resources :contributions
 
   # Referral
-  get 'profiles/:username' => 'profiles#show', as: :profiles
+  get 'profiles/:username' => 'profiles#show', as: :profiles, defaults: { format: :html }
 
   # Sessions and Authentication
   resource :sessions, only: %i[new destroy]
@@ -52,7 +52,7 @@ Rails.application.routes.draw do
   end if Rails.env.production?
   mount Sidekiq::Web, at: "/sidekiq"
 
-  get '/:campaign_slug' => 'campaigns#show', as: :campaigns
+  get '/:campaign_slug' => 'campaigns#show', as: :campaigns, defaults: { format: :html }
   post '/:campaign_slug/contributions' => 'campaign_contributions#create', as: :campaign_contributions
-  get '/:campaign_slug/donation-box' => 'campaigns#donation_box', as: :campaigns_donation_box
+  get '/:campaign_slug/donation-box' => 'campaigns#donation_box', as: :campaigns_donation_box, defaults: { format: :html }
 end
