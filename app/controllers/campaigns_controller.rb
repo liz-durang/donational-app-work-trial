@@ -22,7 +22,7 @@ class CampaignsController < ApplicationController
       campaign_slug: campaign.slug,
       campaign_description: campaign.description,
       contribution_amount_help_text: campaign.contribution_amount_help_text,
-      donation_frequencies: available_donation_frequencies,
+      donation_frequencies: campaign.allowable_donation_frequencies,
       default_contribution_amounts: campaign.default_contribution_amounts,
       campaign_contributions_path: campaign_contributions_path(campaign.slug),
       new_campaign_contribution: new_campaign_contribution,
@@ -91,7 +91,7 @@ class CampaignsController < ApplicationController
     @view_model = OpenStruct.new(
       campaign_slug: campaign.slug,
       contribution_amount_help_text: campaign.contribution_amount_help_text,
-      donation_frequencies: available_donation_frequencies,
+      donation_frequencies: campaign.allowable_donation_frequencies,
       default_contribution_amounts: campaign.default_contribution_amounts,
       campaign_contributions_path: campaign_contributions_path(campaign.slug),
       new_campaign_contribution: new_campaign_contribution,
@@ -128,12 +128,6 @@ class CampaignsController < ApplicationController
       last_name: current_donor.try(:last_name),
       email: current_donor.try(:email)
     )
-  end
-
-  def available_donation_frequencies
-    return RecurringContribution.frequency.options if campaign.allow_one_time_contributions?
-
-    RecurringContribution.frequency.options.reject { |k,v| v == 'once' }
   end
 
   def campaign

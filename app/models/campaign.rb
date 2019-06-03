@@ -18,4 +18,12 @@ class Campaign < ApplicationRecord
   has_one_attached :banner_image
 
   validates :slug, uniqueness: true
+
+  def allowable_donation_frequencies
+    if allow_one_time_contributions?
+      RecurringContribution.frequency.options.select { |k,v| v.in? ['once', 'monthly'] } 
+    else
+      RecurringContribution.frequency.options.select { |k,v| v == 'monthly' }
+    end
+  end
 end

@@ -14,45 +14,32 @@
     = f.hidden_field :payment_token, id: 'payment_token'
     fieldset.wizard-card data-target='wizard.step'
       .wizard-card-header
-        span.icon: i.fas.fa-lock
-        h3.wizard-card-title Donate now
+        span.icon: i.fas.fa-handshake
+        h3.wizard-card-title Pledge now
         = render 'wizard_nav', step: 1, of: 5
       .wizard-card-content
-        .field data-controller="radio-select"
-          .field.is-grouped.is-grouped-multiline
-            - @view_model.default_contribution_amounts.each do |amount|
-              a.control.button.is-expanded href='#' data-target='radio-select.button' data-action='radio-select#select' data-radio-select-value=amount
-                = number_to_currency(amount, precision: 0)
-          .field.has-addons
-            .control
-              .button.is-static.is-medium Your donation:
-            .control.has-icons-left.is-expanded
-              = f.number_field :amount_dollars,
-                class: %w(input is-medium),
-                data: { controller: 'integer-field', target: 'radio-select.output wizard.required_field_0', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection keypress->integer-field#allowKeypressWhenInteger' }
-              span.icon.is-left $
-              span.help.display-when-errors This field is required
-          p.help = @view_model.contribution_amount_help_text
         .field
-          label.label Donation frequency
-          .field.is-grouped
-            .control
-              .select = f.collection_select(:frequency, @view_model.donation_frequencies, :last, :first)
-            .control
-              span.input.is-static starting
-            .control data-accordion-panel-for="hide-when-show-date-is-triggered"
-              a.button.is-text data-accordion-trigger="show-date"
-                = icon_tag('fas fa-calendar')
-                span today
-            .control.is-expanded.has-icons-left.is-hidden data-accordion-panel-for="show-date"
-                = icon_tag('fas fa-calendar')
-                = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 4.years.from_now.to_date.iso8601
+          = f.label :managed_portfolio_id, class: :label, value: 'Select a portfolio'
+          .field
+            - @view_model.managed_portfolios.each do |mp|
+              .control
+                label for="portfolio-#{mp.id}"
+                  .level.is-mobile
+                    .level-left
+                      .label
+                        .span.icon = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}", data: { action: 'wizard#selectPortfolio' }
+                    .level-left style='flex-shrink: initial; flex-grow: 1; margin: 0 0.5rem'
+                        = mp.name
+                    .level-right
+                      .help = pluralize(mp.size, 'charity')
+          = f.hidden_field :portfolio_selected, data: { target: "wizard.portfolioSelected wizard.required_field_0" }
+          span.help.display-when-errors This field is required
       .wizard-card-footer
         a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
     fieldset.wizard-card data-target='wizard.step'
       .wizard-card-header
         a.icon data-action="wizard#previous" &larr;
-        h3.wizard-card-title Donor Information
+        h3.wizard-card-title About you
         = render 'wizard_nav', step: 2, of: 5
       .wizard-card-content
         .field.is-horizontal
@@ -97,25 +84,41 @@
     fieldset.wizard-card data-target='wizard.step'
       .wizard-card-header
         a.icon data-action="wizard#previous" &larr;
-        h3.wizard-card-title Select portfolio
+        h3.wizard-card-title Your donation
         = render 'wizard_nav', step: 4, of: 5
       .wizard-card-content
+        .field data-controller="radio-select"
+          .field.is-grouped.is-grouped-multiline
+            - @view_model.default_contribution_amounts.each do |amount|
+              a.control.button.is-expanded href='#' data-target='radio-select.button' data-action='radio-select#select' data-radio-select-value=amount
+                = number_to_currency(amount, precision: 0)
+          .field.has-addons
+            .control
+              .button.is-static.is-medium Your donation:
+            .control.has-icons-left.is-expanded
+              = f.number_field :amount_dollars,
+                class: %w(input is-medium),
+                data: { controller: 'integer-field', target: 'radio-select.output wizard.required_field_3', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection keypress->integer-field#allowKeypressWhenInteger' }
+              span.icon.is-left $
+              span.help.display-when-errors This field is required
+          p.help = @view_model.contribution_amount_help_text
         .field
-          = f.label :managed_portfolio_id, class: :label, value: 'Portfolio'
-          .field
-            - @view_model.managed_portfolios.each do |mp|
-              .control
-                label for="portfolio-#{mp.id}"
-                  .level.is-mobile
-                    .level-left
-                      .label
-                        .span.icon = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}", data: { action: 'wizard#selectPortfolio' }
-                    .level-left style='flex-shrink: initial; flex-grow: 1; margin: 0 0.5rem'
-                        = mp.name
-                    .level-right
-                      .help = pluralize(mp.size, 'charity')
-          = f.hidden_field :portfolio_selected, data: { target: "wizard.portfolioSelected wizard.required_field_3" }
-          span.help.display-when-errors This field is required
+          .field.is-grouped.is-centered
+            .control
+              - if @view_model.donation_frequencies.size == 1
+                span.input.is-static.has-text-weight-bold = @view_model.donation_frequencies.first[0]
+                = f.hidden_field :frequency, value: @view_model.donation_frequencies.first[1] 
+              - else
+                .select = f.collection_select(:frequency, @view_model.donation_frequencies, :last, :first)
+            .control
+              span.input.is-static starting
+            .control data-accordion-panel-for="hide-when-show-date-is-triggered"
+              a.button.is-text data-accordion-trigger="show-date"
+                = icon_tag('fas fa-calendar')
+                span today
+            .control.is-expanded.has-icons-left.is-hidden data-accordion-panel-for="show-date"
+                = icon_tag('fas fa-calendar')
+                = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 4.years.from_now.to_date.iso8601
       .wizard-card-footer
         a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
     fieldset.wizard-card data-target='wizard.step'
