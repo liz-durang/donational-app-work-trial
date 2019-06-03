@@ -13,19 +13,8 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
   scenario 'as a new visitor', js: true do
     visit campaigns_path('1ftw-wharton')
 
-    find('a', text: '$200').click
-
-    # Future date the donation
-    find('[data-accordion-trigger="show-date"]').click
-    find('input[type="date"]').click
-    [1, 2, 3].each do |i|
-      find('.calendar-nav-next-month').click
-      month_name = i.months.from_now.strftime("%B")
-      expect(page).to have_content(month_name)
-    end
-    click_on '12'
-
-    select 'Yearly'
+    expect(page).not_to have_content('Managed Portfolio that has been hidden')
+    click_on_label 'Top Picks'
 
     click_on 'Next'
 
@@ -41,8 +30,19 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     click_on 'Next'
 
-    expect(page).not_to have_content('Managed Portfolio that has been hidden')
-    click_on_label 'Top Picks'
+    find('a', text: '$200').click
+
+    # Future date the donation
+    find('[data-accordion-trigger="show-date"]').click
+    find('input[type="date"]').click
+    [1, 2, 3].each do |i|
+      find('.calendar-nav-next-month').click
+      month_name = i.months.from_now.strftime("%B")
+      expect(page).to have_content(month_name)
+    end
+    click_on '12'
+
+    select 'Monthly'
 
     click_on 'Next'
 
@@ -51,7 +51,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     page.execute_script("document.getElementById('payment-form').submit();")
 
     date_in_two_months_on_the_12th = (Date.new(Date.today.year, Date.today.month, 12) + 3.months).to_formatted_s(:long_ordinal)
-    expect(page).to have_content("Your next annual donation of $200.00 is scheduled for #{date_in_two_months_on_the_12th}")
+    expect(page).to have_content("Your next donation of $200.00 is scheduled for #{date_in_two_months_on_the_12th}")
 
     click_on 'View my portfolio'
 
