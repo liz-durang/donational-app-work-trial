@@ -13,10 +13,10 @@
       "description": "Donor who makes the contribution"
     },
     {
-      "type": "string",
+      "type": "integer",
       "required": true,
       "name": "amount",
-      "description": "Contribution amount in USD"
+      "description": "Contribution amount in cents (USD)"
     }
   ],
   "response_fields": [
@@ -25,11 +25,11 @@
   "requests": [
     {
       "request_method": "POST",
-      "request_path": "/api/v1/organizations/org_7_822de18/contributions",
-      "request_body": "{\"contribution\":{\"donor_id\":\"e3b528fa-587d-4060-b74e-34dfbba608f8\",\"amount\":0}}",
+      "request_path": "/api/v1/organizations/org_7_d0aacd7/contributions",
+      "request_body": "{\"contribution\":{\"donor_id\":\"b05a0803-0dfe-4fd4-9c8b-9cd24f8f80e0\",\"amount\":0}}",
       "request_headers": {
         "Content-Type": "application/json",
-        "X-Api-Key": "Yhaw5hyKMF3RDsgAlzTYHgtt",
+        "X-Api-Key": "oqzZF3HjdA8gPtJOrRftLwtt",
         "Host": "example.org",
         "Cookie": ""
       },
@@ -48,8 +48,8 @@
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Content-Type": "application/json; charset=utf-8",
         "Cache-Control": "no-cache",
-        "X-Request-Id": "e3f24002-615d-489c-a0e3-f188ad50749d",
-        "X-Runtime": "0.021174",
+        "X-Request-Id": "a0ce8658-2f25-40da-bb31-a7fb8c7b17b4",
+        "X-Runtime": "0.018499",
         "Content-Length": "40"
       },
       "response_content_type": "application/json; charset=utf-8",

@@ -28,7 +28,7 @@ resource 'Donors' do
         }.to_json
       end
 
-      example 'Succesfull request: Create a donor' do
+      example 'Succesful request: Create a donor' do
         do_request
 
         expect(status).to eq(200)

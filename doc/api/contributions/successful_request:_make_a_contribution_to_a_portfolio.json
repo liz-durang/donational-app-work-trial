@@ -3,7 +3,7 @@
   "resource_explanation": null,
   "http_method": "POST",
   "route": "/api/v1/portfolios/:id/contributions",
-  "description": "Succesfull request: Make a contribution to a portfolio",
+  "description": "Successful request: Make a contribution to a portfolio",
   "explanation": null,
   "parameters": [
     {
@@ -25,11 +25,11 @@
   "requests": [
     {
       "request_method": "POST",
-      "request_path": "/api/v1/portfolios/4bcfce34-67f2-4d63-b591-b209e0f31679/contributions",
-      "request_body": "{\"contribution\":{\"donor_id\":\"091d7a38-dc44-429d-9868-6e7d4838fca9\",\"amount\":20}}",
+      "request_path": "/api/v1/portfolios/544a3a34-d40f-4e5e-8af8-8eba09908d3d/contributions",
+      "request_body": "{\"contribution\":{\"donor_id\":\"206f1dca-93d8-4807-ace9-24b77374b222\",\"amount\":20}}",
       "request_headers": {
         "Content-Type": "application/json",
-        "X-Api-Key": "4R8jMXwrrC3YEGuU3er6qAtt",
+        "X-Api-Key": "2oPr5We824R5KBdC9QfSpwtt",
         "Host": "example.org",
         "Cookie": ""
       },
@@ -38,7 +38,7 @@
       "request_content_type": "application/json",
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "{\n  \"contribution\": {\n    \"id\": \"103b7e25-abf9-4441-aa0f-3a0c949eece0\",\n    \"portfolio_id\": \"4bcfce34-67f2-4d63-b591-b209e0f31679\",\n    \"donor_id\": \"091d7a38-dc44-429d-9868-6e7d4838fca9\",\n    \"amount\": 20.0,\n    \"scheduled_at\": \"2018-09-06T17:12:20.349Z\"\n  }\n}",
+      "response_body": "{\n  \"contribution\": {\n    \"id\": \"db63d4f6-036d-47ea-8256-6922b0f1ff76\",\n    \"portfolio_id\": \"544a3a34-d40f-4e5e-8af8-8eba09908d3d\",\n    \"donor_id\": \"206f1dca-93d8-4807-ace9-24b77374b222\",\n    \"amount\": 20.0,\n    \"scheduled_at\": \"2019-06-24T16:42:46.869Z\"\n  }\n}",
       "response_headers": {
         "X-Frame-Options": "SAMEORIGIN",
         "X-XSS-Protection": "1; mode=block",
@@ -47,10 +47,10 @@
         "X-Permitted-Cross-Domain-Policies": "none",
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Content-Type": "application/json; charset=utf-8",
-        "ETag": "W/\"1f7ba576a876a481e7d3f52682b48cb6\"",
+        "ETag": "W/\"319bbc4bc5712d73fb1ebe83d56838eb\"",
         "Cache-Control": "max-age=0, private, must-revalidate",
-        "X-Request-Id": "a557639e-94b9-48b8-84d4-f87593f9a855",
-        "X-Runtime": "0.020933",
+        "X-Request-Id": "a637e579-e02b-4bce-986e-ca0c7271dc33",
+        "X-Runtime": "0.022308",
         "Content-Length": "222"
       },
       "response_content_type": "application/json; charset=utf-8",

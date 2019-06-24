@@ -18,7 +18,7 @@ resource 'Contributions' do
     let(:id)  { organization.ein }
     # Request parameters
     parameter :donor_id, 'Donor who makes the contribution', type: :string, required: true
-    parameter :amount, 'Contribution amount in USD', type: :string, required: true
+    parameter :amount, 'Contribution amount in cents (USD)', type: :integer, required: true
 
     context '200' do
       let(:params) do
@@ -30,7 +30,7 @@ resource 'Contributions' do
         }.to_json
       end
 
-      example 'Succesfull request: Make a contribution to a single organization' do
+      example 'Successful request: Make a contribution to a single organization' do
         do_request
 
         expect(status).to eq(200)
@@ -101,7 +101,7 @@ resource 'Contributions' do
         }.to_json
       end
 
-      example 'Succesfull request: Make a contribution to a portfolio' do
+      example 'Successful request: Make a contribution to a portfolio' do
         do_request
 
         expect(status).to eq(200)

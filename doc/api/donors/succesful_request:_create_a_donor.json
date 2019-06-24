@@ -1,22 +1,28 @@
 {
-  "resource": "Contributions",
+  "resource": "Donors",
   "resource_explanation": null,
   "http_method": "POST",
-  "route": "/api/v1/organizations/:id/contributions",
-  "description": "Succesfull request: Make a contribution to a single organization",
+  "route": "/api/v1/donors",
+  "description": "Succesful request: Create a donor",
   "explanation": null,
   "parameters": [
     {
       "type": "string",
       "required": true,
-      "name": "donor_id",
-      "description": "Donor who makes the contribution"
+      "name": "first_name",
+      "description": "Donor first name"
     },
     {
       "type": "string",
       "required": true,
-      "name": "amount",
-      "description": "Contribution amount in USD"
+      "name": "last_name",
+      "description": "Donor last name"
+    },
+    {
+      "type": "string",
+      "required": true,
+      "name": "email",
+      "description": "Donor email"
     }
   ],
   "response_fields": [
@@ -25,11 +31,11 @@
   "requests": [
     {
       "request_method": "POST",
-      "request_path": "/api/v1/organizations/org_6_ae9d7ab/contributions",
-      "request_body": "{\"contribution\":{\"donor_id\":\"4fc3fef9-7f34-4e3c-bf1a-5ae25eb3d9c4\",\"amount\":20}}",
+      "request_path": "/api/v1/donors",
+      "request_body": "{\"donor\":{\"first_name\":\"Donny\",\"last_name\":\"Donator\",\"email\":\"user@example.com\"}}",
       "request_headers": {
         "Content-Type": "application/json",
-        "X-Api-Key": "XS96vrkw7uT94y6Xx8wQ5Att",
+        "X-Api-Key": "1ayD4SDxECKrPR3QU1FL7wtt",
         "Host": "example.org",
         "Cookie": ""
       },
@@ -38,7 +44,7 @@
       "request_content_type": "application/json",
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "{\n  \"contribution\": {\n    \"id\": \"15d5e739-50a6-42ef-87d0-802ba226b17f\",\n    \"portfolio_id\": \"372f34c0-af3a-43f7-9eb0-96b1408e093e\",\n    \"donor_id\": \"4fc3fef9-7f34-4e3c-bf1a-5ae25eb3d9c4\",\n    \"amount\": 20.0,\n    \"scheduled_at\": \"2018-09-06T17:12:20.207Z\"\n  }\n}",
+      "response_body": "{\n  \"donor\": {\n    \"id\": \"60e9ebde-2edd-4630-9a0d-46e9edb3cd3e\",\n    \"first_name\": \"Donny\",\n    \"last_name\": \"Donator\",\n    \"email\": \"user@example.com\"\n  }\n}",
       "response_headers": {
         "X-Frame-Options": "SAMEORIGIN",
         "X-XSS-Protection": "1; mode=block",
@@ -47,11 +53,11 @@
         "X-Permitted-Cross-Domain-Policies": "none",
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Content-Type": "application/json; charset=utf-8",
-        "ETag": "W/\"41096cde2b274d4f52c7033d9a52805c\"",
+        "ETag": "W/\"9983f3adf1655c8d689c14c844c48972\"",
         "Cache-Control": "max-age=0, private, must-revalidate",
-        "X-Request-Id": "a103ba86-2991-479e-bd94-ec0faaca911d",
-        "X-Runtime": "0.063060",
-        "Content-Length": "222"
+        "X-Request-Id": "783563df-a384-426b-97a7-b64b71e31d60",
+        "X-Runtime": "0.022094",
+        "Content-Length": "125"
       },
       "response_content_type": "application/json; charset=utf-8",
       "curl": null

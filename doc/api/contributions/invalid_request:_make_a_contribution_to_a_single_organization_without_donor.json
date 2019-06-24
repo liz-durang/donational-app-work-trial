@@ -13,10 +13,10 @@
       "description": "Donor who makes the contribution"
     },
     {
-      "type": "string",
+      "type": "integer",
       "required": true,
       "name": "amount",
-      "description": "Contribution amount in USD"
+      "description": "Contribution amount in cents (USD)"
     }
   ],
   "response_fields": [
@@ -25,11 +25,11 @@
   "requests": [
     {
       "request_method": "POST",
-      "request_path": "/api/v1/organizations/org_8_7aaef02/contributions",
+      "request_path": "/api/v1/organizations/org_8_0829b39/contributions",
       "request_body": "{\"contribution\":{\"donor_id\":\"\",\"amount\":20}}",
       "request_headers": {
         "Content-Type": "application/json",
-        "X-Api-Key": "s7zx0cggvcs121SmJdglMwtt",
+        "X-Api-Key": "3MPrSi3oDl5c6hran5DKiwtt",
         "Host": "example.org",
         "Cookie": ""
       },
@@ -48,8 +48,8 @@
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Content-Type": "application/json; charset=utf-8",
         "Cache-Control": "no-cache",
-        "X-Request-Id": "447a8760-67a3-4fb6-b2f4-715e662800b5",
-        "X-Runtime": "0.003023",
+        "X-Request-Id": "b816c5dd-bf41-41e4-b18e-8b738f25789a",
+        "X-Runtime": "0.004473",
         "Content-Length": "33"
       },
       "response_content_type": "application/json; charset=utf-8",
