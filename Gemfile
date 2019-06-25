@@ -56,6 +56,7 @@ gem 'mutations'
 # API
 gem 'jbuilder', '~> 2.7.0'
 gem 'apitome'
+gem 'rspec_api_documentation'
 
 # Payments
 gem 'stripe'
@@ -70,7 +71,6 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'rspec-rails'
   gem 'rubocop-rspec'
-  gem 'rspec_api_documentation'
 end
 
 group :development do

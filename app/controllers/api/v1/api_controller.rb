@@ -2,7 +2,7 @@ module Api
   module V1
     class ApiController < ActionController::Base
       helper_method :current_partner
-      before_action :authenticate_partner!
+      # before_action :authenticate_partner!
       before_action :check_json_request
       skip_before_action :verify_authenticity_token
 
