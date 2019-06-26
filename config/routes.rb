@@ -60,12 +60,8 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1, defaults: { format: :json } do
       resources :donors, only: :create
-      resources :organizations, only: %i[index] do
-        resources :contributions, module: :organization_contributions, only: :create
-      end
-      resources :portfolios, only: %i[] do
-        resources :contributions, module: :portfolio_contributions, only: :create
-      end
+      resources :organizations, only: :index
+      resources :contributions, only: :create
     end
   end
 end
