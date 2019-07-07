@@ -9,8 +9,8 @@ module Api
         end
 
         if command.success?
-          @contribution = command.result 
-        else command.success?
+          @contribution = command.result
+        else
           render json: { errors: command.errors.message_list }, status: 422
         end
       end
@@ -30,14 +30,16 @@ module Api
       end
 
       def create_contribution_for_a_single_organization
-        organization = Organizations::FindOrCreateDonorSuggestedCharity.run!(
+        find_organization = Organizations::FindOrCreateDonorSuggestedCharity.run(
           ein: contribution_params[:organization_ein],
           suggested_by: donor
         )
 
+        return find_organization unless find_organization.success?
+
         Contributions::ScheduleContributionForSingleOrganization.run(
           donor: donor,
-          organization: organization,
+          organization: find_organization.result,
           amount_cents: amount_cents,
           tips_cents: 0,
           scheduled_at: Time.zone.now

@@ -10,13 +10,19 @@ module Organizations
     end
 
     def create_organization_from_searchable_organization
-      searchable_organization = SearchableOrganization.find(ein.delete('-'))
+      if searchable_organization
+        Organization.create!(
+          ein: searchable_organization.formatted_ein,
+          name: searchable_organization.formatted_name,
+          suggested_by_donor: suggested_by
+        )
+      else
+        add_error(:organization, :not_found, "Could not find an organization with ein #{ein}")
+      end
+    end
 
-      Organization.create!(
-        ein: searchable_organization.formatted_ein,
-        name: searchable_organization.formatted_name,
-        suggested_by_donor: suggested_by
-      )
+    def searchable_organization
+      @searchable_organization ||= SearchableOrganization.find_by(ein: ein.delete('-'))
     end
   end
 end

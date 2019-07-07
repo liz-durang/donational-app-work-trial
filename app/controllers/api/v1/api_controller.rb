@@ -40,7 +40,7 @@ module Api
 
       def authenticate_partner!
         unless current_partner
-          head :unauthorized
+          render json: { error: 'API Key is invalid' }, status: :unauthorized
         end
       end
 
