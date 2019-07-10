@@ -3,8 +3,8 @@
   "resource_explanation": "Contributions must be created with either an organization_ein or a portfolio_id.",
   "http_method": "POST",
   "route": "/api/v1/contributions",
-  "description": "Successful request: Make a contribution to a portfolio",
-  "explanation": null,
+  "description": "Invalid request: Make a contribution without organization_ein or portfolio_id",
+  "explanation": "Invalid parameters: missing organization_ein and portfolio_id",
   "parameters": [
     {
       "type": "string",
@@ -44,19 +44,19 @@
     {
       "request_method": "POST",
       "request_path": "/api/v1/contributions",
-      "request_body": "{\"contribution\":{\"donor_id\":\"ce632e4c-29b7-4591-89a0-8f110eb793ee\",\"amount_cents\":200,\"currency\":\"USD\",\"portfolio_id\":\"e8eed87c-96dc-4fa3-a9bd-c200f51f899d\"}}",
+      "request_body": "{\"contribution\":{\"donor_id\":\"ba8dc5c7-4f91-4246-af06-5363721fdd1c\",\"amount_cents\":200,\"currency\":\"USD\"}}",
       "request_headers": {
         "Content-Type": "application/json",
-        "X-Api-Key": "aooDO5LrjOw3ond5YavqDQtt",
+        "X-Api-Key": "iXQwLvNw1nfxq11a7wOEAAtt",
         "Host": "example.org",
         "Cookie": ""
       },
       "request_query_parameters": {
       },
       "request_content_type": "application/json",
-      "response_status": 200,
-      "response_status_text": "OK",
-      "response_body": "{\n  \"contribution\": {\n    \"id\": \"85301b50-45e3-4e93-92d6-4e6e73119cfd\",\n    \"donor_id\": \"ce632e4c-29b7-4591-89a0-8f110eb793ee\",\n    \"amount_cents\": 200,\n    \"scheduled_at\": \"2019-07-12T16:34:57.013Z\",\n    \"portfolio_id\": \"e8eed87c-96dc-4fa3-a9bd-c200f51f899d\",\n    \"portfolio_allocations\": [\n\n    ]\n  }\n}",
+      "response_status": 422,
+      "response_status_text": "Unprocessable Entity",
+      "response_body": "{\n  \"errors\": \"Either Organization ein or Portfolio id should be present\"\n}",
       "response_headers": {
         "X-Frame-Options": "SAMEORIGIN",
         "X-XSS-Protection": "1; mode=block",
@@ -65,11 +65,10 @@
         "X-Permitted-Cross-Domain-Policies": "none",
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Content-Type": "application/json; charset=utf-8",
-        "ETag": "W/\"5193a6ba035e0a72e876edf38269e6eb\"",
-        "Cache-Control": "max-age=0, private, must-revalidate",
-        "X-Request-Id": "8a25c751-7df7-4f24-b088-a8abb43a2d29",
-        "X-Runtime": "0.009223",
-        "Content-Length": "254"
+        "Cache-Control": "no-cache",
+        "X-Request-Id": "4d87a626-71cf-41e8-a5c3-6f655bc02b6d",
+        "X-Runtime": "0.002177",
+        "Content-Length": "70"
       },
       "response_content_type": "application/json; charset=utf-8",
       "curl": null

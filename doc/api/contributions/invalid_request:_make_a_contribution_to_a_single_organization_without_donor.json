@@ -1,8 +1,8 @@
 {
   "resource": "Contributions",
-  "resource_explanation": null,
+  "resource_explanation": "Contributions must be created with either an organization_ein or a portfolio_id.",
   "http_method": "POST",
-  "route": "/api/v1/organizations/:id/contributions",
+  "route": "/api/v1/contributions",
   "description": "Invalid request: Make a contribution to a single organization without donor",
   "explanation": "Invalid parameter: donor_id",
   "parameters": [
@@ -15,8 +15,26 @@
     {
       "type": "integer",
       "required": true,
-      "name": "amount",
+      "name": "amount_cents",
       "description": "Contribution amount in cents (USD)"
+    },
+    {
+      "type": "string",
+      "required": true,
+      "name": "currency",
+      "description": "Contribution currency. Currently only USD is supported"
+    },
+    {
+      "type": "string",
+      "required": false,
+      "name": "organization_ein",
+      "description": "The tax id of the recipient charitable organization"
+    },
+    {
+      "type": "string",
+      "required": false,
+      "name": "portfolio_id",
+      "description": "The id of the charitable Portfolio to contribute to"
     }
   ],
   "response_fields": [
@@ -25,11 +43,11 @@
   "requests": [
     {
       "request_method": "POST",
-      "request_path": "/api/v1/organizations/org_8_0829b39/contributions",
-      "request_body": "{\"contribution\":{\"donor_id\":\"\",\"amount\":20}}",
+      "request_path": "/api/v1/contributions",
+      "request_body": "{\"contribution\":{\"donor_id\":\"\",\"amount_cents\":200,\"currency\":\"USD\",\"organization_ein\":\"org_7_9326e5d\"}}",
       "request_headers": {
         "Content-Type": "application/json",
-        "X-Api-Key": "3MPrSi3oDl5c6hran5DKiwtt",
+        "X-Api-Key": "4WveoTqkBAk8t78li1nk9wtt",
         "Host": "example.org",
         "Cookie": ""
       },
@@ -38,7 +56,7 @@
       "request_content_type": "application/json",
       "response_status": 422,
       "response_status_text": "Unprocessable Entity",
-      "response_body": "{\n  \"errors\": [\n    \"Donor can't be nil\"\n  ]\n}",
+      "response_body": "{\n  \"errors\": [\n    \"Suggested By can't be nil\"\n  ]\n}",
       "response_headers": {
         "X-Frame-Options": "SAMEORIGIN",
         "X-XSS-Protection": "1; mode=block",
@@ -48,9 +66,9 @@
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Content-Type": "application/json; charset=utf-8",
         "Cache-Control": "no-cache",
-        "X-Request-Id": "b816c5dd-bf41-41e4-b18e-8b738f25789a",
-        "X-Runtime": "0.004473",
-        "Content-Length": "33"
+        "X-Request-Id": "5d1278a0-8041-40bf-ba0e-b17784586fb9",
+        "X-Runtime": "0.002241",
+        "Content-Length": "40"
       },
       "response_content_type": "application/json; charset=utf-8",
       "curl": null

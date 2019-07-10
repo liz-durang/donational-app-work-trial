@@ -1,8 +1,8 @@
 {
   "resource": "Contributions",
-  "resource_explanation": null,
+  "resource_explanation": "Contributions must be created with either an organization_ein or a portfolio_id.",
   "http_method": "POST",
-  "route": "/api/v1/organizations/:id/contributions",
+  "route": "/api/v1/contributions",
   "description": "Invalid request: Make a contribution to a single organization without amount",
   "explanation": "Invalid parameter: amount",
   "parameters": [
@@ -15,8 +15,26 @@
     {
       "type": "integer",
       "required": true,
-      "name": "amount",
+      "name": "amount_cents",
       "description": "Contribution amount in cents (USD)"
+    },
+    {
+      "type": "string",
+      "required": true,
+      "name": "currency",
+      "description": "Contribution currency. Currently only USD is supported"
+    },
+    {
+      "type": "string",
+      "required": false,
+      "name": "organization_ein",
+      "description": "The tax id of the recipient charitable organization"
+    },
+    {
+      "type": "string",
+      "required": false,
+      "name": "portfolio_id",
+      "description": "The id of the charitable Portfolio to contribute to"
     }
   ],
   "response_fields": [
@@ -25,11 +43,11 @@
   "requests": [
     {
       "request_method": "POST",
-      "request_path": "/api/v1/organizations/org_7_d0aacd7/contributions",
-      "request_body": "{\"contribution\":{\"donor_id\":\"b05a0803-0dfe-4fd4-9c8b-9cd24f8f80e0\",\"amount\":0}}",
+      "request_path": "/api/v1/contributions",
+      "request_body": "{\"contribution\":{\"donor_id\":\"99b91c5b-235d-4a40-8271-422eeac69483\",\"amount_cents\":50,\"currency\":\"USD\",\"organization_ein\":\"org_8_019a316\"}}",
       "request_headers": {
         "Content-Type": "application/json",
-        "X-Api-Key": "oqzZF3HjdA8gPtJOrRftLwtt",
+        "X-Api-Key": "PRW6sPwCbgYS7UESpkGAEgtt",
         "Host": "example.org",
         "Cookie": ""
       },
@@ -48,8 +66,8 @@
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Content-Type": "application/json; charset=utf-8",
         "Cache-Control": "no-cache",
-        "X-Request-Id": "a0ce8658-2f25-40da-bb31-a7fb8c7b17b4",
-        "X-Runtime": "0.018499",
+        "X-Request-Id": "81802fbf-dd02-46cf-88db-d13d34d19abd",
+        "X-Runtime": "0.003840",
         "Content-Length": "40"
       },
       "response_content_type": "application/json; charset=utf-8",
