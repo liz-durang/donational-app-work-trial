@@ -22,6 +22,8 @@ class Partner < ApplicationRecord
   has_one_attached :logo
   has_one_attached :email_banner
 
+  before_create :generate_api_key
+
   def donor_questions
     return if donor_questions_schema.nil?
 
@@ -51,6 +53,20 @@ class Partner < ApplicationRecord
       @type = type
       @options = options || []
       @required = required || false
+    end
+  end
+
+  private
+
+  def generate_api_key
+    return if api_key.present?
+
+    candidate_api_key = SecureRandom.base64.tr('+/=', 'Qrt')
+
+    if Partner.exists?(api_key: api_key)
+      generate_api_key
+    else
+      self.api_key = candidate_api_key
     end
   end
 end

@@ -8,6 +8,7 @@ Capybara.register_driver :headless_chrome do |app|
   # https://github.com/heroku/heroku-buildpack-google-chrome#selenium
   chrome_binary_path = ENV.fetch('GOOGLE_CHROME_SHIM', nil)
   capabilities[:chromeOptions][:binary] = chrome_binary_path if chrome_binary_path
+  capabilities[:chromeOptions][:w3c] = false
 
   Capybara::Selenium::Driver.new(
     app,
@@ -25,6 +26,7 @@ Capybara.register_driver :headless_selenium_chrome_billy do |app|
 
   chrome_binary_path = ENV.fetch('GOOGLE_CHROME_SHIM', nil)
   capabilities[:chromeOptions][:binary] = chrome_binary_path if chrome_binary_path
+  capabilities[:chromeOptions][:w3c] = false
 
   Capybara::Selenium::Driver.new(
     app,

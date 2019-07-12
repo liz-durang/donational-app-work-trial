@@ -8,7 +8,7 @@ module Portfolios
     def execute
       SelectedPortfolio.transaction do
         deselect_existing_portfolios!
-        SelectedPortfolio.create(donor: donor, portfolio: portfolio )
+        SelectedPortfolio.create(donor: donor, portfolio: portfolio)
       end
 
       nil

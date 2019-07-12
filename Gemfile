@@ -54,7 +54,9 @@ gem 'appsignal'
 gem 'mutations'
 
 # API
-gem 'jbuilder', '~> 2.5'
+gem 'jbuilder', '~> 2.7.0'
+gem 'apitome'
+gem 'rspec_api_documentation'
 
 # Payments
 gem 'stripe'
