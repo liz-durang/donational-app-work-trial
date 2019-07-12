@@ -63,7 +63,7 @@ class Partner < ApplicationRecord
 
     candidate_api_key = SecureRandom.base64.tr('+/=', 'Qrt')
 
-    if Partner.exists?(api_key: api_key)
+    if Partner.exists?(api_key: candidate_api_key)
       generate_api_key
     else
       self.api_key = candidate_api_key
