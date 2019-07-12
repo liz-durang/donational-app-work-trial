@@ -8,6 +8,10 @@ module Api
           create_contribution_for_a_single_organization
         end
 
+        if command.nil?
+          render json: { errors: 'Either Organization ein or Portfolio id should be present' }, status: 422
+        end
+
         if command.success?
           @contribution = command.result
         else
