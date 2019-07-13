@@ -49,6 +49,7 @@ end
 gem 'sentry-raven'
 gem 'analytics-ruby'
 gem 'appsignal'
+gem 'lograge'
 
 # Commands
 gem 'mutations'
@@ -62,7 +63,8 @@ gem 'rspec_api_documentation'
 gem 'stripe'
 
 # Search
-gem 'pg_search'
+gem 'searchkick'
+gem 'elasticsearch-model'
 
 group :development, :test do
   gem 'byebug', platform: :mri

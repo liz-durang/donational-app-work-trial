@@ -4,7 +4,7 @@ module Api
       skip_before_action :authenticate_partner!
 
       def index
-        @organizations = SearchableOrganization.search_for(search_params).select(:ein, :name, :state).limit(10)
+        @organizations = SearchableOrganization.search_for(search_params)
       end
 
       def show

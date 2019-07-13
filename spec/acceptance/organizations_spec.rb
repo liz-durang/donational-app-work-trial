@@ -1,14 +1,12 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Organizations' do
-  let!(:searchable_organizations) { create_list(:searchable_organization, 2) }
-  let(:partner)                   { create(:partner) }
-  let(:api_key)                   { partner.api_key }
+resource 'Organizations', search: true do
+  let!(:searchable_organization_1) { create(:searchable_organization, :reindex, name: 'Charity 1') }
+  let!(:searchable_organization_2) { create(:searchable_organization, :reindex, name: 'Charity 2') }
 
   # Headers which should be included in the request
   header 'Content-Type', 'application/json'
-  header 'X-Api-Key', :api_key
 
   # Get api/v1/organizations/
   get '/api/v1/organizations' do
@@ -18,15 +16,17 @@ resource 'Organizations' do
     let(:name)  { 'Charity' }
 
     context '200' do
-
       example 'Successful request: Search charitable organizations' do
+        SearchableOrganization.search_index.refresh
+        sleep 5
+
         do_request
 
         expect(status).to eq(200)
         response = JSON.parse(response_body)
-        expect(response['organizations'][0]['ein']).to eq(searchable_organizations[0].formatted_ein)
-        expect(response['organizations'][0]['name']).to eq(searchable_organizations[0].formatted_name)
-        expect(response['organizations'][0]['state']).to eq(searchable_organizations[0].state)
+        expect(response['organizations'][0]['ein']).to eq(searchable_organization_1.formatted_ein)
+        expect(response['organizations'][0]['name']).to eq(searchable_organization_1.formatted_name)
+        expect(response['organizations'][0]['state']).to eq(searchable_organization_1.state)
       end
     end
   end
@@ -35,7 +35,7 @@ resource 'Organizations' do
     # Request parameters
     parameter :id, type: :string, required: true
 
-    let(:id)  { searchable_organizations[0].ein }
+    let(:id)  { searchable_organization_1.ein }
 
     context '200' do
 
@@ -44,9 +44,9 @@ resource 'Organizations' do
 
         expect(status).to eq(200)
         response = JSON.parse(response_body)
-        expect(response['organization']['ein']).to eq(searchable_organizations[0].formatted_ein)
-        expect(response['organization']['name']).to eq(searchable_organizations[0].formatted_name)
-        expect(response['organization']['state']).to eq(searchable_organizations[0].state)
+        expect(response['organization']['ein']).to eq(searchable_organization_1.formatted_ein)
+        expect(response['organization']['name']).to eq(searchable_organization_1.formatted_name)
+        expect(response['organization']['state']).to eq(searchable_organization_1.state)
       end
     end
 

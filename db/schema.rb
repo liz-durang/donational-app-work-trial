@@ -292,10 +292,6 @@ ActiveRecord::Schema.define(version: 2019_02_10_160208) do
     t.string "revenue_amt"
     t.string "ntee_cd"
     t.string "sort_name"
-    t.tsvector "tsv"
-    t.index ["ein"], name: "index_searchable_organizations_on_ein", unique: true
-    t.index ["name"], name: "index_searchable_organizations_on_name"
-    t.index ["tsv"], name: "index_searchable_organizations_on_name_tsv", using: :gin
   end
 
   create_table "selected_portfolios", force: :cascade do |t|

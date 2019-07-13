@@ -6,7 +6,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module DonateDeliberately
+module Donational
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.0
@@ -16,6 +16,9 @@ module DonateDeliberately
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
     config.active_job.queue_adapter = :sidekiq
+    config.lograge.enabled = true
+    config.lograge.base_controller_class = ['ActionController::API', 'ActionController::Base']
     config.action_mailer.default_url_options = { host: ENV.fetch('DEFAULT_HOST') }
   end
 end
+  
