@@ -1,6 +1,8 @@
 module Api
   module V1
     class OrganizationsController < Api::V1::ApiController
+      skip_before_action :authenticate_partner!
+
       def index
         @organizations = SearchableOrganization.search_for(search_params).select(:ein, :name, :state).limit(10)
       end
