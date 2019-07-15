@@ -51,7 +51,7 @@ class SearchableOrganization < ApplicationRecord
   def formatted_ein
     ein[0..1] + '-' + ein[2..8]
   end
-  
+
   def formatted_name
     name.titleize
   end
