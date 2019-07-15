@@ -44,10 +44,10 @@
     {
       "request_method": "POST",
       "request_path": "/api/v1/contributions",
-      "request_body": "{\"contribution\":{\"donor_id\":\"59715f6a-9d89-49f8-b289-49c2f3fcb674\",\"amount_cents\":200,\"currency\":\"USD\",\"organization_ein\":\"org_6_e528186\"}}",
+      "request_body": "{\"contribution\":{\"donor_id\":\"621767ec-8b61-4819-8738-06e80105e670\",\"amount_cents\":200,\"currency\":\"USD\",\"organization_ein\":\"org_9_371f718\"}}",
       "request_headers": {
         "Content-Type": "application/json",
-        "X-Api-Key": "g28bM1bqhIjjHZq5Wex4qwtt",
+        "X-Api-Key": "QG5gpDds1QJexMaCVpU07Qtt",
         "Host": "example.org",
         "Cookie": ""
       },
@@ -56,7 +56,7 @@
       "request_content_type": "application/json",
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "{\n  \"contribution\": {\n    \"id\": \"c83735aa-00b9-45c6-b7de-bf291c5ef664\",\n    \"donor_id\": \"59715f6a-9d89-49f8-b289-49c2f3fcb674\",\n    \"amount_cents\": 200,\n    \"scheduled_at\": \"2019-07-12T16:34:56.956Z\",\n    \"portfolio_id\": \"573bfeaa-e6ba-4498-bc68-a766398b4825\",\n    \"portfolio_allocations\": [\n      {\n        \"organization_ein\": \"org_6_e528186\",\n        \"percentage\": 100\n      }\n    ]\n  }\n}",
+      "response_body": "{\n  \"contribution\": {\n    \"id\": \"072d9036-acd8-4816-9c89-549846aa3227\",\n    \"donor_id\": \"621767ec-8b61-4819-8738-06e80105e670\",\n    \"amount_cents\": 200,\n    \"scheduled_at\": \"2019-07-15T17:23:58.404Z\",\n    \"portfolio_id\": \"7920d511-4b99-4678-89b5-83e7384b11cf\",\n    \"portfolio_allocations\": [\n      {\n        \"organization_ein\": \"org_9_371f718\",\n        \"percentage\": 100,\n        \"name\": \"Organization 9\"\n      }\n    ]\n  }\n}",
       "response_headers": {
         "X-Frame-Options": "SAMEORIGIN",
         "X-XSS-Protection": "1; mode=block",
@@ -65,11 +65,11 @@
         "X-Permitted-Cross-Domain-Policies": "none",
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Content-Type": "application/json; charset=utf-8",
-        "ETag": "W/\"eb93137b004294b767c223c9245cfc3d\"",
+        "ETag": "W/\"d576da1784b5a6329b99e828c28e99b6\"",
         "Cache-Control": "max-age=0, private, must-revalidate",
-        "X-Request-Id": "bf992988-4619-4f02-a371-cef2c358dcd6",
-        "X-Runtime": "0.046465",
-        "Content-Length": "307"
+        "X-Request-Id": "afc7b1f6-c561-44b6-adde-35e79807061c",
+        "X-Runtime": "0.054944",
+        "Content-Length": "331"
       },
       "response_content_type": "application/json; charset=utf-8",
       "curl": null

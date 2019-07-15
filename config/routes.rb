@@ -62,6 +62,7 @@ Rails.application.routes.draw do
       resources :donors, only: :create
       resources :organizations, only: :index
       resources :contributions, only: :create
+      resources :portfolios, only: :index
     end
   end
 end
