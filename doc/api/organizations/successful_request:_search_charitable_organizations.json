@@ -1,0 +1,55 @@
+{
+  "resource": "Organizations",
+  "resource_explanation": null,
+  "http_method": "GET",
+  "route": "/api/v1/organizations",
+  "description": "Successful request: Search charitable organizations",
+  "explanation": null,
+  "parameters": [
+    {
+      "type": "string",
+      "required": true,
+      "name": "name",
+      "description": " name"
+    }
+  ],
+  "response_fields": [
+
+  ],
+  "requests": [
+    {
+      "request_method": "GET",
+      "request_path": "/api/v1/organizations?name=Charity",
+      "request_body": null,
+      "request_headers": {
+        "Content-Type": "application/json",
+        "X-Api-Key": "Oy9dDZTrI08LZbRI7rWLtwtt",
+        "Host": "example.org",
+        "Cookie": ""
+      },
+      "request_query_parameters": {
+        "name": "Charity"
+      },
+      "request_content_type": "application/json",
+      "response_status": 200,
+      "response_status_text": "OK",
+      "response_body": "{\n  \"organizations\": [\n    {\n      \"ein\": \"or-g_2_381\",\n      \"name\": \"Charity 2\",\n      \"state\": \"State 2\"\n    },\n    {\n      \"ein\": \"or-g_3_d3c\",\n      \"name\": \"Charity 3\",\n      \"state\": \"State 3\"\n    }\n  ]\n}",
+      "response_headers": {
+        "X-Frame-Options": "SAMEORIGIN",
+        "X-XSS-Protection": "1; mode=block",
+        "X-Content-Type-Options": "nosniff",
+        "X-Download-Options": "noopen",
+        "X-Permitted-Cross-Domain-Policies": "none",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Content-Type": "application/json; charset=utf-8",
+        "ETag": "W/\"1d8792de770bc707ef942603510bef91\"",
+        "Cache-Control": "max-age=0, private, must-revalidate",
+        "X-Request-Id": "e63ef31c-2a3b-4837-8f7c-746849f83b72",
+        "X-Runtime": "0.051522",
+        "Content-Length": "135"
+      },
+      "response_content_type": "application/json; charset=utf-8",
+      "curl": null
+    }
+  ]
+}

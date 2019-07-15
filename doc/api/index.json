@@ -74,6 +74,32 @@
           "method": "post"
         }
       ]
+    },
+    {
+      "name": "Organizations",
+      "explanation": null,
+      "examples": [
+        {
+          "description": "Successful request: Search charitable organizations",
+          "link": "organizations/successful_request:_search_charitable_organizations.json",
+          "groups": "all",
+          "route": "/api/v1/organizations",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "name": "Portfolios",
+      "explanation": null,
+      "examples": [
+        {
+          "description": "Successful request: List Charitable Portfolios",
+          "link": "portfolios/successful_request:_list_charitable_portfolios.json",
+          "groups": "all",
+          "route": "/api/v1/portfolios",
+          "method": "get"
+        }
+      ]
     }
   ]
 }
