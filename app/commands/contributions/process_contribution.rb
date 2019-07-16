@@ -23,13 +23,19 @@ module Contributions
     class ChargeCustomerError < RuntimeError; end
 
     def charge_customer_and_update_receipt!
+      metadata = {
+        donor_id:         contribution.donor.id,
+        portfolio_id:     contribution.portfolio.id,
+        contribution_id:  contribution.id
+      }
       Payments::ChargeCustomer.run(
-        customer_id: payment_method.payment_processor_customer_id,
-        account_id: payment_processor_account_id,
-        email: contribution.donor.email,
-        donation_amount_cents: contribution.amount_cents,
-        tips_cents: contribution.tips_cents,
-        platform_fee_cents: payment_fees.platform_fee_cents
+        customer_id:            payment_method.payment_processor_customer_id,
+        account_id:             payment_processor_account_id,
+        email:                  contribution.donor.email,
+        donation_amount_cents:  contribution.amount_cents,
+        tips_cents:             contribution.tips_cents,
+        platform_fee_cents:     payment_fees.platform_fee_cents,
+        metadata:               metadata
       ).tap do |command|
         if command.success?
           fee = command.result['balance_transaction']['fee_details'].detect { |fee| fee['type'] == 'stripe_fee' }

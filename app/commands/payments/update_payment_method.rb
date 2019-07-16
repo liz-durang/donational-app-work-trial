@@ -52,7 +52,8 @@ module Payments
     end
 
     def create_customer
-      create_customer = Payments::CreateCustomer.run
+      metadata        = { donor_id: donor.id }
+      create_customer = Payments::CreateCustomer.run(metadata: metadata)
       return nil unless create_customer.success?
       create_customer.result
     end

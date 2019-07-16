@@ -3,15 +3,20 @@ require 'stripe'
 module Payments
   class ChargeCustomer < ApplicationCommand
     required do
-      string :customer_id, empty: false
-      string :account_id, empty: false
-      string :email, empty: false
+      string  :customer_id, empty: false
+      string  :account_id,  empty: false
+      string  :email,       empty: false
       integer :donation_amount_cents
     end
 
     optional do
-      integer :platform_fee_cents, default: 0
-      integer :tips_cents, default: 0
+      integer :platform_fee_cents,  default: 0
+      integer :tips_cents,          default: 0
+      hash    :metadata do
+        string :donor_id
+        string :portfolio_id
+        string :contribution_id
+      end
     end
 
     def execute
@@ -29,11 +34,12 @@ module Payments
 
         charge = Stripe::Charge.create(
           {
-            source: token.id,
-            amount: donation_amount_cents + tips_cents,
-            application_fee: platform_fee_cents + tips_cents,
-            currency: 'usd',
-            expand: ['balance_transaction']
+            source:           token.id,
+            amount:           donation_amount_cents + tips_cents,
+            application_fee:  platform_fee_cents + tips_cents,
+            currency:         'usd',
+            expand:           ['balance_transaction'],
+            metadata:         metadata
           },
           stripe_account: account_id
         )
