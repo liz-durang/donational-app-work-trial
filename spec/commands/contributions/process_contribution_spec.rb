@@ -109,16 +109,24 @@ RSpec.describe Contributions::ProcessContribution do
       end
 
       let(:successful_track_event) { double(success?: true) }
+      let(:metadata) {
+        {
+          donor_id:         contribution.donor.id,
+          portfolio_id:     contribution.portfolio.id,
+          contribution_id:  contribution.id
+        }
+      }
       it 'stores the receipt and marks the contribution as processed' do
         expect(Payments::ChargeCustomer)
           .to receive(:run)
           .with(
-            email: 'user@example.com',
-            customer_id: 'cus_123',
-            account_id: 'acc_123',
-            donation_amount_cents: 1_000,
-            platform_fee_cents: 0,
-            tips_cents: 200)
+            email:                  'user@example.com',
+            customer_id:            'cus_123',
+            account_id:             'acc_123',
+            donation_amount_cents:  1_000,
+            platform_fee_cents:     0,
+            tips_cents:             200,
+            metadata:               metadata)
           .and_return(successful_charge)
         expect(Analytics::TrackEvent).to receive(:run).and_return(successful_track_event)
 
