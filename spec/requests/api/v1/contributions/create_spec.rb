@@ -17,10 +17,11 @@ describe 'POST api/v1/contributions/', type: :request do
       let(:params) do
         {
           contribution: {
-            donor_id:         donor_id,
-            amount_cents:     amount_cents,
-            currency:         currency,
-            organization_ein: organization.ein
+            donor_id: donor_id,
+            amount_cents: amount_cents,
+            currency: currency,
+            organization_ein: organization.ein,
+            external_reference_id: 'external_reference_id_1'
           }
         }
       end
@@ -44,6 +45,7 @@ describe 'POST api/v1/contributions/', type: :request do
         expect(json[:contribution][:id]).to eq(contribution.id)
         expect(json[:contribution][:donor_id]).to eq(contribution.donor_id)
         expect(json[:contribution][:amount_cents]).to eq(contribution.amount_cents)
+        expect(json[:contribution][:external_reference_id]).to eq(contribution.external_reference_id)
         expect(json[:contribution][:portfolio_id]).to eq(contribution.portfolio_id)
       end
 
@@ -117,6 +119,7 @@ describe 'POST api/v1/contributions/', type: :request do
         expect(json[:contribution][:id]).to eq(contribution.id)
         expect(json[:contribution][:donor_id]).to eq(contribution.donor_id)
         expect(json[:contribution][:amount_cents]).to eq(contribution.amount_cents)
+        expect(json[:contribution][:external_reference_id]).to eq(contribution.external_reference_id)
         expect(json[:contribution][:portfolio_id]).to eq(contribution.portfolio_id)
       end
 

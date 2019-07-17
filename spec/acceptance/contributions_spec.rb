@@ -16,11 +16,12 @@ resource 'Contributions' do
   # POST api/v1/contributions
   post '/api/v1/contributions' do
     # Request parameters
-    parameter :donor_id,          'Donor who makes the contribution',                       type: :string,  required: true
-    parameter :amount_cents,      'Contribution amount in cents (USD)',                     type: :integer, required: true
-    parameter :currency,          'Contribution currency. Currently only USD is supported', type: :string,  required: true
-    parameter :organization_ein,  'The tax id of the recipient charitable organization',    type: :string,  required: false
-    parameter :portfolio_id,      'The id of the charitable Portfolio to contribute to',    type: :string,  required: false
+    parameter :donor_id, 'Donor who makes the contribution', type: :string, required: true
+    parameter :amount_cents, 'Contribution amount in cents (USD)', type: :integer, required: true
+    parameter :currency, 'Contribution currency. Currently only USD is supported', type: :string, required: true
+    parameter :organization_ein, 'The tax id of the recipient charitable organization', type: :string, required: false
+    parameter :portfolio_id, 'The id of the charitable Portfolio to contribute to', type: :string, required: false
+    parameter :external_reference_id, 'The contribution id on your platform', type: :string, required: false
 
     explanation 'Contributions must be created with either an organization_ein or a portfolio_id.'
 
@@ -29,10 +30,11 @@ resource 'Contributions' do
         let(:params) do
           {
             contribution: {
-              donor_id:         donor.id,
-              amount_cents:     200,
-              currency:         'USD',
-              organization_ein: organization.ein
+              donor_id: donor.id,
+              amount_cents: 200,
+              currency: 'USD',
+              organization_ein: organization.ein,
+              external_reference_id: 'external_reference_id_1'
             }
           }.to_json
         end
@@ -46,6 +48,7 @@ resource 'Contributions' do
           expect(response['contribution']['portfolio_id']).to eq(contribution.portfolio_id)
           expect(response['contribution']['donor_id']).to eq(contribution.donor_id)
           expect(response['contribution']['amount_cents']).to eq(contribution.amount_cents)
+          expect(response['contribution']['external_reference_id']).to eq(contribution.external_reference_id)
         end
       end
 
@@ -70,6 +73,7 @@ resource 'Contributions' do
           expect(response['contribution']['portfolio_id']).to eq(contribution.portfolio_id)
           expect(response['contribution']['donor_id']).to eq(contribution.donor_id)
           expect(response['contribution']['amount_cents']).to eq(contribution.amount_cents)
+          expect(response['contribution']['external_reference_id']).to eq(contribution.external_reference_id)
         end
       end
     end

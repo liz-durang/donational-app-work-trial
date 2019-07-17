@@ -23,7 +23,6 @@
       "request_body": null,
       "request_headers": {
         "Content-Type": "application/json",
-        "X-Api-Key": "Oy9dDZTrI08LZbRI7rWLtwtt",
         "Host": "example.org",
         "Cookie": ""
       },
@@ -33,7 +32,7 @@
       "request_content_type": "application/json",
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "{\n  \"organizations\": [\n    {\n      \"ein\": \"or-g_2_381\",\n      \"name\": \"Charity 2\",\n      \"state\": \"State 2\"\n    },\n    {\n      \"ein\": \"or-g_3_d3c\",\n      \"name\": \"Charity 3\",\n      \"state\": \"State 3\"\n    }\n  ]\n}",
+      "response_body": "{\n  \"organizations\": [\n    {\n      \"ein\": \"or-g_6_370\",\n      \"name\": \"Charity 1\",\n      \"state\": \"State 6\"\n    },\n    {\n      \"ein\": \"or-g_7_69b\",\n      \"name\": \"Charity 2\",\n      \"state\": \"State 7\"\n    }\n  ]\n}",
       "response_headers": {
         "X-Frame-Options": "SAMEORIGIN",
         "X-XSS-Protection": "1; mode=block",
@@ -42,10 +41,10 @@
         "X-Permitted-Cross-Domain-Policies": "none",
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Content-Type": "application/json; charset=utf-8",
-        "ETag": "W/\"1d8792de770bc707ef942603510bef91\"",
+        "ETag": "W/\"f4856404d2e745fc39b96ba1ba6378d0\"",
         "Cache-Control": "max-age=0, private, must-revalidate",
-        "X-Request-Id": "e63ef31c-2a3b-4837-8f7c-746849f83b72",
-        "X-Runtime": "0.051522",
+        "X-Request-Id": "523252a1-1a4e-4b3c-80de-9c588e8ee601",
+        "X-Runtime": "0.094986",
         "Content-Length": "135"
       },
       "response_content_type": "application/json; charset=utf-8",

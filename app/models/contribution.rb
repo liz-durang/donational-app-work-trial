@@ -15,6 +15,7 @@
 #  failed_at                    :datetime
 #  payment_processor_fees_cents :integer
 #  refunded_at                  :datetime
+#  external_reference_id        :string
 #
 
 # Funds withdrawn from a Donor and transferred to Donational

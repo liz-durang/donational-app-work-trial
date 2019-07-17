@@ -1,12 +1,17 @@
 {
-  "resource": "Portfolios",
+  "resource": "Organizations",
   "resource_explanation": null,
   "http_method": "GET",
-  "route": "/api/v1/portfolios",
-  "description": "Successful request: List Charitable Portfolios",
+  "route": "/api/v1/organizations/:id",
+  "description": "Successful request: Search charitable organization by ein",
   "explanation": null,
   "parameters": [
-
+    {
+      "type": "string",
+      "required": true,
+      "name": "id",
+      "description": " id"
+    }
   ],
   "response_fields": [
 
@@ -14,11 +19,10 @@
   "requests": [
     {
       "request_method": "GET",
-      "request_path": "/api/v1/portfolios",
+      "request_path": "/api/v1/organizations/org_4_f2f4ba9",
       "request_body": null,
       "request_headers": {
         "Content-Type": "application/json",
-        "X-Api-Key": "CTGpN8a9CiLMiY5ovoq0qgtt",
         "Host": "example.org",
         "Cookie": ""
       },
@@ -27,7 +31,7 @@
       "request_content_type": "application/json",
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "{\n  \"portfolios\": [\n    {\n      \"id\": \"ac73921a-bafb-4747-88f4-5b3de1f37dfd\",\n      \"name\": \"MyString\",\n      \"allocations\": [\n        {\n          \"organization_ein\": \"org_6_08e6b7f\",\n          \"percentage\": 100,\n          \"name\": \"Organization 6\"\n        }\n      ]\n    }\n  ]\n}",
+      "response_body": "{\n  \"organization\": {\n    \"ein\": \"or-g_4_f2f\",\n    \"name\": \"Charity 1\",\n    \"state\": \"State 4\"\n  }\n}",
       "response_headers": {
         "X-Frame-Options": "SAMEORIGIN",
         "X-XSS-Protection": "1; mode=block",
@@ -36,11 +40,11 @@
         "X-Permitted-Cross-Domain-Policies": "none",
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Content-Type": "application/json; charset=utf-8",
-        "ETag": "W/\"4654bbfae748be28306c84813d0dca6e\"",
+        "ETag": "W/\"7a0f00e9767196fdba70b26948f58bef\"",
         "Cache-Control": "max-age=0, private, must-revalidate",
-        "X-Request-Id": "82abd9d5-d921-438e-b1bc-511c15603c6b",
-        "X-Runtime": "0.069077",
-        "Content-Length": "174"
+        "X-Request-Id": "f5f1474d-c148-420c-93e2-bf7d6918fe4d",
+        "X-Runtime": "0.005941",
+        "Content-Length": "74"
       },
       "response_content_type": "application/json; charset=utf-8",
       "curl": null

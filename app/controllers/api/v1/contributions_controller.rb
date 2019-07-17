@@ -29,7 +29,8 @@ module Api
           portfolio: portfolio,
           amount_cents: amount_cents,
           tips_cents: 0,
-          scheduled_at: Time.zone.now
+          scheduled_at: Time.zone.now,
+          external_reference_id: contribution_params[:external_reference_id]
         )
       end
 
@@ -46,12 +47,13 @@ module Api
           organization: find_organization.result,
           amount_cents: amount_cents,
           tips_cents: 0,
-          scheduled_at: Time.zone.now
+          scheduled_at: Time.zone.now,
+          external_reference_id: contribution_params[:external_reference_id]
         )
       end
 
       def contribution_params
-        params.require(:contribution).permit(:donor_id, :amount_cents, :currency, :organization_ein, :portfolio_id)
+        params.require(:contribution).permit(:donor_id, :amount_cents, :currency, :organization_ein, :portfolio_id, :external_reference_id)
       end
 
       def donor
