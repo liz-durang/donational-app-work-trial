@@ -9,12 +9,6 @@ module Organizations
     end
 
     def execute
-      ActiveRecord::Base.connection.execute <<-SQL
-        DELETE FROM searchable_organizations;
-        DROP INDEX IF EXISTS index_searchable_organizations_on_tsv;
-        ALTER TABLE searchable_organizations DROP COLUMN IF EXISTS tsv;
-      SQL
-
       puts "Importing searchable organizations from IRS Exempt Organizations Business Master File Extract (EO BMF)"
 
       files.each do |zipped_csv_file|
@@ -22,14 +16,9 @@ module Organizations
       end
       puts "Imported #{SearchableOrganization.count} searchable organizations"
 
-      ActiveRecord::Base.connection.execute <<-SQL
-        ALTER TABLE searchable_organizations ADD COLUMN tsv tsvector;
-        UPDATE searchable_organizations SET tsv=to_tsvector('pg_catalog.english', coalesce(name,''));
-        CREATE INDEX index_searchable_organizations_on_name_tsv ON searchable_organizations USING gin(tsv);
-      SQL
-
+      SearchableOrganization.reindex
       puts "Indexed #{SearchableOrganization.count} searchable organizations"
-
+      
       nil
     end
 

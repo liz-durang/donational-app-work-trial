@@ -42,7 +42,6 @@
         { "url": "heroku/nodejs" },
         { "url": "https://github.com/heroku/heroku-buildpack-chromedriver" },
         { "url": "https://github.com/heroku/heroku-buildpack-google-chrome" },
-        { "url": "https://github.com/ello/heroku-buildpack-imagemagick" },
         { "url": "heroku/ruby" }
       ]
     }
@@ -52,11 +51,11 @@
   "addons": [
     "heroku-postgresql",
     "heroku-redis",
-    "sendgrid"
+    "sendgrid",
+    "searchbox:starter"
   ],
   "buildpacks": [
     { "url": "heroku/nodejs" },
-    { "url": "https://github.com/ello/heroku-buildpack-imagemagick" },
     { "url": "heroku/ruby" }
   ]
 }

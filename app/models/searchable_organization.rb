@@ -30,23 +30,23 @@
 #  revenue_amt      :string
 #  ntee_cd          :string
 #  sort_name        :string
-#  tsv              :tsvector
 #
 
 class SearchableOrganization < ApplicationRecord
-  include PgSearch
+  searchkick word_start: [:name], batch_size: 10_000
 
+  def search_data
+    {
+      ein: ein,
+      name: name
+    }
+  end
+  
   self.primary_key = 'ein'
 
-  pg_search_scope :search_for,
-    against: :name,
-    using: {
-      tsearch: {
-        prefix: true,
-        dictionary: 'english',
-        tsvector_column: 'tsv'
-      }
-    }
+  def self.search_for(query, limit: 10)
+    self.search(query, limit: limit, misspellings: { prefix_length: 2 }, match: :word_start)
+  end
   
   def formatted_ein
     ein[0..1] + '-' + ein[2..8]

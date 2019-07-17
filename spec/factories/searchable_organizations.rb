@@ -9,8 +9,11 @@ FactoryBot.define do
     sequence :state do |n|
       "State #{n}"
     end
-    sequence :tsv do |n|
-      "'#{n}':2 'chariti':1"
+
+    trait :reindex do
+      after(:create) do |searchable_organization, _evaluator|
+        searchable_organization.reindex(refresh: true)
+      end
     end
   end
 end
