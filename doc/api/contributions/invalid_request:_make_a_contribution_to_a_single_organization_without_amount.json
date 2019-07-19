@@ -41,6 +41,18 @@
       "required": false,
       "name": "external_reference_id",
       "description": "The contribution id on your platform"
+    },
+    {
+      "type": "boolean",
+      "required": false,
+      "name": "mark_as_paid",
+      "description": "Indicates if the contribution was processed manually"
+    },
+    {
+      "type": "json",
+      "required": false,
+      "name": "receipt",
+      "description": "The contribution receipt"
     }
   ],
   "response_fields": [
@@ -50,10 +62,10 @@
     {
       "request_method": "POST",
       "request_path": "/api/v1/contributions",
-      "request_body": "{\"contribution\":{\"donor_id\":\"b96892b5-4781-46d7-8016-099c33379e55\",\"amount_cents\":50,\"currency\":\"USD\",\"organization_ein\":\"org_8_e7aa5b8\"}}",
+      "request_body": "{\"contribution\":{\"donor_id\":\"bb56db71-6d61-4251-b872-30e7e06fe065\",\"amount_cents\":50,\"currency\":\"USD\",\"organization_ein\":\"org_10_ca9d397\"}}",
       "request_headers": {
         "Content-Type": "application/json",
-        "X-Api-Key": "5wEIpvoLpAHXshJ1O1gIZQtt",
+        "X-Api-Key": "OqOX64WquzDtx6LZt2EhpQtt",
         "Host": "example.org",
         "Cookie": ""
       },
@@ -72,8 +84,8 @@
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Content-Type": "application/json; charset=utf-8",
         "Cache-Control": "no-cache",
-        "X-Request-Id": "e0762ee0-2ebf-4376-a7d6-7ad22d254095",
-        "X-Runtime": "0.003805",
+        "X-Request-Id": "29a7bcee-d500-467b-b6ae-2e433ac1506d",
+        "X-Runtime": "0.007877",
         "Content-Length": "40"
       },
       "response_content_type": "application/json; charset=utf-8",

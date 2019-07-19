@@ -41,6 +41,18 @@
       "required": false,
       "name": "external_reference_id",
       "description": "The contribution id on your platform"
+    },
+    {
+      "type": "boolean",
+      "required": false,
+      "name": "mark_as_paid",
+      "description": "Indicates if the contribution was processed manually"
+    },
+    {
+      "type": "json",
+      "required": false,
+      "name": "receipt",
+      "description": "The contribution receipt"
     }
   ],
   "response_fields": [
@@ -50,10 +62,10 @@
     {
       "request_method": "POST",
       "request_path": "/api/v1/contributions",
-      "request_body": "{\"contribution\":{\"donor_id\":\"f6d523db-da05-44c0-b6dd-23ec5f25ccaa\",\"amount_cents\":200,\"currency\":\"USD\",\"organization_ein\":\"org_7_802f751\",\"external_reference_id\":\"external_reference_id_1\"}}",
+      "request_body": "{\"contribution\":{\"donor_id\":\"983d54ba-2b68-4bbd-9ef0-b2a0fa5fd34c\",\"amount_cents\":200,\"currency\":\"USD\",\"organization_ein\":\"org_12_4d54ed0\",\"external_reference_id\":\"external_reference_id_1\",\"mark_as_paid\":true,\"receipt\":{\"method\":\"ACH\",\"account\":\"jp_morgan_chase_1\",\"memo\":\"some_entry_id\",\"transfer_date\":\"2019-01-01\"}}}",
       "request_headers": {
         "Content-Type": "application/json",
-        "X-Api-Key": "aHPNkatVdeZHE6FyQUKhlAtt",
+        "X-Api-Key": "09wudchwlGPClkqlvEfBTgtt",
         "Host": "example.org",
         "Cookie": ""
       },
@@ -62,7 +74,7 @@
       "request_content_type": "application/json",
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "{\n  \"contribution\": {\n    \"id\": \"e6d96cf4-2897-4a72-af25-38c4d4cd30f2\",\n    \"donor_id\": \"f6d523db-da05-44c0-b6dd-23ec5f25ccaa\",\n    \"amount_cents\": 200,\n    \"scheduled_at\": \"2019-07-17T20:44:34.343Z\",\n    \"external_reference_id\": \"external_reference_id_1\",\n    \"portfolio_id\": \"95af0747-a1d1-4cc2-95d6-fdef992511a8\",\n    \"portfolio_allocations\": [\n      {\n        \"organization_ein\": \"org_7_802f751\",\n        \"percentage\": 100,\n        \"name\": \"Organization 7\"\n      }\n    ]\n  }\n}",
+      "response_body": "{\n  \"contribution\": {\n    \"id\": \"c8ff3723-82b4-4e56-9e61-13d439ab4e33\",\n    \"donor_id\": \"983d54ba-2b68-4bbd-9ef0-b2a0fa5fd34c\",\n    \"amount_cents\": 200,\n    \"scheduled_at\": \"2019-07-19T19:32:59.191Z\",\n    \"external_reference_id\": \"external_reference_id_1\",\n    \"processed_at\": \"2019-07-19T19:32:59.205Z\",\n    \"receipt\": {\n      \"method\": \"ACH\",\n      \"account\": \"jp_morgan_chase_1\",\n      \"memo\": \"some_entry_id\",\n      \"transfer_date\": \"2019-01-01\"\n    },\n    \"portfolio_id\": \"fa830f65-75e7-4994-8b00-31b6986e2734\",\n    \"portfolio_allocations\": [\n      {\n        \"organization_ein\": \"org_12_4d54ed0\",\n        \"percentage\": 100,\n        \"name\": \"Organization 12\"\n      }\n    ]\n  }\n}",
       "response_headers": {
         "X-Frame-Options": "SAMEORIGIN",
         "X-XSS-Protection": "1; mode=block",
@@ -71,11 +83,11 @@
         "X-Permitted-Cross-Domain-Policies": "none",
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Content-Type": "application/json; charset=utf-8",
-        "ETag": "W/\"0c6143db27a19a2948eab1f5c27ec1bc\"",
+        "ETag": "W/\"a465045c1ccfb65208a6ee16af6bd3a4\"",
         "Cache-Control": "max-age=0, private, must-revalidate",
-        "X-Request-Id": "b9103405-f0e2-44b6-961c-564a8c0bbd1d",
-        "X-Runtime": "0.037596",
-        "Content-Length": "381"
+        "X-Request-Id": "e71e9194-300b-465e-8f2b-f557e84dc098",
+        "X-Runtime": "0.022726",
+        "Content-Length": "534"
       },
       "response_content_type": "application/json; charset=utf-8",
       "curl": null

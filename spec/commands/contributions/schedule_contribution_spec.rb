@@ -32,7 +32,7 @@ RSpec.describe Contributions::ScheduleContribution do
     it 'creates a scheduled Contribution for the portfolio with the contribution amount' do
       expect(Contribution)
         .to receive(:create!)
-        .with(donor: donor, portfolio: portfolio, amount_cents: 1234, tips_cents: 200, scheduled_at: scheduled_at, external_reference_id: nil)
+        .with(donor: donor, portfolio: portfolio, amount_cents: 1234, tips_cents: 200, scheduled_at: scheduled_at, external_reference_id: nil, processed_at: nil, receipt: nil)
 
       command = Contributions::ScheduleContribution.run(params)
 

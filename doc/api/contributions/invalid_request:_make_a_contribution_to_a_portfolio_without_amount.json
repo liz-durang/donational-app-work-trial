@@ -41,6 +41,18 @@
       "required": false,
       "name": "external_reference_id",
       "description": "The contribution id on your platform"
+    },
+    {
+      "type": "boolean",
+      "required": false,
+      "name": "mark_as_paid",
+      "description": "Indicates if the contribution was processed manually"
+    },
+    {
+      "type": "json",
+      "required": false,
+      "name": "receipt",
+      "description": "The contribution receipt"
     }
   ],
   "response_fields": [
@@ -50,10 +62,10 @@
     {
       "request_method": "POST",
       "request_path": "/api/v1/contributions",
-      "request_body": "{\"contribution\":{\"donor_id\":\"42f4cf49-94bd-4f68-a861-7af937f4186b\",\"amount_cents\":0,\"currency\":\"USD\",\"portfolio_id\":\"8a51b0dc-b141-43f8-9f89-e09d4ff932ea\"}}",
+      "request_body": "{\"contribution\":{\"donor_id\":\"46772d79-82c8-4e5e-b8f0-4bf9e0e81f2a\",\"amount_cents\":0,\"currency\":\"USD\",\"portfolio_id\":\"e87f2e7f-2d6b-4fdd-bed6-5824477a5bff\"}}",
       "request_headers": {
         "Content-Type": "application/json",
-        "X-Api-Key": "Q5vAh0dXQGbOw7CM5h5ubQtt",
+        "X-Api-Key": "S2jQ3RhQ5XzNWvgmctEpWQtt",
         "Host": "example.org",
         "Cookie": ""
       },
@@ -72,8 +84,8 @@
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Content-Type": "application/json; charset=utf-8",
         "Cache-Control": "no-cache",
-        "X-Request-Id": "372ef288-5f38-454b-b54b-ad1ac5097c18",
-        "X-Runtime": "0.003320",
+        "X-Request-Id": "a9588dd7-b86f-42f7-bffe-f503a41077f7",
+        "X-Runtime": "0.004100",
         "Content-Length": "40"
       },
       "response_content_type": "application/json; charset=utf-8",

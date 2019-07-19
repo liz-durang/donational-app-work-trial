@@ -7,6 +7,7 @@ resource 'Contributions' do
   let(:organization)  { create(:organization) }
   let(:partner)       { create(:partner) }
   let(:portfolio)     { create(:portfolio) }
+  let!(:allocation)   { create(:allocation, organization: organization, portfolio: portfolio, percentage: 100) }
   let(:api_key)       { partner.api_key }
 
   # Headers which should be included in the request
@@ -22,11 +23,23 @@ resource 'Contributions' do
     parameter :organization_ein, 'The tax id of the recipient charitable organization', type: :string, required: false
     parameter :portfolio_id, 'The id of the charitable Portfolio to contribute to', type: :string, required: false
     parameter :external_reference_id, 'The contribution id on your platform', type: :string, required: false
+    parameter :mark_as_paid, 'Indicates if the contribution was processed manually', type: :boolean, required: false
+    parameter :receipt, 'The contribution receipt', type: :json, required: false
 
     explanation 'Contributions must be created with either an organization_ein or a portfolio_id.'
 
     context '200' do
       context 'Single organization' do
+        let(:mark_as_paid) { true }
+        let(:receipt) {
+          {
+            method: "ACH",
+            account: "jp_morgan_chase_1",
+            memo: "some_entry_id",
+            transfer_date: "2019-01-01"
+          }
+        }
+
         let(:params) do
           {
             contribution: {
@@ -34,7 +47,9 @@ resource 'Contributions' do
               amount_cents: 200,
               currency: 'USD',
               organization_ein: organization.ein,
-              external_reference_id: 'external_reference_id_1'
+              external_reference_id: 'external_reference_id_1',
+              mark_as_paid: mark_as_paid,
+              receipt: receipt
             }
           }.to_json
         end
@@ -49,6 +64,8 @@ resource 'Contributions' do
           expect(response['contribution']['donor_id']).to eq(contribution.donor_id)
           expect(response['contribution']['amount_cents']).to eq(contribution.amount_cents)
           expect(response['contribution']['external_reference_id']).to eq(contribution.external_reference_id)
+          expect(response['contribution']['processed_at']).not_to be(nil)
+          expect(response['contribution']['receipt']).to eq(contribution.receipt)
         end
       end
 
@@ -74,6 +91,8 @@ resource 'Contributions' do
           expect(response['contribution']['donor_id']).to eq(contribution.donor_id)
           expect(response['contribution']['amount_cents']).to eq(contribution.amount_cents)
           expect(response['contribution']['external_reference_id']).to eq(contribution.external_reference_id)
+          expect(response['contribution']['processed_at']).to be(nil)
+          expect(response['contribution']['receipt']).to eq(contribution.receipt)
         end
       end
     end
