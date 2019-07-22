@@ -2,9 +2,12 @@ require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Donors' do
-  let(:donor)   { Donor.last }
-  let(:partner) { create(:partner) }
-  let(:api_key) { partner.api_key }
+  let(:donor)                { Donor.find_by(first_name: 'Donny') }
+  let(:partner)              { create(:partner) }
+  let(:api_key)              { partner.api_key }
+  let(:affiliated_donor)     { create(:donor, email: 'donor@example.com') }
+  let(:unaffiliated_donor)   { create(:donor, email: 'unaffiliated_donor@example.com') }
+  let!(:partner_affiliation) { create(:partner_affiliation, donor_id: affiliated_donor.id, partner_id: partner.id) }
 
   # Headers which should be included in the request
   header 'Content-Type', 'application/json'
@@ -58,6 +61,78 @@ resource 'Donors' do
         expect(response['errors'][0]).to eq("First Name can't be blank")
         expect(response['errors'][1]).to eq("Last Name can't be blank")
         expect(response['errors'][2]).to eq("Email can't be blank")
+      end
+    end
+  end
+
+  # Get api/v1/donors/:id
+  get '/api/v1/donors/:id' do
+    # Request parameters
+    parameter :id, type: :string, required: true
+
+    let(:id)  { affiliated_donor.id }
+
+    context '200' do
+      example 'Successful request: Search donor by id' do
+        do_request
+
+        expect(status).to eq(200)
+
+        response = JSON.parse(response_body)
+        expect(response['donor']['id']).to eq(affiliated_donor.id)
+        expect(response['donor']['first_name']).to eq(affiliated_donor.first_name)
+        expect(response['donor']['last_name']).to eq(affiliated_donor.last_name)
+        expect(response['donor']['email']).to eq(affiliated_donor.email)
+      end
+    end
+
+    context '404' do
+      parameter :id, type: :string, required: true
+
+      let(:id)  { 'invalid_id' }
+
+      example 'Invalid request: Search donor by id' do
+        do_request
+
+        expect(status).to eq(404)
+        response = JSON.parse(response_body)
+        expect(response['error']).to eq("Could not find a donor with id #{id}")
+      end
+    end
+
+    context '404' do
+      parameter :id, type: :string, required: true
+
+      let(:id)  { unaffiliated_donor.id }
+
+      example 'Invalid request: Search donor by id' do
+        do_request
+
+        expect(status).to eq(404)
+        response = JSON.parse(response_body)
+        expect(response['error']).to eq("Could not find a donor with id #{id}")
+      end
+    end
+  end
+
+  # Get api/v1/donors/
+  get '/api/v1/donors' do
+    # Request parameters
+    parameter :email, type: :string, required: true
+
+    let(:email)  { affiliated_donor.email }
+
+    context '200' do
+
+      example 'Successful request: Search donor by email' do
+        do_request
+
+        expect(status).to eq(200)
+        response = JSON.parse(response_body)
+        expect(response['donors'][0]['id']).to eq(affiliated_donor.id)
+        expect(response['donors'][0]['first_name']).to eq(affiliated_donor.first_name)
+        expect(response['donors'][0]['last_name']).to eq(affiliated_donor.last_name)
+        expect(response['donors'][0]['email']).to eq(affiliated_donor.email)
       end
     end
   end
