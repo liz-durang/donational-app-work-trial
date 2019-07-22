@@ -3,6 +3,7 @@ module Contributions
     required do
       model :donor
       model :organization
+      model :partner
       integer :amount_cents, min: 100
       time :scheduled_at
     end
@@ -36,6 +37,7 @@ module Contributions
       contribution = Contribution.create!(
         donor: donor,
         portfolio: portfolio,
+        partner: partner,
         amount_cents: amount_cents,
         tips_cents: tips_cents,
         scheduled_at: scheduled_at,

@@ -33,7 +33,8 @@ module Api
           scheduled_at: Time.zone.now,
           external_reference_id: contribution_params[:external_reference_id],
           mark_as_paid: mark_as_paid,
-          receipt: contribution_params[:receipt]
+          receipt: contribution_params[:receipt],
+          partner: current_partner
         )
       end
 
@@ -54,7 +55,8 @@ module Api
           scheduled_at: Time.zone.now,
           external_reference_id: contribution_params[:external_reference_id],
           mark_as_paid: mark_as_paid,
-          receipt: contribution_params[:receipt]
+          receipt: contribution_params[:receipt],
+          partner: current_partner
         )
       end
 

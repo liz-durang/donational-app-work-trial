@@ -22,6 +22,7 @@ FactoryBot.define do
   factory :contribution do
     donor
     portfolio
+    partner
     amount_cents { 123 }
     tips_cents { 2 }
     scheduled_at { 1.day.ago }

@@ -11,6 +11,7 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
     {
       donor: donor,
       portfolio: portfolio,
+      partner: partner,
       amount_cents: 8000,
       tips_cents: 100,
       frequency: :annually,
@@ -20,6 +21,7 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
   let(:other_donor) { create(:donor) }
   let(:donor) { create(:donor, email: 'user@example.com') }
   let(:portfolio) { create(:portfolio) }
+  let(:partner) { create(:partner) }
 
   context 'when there are no existing recurring donations for the donor' do
     it 'creates a new active recurring contribution' do
@@ -33,6 +35,7 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
       expect(recurring_contribution.frequency).to eq 'annually'
       expect(recurring_contribution.start_at.to_date).to eq Date.new(2000, 1, 1)
       expect(recurring_contribution.last_scheduled_at).to eq nil
+      expect(recurring_contribution.partner).to eq partner
     end
 
     context 'and there is no start date provided' do
@@ -79,6 +82,7 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
       expect(recurring_contribution).to be_active
       expect(recurring_contribution.donor).to eq donor
       expect(recurring_contribution.amount_cents).to eq 8000
+      expect(recurring_contribution.partner).to eq partner
     end
 
     it 'copies the last_scheduled_at date from the previous plan' do

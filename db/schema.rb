@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_17_180813) do
+ActiveRecord::Schema.define(version: 2019_07_22_162439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -100,7 +100,9 @@ ActiveRecord::Schema.define(version: 2019_07_17_180813) do
     t.integer "payment_processor_fees_cents"
     t.datetime "refunded_at"
     t.string "external_reference_id"
+    t.uuid "partner_id"
     t.index ["donor_id"], name: "index_contributions_on_donor_id"
+    t.index ["partner_id"], name: "index_contributions_on_partner_id"
     t.index ["portfolio_id"], name: "index_contributions_on_portfolio_id"
   end
 
@@ -259,8 +261,10 @@ ActiveRecord::Schema.define(version: 2019_07_17_180813) do
     t.datetime "updated_at", null: false
     t.datetime "last_reminded_at"
     t.datetime "last_scheduled_at"
+    t.uuid "partner_id"
     t.index ["deactivated_at"], name: "index_recurring_contributions_on_deactivated_at"
     t.index ["donor_id"], name: "index_recurring_contributions_on_donor_id"
+    t.index ["partner_id"], name: "index_recurring_contributions_on_partner_id"
     t.index ["portfolio_id"], name: "index_recurring_contributions_on_portfolio_id"
   end
 
@@ -311,6 +315,7 @@ ActiveRecord::Schema.define(version: 2019_07_17_180813) do
   add_foreign_key "campaigns", "partners"
   add_foreign_key "cause_area_relevances", "donors"
   add_foreign_key "contributions", "donors"
+  add_foreign_key "contributions", "partners"
   add_foreign_key "contributions", "portfolios"
   add_foreign_key "donations", "allocations"
   add_foreign_key "donations", "contributions"
@@ -327,6 +332,7 @@ ActiveRecord::Schema.define(version: 2019_07_17_180813) do
   add_foreign_key "payment_methods", "donors"
   add_foreign_key "portfolios", "donors", column: "creator_id"
   add_foreign_key "recurring_contributions", "donors"
+  add_foreign_key "recurring_contributions", "partners"
   add_foreign_key "recurring_contributions", "portfolios"
   add_foreign_key "selected_portfolios", "donors"
   add_foreign_key "selected_portfolios", "portfolios"

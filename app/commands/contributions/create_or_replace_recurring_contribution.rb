@@ -5,6 +5,7 @@ module Contributions
     required do
       model :donor
       model :portfolio
+      model :partner
       symbol :frequency, default: :monthly, in: RecurringContribution.frequency.values
       integer :amount_cents, min: 0
       integer :tips_cents, min: 0, default: 0
@@ -23,6 +24,7 @@ module Contributions
         @contribution = RecurringContribution.create!(
           donor: donor,
           portfolio: portfolio,
+          partner: partner,
           frequency: frequency,
           start_at: start_at || Time.zone.now,
           amount_cents: amount_cents,
