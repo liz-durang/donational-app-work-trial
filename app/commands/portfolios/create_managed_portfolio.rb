@@ -9,6 +9,7 @@ module Portfolios
 
     optional do
       string :description
+      string :image
     end
 
     def execute
@@ -44,12 +45,13 @@ module Portfolios
     end
 
     def create_managed_portfolio
-      ManagedPortfolio.create(
+      managed_portfolio = ManagedPortfolio.create(
         partner: partner,
         name: title,
         description: description || '',
         portfolio: @portfolio
       )
+      managed_portfolio.image.attach(image) if image.present?
     end
   end
 end

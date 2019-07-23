@@ -18,7 +18,7 @@
               = organization.state
     .card-footer
       .card-footer-item
-        = link_to 'Add to portfolio', 'javascript:;', class:'button is-success is-outlined is-fullwidth', onClick: "addSearchedCharity('#{@organization_name}', '#{@organization_ein}');"
+        = link_to 'Add to portfolio', 'javascript:;', class:'button is-success is-outlined is-fullwidth', onClick: "addSearchedCharity('#{organization.formatted_name}', '#{organization.formatted_ein}');"
 
 - if @organizations.empty?
   h3.subtitle
