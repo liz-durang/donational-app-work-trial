@@ -18,7 +18,7 @@
       "request_body": null,
       "request_headers": {
         "Content-Type": "application/json",
-        "X-Api-Key": "KMarQGYVkJ3WrJiWEZrMMAtt",
+        "X-Api-Key": "JVyvtSVz6s0qDpW8ws1CAwtt",
         "Host": "example.org",
         "Cookie": ""
       },
@@ -27,7 +27,7 @@
       "request_content_type": "application/json",
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "{\n  \"portfolios\": [\n    {\n      \"id\": \"bc82d92c-6282-47aa-a564-3dec84bea2e1\",\n      \"name\": \"MyString\",\n      \"allocations\": [\n        {\n          \"organization_ein\": \"org_13_0ac0708\",\n          \"percentage\": 100,\n          \"name\": \"Organization 13\"\n        }\n      ]\n    }\n  ]\n}",
+      "response_body": "{\n  \"portfolios\": [\n    {\n      \"id\": \"163ba1e2-f199-45c1-82c9-8d40639aaed9\",\n      \"name\": \"MyString\",\n      \"description\": \"MyText\",\n      \"allocations\": [\n        {\n          \"organization_ein\": \"org_6_5b86da3\",\n          \"percentage\": 100,\n          \"name\": \"Organization 6\"\n        }\n      ]\n    }\n  ]\n}",
       "response_headers": {
         "X-Frame-Options": "SAMEORIGIN",
         "X-XSS-Protection": "1; mode=block",
@@ -36,11 +36,11 @@
         "X-Permitted-Cross-Domain-Policies": "none",
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Content-Type": "application/json; charset=utf-8",
-        "ETag": "W/\"ac734fba0938c3580d800b9b22a21a79\"",
+        "ETag": "W/\"b3c8337c1db7f20b4f9e20fd1527e914\"",
         "Cache-Control": "max-age=0, private, must-revalidate",
-        "X-Request-Id": "bfdac978-4a1a-4c84-93f9-1c0324fab3f8",
-        "X-Runtime": "0.012669",
-        "Content-Length": "176"
+        "X-Request-Id": "7fd58feb-ecb5-4cea-9494-4944b66ee16e",
+        "X-Runtime": "0.039357",
+        "Content-Length": "197"
       },
       "response_content_type": "application/json; charset=utf-8",
       "curl": null

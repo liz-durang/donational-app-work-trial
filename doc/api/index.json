@@ -60,8 +60,36 @@
       "explanation": null,
       "examples": [
         {
-          "description": "Invalid request: Create a donor",
-          "link": "donors/invalid_request:_create_a_donor.json",
+          "description": "Invalid request: Create a donor without email",
+          "link": "donors/invalid_request:_create_a_donor_without_email.json",
+          "groups": "all",
+          "route": "/api/v1/donors",
+          "method": "post"
+        },
+        {
+          "description": "Invalid request: Create a donor without name",
+          "link": "donors/invalid_request:_create_a_donor_without_name.json",
+          "groups": "all",
+          "route": "/api/v1/donors",
+          "method": "post"
+        },
+        {
+          "description": "Invalid request: Search donor by id",
+          "link": "donors/invalid_request:_search_donor_by_id.json",
+          "groups": "all",
+          "route": "/api/v1/donors/:id",
+          "method": "get"
+        },
+        {
+          "description": "Invalid request: Search donor by id",
+          "link": "donors/invalid_request:_search_donor_by_id.json",
+          "groups": "all",
+          "route": "/api/v1/donors/:id",
+          "method": "get"
+        },
+        {
+          "description": "Succesful request: Create a donor",
+          "link": "donors/succesful_request:_create_a_donor.json",
           "groups": "all",
           "route": "/api/v1/donors",
           "method": "post"
@@ -72,6 +100,20 @@
           "groups": "all",
           "route": "/api/v1/donors",
           "method": "post"
+        },
+        {
+          "description": "Successful request: Search donor by email",
+          "link": "donors/successful_request:_search_donor_by_email.json",
+          "groups": "all",
+          "route": "/api/v1/donors",
+          "method": "get"
+        },
+        {
+          "description": "Successful request: Search donor by id",
+          "link": "donors/successful_request:_search_donor_by_id.json",
+          "groups": "all",
+          "route": "/api/v1/donors/:id",
+          "method": "get"
         }
       ]
     },

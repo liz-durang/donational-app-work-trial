@@ -7,7 +7,7 @@ hr
 
 p
   ' Hey
-  = @donor.first_name
+  = @donor.short_name
   | ,
 
 p
@@ -22,7 +22,7 @@ p
 p
   ' When entering this as a deduction on your taxes, please enter "Social Good Fund" as the name of the charity.
   | Your donations are tax-deductible in the United States, and this email serves as your official tax receipt.
-  
+
 p
   ' Here is a list of each contribution that you made in
   = @year

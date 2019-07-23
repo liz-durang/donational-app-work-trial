@@ -62,10 +62,10 @@
     {
       "request_method": "POST",
       "request_path": "/api/v1/contributions",
-      "request_body": "{\"contribution\":{\"donor_id\":\"983d54ba-2b68-4bbd-9ef0-b2a0fa5fd34c\",\"amount_cents\":200,\"currency\":\"USD\",\"organization_ein\":\"org_12_4d54ed0\",\"external_reference_id\":\"external_reference_id_1\",\"mark_as_paid\":true,\"receipt\":{\"method\":\"ACH\",\"account\":\"jp_morgan_chase_1\",\"memo\":\"some_entry_id\",\"transfer_date\":\"2019-01-01\"}}}",
+      "request_body": "{\"contribution\":{\"donor_id\":\"2fe80bb0-7667-4059-a4e7-95cccb1ccab2\",\"amount_cents\":200,\"currency\":\"USD\",\"organization_ein\":\"org_8_d438c26\",\"external_reference_id\":\"external_reference_id_1\",\"mark_as_paid\":true,\"receipt\":{\"method\":\"ACH\",\"account\":\"jp_morgan_chase_1\",\"memo\":\"some_entry_id\",\"transfer_date\":\"2019-01-01\"}}}",
       "request_headers": {
         "Content-Type": "application/json",
-        "X-Api-Key": "09wudchwlGPClkqlvEfBTgtt",
+        "X-Api-Key": "7N9Ggc9oTeqYPvzXYuJxfAtt",
         "Host": "example.org",
         "Cookie": ""
       },
@@ -74,7 +74,7 @@
       "request_content_type": "application/json",
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "{\n  \"contribution\": {\n    \"id\": \"c8ff3723-82b4-4e56-9e61-13d439ab4e33\",\n    \"donor_id\": \"983d54ba-2b68-4bbd-9ef0-b2a0fa5fd34c\",\n    \"amount_cents\": 200,\n    \"scheduled_at\": \"2019-07-19T19:32:59.191Z\",\n    \"external_reference_id\": \"external_reference_id_1\",\n    \"processed_at\": \"2019-07-19T19:32:59.205Z\",\n    \"receipt\": {\n      \"method\": \"ACH\",\n      \"account\": \"jp_morgan_chase_1\",\n      \"memo\": \"some_entry_id\",\n      \"transfer_date\": \"2019-01-01\"\n    },\n    \"portfolio_id\": \"fa830f65-75e7-4994-8b00-31b6986e2734\",\n    \"portfolio_allocations\": [\n      {\n        \"organization_ein\": \"org_12_4d54ed0\",\n        \"percentage\": 100,\n        \"name\": \"Organization 12\"\n      }\n    ]\n  }\n}",
+      "response_body": "{\n  \"contribution\": {\n    \"id\": \"d0485811-fc1b-4941-9367-4f531cbf2d1b\",\n    \"donor_id\": \"2fe80bb0-7667-4059-a4e7-95cccb1ccab2\",\n    \"amount_cents\": 200,\n    \"scheduled_at\": \"2019-07-24T17:10:17.482Z\",\n    \"external_reference_id\": \"external_reference_id_1\",\n    \"processed_at\": \"2019-07-24T17:10:17.516Z\",\n    \"receipt\": {\n      \"method\": \"ACH\",\n      \"account\": \"jp_morgan_chase_1\",\n      \"memo\": \"some_entry_id\",\n      \"transfer_date\": \"2019-01-01\"\n    },\n    \"portfolio_id\": \"dfb8a781-fde3-4063-952a-a9d9e14dbc84\",\n    \"portfolio_allocations\": [\n      {\n        \"organization_ein\": \"org_8_d438c26\",\n        \"percentage\": 100,\n        \"name\": \"Organization 8\"\n      }\n    ]\n  }\n}",
       "response_headers": {
         "X-Frame-Options": "SAMEORIGIN",
         "X-XSS-Protection": "1; mode=block",
@@ -83,11 +83,11 @@
         "X-Permitted-Cross-Domain-Policies": "none",
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Content-Type": "application/json; charset=utf-8",
-        "ETag": "W/\"a465045c1ccfb65208a6ee16af6bd3a4\"",
+        "ETag": "W/\"b4fac1b055406efc71b7cd8664a7ec6a\"",
         "Cache-Control": "max-age=0, private, must-revalidate",
-        "X-Request-Id": "e71e9194-300b-465e-8f2b-f557e84dc098",
-        "X-Runtime": "0.022726",
-        "Content-Length": "534"
+        "X-Request-Id": "0aab705a-4f17-4791-8ad1-048ae34bf208",
+        "X-Runtime": "0.063996",
+        "Content-Length": "532"
       },
       "response_content_type": "application/json; charset=utf-8",
       "curl": null

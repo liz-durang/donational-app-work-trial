@@ -1,22 +1,28 @@
 {
   "resource": "Donors",
-  "resource_explanation": null,
+  "resource_explanation": "Donors must be created with either an entity_name or a first_name and last_name.",
   "http_method": "POST",
   "route": "/api/v1/donors",
-  "description": "Invalid request: Create a donor",
+  "description": "Invalid request: Create a donor without email",
   "explanation": null,
   "parameters": [
     {
       "type": "string",
-      "required": true,
+      "required": false,
       "name": "first_name",
       "description": "Donor first name"
     },
     {
       "type": "string",
-      "required": true,
+      "required": false,
       "name": "last_name",
       "description": "Donor last name"
+    },
+    {
+      "type": "string",
+      "required": false,
+      "name": "entity_name",
+      "description": "Entity name"
     },
     {
       "type": "string",
@@ -32,10 +38,10 @@
     {
       "request_method": "POST",
       "request_path": "/api/v1/donors",
-      "request_body": "{\"donor\":{\"first_name\":\"\",\"last_name\":\"\",\"email\":\"\"}}",
+      "request_body": "{\"donor\":{\"email\":\"\"}}",
       "request_headers": {
         "Content-Type": "application/json",
-        "X-Api-Key": "LZxmujMDHvqKGt6RXhX9sQtt",
+        "X-Api-Key": "NEkX1DFHoEQiqFTAYdrvPwtt",
         "Host": "example.org",
         "Cookie": ""
       },
@@ -44,7 +50,7 @@
       "request_content_type": "application/json",
       "response_status": 422,
       "response_status_text": "Unprocessable Entity",
-      "response_body": "{\n  \"errors\": [\n    \"First Name can't be blank\",\n    \"Last Name can't be blank\",\n    \"Email can't be blank\"\n  ]\n}",
+      "response_body": "{\n  \"errors\": [\n    \"Email can't be blank\"\n  ]\n}",
       "response_headers": {
         "X-Frame-Options": "SAMEORIGIN",
         "X-XSS-Protection": "1; mode=block",
@@ -54,9 +60,9 @@
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Content-Type": "application/json; charset=utf-8",
         "Cache-Control": "no-cache",
-        "X-Request-Id": "9f8108c4-a197-44ec-8ab8-992b331c397d",
-        "X-Runtime": "0.019250",
-        "Content-Length": "90"
+        "X-Request-Id": "c40ce256-31df-42a8-a78a-383ab43378a1",
+        "X-Runtime": "0.002532",
+        "Content-Length": "35"
       },
       "response_content_type": "application/json; charset=utf-8",
       "curl": null
