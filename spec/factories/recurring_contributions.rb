@@ -19,6 +19,7 @@ FactoryBot.define do
   factory :recurring_contribution do
     donor
     portfolio
+    partner
     frequency { :monthly }
     amount_cents { 1 }
     tips_cents { 1 }

@@ -35,6 +35,24 @@
       "required": false,
       "name": "portfolio_id",
       "description": "The id of the charitable Portfolio to contribute to"
+    },
+    {
+      "type": "string",
+      "required": false,
+      "name": "external_reference_id",
+      "description": "The contribution id on your platform"
+    },
+    {
+      "type": "boolean",
+      "required": false,
+      "name": "mark_as_paid",
+      "description": "Indicates if the contribution was processed manually"
+    },
+    {
+      "type": "json",
+      "required": false,
+      "name": "receipt",
+      "description": "The contribution receipt"
     }
   ],
   "response_fields": [
@@ -44,10 +62,10 @@
     {
       "request_method": "POST",
       "request_path": "/api/v1/contributions",
-      "request_body": "{\"contribution\":{\"donor_id\":\"621767ec-8b61-4819-8738-06e80105e670\",\"amount_cents\":200,\"currency\":\"USD\",\"organization_ein\":\"org_9_371f718\"}}",
+      "request_body": "{\"contribution\":{\"donor_id\":\"983d54ba-2b68-4bbd-9ef0-b2a0fa5fd34c\",\"amount_cents\":200,\"currency\":\"USD\",\"organization_ein\":\"org_12_4d54ed0\",\"external_reference_id\":\"external_reference_id_1\",\"mark_as_paid\":true,\"receipt\":{\"method\":\"ACH\",\"account\":\"jp_morgan_chase_1\",\"memo\":\"some_entry_id\",\"transfer_date\":\"2019-01-01\"}}}",
       "request_headers": {
         "Content-Type": "application/json",
-        "X-Api-Key": "QG5gpDds1QJexMaCVpU07Qtt",
+        "X-Api-Key": "09wudchwlGPClkqlvEfBTgtt",
         "Host": "example.org",
         "Cookie": ""
       },
@@ -56,7 +74,7 @@
       "request_content_type": "application/json",
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "{\n  \"contribution\": {\n    \"id\": \"072d9036-acd8-4816-9c89-549846aa3227\",\n    \"donor_id\": \"621767ec-8b61-4819-8738-06e80105e670\",\n    \"amount_cents\": 200,\n    \"scheduled_at\": \"2019-07-15T17:23:58.404Z\",\n    \"portfolio_id\": \"7920d511-4b99-4678-89b5-83e7384b11cf\",\n    \"portfolio_allocations\": [\n      {\n        \"organization_ein\": \"org_9_371f718\",\n        \"percentage\": 100,\n        \"name\": \"Organization 9\"\n      }\n    ]\n  }\n}",
+      "response_body": "{\n  \"contribution\": {\n    \"id\": \"c8ff3723-82b4-4e56-9e61-13d439ab4e33\",\n    \"donor_id\": \"983d54ba-2b68-4bbd-9ef0-b2a0fa5fd34c\",\n    \"amount_cents\": 200,\n    \"scheduled_at\": \"2019-07-19T19:32:59.191Z\",\n    \"external_reference_id\": \"external_reference_id_1\",\n    \"processed_at\": \"2019-07-19T19:32:59.205Z\",\n    \"receipt\": {\n      \"method\": \"ACH\",\n      \"account\": \"jp_morgan_chase_1\",\n      \"memo\": \"some_entry_id\",\n      \"transfer_date\": \"2019-01-01\"\n    },\n    \"portfolio_id\": \"fa830f65-75e7-4994-8b00-31b6986e2734\",\n    \"portfolio_allocations\": [\n      {\n        \"organization_ein\": \"org_12_4d54ed0\",\n        \"percentage\": 100,\n        \"name\": \"Organization 12\"\n      }\n    ]\n  }\n}",
       "response_headers": {
         "X-Frame-Options": "SAMEORIGIN",
         "X-XSS-Protection": "1; mode=block",
@@ -65,11 +83,11 @@
         "X-Permitted-Cross-Domain-Policies": "none",
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Content-Type": "application/json; charset=utf-8",
-        "ETag": "W/\"d576da1784b5a6329b99e828c28e99b6\"",
+        "ETag": "W/\"a465045c1ccfb65208a6ee16af6bd3a4\"",
         "Cache-Control": "max-age=0, private, must-revalidate",
-        "X-Request-Id": "afc7b1f6-c561-44b6-adde-35e79807061c",
-        "X-Runtime": "0.054944",
-        "Content-Length": "331"
+        "X-Request-Id": "e71e9194-300b-465e-8f2b-f557e84dc098",
+        "X-Runtime": "0.022726",
+        "Content-Length": "534"
       },
       "response_content_type": "application/json; charset=utf-8",
       "curl": null

@@ -80,6 +80,20 @@
       "explanation": null,
       "examples": [
         {
+          "description": "Invalid request: Search charitable organization by ein",
+          "link": "organizations/invalid_request:_search_charitable_organization_by_ein.json",
+          "groups": "all",
+          "route": "/api/v1/organizations/:id",
+          "method": "get"
+        },
+        {
+          "description": "Successful request: Search charitable organization by ein",
+          "link": "organizations/successful_request:_search_charitable_organization_by_ein.json",
+          "groups": "all",
+          "route": "/api/v1/organizations/:id",
+          "method": "get"
+        },
+        {
           "description": "Successful request: Search charitable organizations",
           "link": "organizations/successful_request:_search_charitable_organizations.json",
           "groups": "all",

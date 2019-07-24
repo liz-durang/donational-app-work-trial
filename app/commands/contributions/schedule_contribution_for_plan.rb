@@ -12,7 +12,8 @@ module Contributions
           portfolio: recurring_contribution.portfolio,
           amount_cents: recurring_contribution.amount_cents,
           tips_cents: recurring_contribution.tips_cents,
-          scheduled_at: Time.zone.now
+          scheduled_at: Time.zone.now,
+          partner: recurring_contribution.partner
         )
       }
 

@@ -18,6 +18,7 @@
 class RecurringContribution < ApplicationRecord
   belongs_to :donor
   belongs_to :portfolio
+  belongs_to :partner
 
   extend Enumerize
   enumerize :frequency, in: %w[monthly quarterly annually once], predicates: true

@@ -35,6 +35,24 @@
       "required": false,
       "name": "portfolio_id",
       "description": "The id of the charitable Portfolio to contribute to"
+    },
+    {
+      "type": "string",
+      "required": false,
+      "name": "external_reference_id",
+      "description": "The contribution id on your platform"
+    },
+    {
+      "type": "boolean",
+      "required": false,
+      "name": "mark_as_paid",
+      "description": "Indicates if the contribution was processed manually"
+    },
+    {
+      "type": "json",
+      "required": false,
+      "name": "receipt",
+      "description": "The contribution receipt"
     }
   ],
   "response_fields": [
@@ -44,10 +62,10 @@
     {
       "request_method": "POST",
       "request_path": "/api/v1/contributions",
-      "request_body": "{\"contribution\":{\"donor_id\":\"53194392-b180-43f1-b6d0-1d5c2aa963d8\",\"amount_cents\":50,\"currency\":\"USD\",\"organization_ein\":\"org_8_d56581f\"}}",
+      "request_body": "{\"contribution\":{\"donor_id\":\"bb56db71-6d61-4251-b872-30e7e06fe065\",\"amount_cents\":50,\"currency\":\"USD\",\"organization_ein\":\"org_10_ca9d397\"}}",
       "request_headers": {
         "Content-Type": "application/json",
-        "X-Api-Key": "9MozZQXAw6cY1HYCGpjwuAtt",
+        "X-Api-Key": "OqOX64WquzDtx6LZt2EhpQtt",
         "Host": "example.org",
         "Cookie": ""
       },
@@ -66,8 +84,8 @@
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Content-Type": "application/json; charset=utf-8",
         "Cache-Control": "no-cache",
-        "X-Request-Id": "7e02a7bd-e62f-4fb7-91dc-c2549ec15fc6",
-        "X-Runtime": "0.009999",
+        "X-Request-Id": "29a7bcee-d500-467b-b6ae-2e433ac1506d",
+        "X-Runtime": "0.007877",
         "Content-Length": "40"
       },
       "response_content_type": "application/json; charset=utf-8",

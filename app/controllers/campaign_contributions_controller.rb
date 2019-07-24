@@ -62,6 +62,7 @@ class CampaignContributionsController < ApplicationController
     Contributions::CreateOrReplaceRecurringContribution.run(
       donor: current_donor,
       portfolio: active_portfolio,
+      partner: partner,
       amount_cents: params[:campaign_contribution][:amount_dollars].to_i * 100,
       frequency: params[:campaign_contribution][:frequency],
       start_at: params[:campaign_contribution][:start_at].presence,

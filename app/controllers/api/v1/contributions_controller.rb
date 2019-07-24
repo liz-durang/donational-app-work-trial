@@ -23,17 +23,23 @@ module Api
 
       def create_contribution_for_a_portfolio
         portfolio = Portfolios::GetPortfolioById.call(id: contribution_params[:portfolio_id])
+        mark_as_paid = contribution_params[:mark_as_paid] || false
 
         Contributions::ScheduleContribution.run(
           donor: donor,
           portfolio: portfolio,
           amount_cents: amount_cents,
           tips_cents: 0,
-          scheduled_at: Time.zone.now
+          scheduled_at: Time.zone.now,
+          external_reference_id: contribution_params[:external_reference_id],
+          mark_as_paid: mark_as_paid,
+          receipt: contribution_params[:receipt],
+          partner: current_partner
         )
       end
 
       def create_contribution_for_a_single_organization
+        mark_as_paid = contribution_params[:mark_as_paid] || false
         find_organization = Organizations::FindOrCreateDonorSuggestedCharity.run(
           ein: contribution_params[:organization_ein],
           suggested_by: donor
@@ -46,12 +52,20 @@ module Api
           organization: find_organization.result,
           amount_cents: amount_cents,
           tips_cents: 0,
-          scheduled_at: Time.zone.now
+          scheduled_at: Time.zone.now,
+          external_reference_id: contribution_params[:external_reference_id],
+          mark_as_paid: mark_as_paid,
+          receipt: contribution_params[:receipt],
+          partner: current_partner
         )
       end
 
       def contribution_params
-        params.require(:contribution).permit(:donor_id, :amount_cents, :currency, :organization_ein, :portfolio_id)
+        receipt_keys = params.require(:contribution).fetch(:receipt, {})&.keys
+        params
+          .require(:contribution)
+          .permit(:donor_id, :amount_cents, :currency, :organization_ein, :portfolio_id, :external_reference_id, :mark_as_paid, receipt: receipt_keys)
+          .to_h
       end
 
       def donor

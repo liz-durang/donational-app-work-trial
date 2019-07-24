@@ -10,6 +10,12 @@ one_for_the_world = Partner.find_or_create_by(name: 'One For The World') do |p|
   p.donor_questions_schema = { questions: [] }
 end
 
+default_partner = Partner.find_or_create_by(name: Partner::DEFAULT_PARTNER_NAME) do |p|
+  p.website_url = 'https://donational.org'
+  p.description = 'Donational'
+  p.donor_questions_schema = { questions: [] }
+end
+
 Partners::UpdateCustomDonorQuestions.run(
   partner: one_for_the_world,
   donor_questions: [
@@ -66,4 +72,9 @@ ManagedPortfolio.create(
   partner: one_for_the_world,
   name: "All Charities",
   portfolio: create_portfolio_with_charities(Organization.all.pluck(:ein))
+)
+ManagedPortfolio.create(
+  partner: default_partner,
+  name: "Random Picks",
+  portfolio: create_portfolio_with_charities(Organization.all.pluck(:ein).sample(8))
 )

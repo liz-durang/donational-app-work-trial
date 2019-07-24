@@ -15,12 +15,14 @@
 #  failed_at                    :datetime
 #  payment_processor_fees_cents :integer
 #  refunded_at                  :datetime
+#  external_reference_id        :string
 #
 
 # Funds withdrawn from a Donor and transferred to Donational
 class Contribution < ApplicationRecord
   belongs_to :portfolio
   belongs_to :donor
+  belongs_to :partner
   has_many :donations
   has_many :organizations, through: :donations
 

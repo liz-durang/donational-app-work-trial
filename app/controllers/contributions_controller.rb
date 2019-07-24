@@ -61,6 +61,7 @@ class ContributionsController < ApplicationController
     Contributions::CreateOrReplaceRecurringContribution.run(
       donor: current_donor,
       portfolio: Portfolio.find(portfolio_id),
+      partner: partner,
       frequency: frequency,
       amount_cents: amount_cents,
       tips_cents: tips_cents,
@@ -82,6 +83,10 @@ class ContributionsController < ApplicationController
 
   def partner_affiliation
     @partner_affiliation ||= Partners::GetPartnerAffiliationByDonor.call(donor: current_donor)
+  end
+
+  def partner
+    @partner ||= Partners::GetDefaultPartnerByName.call
   end
 
   def new_recurring_donation

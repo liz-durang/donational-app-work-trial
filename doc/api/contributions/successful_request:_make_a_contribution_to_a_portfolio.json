@@ -35,6 +35,24 @@
       "required": false,
       "name": "portfolio_id",
       "description": "The id of the charitable Portfolio to contribute to"
+    },
+    {
+      "type": "string",
+      "required": false,
+      "name": "external_reference_id",
+      "description": "The contribution id on your platform"
+    },
+    {
+      "type": "boolean",
+      "required": false,
+      "name": "mark_as_paid",
+      "description": "Indicates if the contribution was processed manually"
+    },
+    {
+      "type": "json",
+      "required": false,
+      "name": "receipt",
+      "description": "The contribution receipt"
     }
   ],
   "response_fields": [
@@ -44,10 +62,10 @@
     {
       "request_method": "POST",
       "request_path": "/api/v1/contributions",
-      "request_body": "{\"contribution\":{\"donor_id\":\"e37b7939-96c5-400a-a103-3f050f361bc1\",\"amount_cents\":200,\"currency\":\"USD\",\"portfolio_id\":\"f6c40334-c5d1-426d-addb-6f12e33ac555\"}}",
+      "request_body": "{\"contribution\":{\"donor_id\":\"55451a0f-c3b2-4274-8a87-d095af12c40d\",\"amount_cents\":200,\"currency\":\"USD\",\"portfolio_id\":\"ae22b00f-ffc1-4adb-a056-5623ad5eb1d3\"}}",
       "request_headers": {
         "Content-Type": "application/json",
-        "X-Api-Key": "BQMKm5eMkgREZMFezbNtfAtt",
+        "X-Api-Key": "RexAICq1gjP1dqdPPhFecgtt",
         "Host": "example.org",
         "Cookie": ""
       },
@@ -56,7 +74,7 @@
       "request_content_type": "application/json",
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "{\n  \"contribution\": {\n    \"id\": \"851f016a-4a68-44e3-b31c-0acced35d67a\",\n    \"donor_id\": \"e37b7939-96c5-400a-a103-3f050f361bc1\",\n    \"amount_cents\": 200,\n    \"scheduled_at\": \"2019-07-15T17:23:58.384Z\",\n    \"portfolio_id\": \"f6c40334-c5d1-426d-addb-6f12e33ac555\",\n    \"portfolio_allocations\": [\n\n    ]\n  }\n}",
+      "response_body": "{\n  \"contribution\": {\n    \"id\": \"73b0055f-0c80-4e76-be36-58e104e043fc\",\n    \"donor_id\": \"55451a0f-c3b2-4274-8a87-d095af12c40d\",\n    \"amount_cents\": 200,\n    \"scheduled_at\": \"2019-07-19T19:32:59.139Z\",\n    \"external_reference_id\": null,\n    \"processed_at\": null,\n    \"receipt\": null,\n    \"portfolio_id\": \"ae22b00f-ffc1-4adb-a056-5623ad5eb1d3\",\n    \"portfolio_allocations\": [\n      {\n        \"organization_ein\": \"org_11_9b1015d\",\n        \"percentage\": 100,\n        \"name\": \"Organization 11\"\n      }\n    ]\n  }\n}",
       "response_headers": {
         "X-Frame-Options": "SAMEORIGIN",
         "X-XSS-Protection": "1; mode=block",
@@ -65,11 +83,11 @@
         "X-Permitted-Cross-Domain-Policies": "none",
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Content-Type": "application/json; charset=utf-8",
-        "ETag": "W/\"78fa11ff0942ab9de6a0f2ab9af2e164\"",
+        "ETag": "W/\"db7ca5997bcac4cbf611735c14e33310\"",
         "Cache-Control": "max-age=0, private, must-revalidate",
-        "X-Request-Id": "b697013a-4548-41f5-b52c-285af7ab5b10",
-        "X-Runtime": "0.010769",
-        "Content-Length": "254"
+        "X-Request-Id": "32365f61-d6f6-428d-b7a0-e18888e6a254",
+        "X-Runtime": "0.035266",
+        "Content-Length": "397"
       },
       "response_content_type": "application/json; charset=utf-8",
       "curl": null

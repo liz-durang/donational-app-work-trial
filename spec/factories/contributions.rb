@@ -15,17 +15,19 @@
 #  failed_at                    :datetime
 #  payment_processor_fees_cents :integer
 #  refunded_at                  :datetime
+#  external_reference_id        :string
 #
 
 FactoryBot.define do
   factory :contribution do
     donor
     portfolio
+    partner
     amount_cents { 123 }
     tips_cents { 2 }
     scheduled_at { 1.day.ago }
     processed_at { nil }
-    
+
     factory :contribution_with_donations_to_organizations do
       transient do
         organizations { [] }

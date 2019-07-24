@@ -16,6 +16,8 @@
 
 class Partner < ApplicationRecord
   has_many :campaigns
+  has_many :contributions
+  has_many :recurring_contributions
   has_many :managed_portfolios, -> { order(:display_order) }
   # Partner administrators
   has_and_belongs_to_many :donors
@@ -23,6 +25,8 @@ class Partner < ApplicationRecord
   has_one_attached :email_banner
 
   before_create :generate_api_key
+
+  DEFAULT_PARTNER_NAME = 'Donational'
 
   def donor_questions
     return if donor_questions_schema.nil?

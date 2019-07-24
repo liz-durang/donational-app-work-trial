@@ -7,6 +7,7 @@ resource 'Contributions' do
   let(:organization)  { create(:organization) }
   let(:partner)       { create(:partner) }
   let(:portfolio)     { create(:portfolio) }
+  let!(:allocation)   { create(:allocation, organization: organization, portfolio: portfolio, percentage: 100) }
   let(:api_key)       { partner.api_key }
 
   # Headers which should be included in the request
@@ -16,23 +17,39 @@ resource 'Contributions' do
   # POST api/v1/contributions
   post '/api/v1/contributions' do
     # Request parameters
-    parameter :donor_id,          'Donor who makes the contribution',                       type: :string,  required: true
-    parameter :amount_cents,      'Contribution amount in cents (USD)',                     type: :integer, required: true
-    parameter :currency,          'Contribution currency. Currently only USD is supported', type: :string,  required: true
-    parameter :organization_ein,  'The tax id of the recipient charitable organization',    type: :string,  required: false
-    parameter :portfolio_id,      'The id of the charitable Portfolio to contribute to',    type: :string,  required: false
+    parameter :donor_id, 'Donor who makes the contribution', type: :string, required: true
+    parameter :amount_cents, 'Contribution amount in cents (USD)', type: :integer, required: true
+    parameter :currency, 'Contribution currency. Currently only USD is supported', type: :string, required: true
+    parameter :organization_ein, 'The tax id of the recipient charitable organization', type: :string, required: false
+    parameter :portfolio_id, 'The id of the charitable Portfolio to contribute to', type: :string, required: false
+    parameter :external_reference_id, 'The contribution id on your platform', type: :string, required: false
+    parameter :mark_as_paid, 'Indicates if the contribution was processed manually', type: :boolean, required: false
+    parameter :receipt, 'The contribution receipt', type: :json, required: false
 
     explanation 'Contributions must be created with either an organization_ein or a portfolio_id.'
 
     context '200' do
       context 'Single organization' do
+        let(:mark_as_paid) { true }
+        let(:receipt) {
+          {
+            method: "ACH",
+            account: "jp_morgan_chase_1",
+            memo: "some_entry_id",
+            transfer_date: "2019-01-01"
+          }
+        }
+
         let(:params) do
           {
             contribution: {
-              donor_id:         donor.id,
-              amount_cents:     200,
-              currency:         'USD',
-              organization_ein: organization.ein
+              donor_id: donor.id,
+              amount_cents: 200,
+              currency: 'USD',
+              organization_ein: organization.ein,
+              external_reference_id: 'external_reference_id_1',
+              mark_as_paid: mark_as_paid,
+              receipt: receipt
             }
           }.to_json
         end
@@ -46,6 +63,9 @@ resource 'Contributions' do
           expect(response['contribution']['portfolio_id']).to eq(contribution.portfolio_id)
           expect(response['contribution']['donor_id']).to eq(contribution.donor_id)
           expect(response['contribution']['amount_cents']).to eq(contribution.amount_cents)
+          expect(response['contribution']['external_reference_id']).to eq(contribution.external_reference_id)
+          expect(response['contribution']['processed_at']).not_to be(nil)
+          expect(response['contribution']['receipt']).to eq(contribution.receipt)
         end
       end
 
@@ -70,6 +90,9 @@ resource 'Contributions' do
           expect(response['contribution']['portfolio_id']).to eq(contribution.portfolio_id)
           expect(response['contribution']['donor_id']).to eq(contribution.donor_id)
           expect(response['contribution']['amount_cents']).to eq(contribution.amount_cents)
+          expect(response['contribution']['external_reference_id']).to eq(contribution.external_reference_id)
+          expect(response['contribution']['processed_at']).to be(nil)
+          expect(response['contribution']['receipt']).to eq(contribution.receipt)
         end
       end
     end
