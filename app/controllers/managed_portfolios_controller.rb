@@ -13,6 +13,7 @@ class ManagedPortfoliosController < ApplicationController
     @view_model = OpenStruct.new(
       partner: partner,
       managed_portfolio: managed_portfolio,
+      image: managed_portfolio.image,
       managed_portfolio_path: partner_managed_portfolio_path
     )
   end
@@ -23,6 +24,7 @@ class ManagedPortfoliosController < ApplicationController
       donor: current_donor,
       title: params[:title],
       description: params[:description].presence,
+      image: params[:image],
       charities: organizations
     )
 
@@ -37,6 +39,7 @@ class ManagedPortfoliosController < ApplicationController
       donor: current_donor,
       title: params[:title],
       description: params[:description].presence,
+      image: params[:image],
       organizations: organizations
     )
 

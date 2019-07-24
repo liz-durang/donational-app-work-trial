@@ -15,6 +15,7 @@
 class ManagedPortfolio < ApplicationRecord
   belongs_to :partner
   belongs_to :portfolio
+  has_one_attached :image
 
   delegate :size, to: :portfolio
   def available_to_new_donors?

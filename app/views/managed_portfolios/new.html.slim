@@ -36,19 +36,23 @@ section.embossed.section
           .columns
             .column
               label.control
-                = f.label :select_a_charity, class: :label
-                .select.control.is-fullwidth = f.select :charity, Organizations::GetAllOrganizations.call.collect { |o| [o.name, o.ein] }, { include_blank: true, class: :input }, id: 'select-charity'
-            .column
-              label.control
                 = f.label :search_for_a_charity, class: :label
                 input class='input' data-target='autocomplete.query' data-action='keyup->autocomplete#search' data-autocomplete-url=searchable_organizations_path data-autocomplete-from='portfolios'
               p.help You can add any 501(c)3 recognized organization to your portfolio
+            .column
+              label.control
+                = f.label :select_a_charity, class: :label
+                .select.control.is-fullwidth = f.select :charity, Organizations::GetAllOrganizations.call.collect { |o| [o.name, o.ein] }, { include_blank: true, class: :input }, id: 'select-charity'
           .columns
+            .column
+              = render 'shared/image_upload_field',
+                  attachment: @view_model.managed_portfolio&.image,
+                  field: :image,
+                  thumbnail_preview_size: '400x200',
+                  form: f
             .column
               label.control
                 .has-text-right = link_to 'Add', 'javascript:;', class:  %w(button is-primary), onClick: "addCharity();"
-            .column
-              label.control
           .field
             label.control
               = f.label :charities, class: :label
@@ -114,5 +118,4 @@ javascript:
       }
     }
     document.getElementById('charities').value = charities;
-    document.getElementById('form').submit();
   }

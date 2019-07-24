@@ -9,6 +9,7 @@ module Portfolios
 
     optional do
       string :description
+      string :image
     end
 
     def execute
@@ -53,6 +54,7 @@ module Portfolios
         name: title,
         description: description || ''
       )
+      managed_portfolio.image.attach(image) if image.present?
     end
   end
 end

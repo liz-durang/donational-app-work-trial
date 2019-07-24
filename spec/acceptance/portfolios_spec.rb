@@ -24,6 +24,7 @@ resource 'Portfolios' do
         json = JSON.parse(response_body).with_indifferent_access
         expect(json[:portfolios][0][:id]).to eq(managed_portfolio.id)
         expect(json[:portfolios][0][:name]).to eq(managed_portfolio.name)
+        expect(json[:portfolios][0][:description]).to eq(managed_portfolio.description)
         expect(json[:portfolios][0][:allocations][0][:organization_ein]).to eq(managed_portfolio.portfolio.active_allocations.first.organization_ein)
         expect(json[:portfolios][0][:allocations][0][:percentage]).to eq(managed_portfolio.portfolio.active_allocations.first.percentage)
       end
