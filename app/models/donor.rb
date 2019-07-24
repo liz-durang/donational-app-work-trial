@@ -56,7 +56,19 @@ class Donor < ApplicationRecord
   end
 
   def name
-    [first_name, last_name].compact.join(' ')
+    entity_name || [first_name, last_name].compact.join(' ')
+  end
+
+  def short_name
+    person? ? first_name : entity_name
+  end
+
+  def entity?
+    entity_name.present?
+  end
+
+  def person?
+    !entity?
   end
 
   def account_holder?

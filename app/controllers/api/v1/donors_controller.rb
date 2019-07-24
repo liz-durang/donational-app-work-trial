@@ -26,7 +26,7 @@ module Api
       private
 
       def donor_params
-        params.require(:donor).permit(:first_name, :last_name, :email)
+        params.require(:donor).permit(:first_name, :last_name, :entity_name, :email)
       end
 
       def search_params
@@ -37,6 +37,7 @@ module Api
         command = Donors::CreateDonor.run(
           first_name: donor_params[:first_name],
           last_name: donor_params[:last_name],
+          entity_name: donor_params[:entity_name],
           email: donor_params[:email]
         )
 

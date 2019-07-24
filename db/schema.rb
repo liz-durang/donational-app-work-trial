@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_22_162439) do
+ActiveRecord::Schema.define(version: 2019_07_23_165838) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -143,6 +143,7 @@ ActiveRecord::Schema.define(version: 2019_07_22_162439) do
     t.string "reasons_why_i_choose_an_organization", default: [], array: true
     t.string "contribution_frequency"
     t.integer "portfolio_diversity"
+    t.string "entity_name"
     t.index ["username"], name: "index_donors_on_username", unique: true
   end
 
