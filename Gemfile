@@ -55,6 +55,7 @@ gem 'lograge'
 gem 'mutations'
 
 # API
+gem 'rack-cors'
 gem 'jbuilder', '~> 2.7.0'
 gem 'apitome'
 gem 'rspec_api_documentation'

@@ -19,7 +19,7 @@ module Api
       end
 
       def lookup_params
-        params[:id]
+        params[:id].delete('-')
       end
     end
   end
