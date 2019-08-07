@@ -64,12 +64,43 @@ module Api
         receipt_keys = params.require(:contribution).fetch(:receipt, {})&.keys
         params
           .require(:contribution)
-          .permit(:donor_id, :amount_cents, :currency, :organization_ein, :portfolio_id, :external_reference_id, :mark_as_paid, receipt: receipt_keys)
+          .permit(:donor_id, :donor_first_name, :donor_last_name, :donor_entity_name, :donor_email, :amount_cents, :currency,
+                  :organization_ein, :portfolio_id, :external_reference_id, :mark_as_paid, receipt: receipt_keys)
           .to_h
       end
 
       def donor
-        @donor ||= Donors::GetDonorById.call(id: contribution_params[:donor_id])
+        if donor_id.present?
+          @donor ||= Donors::GetDonorById.call(id: donor_id)
+        else
+          command = Donors::FindOrCreateDonorByEmail.run(email: donor_email, first_name: donor_first_name, last_name: donor_last_name,
+                                                          entity_name: donor_entity_name, partner: current_partner)
+          if command.success?
+            @donor ||= command.result
+          else
+            render json: { errors: command.errors.message_list }, status: 422
+          end
+        end
+      end
+
+      def donor_id
+        contribution_params[:donor_id]
+      end
+
+      def donor_email
+        contribution_params[:donor_email]
+      end
+
+      def donor_first_name
+        contribution_params[:donor_first_name]
+      end
+
+      def donor_last_name
+        contribution_params[:donor_last_name]
+      end
+
+      def donor_entity_name
+        contribution_params[:donor_entity_name]
       end
 
       def amount_cents

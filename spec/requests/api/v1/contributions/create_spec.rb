@@ -149,12 +149,16 @@ describe 'POST api/v1/contributions/', type: :request do
     end
 
     context 'for a portfolio' do
-      let(:donor_id) { donor.id }
+      let(:donor_email) { 'donny@donator.com' }
+      let(:donor_first_name) { 'Donny' }
+      let(:donor_last_name) { 'Donator' }
 
       let(:params) do
         {
           contribution: {
-            donor_id: donor_id,
+            donor_email: donor_email,
+            donor_first_name: donor_first_name,
+            donor_last_name: donor_last_name,
             amount_cents: amount_cents,
             currency: currency,
             portfolio_id: portfolio.id,
@@ -174,6 +178,12 @@ describe 'POST api/v1/contributions/', type: :request do
         expect {
           post api_v1_contributions_path, params: params, headers: { 'X-Api-Key': partner.api_key }, as: :json
         }.to change(Contribution, :count).by(1)
+      end
+
+      it 'creates the donor' do
+        expect {
+          post api_v1_contributions_path, params: params, headers: { 'X-Api-Key': partner.api_key }, as: :json
+        }.to change(Donor, :count)
       end
 
       it 'returns the contribution' do
@@ -238,8 +248,9 @@ describe 'POST api/v1/contributions/', type: :request do
         end
       end
 
-      context 'when the donor is invalid' do
-        let(:donor_id) { 'invalid_donor' }
+      context 'when the donor name is invalid' do
+        let(:donor_first_name) { '' }
+        let(:donor_last_name) { '' }
 
         it 'does not create a contribution' do
           expect {
@@ -252,7 +263,7 @@ describe 'POST api/v1/contributions/', type: :request do
 
           json = JSON.parse(response.body).with_indifferent_access
           expect(response.status).to eq(422)
-          expect(json[:errors][0]).to eq("Donor can't be nil")
+          expect(json[:errors][0]).to eq("First Name can't be blank")
         end
       end
 

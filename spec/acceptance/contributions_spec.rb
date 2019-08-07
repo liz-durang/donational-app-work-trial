@@ -117,7 +117,7 @@ resource 'Contributions' do
 
             expect(status).to eq(422)
             response = JSON.parse(response_body)
-            expect(response['errors'][0]).to eq("Suggested By can't be nil")
+            expect(response['errors'][0]).to eq("Email can't be nil")
           end
         end
 
@@ -163,7 +163,7 @@ resource 'Contributions' do
 
             expect(status).to eq(422)
             response = JSON.parse(response_body)
-            expect(response['errors'][0]).to eq("Donor can't be nil")
+            expect(response['errors'][0]).to eq("Email can't be nil")
           end
         end
 
