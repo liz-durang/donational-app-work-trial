@@ -10,6 +10,7 @@
 #  updated_at       :datetime         not null
 #  scheduled_at     :datetime
 #  processed_at     :datetime
+#  voided_at        :datetime
 #
 
 FactoryBot.define do
