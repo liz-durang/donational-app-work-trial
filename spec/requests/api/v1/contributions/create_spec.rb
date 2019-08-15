@@ -146,6 +146,27 @@ describe 'POST api/v1/contributions/', type: :request do
           expect(json[:errors][0]).to eq('Amount Cents is too small')
         end
       end
+
+      context 'when the external_reference_id already exists' do
+        it 'does not create a contribution' do
+          expect {
+            post api_v1_contributions_path, params: params, headers: { 'X-Api-Key': partner.api_key }, as: :json
+          }.to change(Contribution, :count).by(1)
+
+          expect {
+            post api_v1_contributions_path, params: params, headers: { 'X-Api-Key': partner.api_key }, as: :json
+          }.not_to change { Contribution.count }
+        end
+
+        it 'does not return a successful response' do
+          post api_v1_contributions_path, params: params, headers: { 'X-Api-Key': partner.api_key }, as: :json
+          post api_v1_contributions_path, params: params, headers: { 'X-Api-Key': partner.api_key }, as: :json
+
+          json = JSON.parse(response.body).with_indifferent_access
+          expect(response.status).to eq(400)
+          expect(json[:errors][:external_reference_id][0]).to eq('has already been taken')
+        end
+      end
     end
 
     context 'for a portfolio' do
@@ -282,6 +303,27 @@ describe 'POST api/v1/contributions/', type: :request do
           json = JSON.parse(response.body).with_indifferent_access
           expect(response.status).to eq(422)
           expect(json[:errors][0]).to eq('Amount Cents is too small')
+        end
+      end
+
+      context 'when the external_reference_id already exists' do
+        it 'does not create a contribution' do
+          expect {
+            post api_v1_contributions_path, params: params, headers: { 'X-Api-Key': partner.api_key }, as: :json
+          }.to change(Contribution, :count).by(1)
+
+          expect {
+            post api_v1_contributions_path, params: params, headers: { 'X-Api-Key': partner.api_key }, as: :json
+          }.not_to change { Contribution.count }
+        end
+
+        it 'does not return a successful response' do
+          post api_v1_contributions_path, params: params, headers: { 'X-Api-Key': partner.api_key }, as: :json
+          post api_v1_contributions_path, params: params, headers: { 'X-Api-Key': partner.api_key }, as: :json
+
+          json = JSON.parse(response.body).with_indifferent_access
+          expect(response.status).to eq(400)
+          expect(json[:errors][:external_reference_id][0]).to eq('has already been taken')
         end
       end
     end
