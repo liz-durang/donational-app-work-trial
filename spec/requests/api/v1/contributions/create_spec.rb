@@ -106,8 +106,8 @@ describe 'POST api/v1/contributions/', type: :request do
           post api_v1_contributions_path, params: params, headers: { 'X-Api-Key': partner.api_key }, as: :json
 
           json = JSON.parse(response.body).with_indifferent_access
-          expect(response.status).to eq(422)
-          expect(json[:errors][0]).to eq("Receipt can't be nil")
+          expect(response.status).to eq(400)
+          expect(json[:errors][:receipt][0]).to eq("Receipt can't be nil")
         end
       end
 
@@ -124,8 +124,8 @@ describe 'POST api/v1/contributions/', type: :request do
           post api_v1_contributions_path, params: params, headers: { 'X-Api-Key': partner.api_key }, as: :json
 
           json = JSON.parse(response.body).with_indifferent_access
-          expect(response.status).to eq(422)
-          expect(json[:errors][0]).to eq("Suggested By can't be nil")
+          expect(response.status).to eq(400)
+          expect(json[:errors][:suggested_by][0]).to eq("Suggested By can't be nil")
         end
       end
 
@@ -142,8 +142,8 @@ describe 'POST api/v1/contributions/', type: :request do
           post api_v1_contributions_path, params: params, headers: { 'X-Api-Key': partner.api_key }, as: :json
 
           json = JSON.parse(response.body).with_indifferent_access
-          expect(response.status).to eq(422)
-          expect(json[:errors][0]).to eq('Amount Cents is too small')
+          expect(response.status).to eq(400)
+          expect(json[:errors][:amount_cents][0]).to eq('Amount Cents is too small')
         end
       end
 
@@ -184,7 +184,8 @@ describe 'POST api/v1/contributions/', type: :request do
             currency: currency,
             portfolio_id: portfolio.id,
             mark_as_paid: mark_as_paid,
-            receipt: receipt
+            receipt: receipt,
+            external_reference_id: 'external_reference_id_2'
           }
         }
       end
@@ -264,8 +265,8 @@ describe 'POST api/v1/contributions/', type: :request do
           post api_v1_contributions_path, params: params, headers: { 'X-Api-Key': partner.api_key }, as: :json
 
           json = JSON.parse(response.body).with_indifferent_access
-          expect(response.status).to eq(422)
-          expect(json[:errors][0]).to eq("Receipt can't be nil")
+          expect(response.status).to eq(400)
+          expect(json[:errors][:receipt][0]).to eq("Receipt can't be nil")
         end
       end
 
@@ -283,8 +284,8 @@ describe 'POST api/v1/contributions/', type: :request do
           post api_v1_contributions_path, params: params, headers: { 'X-Api-Key': partner.api_key }, as: :json
 
           json = JSON.parse(response.body).with_indifferent_access
-          expect(response.status).to eq(422)
-          expect(json[:errors][0]).to eq("First Name can't be blank")
+          expect(response.status).to eq(400)
+          expect(json[:errors][:first_name][0]).to eq("First Name can't be blank")
         end
       end
 
@@ -301,8 +302,8 @@ describe 'POST api/v1/contributions/', type: :request do
           post api_v1_contributions_path, params: params, headers: { 'X-Api-Key': partner.api_key }, as: :json
 
           json = JSON.parse(response.body).with_indifferent_access
-          expect(response.status).to eq(422)
-          expect(json[:errors][0]).to eq('Amount Cents is too small')
+          expect(response.status).to eq(400)
+          expect(json[:errors][:amount_cents][0]).to eq('Amount Cents is too small')
         end
       end
 

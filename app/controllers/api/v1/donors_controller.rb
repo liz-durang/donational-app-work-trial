@@ -9,7 +9,7 @@ module Api
         outcome = pipeline.run
 
         unless outcome.success?
-          render json: { errors: outcome.errors.message_list }, status: 422
+          render_errors(outcome.errors.message, :bad_request)
         end
       end
 
@@ -20,7 +20,9 @@ module Api
 
       def show
         @donor = Donors::GetDonorById.call(id: params[:id])
-        render json: { error: "Could not find a donor with id #{params[:id]}" }, status: :not_found unless ensure_donor_is_affiliated_to_current_partner(@donor)
+        unless ensure_donor_is_affiliated_to_current_partner(@donor)
+          render_errors({ donor: "Could not find a donor with ID #{params[:id]}" }, :not_found)
+        end
       end
 
       private

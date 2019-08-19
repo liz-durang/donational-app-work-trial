@@ -29,7 +29,7 @@ describe 'GET api/v1/organizations', type: :request do
         get api_v1_organization_path(id: ein), headers: { 'X-Api-Key': partner.api_key }, as: :json
 
         json = JSON.parse(response.body).with_indifferent_access
-        expect(json[:error]).to eq("Could not find an organization with EIN #{ein}")
+        expect(json[:errors][:organization][0]).to eq("Could not find an organization with EIN #{ein}")
       end
     end
   end

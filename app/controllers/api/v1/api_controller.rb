@@ -33,6 +33,14 @@ module Api
         render json: { error: 'A required parameter is missing' }, status: :unprocessable_entity
       end
 
+      def render_errors(attribute_errors, status)
+        errors = {}
+        attribute_errors.each do |attribute, message|
+          errors[:"#{attribute}"] = [message]
+        end
+        render json: { errors: errors }, status: status
+      end
+
       def current_partner
         api_key = request.headers['X-Api-Key']
         @current_partner ||= Partners::GetPartnerByApiKey.call(api_key: api_key)

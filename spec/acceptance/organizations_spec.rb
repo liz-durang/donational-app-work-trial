@@ -60,7 +60,7 @@ resource 'Organizations', search: true do
 
         expect(status).to eq(404)
         response = JSON.parse(response_body)
-        expect(response['error']).to eq("Could not find an organization with EIN #{id}")
+        expect(response['errors']['organization'][0]).to eq("Could not find an organization with EIN #{id}")
       end
     end
   end

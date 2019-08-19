@@ -68,7 +68,7 @@ resource 'Donors' do
       end
     end
 
-    context '422' do
+    context '400' do
       context 'Email' do
         let(:params) do
           {
@@ -81,9 +81,9 @@ resource 'Donors' do
         example 'Invalid request: Create a donor without email' do
           do_request
 
-          expect(status).to eq(422)
+          expect(status).to eq(400)
           response = JSON.parse(response_body)
-          expect(response['errors'][0]).to eq("Email can't be blank")
+          expect(response['errors']['email'][0]).to eq("Email can't be blank")
         end
       end
 
@@ -99,9 +99,9 @@ resource 'Donors' do
         example 'Invalid request: Create a donor without name' do
           do_request
 
-          expect(status).to eq(422)
+          expect(status).to eq(400)
           response = JSON.parse(response_body)
-          expect(response['errors'][0]).to eq('Either entity_name or first_name and last_name should be present')
+          expect(response['errors']['donor'][0]).to eq('Either entity_name or first_name and last_name should be present')
         end
       end
     end
@@ -138,7 +138,7 @@ resource 'Donors' do
 
         expect(status).to eq(404)
         response = JSON.parse(response_body)
-        expect(response['error']).to eq("Could not find a donor with id #{id}")
+        expect(response['errors']['donor'][0]).to eq("Could not find a donor with ID #{id}")
       end
     end
 
@@ -152,7 +152,7 @@ resource 'Donors' do
 
         expect(status).to eq(404)
         response = JSON.parse(response_body)
-        expect(response['error']).to eq("Could not find a donor with id #{id}")
+        expect(response['errors']['donor'][0]).to eq("Could not find a donor with ID #{id}")
       end
     end
   end

@@ -97,7 +97,7 @@ resource 'Contributions' do
       end
     end
 
-    context '422' do
+    context '400' do
       context 'Single organization' do
         context 'Invalid parameter: donor_id' do
           let(:params) do
@@ -115,9 +115,9 @@ resource 'Contributions' do
             explanation 'Invalid parameter: donor_id'
             do_request
 
-            expect(status).to eq(422)
+            expect(status).to eq(400)
             response = JSON.parse(response_body)
-            expect(response['errors'][0]).to eq("Email can't be nil")
+            expect(response['errors']['email'][0]).to eq("Email can't be nil")
           end
         end
 
@@ -137,9 +137,9 @@ resource 'Contributions' do
             explanation 'Invalid parameter: amount'
             do_request
 
-            expect(status).to eq(422)
+            expect(status).to eq(400)
             response = JSON.parse(response_body)
-            expect(response['errors'][0]).to eq("Amount Cents is too small")
+            expect(response['errors']['amount_cents'][0]).to eq("Amount Cents is too small")
           end
         end
       end
@@ -161,9 +161,9 @@ resource 'Contributions' do
             explanation 'Invalid parameter: donor_id'
             do_request
 
-            expect(status).to eq(422)
+            expect(status).to eq(400)
             response = JSON.parse(response_body)
-            expect(response['errors'][0]).to eq("Email can't be nil")
+            expect(response['errors']['email'][0]).to eq("Email can't be nil")
           end
         end
 
@@ -183,9 +183,9 @@ resource 'Contributions' do
             explanation 'Invalid parameter: amount'
             do_request
 
-            expect(status).to eq(422)
+            expect(status).to eq(400)
             response = JSON.parse(response_body)
-            expect(response['errors'][0]).to eq("Amount Cents is too small")
+            expect(response['errors']['amount_cents'][0]).to eq("Amount Cents is too small")
           end
         end
       end
@@ -205,9 +205,9 @@ resource 'Contributions' do
           explanation 'Invalid parameters: missing organization_ein and portfolio_id'
           do_request
 
-          expect(status).to eq(422)
+          expect(status).to eq(400)
           response = JSON.parse(response_body)
-          expect(response['errors']).to eq('Either Organization ein or Portfolio id should be present')
+          expect(response['errors']['contribution'][0]).to eq('Either Organization ein or Portfolio id should be present')
         end
       end
     end

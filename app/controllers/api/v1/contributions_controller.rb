@@ -9,13 +9,13 @@ module Api
         end
 
         if command.nil?
-          render json: { errors: 'Either Organization ein or Portfolio id should be present' }, status: 422
+          render_errors({ contribution: 'Either Organization ein or Portfolio id should be present' }, :bad_request)
         end
 
         if command.success?
           @contribution = command.result
         else
-          render json: { errors: command.errors.message_list }, status: 422
+          render_errors(command.errors.message, :bad_request)
         end
       end
 
@@ -78,7 +78,7 @@ module Api
           if command.success?
             @donor ||= command.result
           else
-            render json: { errors: command.errors.message_list }, status: 422
+            render_errors(command.errors.message, :bad_request)
           end
         end
       end

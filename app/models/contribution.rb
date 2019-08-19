@@ -26,7 +26,7 @@ class Contribution < ApplicationRecord
   has_many :donations
   has_many :organizations, through: :donations
 
-  validates :external_reference_id, uniqueness: { scope: :partner }
+  validates :external_reference_id, uniqueness: { scope: :partner }, allow_nil: true
 
   def amount_dollars
     amount_cents / 100.0

@@ -3,7 +3,7 @@ require 'rails_helper'
 describe 'POST api/v1/donors/', type: :request do
   let(:donor)           { Donor.last }
   let(:partner)         { create(:partner) }
-  let(:failed_response) { 422 }
+  let(:failed_response) { 400 }
 
   describe 'POST create' do
     let(:email)       { 'donny@donator.com' }
@@ -116,7 +116,7 @@ describe 'POST api/v1/donors/', type: :request do
 
         json = JSON.parse(response.body).with_indifferent_access
         expect(response.status).to eq(failed_response)
-        expect(json[:errors][0]).to eq('Either entity_name or first_name and last_name should be present')
+        expect(json[:errors][:donor][0]).to eq('Either entity_name or first_name and last_name should be present')
       end
     end
   end

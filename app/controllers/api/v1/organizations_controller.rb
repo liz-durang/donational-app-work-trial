@@ -9,7 +9,9 @@ module Api
 
       def show
         @organization = SearchableOrganizations::GetSearchableOrganizationByEin.call(ein: lookup_params)
-        render json: { error: "Could not find an organization with EIN #{lookup_params}" }, status: :not_found unless @organization.present?
+        unless @organization.present?
+          render_errors({ organization: "Could not find an organization with EIN #{lookup_params}" }, :not_found)
+        end
       end
 
       private
