@@ -6,7 +6,6 @@
         = organization.name
         br
         small = I18n.t('title', default: nil, scope: ['cause_areas', organization.cause_area])
-      h2 = organization.why_you_should_care
       .badges
         - if organization.recommended_by.include?('lycs')
           = image_tag('badge-the-life-you-can-save.svg')

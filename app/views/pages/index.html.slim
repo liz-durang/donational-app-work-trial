@@ -119,27 +119,35 @@ section.is-medium.hero.has-background
         span Get started
         span.icon.is-small &rarr;
 
-footer.footer
-  .container
-    nav.breadcrumb.has-bullet-separator.is-centered
-      ul
-        li.is-active
-          a href="/"
-            ' Donational &copy;
-            = Time.zone.now.year
-
 section.section.embossed.is-medium
   .content.container
     .columns.is-vcentered
-      .column.is-offset-1
+      .column.is-offset-1.is-10
         p.subtitle
-          ' Donational is run at-cost by a team of dedicated members
+          ' Donational is built by a team of dedicated members
           ' building useful tools for the greater good.
         p
           ' Donations are directly distributed to charities.
-          
         p
           ' We make use of smart features like donation pooling to
           ' ensure that charities spend more on making an impact,
           ' and less on processing donations.
           | Standard credit card payment processing fees apply.
+
+
+footer.footer
+  .container
+    .columns
+      .column.is-offset-1
+        p.is-5.title Get started
+        p: a.has-text-black href=donate_with_confidence_path Why Donational?
+        p: a.has-text-black href=organizations_path Explore our Charities
+      .column
+        p.is-5.title About Donational.org
+        p: a.has-text-black href=methodology_path Methodology
+        p: a.has-text-black href=mission_path Mission
+        p: a.has-text-black href=faq_path FAQ
+      .column
+        p.is-5.title For Partners
+        p: a.has-text-black href=api_path Donations API
+        p = mail_to('info@donational.org', 'Get in touch', class: 'has-text-black')

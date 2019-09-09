@@ -23,9 +23,6 @@ section.section.embossed
       - @view_model.organizations.each do |organization|
         li.column.is-4
           = render 'portfolios/book', organization: organization
-          a.button.is-primary href=onboarding_path(utm_source: organization.name)
-            | Start a portfolio with this Charity &rarr;
-
 
 section.hero.is-dark
   .hero-body
