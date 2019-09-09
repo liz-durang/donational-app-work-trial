@@ -1,14 +1,14 @@
 nav.navbar role="navigation" aria-label="main dropdown navigation"
   .container
     .navbar-brand
-      button.button.navbar-burger.is-white data-target="navMenu"
-        span
-        span
-        span
       .navbar-item
-        h1.title.is-5: a href="/" Donational
-    div#navMenu.navbar-menu
-      .navbar-start
+        h1.title.is-5: a href="/" Donational.org
+      div.navbar-burger.burger data-target="navMenu"
+        span
+        span
+        span
+    div#navMenu.navbar-menu.has-text-white
+      .navbar-end
         a.navbar-item href=mission_path Mission
         a.navbar-item href=donate_with_confidence_path Why Donational?
         a.navbar-item href=methodology_path Methodology

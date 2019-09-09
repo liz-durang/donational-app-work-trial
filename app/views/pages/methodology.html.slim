@@ -1,5 +1,5 @@
 - content_for :hero do
-  section.hero
+  section.hero.has-gradient-background
     .hero-head
       = render 'nav'
     .hero-body
@@ -8,7 +8,7 @@
           .column.is-8
             h1.title.is-2.is-spaced
               ' Our methodology
-            h2.subtitle
+            p.subtitle
               ' How do you go about choosing which charities to support?
               ' There are over 1.5 million charities in the U.S. alone, making it impossible for one person
               | to research each of them.
@@ -86,25 +86,14 @@ section.section.embossed
           a href="https://www.ted.com/talks/dan_pallotta_the_way_we_think_about_charity_is_dead_wrong" target="blank"
             | The way we think about charity is dead wrong
 
-section.section
-  .container.content
     .columns
       .column
-        p.subtitle Get started
         a.button.is-primary.is-outlined.is-medium href=onboarding_path
           => icon_tag('fa-address-book', size: :small)
           span Build personalized charitable portfolio
       .column.has-text-right-tablet
-        p.subtitle Read more
         a.button.is-info.is-outlined.is-medium href=organizations_path
           = icon_tag('fa-book', size: :small)
           | Our Recommended Charities
           span.icon.is-small &rarr;
         | &nbsp;
-
-
-footer.footer
-  .container
-    nav.breadcrumb.has-bullet-separator.is-centered
-      ul
-        li.is-active: a href="/" Donational &copy;

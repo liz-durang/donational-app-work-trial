@@ -1,5 +1,5 @@
 - content_for :hero do
-  section.hero
+  section.hero.has-gradient-background
     .hero-head
       = render 'nav'
     .hero-body
@@ -8,10 +8,10 @@
           .column.is-8
             h1.title.is-2.is-spaced
               ' Why Donational?
-            h2.subtitle
+            p.subtitle
               ' We’ll help you donate with confidence
 
-section.section.embossed
+section.embossed
   .container.content
     .box
         h2.title Make a greater impact
@@ -44,25 +44,14 @@ section.section.embossed
         h2.title Influence charities
         p When you donate as an individual, charities have surprisingly little understanding of what attracted you to their charity. That’s one reason why we pool all of our donations into one big donation – when you give through us, you’re adding your voice to a community of people who care about positive impact, financial transparency, and underserved causes. As we grow as a community, we can influence the entire industry to move away from ineffective and opaque practices, eliminate inefficiencies, and ultimately help save and improve more lives around the world.
 
-section.section
-  .container.content
     .columns
       .column
-        p.subtitle Get started
         a.button.is-primary.is-outlined.is-medium href=onboarding_path
           => icon_tag('fa-address-book', size: :small)
           span Build personalized charitable portfolio
       .column.has-text-right-tablet
-        p.subtitle Read more
         a.button.is-info.is-outlined.is-medium href=methodology_path
           = icon_tag('fa-book', size: :small)
           | Our Methodology
           span.icon.is-small &rarr;
         | &nbsp;
-
-
-footer.footer
-  .container
-    nav.breadcrumb.has-bullet-separator.is-centered
-      ul
-        li.is-active: a href="/" Donational &copy;

@@ -1,15 +1,6 @@
 - content_for :hero do
 
-  section.hero.is-fullheight.has-background.has-background-animated
-    .hero-background
-      figure style="background-image: url(#{image_url('hero-image-1.jpg')})"
-      figure style="background-image: url(#{image_url('hero-image-2.jpg')})"
-      figure style="background-image: url(#{image_url('hero-image-3.jpg')})"
-      figure style="background-image: url(#{image_url('hero-image-4.jpg')})"
-      figure style="background-image: url(#{image_url('hero-image-5.jpg')})"
-      figure style="background-image: url(#{image_url('hero-image-6.jpg')})"
-      figure style="background-image: url(#{image_url('hero-image-7.jpg')})"
-      figure style="background-image: url(#{image_url('hero-image-8.jpg')})"
+  section.hero.is-fullheight.has-gradient-background
     .hero-head
       = render 'nav'
     .hero-body
@@ -21,14 +12,14 @@
               | Donate to charities that reflect your values.
             h2.subtitle
               ' We are your partner for
-              strong.has-text-info> data-rotating-text-alternatives="smarter|simpler|more human|high-impact|values-aligned|effective" data-rotating-text-show-time=3000
+              strong> data-rotating-text-alternatives="smarter|simpler|more human|high-impact|values-aligned|effective" data-rotating-text-show-time=3000
                 | smarter
               | donations
             p &nbsp;
             p &nbsp;
             p
-              a.button.is-primary.is-large href=onboarding_path
-                span Tell us what matters to you
+              a.button.is-primary.is-large.has-shadow href=onboarding_path
+                span Build a charity portfolio
                 span.icon.is-small &rarr;
 
     .hero-foot
@@ -37,18 +28,6 @@
           a href="#learn-more" title="Learn more"
             = icon_tag('fa-arrow-down')
 section.section.is-medium#learn-more
-  .container.has-text-centered.content
-    p = image_tag('hand.svg', width: 60, height: 60)
-    h3.title.is-spaced
-      ' Dear
-      strong born-again optimists,
-    p.subtitle
-      ' This is for you.
-      ' We believe in a global community that cares for each other.
-    p.subtitle
-      ' It begins with a commitment to what you care about.
-hr.container
-section.section.is-medium
   .container
     .columns.is-vcentered
       .column
@@ -82,88 +61,15 @@ section.section.is-medium
         = image_tag('portfolio-screenshot.png')
 hr.container
 
-section.section.is-medium#learn-more
-  .container.has-text-centered.content
-    h1.title.is-spaced Measure your impact
-    p.subtitle
-      ' If
-      strong.has-text-info> 250
-      ' people gave
-      strong.has-text-info> 1%
-      ' of their household income towards
-    p.subtitle
-      strong.has-text-info> data-rotating-text-alternatives="global health|poverty eradication|climate change" data-rotating-text-show-time=8000 global health
-      span> data-rotating-text-alternatives="then" data-rotating-text-show-time=8000 then
-      strong.has-text-info> data-rotating-text-alternatives="3000 people's blindness|60 lives can be saved|180,000 tonnes of CO2" data-rotating-text-show-time=8000 3000 people's blindness
-    p.subtitle
-      span> data-rotating-text-alternatives="can be cured with a|by delivering|will be locked in by protecting" data-rotating-text-show-time=8000 can be cured with a
-      strong.has-text-info> data-rotating-text-alternatives="$50 eye-surgery|60,000 bednets|700 acres" data-rotating-text-show-time=8000 $50 eye-surgery
-      span> data-rotating-text-alternatives="lasting less than 30 minutes|to protect families from malaria|of at-risk rainforest" data-rotating-text-show-time=8000 lasting less than 30 minutes
-    p.help
-      | Based on the median US household income of $59,039
-      sup>
-        a href="https://www.census.gov/newsroom/press-releases/2017/income-povery.html" target="_blank" title="Income, Poverty and Health Insurance Coverage in the United States: 2016" 1
-      ' donated to
-      br
-      strong data-rotating-text-alternatives="Seva|Against Malaria Foundation|Cool Earth" data-rotating-text-show-time=8000 Seva
-      |
-      br
-      | (one of the world's most effective charities)
-
-section.is-medium.hero.is-dark
-  .hero-body.container.content
-    p.has-text-centered.has-text-weight-bold
-      | How it works
-      br
-      | &mdash;
-    .columns
-      .column
-        p.has-text-centered
-          br
-          span.icon: i.fas.fa-2x.fa-handshake
-        h4.is-spaced.title.is-5 1. Tell us about yourself and your values
-        p.subtitle Answer our survey to tell us what causes matter to you
-      .column
-        p.has-text-centered
-          br
-          span.icon: i.fas.fa-2x.fa-university
-        h4.is-spaced.title.is-5 2. Discover expert recommended charities
-        p.subtitle Select from our personalized recommendations to build your charitable portfolio
-      .column
-        p.has-text-centered
-          br
-          span.icon: i.fas.fa-2x.fa-chart-pie
-        h4.is-spaced.title.is-5 3. Pledge your income, make an impact
-        p.subtitle Tell us how much you'd like to give and we distribute it to your charities
-section.section.embossed.is-medium
-  .content.container
-    .columns.is-vcentered
-      .column.is-3
-        h1.title 0% Fees,
-        p.subtitle.is-4 Unless You Want to.
-      .column.is-offset-1
-        p.subtitle
-          ' Donational is run at-cost by a team of dedicated members
-          ' building useful tools for the greater good.
-        p
-          ' Donations are directly distributed to charities and
-          ' make use of smart features like donation pooling to
-          ' ensure that charities spend more on making an impact,
-          ' and less on processing donations.
-          | Standard credit card payment processing fees apply.
-        p
-          ' We only make money if you choose to pay us, allowing us to continue to help you &mdash; and others &mdash; make a greater impact.
-
-section.is-medium.hero.has-background
+section.is-large.hero.has-background
   .hero-background
     figure style="background-image: url(#{image_url('hero-image-7.jpg')})"
 section.section.is-medium
   .container
+    p.title The power of many.
+    p.subtitle.is-4 Give $1 or $1000, we can make a real impact together.
     .columns
-      .column.is-3
-        p.title The power of many.
-        p.subtitle.is-4 Give $1 or $1000, we can make a real impact together.
-      .column.is-offset-1
+      .column
         .tile.is-ancestor
           .tile.is-parent
             .tile.box
@@ -221,3 +127,19 @@ footer.footer
           a href="/"
             ' Donational &copy;
             = Time.zone.now.year
+
+section.section.embossed.is-medium
+  .content.container
+    .columns.is-vcentered
+      .column.is-offset-1
+        p.subtitle
+          ' Donational is run at-cost by a team of dedicated members
+          ' building useful tools for the greater good.
+        p
+          ' Donations are directly distributed to charities.
+          
+        p
+          ' We make use of smart features like donation pooling to
+          ' ensure that charities spend more on making an impact,
+          ' and less on processing donations.
+          | Standard credit card payment processing fees apply.

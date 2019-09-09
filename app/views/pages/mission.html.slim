@@ -1,5 +1,5 @@
 - content_for :hero do
-  section.hero
+  section.hero.has-gradient-background
     .hero-head
       = render 'nav'
     .hero-body
@@ -8,10 +8,10 @@
           .column.is-8
             h1.title.is-2.is-spaced
               ' Our Mission
-            h2.subtitle
+            p.subtitle
               ' We want to see a world where individuals are doing the most good that they can
 
-section.section.embossed
+section.embossed
   .container.content
     .box
       h2.title Together, we can change philanthropy for the better
@@ -23,14 +23,12 @@ section.section.embossed
         ' Together, we’ll demand action from charities that are ineffective and opaque, and push
         | the industry to change for the better.
 
-    .box
       h2.title We want to drive a cultural shift towards high positive impact giving
       p
         ' Most people don’t really know where their money is going when they donate to charity.
         ' We want to help individuals understand what it means to give to charities with a high
         ' positive impact on the world.
 
-    .box
       h2.title We do that by focusing on you and your values
       p
         ' There are several outstanding organizations using data, evidence and thorough analysis to rate and
@@ -39,25 +37,14 @@ section.section.embossed
         ' care about most. Whether you use Donational to make your final donation or not, we want to help you
         ' in your search for charities that prove high positive impact.
 
-section.section
-  .container.content
     .columns
       .column
-        p.subtitle Next steps
         a.button.is-primary.is-medium href=onboarding_path
           => icon_tag('fa-address-book', size: :small)
           span Build a personalized charitable portfolio
       .column.has-text-right-tablet
-        p.subtitle Read more
         a.button.is-info.is-outlined.is-medium href=donate_with_confidence_path
           = icon_tag('fa-book', size: :small)
           | &nbsp; Why choose donational?
           span.icon.is-small &rarr;
         | &nbsp;
-
-
-footer.footer
-  .container
-    nav.breadcrumb.has-bullet-separator.is-centered
-      ul
-        li.is-active: a href="/" Donational &copy;

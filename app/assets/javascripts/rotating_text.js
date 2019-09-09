@@ -9,11 +9,7 @@ document.addEventListener('turbolinks:load', function () {
 
     setInterval(function() {
       el.dataset.rotatingTextIndex++;
-
-      $this.fadeOut(500, function() {
-        $this.fadeIn(500);
-        el.innerHTML = strings[el.dataset.rotatingTextIndex % strings.length];
-      });
+      el.innerHTML = strings[el.dataset.rotatingTextIndex % strings.length];
     }, showTime);
   });
 });
