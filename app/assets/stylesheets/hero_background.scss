@@ -19,8 +19,9 @@
 }
 
 .hero.has-gradient-background {
-  .title { color: white; }
+  a, .title { color: white; }
 
+  
   .navbar-menu {
     padding: 1rem;
   }
@@ -36,9 +37,9 @@
   }
 
   .hero-foot a {
-    background: rgba(255,255,255,0.8);
     padding: 0.75rem 1rem;
     margin-bottom: 1rem;
+    color: #653dea;
     display: inline-block;
   }
 
@@ -55,10 +56,10 @@
   &:before {
     position: absolute;
     transform: skewY(-5deg);
-    bottom: 7vw;
+    top: -7vw;
     right: 0;
     width: 100%;
-    height: 150%;
+    bottom: 7vw;
     content: '';
     background: linear-gradient(to right, #377fea 20%, #653dea) #377fea;
   }

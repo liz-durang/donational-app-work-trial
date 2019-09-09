@@ -1,4 +1,4 @@
-nav.navbar role="navigation" aria-label="main dropdown navigation"
+nav.navbar.is-white role="navigation" aria-label="main dropdown navigation"
   .container
     .navbar-brand
       .navbar-item
@@ -7,9 +7,9 @@ nav.navbar role="navigation" aria-label="main dropdown navigation"
         span
         span
         span
-    div#navMenu.navbar-menu.has-text-white
-      .navbar-end
+    div#navMenu.navbar-menu
+      .navbar-end.has-text-white
         a.navbar-item href=donate_with_confidence_path Why Donational?
         a.navbar-item href=organizations_path Charities
         a.navbar-item href=api_path API
-      .navbar-end = render 'shared/user_nav'
+      .navbar-end.is-transparent = render 'shared/user_nav'
