@@ -19,6 +19,7 @@ class Partner < ApplicationRecord
   has_many :contributions
   has_many :recurring_contributions
   has_many :managed_portfolios, -> { order(:display_order) }
+  has_many :zapier_webhooks
   # Partner administrators
   has_and_belongs_to_many :donors
   has_one_attached :logo

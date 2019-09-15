@@ -115,4 +115,8 @@ RSpec.configure do |config|
       example.run
     end
   end
+
+  config.before(:each) do
+    Sidekiq::Worker.clear_all
+  end
 end

@@ -40,6 +40,7 @@ module Contributions
         if command.success?
           fee = command.result['balance_transaction']['fee_details'].detect { |fee| fee['type'] == 'stripe_fee' }
           contribution.update(receipt: command.result, processed_at: Time.zone.now, payment_processor_fees_cents: fee['amount'])
+          TriggerContributionProcessedWebhook.perform_async(contribution.id, contribution.partner.id)
         else
           payment_failed!(errors: command.errors.to_json)
         end

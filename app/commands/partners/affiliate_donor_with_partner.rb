@@ -14,6 +14,7 @@ module Partners
       return if donor_previously_contributed?
 
       PartnerAffiliation.create(donor: donor, partner: partner, campaign: campaign)
+      TriggerNewDonorWebhook.perform_async(donor.id, partner.id)
 
       nil
     end

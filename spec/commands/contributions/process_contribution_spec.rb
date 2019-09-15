@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'sidekiq/testing'
 
 RSpec.describe Contributions::ProcessContribution do
   include ActiveSupport::Testing::TimeHelpers
@@ -25,6 +26,7 @@ RSpec.describe Contributions::ProcessContribution do
 
       expect(command).not_to be_success
       expect(command.errors.symbolic).to include(payment_method: :not_found)
+      expect(TriggerContributionProcessedWebhook.jobs.size).to eq(0)
     end
   end
 
@@ -38,6 +40,7 @@ RSpec.describe Contributions::ProcessContribution do
 
       expect(command).not_to be_success
       expect(command.errors.symbolic).to include(contribution: :already_processed)
+      expect(TriggerContributionProcessedWebhook.jobs.size).to eq(0)
     end
   end
 
@@ -95,11 +98,13 @@ RSpec.describe Contributions::ProcessContribution do
         expect(contribution.processed_at).to be nil
         expect(contribution.failed_at).to eq Time.zone.now
         expect(contribution.receipt).to eq '{"some":"error"}'
+        expect(TriggerContributionProcessedWebhook.jobs.size).to eq(0)
       end
 
       it 'does not track an analytics event' do
         expect(Analytics::TrackEvent).not_to receive(:run)
         command = Contributions::ProcessContribution.run(contribution: contribution)
+        expect(TriggerContributionProcessedWebhook.jobs.size).to eq(0)
       end
     end
 
@@ -138,6 +143,7 @@ RSpec.describe Contributions::ProcessContribution do
         expect(contribution.receipt).to eq JSON.parse('{"balance_transaction": { "fee_details":[{"amount":56, "description":"Stripe processing fees", "type":"stripe_fee"}]}}')
         expect(contribution.processed_at).to eq Time.zone.now
         expect(contribution.failed_at).to be nil
+        expect(TriggerContributionProcessedWebhook.jobs.size).to eq(1)
       end
 
       it "creates donations based on the donor's allocations" do

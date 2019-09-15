@@ -423,6 +423,7 @@ DEPENDENCIES
   elasticsearch-model
   enumerize (~> 2.1)
   factory_bot_rails
+  faraday
   jbuilder (~> 2.7.0)
   jquery-rails
   letter_opener

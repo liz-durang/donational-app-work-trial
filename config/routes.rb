@@ -63,6 +63,7 @@ Rails.application.routes.draw do
       resources :organizations, only: [:index, :show]
       resources :contributions, only: :create
       resources :portfolios, only: :index
+      resources :hooks, only: [:index, :create]
     end
   end
 end

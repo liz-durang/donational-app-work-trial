@@ -10,6 +10,7 @@ module Contributions
       recurring_contribution.update!(deactivated_at: Time.zone.now)
 
       send_confirmation_email!
+      TriggerRecurringContributionCancelledWebhook.perform_async(recurring_contribution.id, recurring_contribution.partner.id)
 
       nil
     end

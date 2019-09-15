@@ -33,6 +33,7 @@ module Contributions
         )
 
         send_confirmation_email!
+        TriggerRecurringContributionUpdatedWebhook.perform_async(@contribution.id, partner.id)
       end
 
       nil

@@ -312,6 +312,15 @@ ActiveRecord::Schema.define(version: 2019_08_12_181450) do
     t.index ["portfolio_id"], name: "index_selected_portfolios_on_portfolio_id"
   end
 
+  create_table "zapier_webhooks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "hook_url"
+    t.string "hook_type"
+    t.uuid "partner_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["partner_id"], name: "index_zapier_webhooks_on_partner_id"
+  end
+
   add_foreign_key "allocations", "organizations", column: "organization_ein", primary_key: "ein"
   add_foreign_key "allocations", "portfolios"
   add_foreign_key "campaigns", "partners"
@@ -338,4 +347,5 @@ ActiveRecord::Schema.define(version: 2019_08_12_181450) do
   add_foreign_key "recurring_contributions", "portfolios"
   add_foreign_key "selected_portfolios", "donors"
   add_foreign_key "selected_portfolios", "portfolios"
+  add_foreign_key "zapier_webhooks", "partners"
 end

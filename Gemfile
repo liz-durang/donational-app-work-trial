@@ -67,6 +67,9 @@ gem 'stripe'
 gem 'searchkick'
 gem 'elasticsearch-model'
 
+# External Integrations
+gem 'faraday'
+
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'pry'

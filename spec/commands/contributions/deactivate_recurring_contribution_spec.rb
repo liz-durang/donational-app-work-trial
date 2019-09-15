@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'sidekiq/testing'
 
 RSpec.describe Contributions::DeactivateRecurringContribution do
   let(:donor) { create(:donor, email: 'user@example.com') }
@@ -13,6 +14,7 @@ RSpec.describe Contributions::DeactivateRecurringContribution do
 
       expect(command).to be_success
       expect(recurring_contribution.reload).not_to be_active
+      expect(TriggerRecurringContributionCancelledWebhook.jobs.size).to eq(1)
     end
   end
 end
