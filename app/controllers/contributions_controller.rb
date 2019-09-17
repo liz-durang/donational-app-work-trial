@@ -86,7 +86,7 @@ class ContributionsController < ApplicationController
   end
 
   def partner
-    @partner ||= Partners::GetDefaultPartnerByName.call
+    @partner ||= partner_affiliation.try(:partner) || Partners::GetDefaultPartnerByName.call
   end
 
   def new_recurring_donation
