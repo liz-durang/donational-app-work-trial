@@ -14,7 +14,14 @@ class TriggerRecurringContributionUpdatedWebhook < ApplicationJob
       end
 
       response = conn.post() do |req|
-        req.body = recurring_contribution.slice('id', 'start_at', 'frequency', 'amount_dollars').to_json
+        req.body = {
+          id: recurring_contribution.id,
+          start_at: recurring_contribution.start_at.to_date,
+          frequency: recurring_contribution.frequency,
+          amount_dollars: recurring_contribution.amount_dollars,
+          donor_name: recurring_contribution.donor_name,
+          donor_email: recurring_contribution.donor_email
+        }.to_json
       end
 
       raise unless response.status == 200 || response.status == 410

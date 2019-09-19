@@ -23,6 +23,9 @@ class RecurringContribution < ApplicationRecord
   extend Enumerize
   enumerize :frequency, in: %w[monthly quarterly annually once], predicates: true
 
+  delegate :name, to: :donor, prefix: true
+  delegate :email, to: :donor, prefix: true
+
   def active?
     deactivated_at.blank?
   end

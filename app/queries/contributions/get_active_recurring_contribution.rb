@@ -5,7 +5,11 @@ module Contributions
     end
 
     def call(donor:)
-      GetActiveRecurringContributions.new(@relation).call(donor: donor).first
+      GetActiveRecurringContributions
+        .new(@relation)
+        .call(donor: donor)
+        .order(created_at: :desc)
+        .first
     end
   end
 end

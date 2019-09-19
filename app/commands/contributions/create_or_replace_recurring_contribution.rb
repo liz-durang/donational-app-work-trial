@@ -21,7 +21,7 @@ module Contributions
         most_recent_last_scheduled_at = previous_plans_most_recent_scheduled_at
         deactivate_existing_recurring_contributions!
 
-        @contribution = RecurringContribution.create!(
+        recurring_contribution = RecurringContribution.create!(
           donor: donor,
           portfolio: portfolio,
           partner: partner,
@@ -32,8 +32,9 @@ module Contributions
           last_scheduled_at: frequency == 'once' ? nil : most_recent_last_scheduled_at
         )
 
-        send_confirmation_email!
-        TriggerRecurringContributionUpdatedWebhook.perform_async(@contribution.id, partner.id)
+        send_confirmation_email!(recurring_contribution)
+
+        TriggerRecurringContributionUpdatedWebhook.perform_async(recurring_contribution.id, partner.id)
       end
 
       nil
@@ -42,7 +43,8 @@ module Contributions
     private
 
     def existing_recurring_contributions
-      Contributions::GetActiveRecurringContributions.call(donor: donor)
+      @existing_recurring_contributions ||= 
+        Contributions::GetActiveRecurringContributions.call(donor: donor)
     end
 
     def previous_plans_most_recent_scheduled_at
@@ -53,12 +55,12 @@ module Contributions
       existing_recurring_contributions.update_all(deactivated_at: Time.zone.now)
     end
 
-    def send_confirmation_email!
-      payment_method = Payments::GetActivePaymentMethod.call(donor: @contribution.donor)
-      portfolio_manager = Portfolios::GetPortfolioManager.call(portfolio: @contribution.portfolio)
+    def send_confirmation_email!(recurring_contribution)
+      payment_method = Payments::GetActivePaymentMethod.call(donor: recurring_contribution.donor)
+      portfolio_manager = Portfolios::GetPortfolioManager.call(portfolio: recurring_contribution.portfolio)
 
       ConfirmationsMailer.send_confirmation(
-        contribution: @contribution,
+        contribution: recurring_contribution,
         payment_method: payment_method,
         partner: portfolio_manager,
         cancelation: false
