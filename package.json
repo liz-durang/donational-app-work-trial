@@ -3,6 +3,7 @@
     "@rails/webpacker": "3.4",
     "activestorage": "^5.2.0",
     "dotenv": "^6.0.0",
+    "js-yaml": "^3.13.1",
     "stimulus": "^1.0.1",
     "underscore": "^1.9.1"
   },
