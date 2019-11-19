@@ -18,7 +18,6 @@ class ContributionsController < ApplicationController
         target_amount_cents: target_amount_cents,
         recurring_contribution: new_recurring_donation,
         active_payment_method?: payment_method.present?,
-        portfolio_organization_count: active_portfolio.active_allocations.count,
         partner_affiliation: partner_affiliation,
         partner_affiliation?: partner_affiliation.present?
       )
