@@ -44,6 +44,9 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     select 'Monthly'
 
+    expect(page).to have_content('Please select here if you are happy for some of your donations to go to One for the World')
+    click_on '10%'
+
     click_on 'Next'
 
     card_token = stripe_helper.generate_card_token(last4: '9191', name: 'Donatello')
@@ -62,9 +65,10 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     click_on 'Update donation plan'
   end
 
+  # TODO: This should be done by automating Partner/Campaign creation through the Admin interface
   def create_new_partner!
-    # TODO: This should be done by automating Partner/Campaign creation through the Admin interface
-
+    one_for_the_world_operating_costs_charity = create(:organization, name: 'OFTW Operating Costs')
+    
     partner = Partner.create(
       name: 'One for the World',
       platform_fee_percentage: 0.02,
@@ -83,9 +87,12 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
             type: 'text',
             required: false
           }
-        ]
-      }
+        ],
+      },
+      operating_costs_text: "For every $1 donated to One for the World, we raise $12 for effective charities. Please select here if you are happy for some of your donations to go to One for the World.",
+      operating_costs_organization: one_for_the_world_operating_costs_charity
     )
+
     Campaign.create(
       partner: partner,
       title: 'The Wharton School',

@@ -66,7 +66,8 @@ class CampaignContributionsController < ApplicationController
       amount_cents: params[:campaign_contribution][:amount_dollars].to_i * 100,
       frequency: params[:campaign_contribution][:frequency],
       start_at: params[:campaign_contribution][:start_at].presence,
-      tips_cents: 0
+      tips_cents: 0,
+      partner_contribution_percentage: params[:campaign_contribution][:partner_contribution_percentage].to_i
     )
   end
 

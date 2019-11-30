@@ -17,7 +17,7 @@
 class Donation < ApplicationRecord
   belongs_to :portfolio
   belongs_to :organization, foreign_key: 'organization_ein'
-  belongs_to :allocation
+  belongs_to :allocation, optional: true
   belongs_to :contribution
   belongs_to :grant, optional: true
   delegate :donor, to: :contribution
@@ -25,5 +25,5 @@ class Donation < ApplicationRecord
   scope(:unpaid, -> { where(grant: nil) })
   scope(:paid, -> { where.not(grant: nil) })
 
-  validates :contribution, :allocation, :organization, :portfolio, presence: true
+  validates :contribution, :organization, :portfolio, presence: true
 end

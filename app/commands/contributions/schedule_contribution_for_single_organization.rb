@@ -10,6 +10,7 @@ module Contributions
 
     optional do
       integer :tips_cents, min: 0, default: 0
+      integer :partner_contribution_percentage, min: 0, default: 0
       string :external_reference_id
       boolean :mark_as_paid
       hash :receipt do
@@ -43,7 +44,8 @@ module Contributions
         scheduled_at: scheduled_at,
         external_reference_id: external_reference_id,
         processed_at: processed_at,
-        receipt: receipt
+        receipt: receipt,
+        partner_contribution_percentage: partner_contribution_percentage
       )
     end
 

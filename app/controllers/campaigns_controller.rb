@@ -26,8 +26,11 @@ class CampaignsController < ApplicationController
       default_contribution_amounts: campaign.default_contribution_amounts,
       campaign_contributions_path: campaign_contributions_path(campaign.slug),
       new_campaign_contribution: new_campaign_contribution,
-      managed_portfolios: partner.managed_portfolios.where(hidden_at: nil),
-      donor_questions: partner.donor_questions
+      managed_portfolios: managed_portfolios,
+      donor_questions: partner.donor_questions,
+      default_operating_costs_donation_percentages: partner.default_operating_costs_donation_percentages,
+      partner_operating_costs_text: partner.operating_costs_text,
+      partner_accepts_operating_costs_donations?: partner.accepts_operating_costs_donations?
     )
 
     respond_to do |format|
@@ -95,7 +98,7 @@ class CampaignsController < ApplicationController
       default_contribution_amounts: campaign.default_contribution_amounts,
       campaign_contributions_path: campaign_contributions_path(campaign.slug),
       new_campaign_contribution: new_campaign_contribution,
-      managed_portfolios: partner.managed_portfolios,
+      managed_portfolios: managed_portfolios,
       donor_questions: partner.donor_questions
     )
 
@@ -144,5 +147,9 @@ class CampaignsController < ApplicationController
 
   def default_contribution_amounts
     params[:default_contribution_amounts].split(',').map { |amount| amount.to_i }
+  end
+
+  def managed_portfolios
+    Partners::GetManagedPortfoliosForCampaign.call(partner: partner)
   end
 end

@@ -64,7 +64,8 @@ class ContributionsController < ApplicationController
       frequency: frequency,
       amount_cents: amount_cents,
       tips_cents: tips_cents,
-      start_at: start_at.presence
+      start_at: start_at.presence,
+      partner_contribution_percentage: 0
     )
   end
 

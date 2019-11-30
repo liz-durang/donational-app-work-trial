@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'sidekiq/testing'
 
 RSpec.describe Contributions::ProcessContribution do
   include ActiveSupport::Testing::TimeHelpers
@@ -101,6 +100,11 @@ RSpec.describe Contributions::ProcessContribution do
         expect(TriggerContributionProcessedWebhook.jobs.size).to eq(0)
       end
 
+      it 'does not create donations' do
+        expect(Donations::CreateDonationsFromContributionIntoPortfolio).not_to receive(:run)
+        command = Contributions::ProcessContribution.run(contribution: contribution)
+      end
+
       it 'does not track an analytics event' do
         expect(Analytics::TrackEvent).not_to receive(:run)
         command = Contributions::ProcessContribution.run(contribution: contribution)
@@ -147,18 +151,15 @@ RSpec.describe Contributions::ProcessContribution do
       end
 
       it "creates donations based on the donor's allocations" do
-        allow(Payments::ChargeCustomer).to receive(:run).and_return(successful_charge)
-        expect(Analytics::TrackEvent).to receive(:run).and_return(successful_track_event)
+        expect(Payments::ChargeCustomer).to receive(:run).and_return(successful_charge)
+        expect(Donations::CreateDonationsFromContributionIntoPortfolio)
+          .to receive(:run)
+          .with(
+            contribution: contribution,
+            donation_amount_cents: 1_000 - 56 - 0.01 * 1_000)
+          .and_return(double(success?: true))
 
-        expect { Contributions::ProcessContribution.run(contribution: contribution) }.to change { Donation.count }.by(2)
-
-        # (1000 - (1200 * 0.022 + 30) - (1000 * 0.01)) * 0.6
-        expect(Donation.where(organization: org_1).first)
-          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 560 )
-
-        # (1000 - (1200 * 0.022 + 30) - (1000 * 0.01)) * 0.4
-        expect(Donation.where(organization: org_2).first)
-          .to have_attributes(contribution: contribution, portfolio_id: portfolio.id, amount_cents: 373)
+        command = Contributions::ProcessContribution.run(contribution: contribution)
       end
     end
   end

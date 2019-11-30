@@ -34,7 +34,8 @@ module Api
           external_reference_id: contribution_params[:external_reference_id],
           mark_as_paid: mark_as_paid,
           receipt: contribution_params[:receipt],
-          partner: current_partner
+          partner: current_partner,
+          partner_contribution_percentage: 0
         )
       end
 
@@ -56,7 +57,8 @@ module Api
           external_reference_id: contribution_params[:external_reference_id],
           mark_as_paid: mark_as_paid,
           receipt: contribution_params[:receipt],
-          partner: current_partner
+          partner: current_partner,
+          partner_contribution_percentage: 0
         )
       end
 

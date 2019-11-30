@@ -13,7 +13,8 @@ module Contributions
           amount_cents: recurring_contribution.amount_cents,
           tips_cents: recurring_contribution.tips_cents,
           scheduled_at: Time.zone.now,
-          partner: recurring_contribution.partner
+          partner: recurring_contribution.partner,
+          partner_contribution_percentage: recurring_contribution.partner_contribution_percentage
         )
       }
 

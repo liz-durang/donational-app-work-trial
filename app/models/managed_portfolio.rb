@@ -18,6 +18,7 @@ class ManagedPortfolio < ApplicationRecord
   has_one_attached :image
 
   delegate :size, to: :portfolio
+
   def available_to_new_donors?
     hidden_at.blank?
   end

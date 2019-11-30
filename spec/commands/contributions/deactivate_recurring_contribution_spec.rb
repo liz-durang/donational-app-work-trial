@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'sidekiq/testing'
 
 RSpec.describe Contributions::DeactivateRecurringContribution do
   let(:donor) { create(:donor, email: 'user@example.com') }

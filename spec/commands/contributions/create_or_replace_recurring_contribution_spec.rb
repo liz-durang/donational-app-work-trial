@@ -1,6 +1,4 @@
 require 'rails_helper'
-require 'sidekiq/testing'
-
 RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
   include ActiveSupport::Testing::TimeHelpers
 
@@ -38,6 +36,7 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
       expect(recurring_contribution.last_scheduled_at).to eq nil
       expect(recurring_contribution.partner).to eq partner
       expect(TriggerRecurringContributionUpdatedWebhook.jobs.size).to eq(1)
+      expect(recurring_contribution.partner_contribution_percentage).to eq 0
     end
 
     context 'and there is no start date provided' do
@@ -86,6 +85,7 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
       expect(recurring_contribution.donor).to eq donor
       expect(recurring_contribution.amount_cents).to eq 8000
       expect(recurring_contribution.partner).to eq partner
+      expect(recurring_contribution.partner_contribution_percentage).to eq 0
     end
 
     it 'copies the last_scheduled_at date from the previous plan' do

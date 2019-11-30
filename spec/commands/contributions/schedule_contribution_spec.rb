@@ -37,13 +37,14 @@ RSpec.describe Contributions::ScheduleContribution do
         .with(
           donor: donor,
           portfolio: portfolio,
-          partner: partner, 
+          partner: partner,
           amount_cents: 1234,
           tips_cents: 200,
           scheduled_at: scheduled_at,
           external_reference_id: nil,
           processed_at: nil,
-          receipt: nil
+          receipt: nil,
+          partner_contribution_percentage: 0
         )
 
       command = Contributions::ScheduleContribution.run(params)

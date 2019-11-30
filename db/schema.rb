@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_12_181450) do
+ActiveRecord::Schema.define(version: 2019_11_30_180844) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -101,6 +101,7 @@ ActiveRecord::Schema.define(version: 2019_08_12_181450) do
     t.datetime "refunded_at"
     t.string "external_reference_id"
     t.uuid "partner_id"
+    t.integer "partner_contribution_percentage", default: 0
     t.index ["donor_id"], name: "index_contributions_on_donor_id"
     t.index ["partner_id"], name: "index_contributions_on_partner_id"
     t.index ["portfolio_id"], name: "index_contributions_on_portfolio_id"
@@ -109,7 +110,7 @@ ActiveRecord::Schema.define(version: 2019_08_12_181450) do
   create_table "donations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "portfolio_id", null: false
     t.string "organization_ein", null: false
-    t.uuid "allocation_id", null: false
+    t.uuid "allocation_id"
     t.uuid "contribution_id", null: false
     t.uuid "grant_id"
     t.integer "amount_cents"
@@ -228,6 +229,8 @@ ActiveRecord::Schema.define(version: 2019_08_12_181450) do
     t.jsonb "donor_questions_schema"
     t.string "payment_processor_account_id"
     t.string "api_key"
+    t.string "operating_costs_text"
+    t.string "operating_costs_organization_ein"
   end
 
   create_table "payment_methods", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -264,6 +267,7 @@ ActiveRecord::Schema.define(version: 2019_08_12_181450) do
     t.datetime "last_reminded_at"
     t.datetime "last_scheduled_at"
     t.uuid "partner_id"
+    t.integer "partner_contribution_percentage", default: 0
     t.index ["deactivated_at"], name: "index_recurring_contributions_on_deactivated_at"
     t.index ["donor_id"], name: "index_recurring_contributions_on_donor_id"
     t.index ["partner_id"], name: "index_recurring_contributions_on_partner_id"
@@ -340,6 +344,7 @@ ActiveRecord::Schema.define(version: 2019_08_12_181450) do
   add_foreign_key "partner_affiliations", "campaigns"
   add_foreign_key "partner_affiliations", "donors"
   add_foreign_key "partner_affiliations", "partners"
+  add_foreign_key "partners", "organizations", column: "operating_costs_organization_ein", primary_key: "ein"
   add_foreign_key "payment_methods", "donors"
   add_foreign_key "portfolios", "donors", column: "creator_id"
   add_foreign_key "recurring_contributions", "donors"

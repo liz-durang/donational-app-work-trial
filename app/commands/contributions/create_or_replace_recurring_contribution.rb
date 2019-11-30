@@ -13,6 +13,7 @@ module Contributions
 
     optional do
       time :start_at
+      integer :partner_contribution_percentage, min: 0, default: 0
     end
 
     def execute
@@ -29,7 +30,8 @@ module Contributions
           start_at: start_at || Time.zone.now,
           amount_cents: amount_cents,
           tips_cents: tips_cents,
-          last_scheduled_at: frequency == 'once' ? nil : most_recent_last_scheduled_at
+          last_scheduled_at: frequency == 'once' ? nil : most_recent_last_scheduled_at,
+          partner_contribution_percentage: partner_contribution_percentage
         )
 
         send_confirmation_email!(recurring_contribution)

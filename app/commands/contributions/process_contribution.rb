@@ -80,20 +80,10 @@ module Contributions
     end
 
     def create_donations_based_on_active_allocations
-      # TODO: Move this into a Donations::CreateDonationsFromContributionIntoPortfolio command
-      Donation.transaction do
-        Portfolios::GetActiveAllocations.call(portfolio: contribution.portfolio).each do |a|
-          donation_amount_cents = (payment_fees.amount_donated_after_fees_cents * a.percentage / 100.0).floor
-          Donation.create!(
-            allocation: a,
-            contribution: contribution,
-            portfolio: a.portfolio,
-            organization: a.organization,
-            amount_cents: donation_amount_cents
-          )
-        end
-      end
-      Mutations::Outcome.new(true, nil, [], nil)
+      Donations::CreateDonationsFromContributionIntoPortfolio.run(
+        contribution: contribution,
+        donation_amount_cents: payment_fees.amount_donated_after_fees_cents
+      )
     end
 
     def send_tax_deductible_receipt

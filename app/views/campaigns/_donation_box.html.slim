@@ -107,7 +107,7 @@
             .control
               - if @view_model.donation_frequencies.size == 1
                 span.input.is-static.has-text-weight-bold = @view_model.donation_frequencies.first[0]
-                = f.hidden_field :frequency, value: @view_model.donation_frequencies.first[1] 
+                = f.hidden_field :frequency, value: @view_model.donation_frequencies.first[1]
               - else
                 .select = f.collection_select(:frequency, @view_model.donation_frequencies, :last, :first)
             .control
@@ -119,6 +119,14 @@
             .control.is-expanded.has-icons-left.is-hidden data-accordion-panel-for="show-date"
                 = icon_tag('fas fa-calendar')
                 = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 4.years.from_now.to_date.iso8601
+        .field data-controller="radio-select"
+          - if @view_model.partner_accepts_operating_costs_donations?
+            p.help = @view_model.partner_operating_costs_text
+            .field.is-grouped.is-grouped-multiline
+              - @view_model.default_operating_costs_donation_percentages.each do |amount|
+                a.control.button.is-expanded href='#' data-target='radio-select.button' data-action='radio-select#select' data-radio-select-value=amount
+                  = number_to_percentage(amount, precision: 0)
+              = f.hidden_field :partner_contribution_percentage, data: { controller: 'integer-field', target: 'radio-select.output' }
       .wizard-card-footer
         a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
     fieldset.wizard-card data-target='wizard.step'

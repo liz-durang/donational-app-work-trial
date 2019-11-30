@@ -65,7 +65,7 @@ section.section.embossed
                 td.has-text-right colspan=2
                   em => donation.organization.name
                 td.has-text-right
-                  em = cents_to_currency(contribution.total_charges_cents)
+                  em = cents_to_currency(donation.amount_cents)
                 td &nbsp;
             - if contribution.tips_cents > 0
               tr.is-hidden data-accordion-panel-for="contribution-#{contribution.id}"

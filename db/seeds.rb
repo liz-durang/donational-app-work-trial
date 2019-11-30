@@ -2,12 +2,16 @@
 # with its default values. The data can then be loaded with the
 # rails db:seed command (or created alongside the database with db:setup).
 
+one_for_the_world_charity = Organization.create(name: 'OFTW Operating Costs', ein: '84-2124550')
+
 one_for_the_world = Partner.find_or_create_by(name: 'One For The World') do |p|
   p.website_url = 'http://1fortheworld.org'
   p.platform_fee_percentage = 0.02
   p.payment_processor_account_id = 'acct_1Cq2tLDFX5Cbjrb9'
   p.description = "1% of the developed world's income can eliminate extreme poverty. Let it start with you."
   p.donor_questions_schema = { questions: [] }
+  p.operating_costs_text = "For every $1 donated to One for the World, we raise $12 for effective charities. Please select here if you are happy for some of your donations to go to One for the World."
+  p.operating_costs_organization = one_for_the_world_charity
 end
 
 default_partner = Partner.find_or_create_by(name: Partner::DEFAULT_PARTNER_NAME) do |p|

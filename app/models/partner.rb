@@ -24,10 +24,22 @@ class Partner < ApplicationRecord
   has_and_belongs_to_many :donors
   has_one_attached :logo
   has_one_attached :email_banner
+  belongs_to :operating_costs_organization,
+    class_name: 'Organization',
+    optional: true,
+    foreign_key: :operating_costs_organization_ein
 
   before_create :generate_api_key
 
   DEFAULT_PARTNER_NAME = 'Donational'
+
+  def accepts_operating_costs_donations?
+    operating_costs_organization_ein.present?
+  end
+
+  def default_operating_costs_donation_percentages
+    [0, 5, 10]
+  end
 
   def donor_questions
     return if donor_questions_schema.nil?
