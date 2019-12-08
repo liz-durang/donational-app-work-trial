@@ -9,7 +9,7 @@ end
 
 # Base stack
 gem 'pg'
-gem 'puma', '~> 3.0'
+gem 'puma', '~> 3.12'
 gem 'rails', '~> 5.2.0'
 gem 'redis', '~> 3.3.3'
 gem 'bootsnap', require: false
