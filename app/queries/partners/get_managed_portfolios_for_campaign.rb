@@ -10,6 +10,7 @@ module Partners
       @relation
         .where(partner: partner)
         .where(hidden_at: nil)
+        .order(display_order: :asc)
     end
   end
 end
