@@ -94,5 +94,27 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
       recurring_contribution = Contributions::GetActiveRecurringContribution.call(donor: donor)
       expect(recurring_contribution.last_scheduled_at).to eq existing_recurring_contribution.reload.last_scheduled_at
     end
+
+    context 'and the new recurring_contribution is a once-off contribution' do
+      let(:params) do
+        {
+          donor: donor,
+          portfolio: portfolio,
+          partner: partner,
+          amount_cents: 8000,
+          tips_cents: 100,
+          frequency: :once,
+          start_at: '2000-01-01'
+        }
+      end
+
+      it 'clears out the last_scheduled_at date' do
+        subject
+
+        recurring_contribution = Contributions::GetActiveRecurringContribution.call(donor: donor)
+        expect(recurring_contribution.frequency).to eq :once
+        expect(recurring_contribution.last_scheduled_at).to be nil
+      end
+    end
   end
 end
