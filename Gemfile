@@ -1,11 +1,9 @@
 source 'https://rubygems.org'
 
-ruby '2.6.5'
+# Set Ruby version
+ruby File.read('.ruby-version').strip
 
-git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
-  "https://github.com/#{repo_name}.git"
-end
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Base stack
 gem 'pg'

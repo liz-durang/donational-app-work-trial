@@ -23,12 +23,10 @@
 .byebug_history
 
 spec/examples.txt
-/public/packs
-/node_modules
 
-.env
 /public/packs
 /public/packs-test
 /node_modules
+/yarn-error.log
 yarn-debug.log*
 .yarn-integrity
