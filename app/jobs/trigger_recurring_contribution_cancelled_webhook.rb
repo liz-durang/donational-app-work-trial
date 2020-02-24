@@ -18,17 +18,22 @@ class TriggerRecurringContributionCancelledWebhook < ApplicationJob
         partner: current_partner
       )
 
+      portfolio_name = recurring_contribution.portfolio.managed_portfolio.try(:name) || 'Custom Portfolio'
+
       response = conn.post() do |req|
         req.body = {
           id: recurring_contribution.id,
           start_at: recurring_contribution.start_at.to_date,
+          cancelled_at: recurring_contribution.deactivated_at.to_date,
           frequency: recurring_contribution.frequency,
           amount_dollars: recurring_contribution.amount_dollars,
           donor_name: recurring_contribution.donor_name,
           donor_email: recurring_contribution.donor_email,
+          portfolio: portfolio_name,
           donor: {
             name: recurring_contribution.donor_name,
             email: recurring_contribution.donor_email,
+            joined_at: recurring_contribution.donor.created_at,
             questions: affiliation.donor_responses.map { |r| [r.question.name, r.value]  }.to_h,
             campaign: affiliation.campaign_title,
             partner: affiliation.partner_name
