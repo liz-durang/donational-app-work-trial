@@ -63,7 +63,7 @@ gem 'stripe'
 
 # Search
 gem 'searchkick'
-gem 'elasticsearch-model'
+gem 'elasticsearch', '~> 6.0'
 
 # External Integrations
 gem 'faraday'

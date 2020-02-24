@@ -53,7 +53,12 @@
     "heroku-postgresql",
     "heroku-redis",
     "sendgrid",
-    { "plan": "searchbox:starter", "options": { "es_version": 6 } }
+    {
+      "plan": "bonsai:hobby",
+      "options": {
+        "version": "6.5.4"
+      }
+    }
   ],
   "buildpacks": [
     { "url": "heroku/nodejs" },
