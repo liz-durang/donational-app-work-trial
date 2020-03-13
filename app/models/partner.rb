@@ -29,6 +29,9 @@ class Partner < ApplicationRecord
     optional: true,
     foreign_key: :operating_costs_organization_ein
 
+  validates :currency, inclusion: { in: Money::Currency,
+                                    message: '%{value} is not a valid currency iso code' }
+
   before_create :generate_api_key
 
   DEFAULT_PARTNER_NAME = 'Donational'

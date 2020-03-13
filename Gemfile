@@ -52,6 +52,9 @@ gem 'lograge'
 # Commands
 gem 'mutations'
 
+# Multi-currency operations
+gem 'money-rails'
+
 # API
 gem 'rack-cors'
 gem 'jbuilder', '~> 2.7.0'

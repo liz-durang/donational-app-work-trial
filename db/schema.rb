@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_30_180844) do
+ActiveRecord::Schema.define(version: 2020_03_12_160441) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -231,6 +231,7 @@ ActiveRecord::Schema.define(version: 2019_11_30_180844) do
     t.string "api_key"
     t.string "operating_costs_text"
     t.string "operating_costs_organization_ein"
+    t.string "currency", default: "usd", null: false
   end
 
   create_table "payment_methods", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
