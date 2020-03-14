@@ -5,8 +5,11 @@ module Partners
     end
 
     def call(donor:)
-      affiliation = @relation.find_by(donor: donor)
-      affiliation.partner unless affiliation.nil?
+      @relation.find_by(donor: donor).try(:partner) || default_partner
+    end
+
+    def default_partner
+      Partner.find_by(name: Partner::DEFAULT_PARTNER_NAME)
     end
   end
 end

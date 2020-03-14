@@ -62,11 +62,11 @@ section.section.embossed
 
                       .select 
                         = f.collection_select :portfolio_id,
-                          @view_model.partner_affiliation.partner.managed_portfolios.order(:name),
-                          :portfolio_id,
-                          :name
+                          @view_model.selectable_portfolios,
+                          :first,
+                          :last
 
-            - else @view_model.partner_affiliation?
+            - else
               = f.hidden_field :portfolio_id, value: @view_model.recurring_contribution.portfolio_id
               .field
                 .label Help us grow!

@@ -71,10 +71,6 @@ module Contributions
       @payment_method ||= Payments::GetActivePaymentMethod.call(donor: contribution.donor)
     end
 
-    def partner
-      portfolio_manager = Portfolios::GetPortfolioManager.call(portfolio: contribution.portfolio)
-    end
-
     def active_recurring_contribution
       @active_contribution ||= Contributions::GetActiveRecurringContribution.call(donor: contribution.donor)
     end
@@ -87,6 +83,7 @@ module Contributions
     end
 
     def send_tax_deductible_receipt
+      partner = Partners::GetPartnerForDonor.call(donor: contribution.donor)
       ReceiptsMailer.send_receipt(contribution, payment_method, partner).deliver_now
       Mutations::Outcome.new(true, nil, [], nil)
     end
@@ -97,6 +94,7 @@ module Contributions
       contribution.update(receipt: errors, failed_at: Time.zone.now)
 
       # Send payment failed email
+      partner = Partners::GetPartnerForDonor.call(donor: contribution.donor)
       PaymentMethodsMailer.send_payment_failed(contribution, payment_method, partner).deliver_now
 
       # Update payment method retry count and cancel donation plan

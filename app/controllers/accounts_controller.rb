@@ -26,6 +26,7 @@ class AccountsController < ApplicationController
       first_contribution: Contributions::GetFirstContribution.call(donor: current_donor),
       target_amount_cents: target_amount_cents,
       partner_affiliation: partner_affiliation,
+      selectable_portfolios: selectable_portfolios,
       donor_responses: donor_responses
     )
   end
@@ -83,6 +84,21 @@ class AccountsController < ApplicationController
 
   def partner_affiliation
     @partner_affiliation ||= Partners::GetPartnerAffiliationByDonor.call(donor: current_donor)
+  end
+
+  def active_portfolio
+    Portfolios::GetActivePortfolio.call(donor: current_donor)
+  end
+
+  def managed_portfolio?
+    Portfolios::GetPortfolioManager.call(portfolio: active_portfolio).present?
+  end
+
+  def selectable_portfolios
+    portfolios = []
+    portfolios << [active_portfolio.id, 'My personalized portfolio'] unless managed_portfolio?    
+    portfolios += Partners::GetManagedPortfoliosForPartner.call(partner: partner).pluck(:portfolio_id, :name) if partner
+    portfolios
   end
 
   def partner

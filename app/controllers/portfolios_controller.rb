@@ -62,10 +62,10 @@ class PortfoliosController < ApplicationController
   end
 
   def active_portfolio
-    @active_portfolio ||= Portfolios::GetActivePortfolio.call(donor: current_donor)
+    Portfolios::GetActivePortfolio.call(donor: current_donor)
   end
 
   def active_recurring_contribution
-    @active_contribution ||= Contributions::GetActiveRecurringContribution.call(donor: current_donor)
+    Contributions::GetActiveRecurringContribution.call(donor: current_donor)
   end
 end

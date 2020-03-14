@@ -6,7 +6,7 @@
           label.control
             .label Donation amount
             .control.has-icons-left
-              = f.number_field :amount_dollars, class: 'input', value: (recurring_contribution.amount_cents / 100.0).ceil
+              = f.number_field :amount_dollars, class: 'input', value: cents_to_dollars(@view_model.recurring_contribution.amount_cents)
               span.icon.is-left $
       .column
         .field
@@ -32,9 +32,9 @@
 
           .select 
             = f.collection_select :portfolio_id,
-              @view_model.partner_affiliation.partner.managed_portfolios.order(:name),
-              :portfolio_id,
-              :name,
+              @view_model.selectable_portfolios,
+              :first,
+              :last,
               selected: @view_model.recurring_contribution.portfolio_id
 
     - else

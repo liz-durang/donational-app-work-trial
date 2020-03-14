@@ -3,6 +3,10 @@ require 'rails_helper'
 RSpec.describe Contributions::DeactivateRecurringContribution do
   let(:donor) { create(:donor, email: 'user@example.com') }
 
+  before do |example|
+    create(:partner, :default)
+  end
+
   context 'when is cancelled' do
     let(:recurring_contribution) do
       create(:recurring_contribution, donor: donor, deactivated_at: nil)

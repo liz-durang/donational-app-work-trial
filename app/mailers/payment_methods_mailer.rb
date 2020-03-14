@@ -2,7 +2,7 @@ class PaymentMethodsMailer < ApplicationMailer
   def send_payment_failed(contribution, payment_method, partner)
     @contribution = contribution
     @payment_method = payment_method
-    @partner_name = partner.try(:name) || "Donational.org"
+    @partner_name = partner.name
     @partner = partner
 
     Time.use_zone(contribution.donor.time_zone) do

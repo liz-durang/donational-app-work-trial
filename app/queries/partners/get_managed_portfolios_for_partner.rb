@@ -1,5 +1,5 @@
 module Partners
-  class GetManagedPortfoliosForCampaign < ApplicationQuery
+  class GetManagedPortfoliosForPartner < ApplicationQuery
     def initialize(relation = ManagedPortfolio.all)
       @relation = relation
     end

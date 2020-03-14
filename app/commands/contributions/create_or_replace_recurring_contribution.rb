@@ -34,6 +34,8 @@ module Contributions
           partner_contribution_percentage: partner_contribution_percentage
         )
 
+        Portfolios::SelectPortfolio.run(donor: donor, portfolio: portfolio)
+
         send_confirmation_email!(recurring_contribution)
 
         TriggerRecurringContributionUpdatedWebhook.perform_async(recurring_contribution.id, partner.id)
@@ -59,12 +61,12 @@ module Contributions
 
     def send_confirmation_email!(recurring_contribution)
       payment_method = Payments::GetActivePaymentMethod.call(donor: recurring_contribution.donor)
-      portfolio_manager = Portfolios::GetPortfolioManager.call(portfolio: recurring_contribution.portfolio)
+      partner = Partners::GetPartnerForDonor.call(donor: recurring_contribution.donor)
 
       ConfirmationsMailer.send_confirmation(
         contribution: recurring_contribution,
         payment_method: payment_method,
-        partner: portfolio_manager,
+        partner: partner,
         cancelation: false
       ).deliver_now
     end

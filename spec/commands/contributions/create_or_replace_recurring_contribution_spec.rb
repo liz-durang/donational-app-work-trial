@@ -2,6 +2,10 @@ require 'rails_helper'
 RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
   include ActiveSupport::Testing::TimeHelpers
 
+  before do |example|
+    create(:partner, :default)
+  end
+
   subject do
     Contributions::CreateOrReplaceRecurringContribution.run(params)
   end
@@ -55,13 +59,21 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
         expect(TriggerRecurringContributionUpdatedWebhook.jobs.size).to eq(1)
         expect(recurring_contribution.start_at).to eq Date.new(2010, 1, 1)
       end
+
+      it "sets the portfolio to the donor's active portfolio" do
+        expect(Portfolios::SelectPortfolio).to receive(:run).with(donor: donor, portfolio: portfolio)
+
+        subject
+      end
     end
   end
 
   context 'when there is an existing active recurring_contribution' do
+    let(:some_other_portfolio) { create(:portfolio) }
     let!(:existing_recurring_contribution) do
       create(:recurring_contribution,
         donor: donor,
+        portfolio: some_other_portfolio,
         deactivated_at: nil,
         last_scheduled_at: 1.day.ago
       )
@@ -93,6 +105,12 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
 
       recurring_contribution = Contributions::GetActiveRecurringContribution.call(donor: donor)
       expect(recurring_contribution.last_scheduled_at).to eq existing_recurring_contribution.reload.last_scheduled_at
+    end
+
+    it "sets the portfolio to the donor's active portfolio" do
+      expect(Portfolios::SelectPortfolio).to receive(:run).with(donor: donor, portfolio: portfolio)
+
+      subject
     end
 
     context 'and the new recurring_contribution is a once-off contribution' do

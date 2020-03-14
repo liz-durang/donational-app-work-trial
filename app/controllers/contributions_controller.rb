@@ -16,10 +16,11 @@ class ContributionsController < ApplicationController
     else
       @view_model = OpenStruct.new(
         target_amount_cents: target_amount_cents,
-        recurring_contribution: new_recurring_donation,
+        recurring_contribution: new_recurring_contribution,
         active_payment_method?: payment_method.present?,
         partner_affiliation: partner_affiliation,
-        partner_affiliation?: partner_affiliation.present?
+        partner_affiliation?: partner_affiliation.present?,
+        selectable_portfolios: selectable_portfolios
       )
     end
   end
@@ -86,10 +87,21 @@ class ContributionsController < ApplicationController
   end
 
   def partner
-    @partner ||= partner_affiliation.try(:partner) || Partners::GetDefaultPartnerByName.call
+    @partner ||= Partners::GetPartnerForDonor.call(donor: current_donor)
   end
 
-  def new_recurring_donation
+  def managed_portfolio?
+    Portfolios::GetPortfolioManager.call(portfolio: active_portfolio).present?
+  end
+
+  def selectable_portfolios
+    portfolios = []
+    portfolios << [active_portfolio.id, 'My personalized portfolio'] unless managed_portfolio?    
+    portfolios += Partners::GetManagedPortfoliosForPartner.call(partner: partner).pluck(:portfolio_id, :name) if partner
+    portfolios
+  end
+
+  def new_recurring_contribution
     RecurringContribution.new(
       donor: current_donor,
       amount_cents: target_amount_cents,

@@ -150,6 +150,6 @@ class CampaignsController < ApplicationController
   end
 
   def managed_portfolios
-    Partners::GetManagedPortfoliosForCampaign.call(partner: partner)
+    Partners::GetManagedPortfoliosForPartner.call(partner: partner)
   end
 end

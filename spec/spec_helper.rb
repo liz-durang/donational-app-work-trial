@@ -95,6 +95,15 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 
+  # config.before(:each) do
+  #   Partner.find_or_create_by(name: Partner::DEFAULT_PARTNER_NAME) do |p|
+  #     p.website_url = 'https://donational.org'
+  #     p.description = 'Donational'
+  #     p.donor_questions_schema = { questions: [] }
+  #     p.payment_processor_account_id = ENV.fetch('DEFAULT_PAYMENT_PROCESSOR_ACCOUNT_ID')
+  #   end
+  # end
+
   config.before(:suite) do
     Capybara::Webmock.start
   end

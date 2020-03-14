@@ -18,7 +18,15 @@ FactoryBot.define do
   factory :partner do
     name { "MyString" }
     website_url { "MyString" }
-    platform_fee_percentage { "9.99" }
+    description { "MyString" }
+    platform_fee_percentage { "2" }
     primary_branding_color { "MyString" }
+    donor_questions_schema { { questions: [] } }
+    payment_processor_account_id { 'acc_123' }
+
+    trait :default do
+      name { Partner::DEFAULT_PARTNER_NAME }
+      website_url { 'https://donational.org' }
+    end
   end
 end

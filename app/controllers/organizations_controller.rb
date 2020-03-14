@@ -10,5 +10,4 @@ class OrganizationsController < ApplicationController
   def recommended_organizations
     Organizations::GetRecommendedOrganizations.call
   end
-
 end

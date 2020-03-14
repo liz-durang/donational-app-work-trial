@@ -18,6 +18,7 @@ default_partner = Partner.find_or_create_by(name: Partner::DEFAULT_PARTNER_NAME)
   p.website_url = 'https://donational.org'
   p.description = 'Donational'
   p.donor_questions_schema = { questions: [] }
+  p.payment_processor_account_id = ENV.fetch('DEFAULT_PAYMENT_PROCESSOR_ACCOUNT_ID')
 end
 
 Partners::UpdateCustomDonorQuestions.run(

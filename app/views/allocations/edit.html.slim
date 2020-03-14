@@ -26,6 +26,4 @@ section.embossed.section
       p.content
         ' Your portfolio is managed by
         strong => @view_model.portfolio_manager_name
-      = render "allocations_table"
-    - else
-      = render "editable_allocations_table"
+    = render "editable_allocations_table"

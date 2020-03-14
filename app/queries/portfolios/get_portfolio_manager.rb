@@ -5,6 +5,8 @@ module Portfolios
     end
 
     def call(portfolio:)
+      return nil unless portfolio
+
       @relation
         .where(portfolio: portfolio)
         .order(:id)

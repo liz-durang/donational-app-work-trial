@@ -4,10 +4,8 @@ class SendContributionReminders < ApplicationJob
   def perform
     remindable_contributions.each do |contribution|
       payment_method = Payments::GetActivePaymentMethod.call(donor: contribution.donor)
-
-      portfolio_manager = Portfolios::GetPortfolioManager.call(portfolio: contribution.portfolio)
-
-      RemindersMailer.send_reminder(contribution, payment_method, portfolio_manager).deliver_now
+      partner = Partners::GetPartnerForDonor.call(donor: contribution.donor)
+      RemindersMailer.send_reminder(contribution, payment_method, partner).deliver_now
 
       contribution.update!(last_reminded_at: Time.zone.now)
     end

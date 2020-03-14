@@ -3,10 +3,8 @@ require 'rails_helper'
 RSpec.describe Contributions::ProcessContribution do
   include ActiveSupport::Testing::TimeHelpers
 
-  around do |example|
-    ClimateControl.modify(DEFAULT_PAYMENT_PROCESSOR_ACCOUNT_ID: 'acc_123') do
-      example.run
-    end
+  before do |example|
+    create(:partner, :default, payment_processor_account_id: 'acc_123', platform_fee_percentage: 0.03)
   end
 
   context 'when the donor has no payment method' do
@@ -133,7 +131,7 @@ RSpec.describe Contributions::ProcessContribution do
             customer_id:            'cus_123',
             account_id:             'acc_123',
             donation_amount_cents:  1_000,
-            platform_fee_cents:     0,
+            platform_fee_cents:     30,
             tips_cents:             200,
             metadata:               metadata)
           .and_return(successful_charge)
@@ -156,8 +154,8 @@ RSpec.describe Contributions::ProcessContribution do
           .to receive(:run)
           .with(
             contribution: contribution,
-            donation_amount_cents: 1_000 - 56 - 0.01 * 1_000)
-          .and_return(double(success?: true))
+            donation_amount_cents: 1_000 - 56 - (0.01 * 1_000) - (0.03 * 1_000)
+          ).and_return(double(success?: true))
 
         command = Contributions::ProcessContribution.run(contribution: contribution)
       end

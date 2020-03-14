@@ -47,13 +47,12 @@ section.section
           li.column.is-4
             = render 'book', organization: organization
             hr
-        - unless @view_model.managed_portfolio?
-          li.column.is-4
-            .book-placeholder
-              h3.subtitle
-                | Want to add another high-impact charity to your portfolio?
-              p: a.button.is-info href=new_allocations_path
-                | Add a charity
+        li.column.is-4
+          .book-placeholder
+            h3.subtitle
+              | Want to add another high-impact charity to your portfolio?
+            p: a.button.is-info href=new_allocations_path
+              | Add a charity
 
   section.section
     .container.has-text-centered.content

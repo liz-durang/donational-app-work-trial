@@ -2,7 +2,7 @@ class ConfirmationsMailer < ApplicationMailer
   def send_confirmation(contribution:, payment_method:, partner:, cancelation:)
     @contribution = contribution
     @payment_method = payment_method
-    @partner_name = partner.try(:name) || "Donational.org"
+    @partner_name = partner.name
     @partner = partner
     @cancelation = cancelation
 

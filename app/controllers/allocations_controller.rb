@@ -9,33 +9,52 @@ class AllocationsController < ApplicationController
   end
 
   def create
-    organization = Organizations::FindOrCreateDonorSuggestedCharity.run!(
-      ein: params[:organization][:ein],
-      name: params[:organization][:name],
-      suggested_by: current_donor
-    )
+    pipeline = Flow.new
+    pipeline.chain { 
+      Organizations::FindOrCreateDonorSuggestedCharity.run(
+        ein: params[:organization][:ein],
+        name: params[:organization][:name],
+        suggested_by: current_donor
+      )  
+    }
+    pipeline.chain { convert_managed_portfolio_into_custom_portfolio! } if managed_portfolio?
+    pipeline.chain {
+      Portfolios::AddOrganizationAndRebalancePortfolio.run(
+        portfolio: active_portfolio,
+        organization: Organizations::GetOrganizationByEin.call(ein: params[:organization][:ein])
+      )
+    }
+    outcome = pipeline.run
 
-    Portfolios::AddOrganizationAndRebalancePortfolio.run!(
-      portfolio: active_portfolio,
-      organization: organization
-    )
+    organization = Organizations::GetOrganizationByEin.call(ein: params[:organization][:ein])
+    
+    if outcome.success?
+      flash[:success] = "#{organization.name} has been added to your portfolio"
+    else
+      flash[:error] = outcome.errors.message_list.join('. ')
+    end
 
-    flash[:success] = "#{organization.name} has been added to your portfolio"
     redirect_to portfolio_path
   end
 
   def update
-    command = Portfolios::UpdateAllocations.run(
-      portfolio: active_portfolio,
-      allocations: params[:allocations].values
-    )
+    pipeline = Flow.new
+    pipeline.chain { convert_managed_portfolio_into_custom_portfolio! } if managed_portfolio?
+    pipeline.chain {
+      Portfolios::UpdateAllocations.run(
+        portfolio: active_portfolio,
+        allocations: params[:allocations].values
+      )
+    }
 
-    if command.success?
+    outcome = pipeline.run
+
+    if outcome.success?
       flash[:success] = 'Allocations saved!'
       redirect_to edit_allocations_path
     else
       @allocations = params[:allocations].values.map { |a| Allocation.new(a) }
-      flash[:error] = command.errors.message_list.join('\n')
+      flash[:error] = outcome.errors.message_list.join('\n')
       render :edit
     end
   end
@@ -45,12 +64,32 @@ class AllocationsController < ApplicationController
 
     @view_model = OpenStruct.new(
       allocations: Portfolios::GetActiveAllocations.call(portfolio: active_portfolio),
-      managed_portfolio?: portfolio_manager.present?,
+      managed_portfolio?: managed_portfolio?,
       portfolio_manager_name: portfolio_manager.try(:name)
     )
   end
 
   private
+
+  def convert_managed_portfolio_into_custom_portfolio!
+    managed_portfolio_allocations = Portfolios::GetActiveAllocations.call(portfolio: active_portfolio)
+    cmd = Portfolios::CreateOrReplacePortfolio.run(donor: current_donor)
+
+    if cmd.success?
+      Portfolios::UpdateAllocations.run!(
+        portfolio: active_portfolio,
+        allocations: managed_portfolio_allocations.as_json(only: [:organization_ein, :percentage])
+      )
+
+      active_recurring_contribution.update!(portfolio: active_portfolio) if active_recurring_contribution
+    end
+
+    cmd
+  end
+
+  def managed_portfolio?
+    portfolio_manager.present?
+  end
 
   def portfolio_manager
     @portfolio_manager ||= Portfolios::GetPortfolioManager.call(portfolio: active_portfolio)
@@ -61,6 +100,10 @@ class AllocationsController < ApplicationController
   end
 
   def active_portfolio
-    @active_portfolio ||= Portfolios::GetActivePortfolio.call(donor: current_donor)
+    Portfolios::GetActivePortfolio.call(donor: current_donor)
+  end
+
+  def active_recurring_contribution
+    Contributions::GetActiveRecurringContribution.call(donor: current_donor)
   end
 end
