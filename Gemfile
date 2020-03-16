@@ -72,6 +72,7 @@ gem 'elasticsearch', '~> 6.0'
 gem 'faraday'
 
 group :development, :test do
+  gem 'bullet'
   gem 'byebug', platform: :mri
   gem 'pry'
   gem 'dotenv-rails'
