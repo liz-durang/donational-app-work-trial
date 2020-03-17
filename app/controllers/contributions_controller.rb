@@ -65,7 +65,7 @@ class ContributionsController < ApplicationController
       frequency: frequency,
       amount_cents: amount_cents,
       tips_cents: tips_cents,
-      start_at: start_at.presence,
+      start_at: start_at,
       partner_contribution_percentage: 0
     )
   end
@@ -142,6 +142,7 @@ class ContributionsController < ApplicationController
   end
 
   def start_at
-    params[:recurring_contribution][:start_at]
+    start_at_param = params.dig(:recurring_contribution, :start_at)
+    Time.zone.parse(start_at_param) if start_at_param
   end
 end

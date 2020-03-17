@@ -78,13 +78,14 @@ group :development, :test do
   gem 'dotenv-rails'
   gem 'factory_bot_rails'
   gem 'rspec-rails'
-  gem 'rubocop-rspec'
 end
 
 group :development do
   gem 'annotate', require: false
   gem 'listen', '~> 3.0.5'
   gem 'rubocop', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen', '~> 2.0.0'

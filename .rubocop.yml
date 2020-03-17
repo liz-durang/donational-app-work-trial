@@ -1,12 +1,14 @@
+require:
+  - rubocop-rspec
+  - rubocop-rails
+
 AllCops:
   Exclude:
     - db/schema.rb
     - db/migrate/*
     - bin/*
-    - vendor/*
-    - node_modules/*
-Rails:
-  Enabled: true
+    - vendor/**/*
+    - node_modules/**/*
 
 Style/Documentation:
   Enabled: false

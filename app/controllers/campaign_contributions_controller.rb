@@ -65,7 +65,7 @@ class CampaignContributionsController < ApplicationController
       partner: partner,
       amount_cents: params[:campaign_contribution][:amount_dollars].to_i * 100,
       frequency: params[:campaign_contribution][:frequency],
-      start_at: params[:campaign_contribution][:start_at].presence,
+      start_at: start_at,
       tips_cents: 0,
       partner_contribution_percentage: params[:campaign_contribution][:partner_contribution_percentage].to_i
     )
@@ -85,6 +85,11 @@ class CampaignContributionsController < ApplicationController
 
   def payment_token
     params[:campaign_contribution][:payment_token]
+  end
+
+  def start_at
+    start_at_param = params.dig(:campaign_contribution, :start_at)
+    Time.zone.parse(start_at_param) if start_at_param
   end
 
   def custom_question_responses

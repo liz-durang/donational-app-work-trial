@@ -18,7 +18,7 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
       amount_cents: 8000,
       tips_cents: 100,
       frequency: :annually,
-      start_at: '2000-01-01'
+      start_at: Time.zone.parse('2000-01-01')
     }
   end
   let(:other_donor) { create(:donor) }
@@ -122,7 +122,7 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
           amount_cents: 8000,
           tips_cents: 100,
           frequency: :once,
-          start_at: '2000-01-01'
+          start_at: Time.zone.parse('2000-01-01')
         }
       end
 
