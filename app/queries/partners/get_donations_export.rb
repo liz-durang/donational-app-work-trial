@@ -12,7 +12,7 @@ module Partners
         .left_joins(:organization)
         .left_joins(portfolio: [:managed_portfolio])
         .left_joins(contribution: { donor: { partner_affiliations: [:partner, :campaign] } })
-        .where(contributions: { donor: PartnerAffiliation.where(partner: partner).pluck(:donor_id) })
+        .where(contributions: { donor: PartnerAffiliation.where(partner: partner).select(:donor_id) })
         .select(
           'donors.id as donor_id',
           :first_name,

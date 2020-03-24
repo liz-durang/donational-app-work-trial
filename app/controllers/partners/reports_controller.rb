@@ -23,16 +23,25 @@ module Partners
     end
 
     def donations
-      start_date = Date.parse(params[:start_at])
-      end_date = Date.parse(params[:end_at])
-      filename = "#{partner.name.parameterize}-donations-#{start_date.iso8601}-to-#{end_date.iso8601}.csv"
       respond_to do |format|
         format.csv do
           donations = Partners::GetDonationsExport.call(
             partner: partner,
-            donated_between: start_date.at_beginning_of_day..end_date.at_end_of_day
+            donated_between: donated_between
           )
-          stream_sql_data_as_csv(donations.to_sql, filename: filename)
+          stream_sql_data_as_csv(donations.to_sql, filename: filename_with_timeframe)
+        end
+      end
+    end
+
+    def organizations
+      respond_to do |format|
+        format.csv do
+          donations = Partners::GetOrganizationsExport.call(
+            partner: partner,
+            donated_between: donated_between
+          )
+          stream_sql_data_as_csv(donations.to_sql, filename: filename_with_timeframe)
         end
       end
     end
@@ -48,6 +57,22 @@ module Partners
 
     def partner
       @partner ||= Partners::GetPartnerById.call(id: params[:partner_id])
+    end
+
+    def donated_between
+      start_date.at_beginning_of_day..end_date.at_end_of_day
+    end
+
+    def start_date
+      Date.parse(params[:start_at])
+    end
+
+    def end_date
+      Date.parse(params[:end_at])
+    end
+
+    def filename_with_timeframe
+      "#{partner.name.parameterize}-#{action_name}-#{start_date.iso8601}-to-#{end_date.iso8601}.csv"
     end
 
     def stream_sql_data_as_csv(sql_query, filename:)

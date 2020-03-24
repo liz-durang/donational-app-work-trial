@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       collection do
         get 'donors', format: :csv
         get 'donations', format: :csv
+        get 'organizations', format: :csv
       end
     end
   end

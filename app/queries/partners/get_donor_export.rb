@@ -26,6 +26,7 @@ module Partners
           'start_at AS donations_start_at',
           'recurring_contributions.created_at AS plan_updated_at',
           'recurring_contributions.deactivated_at AS plan_cancelled_at',
+          'recurring_contributions.partner_contribution_percentage AS partner_contribution_percentage',
           *custom_donor_fields_for(partner)
         )
         .order('donors.created_at')

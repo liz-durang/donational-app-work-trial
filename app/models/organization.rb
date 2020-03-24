@@ -31,7 +31,7 @@ class Organization < ApplicationRecord
   self.primary_key = 'ein'
 
   has_many :grants, foreign_key: 'organization_ein'
-  has_many :donations
+  has_many :donations, foreign_key: 'organization_ein'
 
   belongs_to :suggested_by_donor, class_name: 'Donor', foreign_key: 'suggested_by_donor_id', required: false
 

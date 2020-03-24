@@ -26,8 +26,8 @@ section.embossed.section
       p = link_to donors_partner_reports_path(format: :csv), class: 'button' do
         = icon_tag('fa-download')
         span Export
-      h2 Donations
-      form.form action=donations_partner_reports_path(format: :csv) method='get'
+      hr.hr style='background-color: gray;'
+      form.form method='get'
         .field.is-grouped
           .control
             label.field.has-addons
@@ -43,8 +43,19 @@ section.embossed.section
               .control.has-icons-left
                 = icon_tag('fas fa-calendar')
                 input.input type='date' name='end_at' max=Date.today.iso8601 value=Date.today.iso8601 size=10
-          .control
+        .columns
+          .column
+            h2 Donations
+            .control
+              .field
+                button.button type='submit' formaction=donations_partner_reports_path(format: :csv)
+                  = icon_tag('fa-download')
+                  span Export for specified timeframe
+          .column
+            h2 Organizations
             .field
-              button.button type='submit'
-                = icon_tag('fa-download')
-                span Export
+              .control
+                .field
+                  button.button type='submit' formaction=organizations_partner_reports_path(format: :csv)
+                    = icon_tag('fa-download')
+                    span Export for specified timeframe
