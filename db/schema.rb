@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_20_155322) do
+ActiveRecord::Schema.define(version: 2020_03_24_161151) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -147,6 +147,10 @@ ActiveRecord::Schema.define(version: 2020_03_20_155322) do
     t.string "contribution_frequency"
     t.integer "portfolio_diversity"
     t.string "entity_name"
+    t.string "type"
+    t.string "title"
+    t.string "house_name_or_number"
+    t.string "postcode"
     t.index ["username"], name: "index_donors_on_username", unique: true
   end
 
@@ -308,6 +312,8 @@ ActiveRecord::Schema.define(version: 2020_03_20_155322) do
     t.string "revenue_amt"
     t.string "ntee_cd"
     t.string "sort_name"
+    t.index ["ein"], name: "index_searchable_organizations_on_ein", unique: true
+    t.index ["name"], name: "index_searchable_organizations_on_name"
   end
 
   create_table "selected_portfolios", force: :cascade do |t|
