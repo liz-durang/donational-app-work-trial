@@ -20,6 +20,7 @@ RSpec.describe Payments::ChargeCustomer do
       cvc: '999'
     }
   end
+  let(:currency) { 'usd' }
 
   before do
     Payments::CreateCustomer.run
@@ -42,7 +43,8 @@ RSpec.describe Payments::ChargeCustomer do
           email: email,
           donation_amount_cents: 100,
           tips_cents: 23,
-          platform_fee_cents: 2
+          platform_fee_cents: 2,
+          currency: currency
         )
 
         expect(command).to be_success
@@ -60,7 +62,8 @@ RSpec.describe Payments::ChargeCustomer do
           customer_id: customer_id,
           account_id: account_id,
           email: email,
-          donation_amount_cents: 100
+          donation_amount_cents: 100,
+          currency: currency
         )
 
         expect(command).not_to be_success
@@ -69,22 +72,26 @@ RSpec.describe Payments::ChargeCustomer do
     end
   end
 
-  context 'when the customer id, account id and email are not supplied' do
+  context 'when the customer id, account id, currency and email are not supplied' do
     let(:customer_id) { '' }
     let(:account_id) { '' }
     let(:email) { '' }
+    let(:currency) { '' }
 
     it 'fails with errors' do
       command = Payments::ChargeCustomer.run(
         customer_id: customer_id,
         account_id: account_id,
         email: email,
-        donation_amount_cents: 100)
+        donation_amount_cents: 100, 
+        currency: currency
+      )
 
       expect(command).not_to be_success
       expect(command.errors.symbolic).to include(customer_id: :empty)
       expect(command.errors.symbolic).to include(account_id: :empty)
       expect(command.errors.symbolic).to include(email: :empty)
+      expect(command.errors.symbolic).to include(currency: :empty)
     end
   end
 

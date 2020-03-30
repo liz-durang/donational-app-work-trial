@@ -7,6 +7,7 @@ module Payments
       string  :account_id,  empty: false
       string  :email,       empty: false
       integer :donation_amount_cents
+      string  :currency, empty: false 
     end
 
     optional do
@@ -37,7 +38,7 @@ module Payments
             source:           token.id,
             amount:           donation_amount_cents + tips_cents,
             application_fee:  platform_fee_cents + tips_cents,
-            currency:         'usd',
+            currency:         currency,
             expand:           ['balance_transaction'],
             metadata:         metadata
           },

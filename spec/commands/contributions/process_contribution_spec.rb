@@ -49,8 +49,10 @@ RSpec.describe Contributions::ProcessContribution do
     let(:payment_method_query_result) { double(payment_processor_customer_id: 'cus_123', last4: '4242') }
 
     let(:portfolio) { create(:portfolio) }
+    let(:currency) { 'usd' }
     let(:contribution) do
-      create(:contribution, donor: donor, portfolio: portfolio, amount_cents: 1_000, tips_cents: 200, processed_at: nil)
+      create(:contribution, donor: donor, portfolio: portfolio,
+        amount_cents: 1_000, tips_cents: 200, processed_at: nil, amount_currency: currency)
     end
     let(:org_1) { create(:organization, ein: 'org1') }
     let(:org_2) { create(:organization, ein: 'org2') }
@@ -133,7 +135,8 @@ RSpec.describe Contributions::ProcessContribution do
             donation_amount_cents:  1_000,
             platform_fee_cents:     30,
             tips_cents:             200,
-            metadata:               metadata)
+            metadata:               metadata,
+            currency:               currency)
           .and_return(successful_charge)
         expect(Analytics::TrackEvent).to receive(:run).and_return(successful_track_event)
 

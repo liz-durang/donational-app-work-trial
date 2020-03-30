@@ -24,5 +24,7 @@ FactoryBot.define do
     amount_cents { 1 }
     tips_cents { 1 }
     start_at { Time.zone.now }
+    amount_currency { 'usd' }
+    payment_processor_account_id { 'acc_123' }
   end
 end

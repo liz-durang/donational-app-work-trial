@@ -44,7 +44,9 @@ RSpec.describe Contributions::ScheduleContribution do
           external_reference_id: nil,
           processed_at: nil,
           receipt: nil,
-          partner_contribution_percentage: 0
+          partner_contribution_percentage: 0,
+          amount_currency: partner.currency,
+          payment_processor_account_id: partner.payment_processor_account_id
         )
 
       command = Contributions::ScheduleContribution.run(params)

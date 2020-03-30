@@ -90,7 +90,8 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
         ],
       },
       operating_costs_text: "For every $1 donated to One for the World, we raise $12 for effective charities. Please select here if you are happy for some of your donations to go to One for the World.",
-      operating_costs_organization: one_for_the_world_operating_costs_charity
+      operating_costs_organization: one_for_the_world_operating_costs_charity,
+      payment_processor_account_id: 'acc_123'
     )
 
     Campaign.create(

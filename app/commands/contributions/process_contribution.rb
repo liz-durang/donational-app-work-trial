@@ -30,10 +30,11 @@ module Contributions
       }
       Payments::ChargeCustomer.run(
         customer_id:            payment_method.payment_processor_customer_id,
-        account_id:             payment_processor_account_id,
+        account_id:             payment_processor_account_id || contribution.payment_processor_account_id,
         email:                  contribution.donor.email,
         donation_amount_cents:  contribution.amount_cents,
         tips_cents:             contribution.tips_cents,
+        currency:               contribution.amount_currency,
         platform_fee_cents:     payment_fees.platform_fee_cents,
         metadata:               metadata
       ).tap do |command|

@@ -53,6 +53,7 @@ RSpec.describe 'Partner creates managed portfolio', type: :feature do
     @partner = Partner.create(
       name: 'One for the World',
       platform_fee_percentage: 0.02,
+      payment_processor_account_id: 'acc_123',
       donor_questions_schema: {
         questions: [
           {

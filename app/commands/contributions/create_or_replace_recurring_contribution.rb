@@ -21,7 +21,6 @@ module Contributions
         # ensure we don't force a new donation when donor updates their plan settings
         most_recent_last_scheduled_at = previous_plans_most_recent_scheduled_at
         deactivate_existing_recurring_contributions!
-
         recurring_contribution = RecurringContribution.create!(
           donor: donor,
           portfolio: portfolio,
@@ -31,7 +30,9 @@ module Contributions
           amount_cents: amount_cents,
           tips_cents: tips_cents,
           last_scheduled_at: frequency == :once ? nil : most_recent_last_scheduled_at,
-          partner_contribution_percentage: partner_contribution_percentage
+          partner_contribution_percentage: partner_contribution_percentage,
+          amount_currency: partner.currency,
+          payment_processor_account_id: partner.payment_processor_account_id
         )
 
         Portfolios::SelectPortfolio.run(donor: donor, portfolio: portfolio)

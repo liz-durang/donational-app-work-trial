@@ -45,7 +45,9 @@ module Contributions
         external_reference_id: external_reference_id,
         processed_at: processed_at,
         receipt: receipt,
-        partner_contribution_percentage: partner_contribution_percentage
+        partner_contribution_percentage: partner_contribution_percentage,
+        amount_currency: partner.currency,
+        payment_processor_account_id: partner.payment_processor_account_id
       )
     end
 

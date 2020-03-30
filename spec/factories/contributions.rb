@@ -25,6 +25,8 @@ FactoryBot.define do
     partner
     amount_cents { 123 }
     tips_cents { 2 }
+    amount_currency { 'usd' }
+    payment_processor_account_id { 'acc_123' }
     scheduled_at { 1.day.ago }
     processed_at { nil }
 

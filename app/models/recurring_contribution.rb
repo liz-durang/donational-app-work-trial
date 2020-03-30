@@ -19,6 +19,7 @@ class RecurringContribution < ApplicationRecord
   belongs_to :donor
   belongs_to :portfolio
   belongs_to :partner
+  validates :amount_currency, :payment_processor_account_id, presence: true
 
   extend Enumerize
   enumerize :frequency, in: %w[monthly quarterly annually once], predicates: true
