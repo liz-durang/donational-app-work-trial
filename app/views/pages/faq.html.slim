@@ -49,7 +49,8 @@ section.section
     .columns
       h3.column.is-4 How much does each charity in my portfolio get?
       .column.is-offset-1
-        p You can split your overall donation across your selected charities as you see fit. For example, if you have a $100 monthly donation and 4 charities in your portfolio, the allocation can be 20%/10%/50%/20%
+        p = "You can split your overall donation across your selected charities as you see fit." \
+         "For example, if you have a #{Money.from_amount(100, @view_model.currency).format(no_cents_if_whole: true)} monthly donation and 4 charities in your portfolio, the allocation can be 20%/10%/50%/20%"
     hr
     .columns
       h3.column.is-4 Can I add or remove charities to my portfolio?

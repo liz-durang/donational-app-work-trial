@@ -1,9 +1,10 @@
 form data-behavior-auto-submit=true
   .column.is-6.is-offset-3
     .field.has-addons
-      p.control.has-icons-left
+      p.control
+        .button.is-static.is-medium = currency.iso_code
+      p.control
         input.input.is-info.is-medium type='text' name='response'
-        span.icon.is-left.is-medium $
       p.control
         button.button.is-medium.is-primary type='submit' Send
 

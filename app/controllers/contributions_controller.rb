@@ -6,7 +6,8 @@ class ContributionsController < ApplicationController
     @view_model = OpenStruct.new(
       contributions: Contributions::GetContributions.call(donor: current_donor),
       first_contribution: Contributions::GetFirstContribution.call(donor: current_donor),
-      recurring_contribution: active_recurring_contribution
+      recurring_contribution: active_recurring_contribution,
+      currency: current_currency
     )
   end
 
@@ -20,7 +21,10 @@ class ContributionsController < ApplicationController
         active_payment_method?: payment_method.present?,
         partner_affiliation: partner_affiliation,
         partner_affiliation?: partner_affiliation.present?,
-        selectable_portfolios: selectable_portfolios
+        selectable_portfolios: selectable_portfolios,
+        currency_code: current_currency.iso_code,
+        amount_cents: new_recurring_contribution.amount_cents,
+        tips_options: tips_options
       )
     end
   end
@@ -49,6 +53,15 @@ class ContributionsController < ApplicationController
   end
 
   private
+
+  def tips_options
+    [0, 200, 500, 1000].map do |amount|
+      [
+        amount,
+        Money.new(amount, current_currency).format(no_cents_if_whole: true, display_free: 'No tip')
+      ]
+    end
+  end
 
   def update_donor_payment_method!
     Payments::UpdatePaymentMethod.run(
@@ -96,7 +109,7 @@ class ContributionsController < ApplicationController
 
   def selectable_portfolios
     portfolios = []
-    portfolios << [active_portfolio.id, 'My personalized portfolio'] unless managed_portfolio?    
+    portfolios << [active_portfolio.id, 'My personalized portfolio'] if active_portfolio && !managed_portfolio?
     portfolios += Partners::GetManagedPortfoliosForPartner.call(partner: partner).pluck(:portfolio_id, :name) if partner
     portfolios
   end

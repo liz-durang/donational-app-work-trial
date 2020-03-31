@@ -6,7 +6,7 @@ RSpec.describe ContributionsSummaryMailer, type: :mailer do
       {
         contributions: contributions,
         year: 2018,
-        donor: build(:donor, first_name: 'Joe', last_name: 'Donator', email: 'donor@example.org'),
+        donor: create(:donor, first_name: 'Joe', last_name: 'Donator', email: 'donor@example.org'),
         partner: partner
       }
     end
@@ -15,17 +15,20 @@ RSpec.describe ContributionsSummaryMailer, type: :mailer do
     let(:amf) { create(:organization, name: 'Against Malaria Foundation') }
     let(:gd) { create(:organization, name: 'Give Directly') }
     let(:end_fund) { create(:organization, name: 'The End Fund') }
+    let(:dollars) { Money::Currency.new('usd') }
+    let(:pounds) { Money::Currency.new('gbp') }
+    let(:partner) { create(:partner, name: 'Example Partner', currency: currency.iso_code) }
+    let(:contributions) do
+      [
+        create(:contribution_with_donations_to_organizations, amount_cents: 1000, tips_cents: 0, processed_at: Date.new(2018, 2, 10), organizations: [gd, amf]),
+        create(:contribution_with_donations_to_organizations, amount_cents: 1625, tips_cents: 0, processed_at: Date.new(2018, 10, 1), organizations: [gd]),
+        create(:contribution_with_donations_to_organizations, amount_cents: 1525, tips_cents: 0, processed_at: Date.new(2018, 7, 1), organizations: [end_fund]),
+        create(:contribution_with_donations_to_organizations, amount_cents: 1100, tips_cents: 0, processed_at: Date.new(2018, 4, 1), organizations: [gd, amf])
+      ]
+    end
 
-    context "when the donor is affiliated with a Partner" do
-      let(:partner) { build(:partner, name: 'Example Partner') }
-      let(:contributions) do
-        [
-          create(:contribution_with_donations_to_organizations, amount_cents: 1000, tips_cents: 0, processed_at: Date.new(2018, 2, 10), organizations: [gd, amf]),
-          create(:contribution_with_donations_to_organizations, amount_cents: 1625, tips_cents: 0, processed_at: Date.new(2018, 10, 1), organizations: [gd]),
-          create(:contribution_with_donations_to_organizations, amount_cents: 1525, tips_cents: 0, processed_at: Date.new(2018, 7, 1), organizations: [end_fund]),
-          create(:contribution_with_donations_to_organizations, amount_cents: 1100, tips_cents: 0, processed_at: Date.new(2018, 4, 1), organizations: [gd, amf])
-        ]
-      end
+    context "when the donor is affiliated with US Partner" do
+      let(:currency) { dollars }
 
       it "renders the headers" do
         expect(mail.subject).to eq("It's Tax-Time! Here is your Example Partner contribution summary for 2018")
@@ -36,7 +39,9 @@ RSpec.describe ContributionsSummaryMailer, type: :mailer do
       it "renders the body" do
         expect(mail.body.encoded).to include("Your 2018 contributions to your Example Partner charity portfolio")
         expect(mail.body.encoded).to include("Hey Joe,")
-        expect(mail.body.encoded).to include("In 2018, you donated a total of <b>$52.50</b> to your Example Partner portfolio!")
+        expect(mail.body.encoded).to include(
+          "In 2018, you donated a total of <b>#{Money.new(5250, currency).format}</b> to your Example Partner portfolio!"
+        )
 
         expect(mail.body.encoded).to match(
           Regexp.new(
@@ -62,41 +67,13 @@ RSpec.describe ContributionsSummaryMailer, type: :mailer do
       end
     end
 
-    context "when the donor not affiliated with a Partner" do
-      let(:partner) { nil }
-      let(:contributions) do
-        [
-          build(:contribution, amount_cents: 1000, tips_cents: 100, processed_at: Time.new(2018, 12, 31, 1), organizations: [amf]),
-          build(:contribution, amount_cents: 2000, tips_cents: 0, processed_at: Time.new(2018, 12, 31, 4), organizations: [amf]),
-        ]
-      end
-
-      it "renders the headers" do
-        expect(mail.subject).to eq("It's Tax-Time! Here is your Donational.org contribution summary for 2018")
-        expect(mail.to).to eq(["donor@example.org"])
-        expect(mail.from).to eq(["receipts@donational.org"])
-      end
+    context "when the donor is affiliated with UK Partner" do
+      let(:currency) { pounds }
 
       it "renders the body" do
-        expect(mail.body.encoded).to include("Your 2018 contributions to your Donational.org charity portfolio")
-        expect(mail.body.encoded).to include("Hey Joe,")
-        expect(mail.body.encoded).to include("In 2018, you donated a total of <b>$31.00</b> to your Donational.org portfolio!")
-
-        expect(mail.body.encoded).to match(
-          Regexp.new(
-            [
-              "Date: December 31st, 2018",
-              "\\$11.00",
-              "Date: December 31st, 2018",
-              "\\$20.00"
-            ].join('.*')
-          )
+        expect(mail.body.encoded).to include(
+          "In 2018, you donated a total of <b>#{Money.new(5250, currency).format}</b> to your Example Partner portfolio!"
         )
-      end
-
-      it "displays a summary of all the organizations a donor contributed to" do
-        expect(mail.body.encoded).to include("Your contributions in 2018 supported 1 charity:")
-        expect(mail.body.encoded).to include("Against Malaria Foundation")
       end
     end
   end

@@ -39,7 +39,8 @@ class PortfoliosController < ApplicationController
       recurring_contribution: active_recurring_contribution,
       first_contribution: Contributions::GetFirstContribution.call(donor: current_donor),
       show_modal: params[:show_modal].to_s == 'true',
-      show_blank_state: active_portfolio.blank?
+      show_blank_state: active_portfolio.blank?,
+      currency: current_currency
     )
   end
 

@@ -9,7 +9,7 @@
             br
             p
               ' You have an income of
-              strong> = cents_to_currency(current_donor.annual_income_cents, precision: 0)
+              strong> = Money.new(current_donor.annual_income_cents, @view_model.currency).format(no_cents_if_whole: true)
               ' and pledged to give
               strong
                 = current_donor.donation_rate * 100
@@ -23,4 +23,4 @@
               - else @view_model.recurring_contribution.monthly?
                 ' monthly
               ' contribution is
-              strong> = cents_to_currency(@view_model.target_amount_cents, precision: 0)
+              strong> = Money.new(@view_model.target_amount_cents, @view_model.currency).format(no_cents_if_whole: true)

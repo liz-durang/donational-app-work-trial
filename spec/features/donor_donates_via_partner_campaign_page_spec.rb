@@ -71,6 +71,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     
     partner = Partner.create(
       name: 'One for the World',
+      currency: 'usd',
       platform_fee_percentage: 0.02,
       donor_questions_schema: {
         questions: [

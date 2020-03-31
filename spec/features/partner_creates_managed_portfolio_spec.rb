@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Partner creates managed portfolio', type: :feature do
   before do
+    create_default_partner!
     create_new_partner!
     create_organizations!
   end
@@ -49,9 +50,14 @@ RSpec.describe 'Partner creates managed portfolio', type: :feature do
     visit auth_oauth2_callback_path
   end
 
+  def create_default_partner!
+    create(:partner, :default)
+  end
+
   def create_new_partner!
     @partner = Partner.create(
       name: 'One for the World',
+      currency: 'usd',
       platform_fee_percentage: 0.02,
       payment_processor_account_id: 'acc_123',
       donor_questions_schema: {

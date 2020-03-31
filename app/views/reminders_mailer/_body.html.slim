@@ -1,12 +1,12 @@
 h4
   = t @contribution.frequency, scope: :reminder_next_contribution, \
-    amount: number_to_currency(@contribution.amount_dollars), \
+    amount: Money.new(@contribution.amount_cents, @currency).format, \
     date: @contribution.created_at.strftime("%Y/%m/%d"), \
     partner_name: @partner_name
 
 h4
   => t @contribution.frequency, scope: :next_contribution, \
-    amount: number_to_currency(@contribution.amount_dollars), \
+    amount: Money.new(@contribution.amount_cents, @currency).format, \
     date: humanized_date(@contribution.start_at)
   ' On this date, we will charge your registered credit card.
   ' Once the donation is processed, we will send you a tax-deductible email receipt for your records.
@@ -18,7 +18,7 @@ table border="0" cellpadding="0" cellspacing="0" width="100%"
         ' Donation to
         = @partner_name
     td align="right"
-      b = number_to_currency(@contribution.amount_dollars)
+      b = Money.new(@contribution.amount_cents, @currency).format
   tr.summary-item
     td colspan="2"
       ' Name:

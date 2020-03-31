@@ -4,8 +4,11 @@ class ContributionsSummaryMailer < ApplicationMailer
     @organizations = @contributions.flat_map { |c| c.organizations }.uniq
     @total_contributions_cents = @contributions.sum(&:total_charges_cents)
     @year = params[:year]
-    @partner_name = params[:partner].try(:name) || "Donational.org"
+    partner = params[:partner]
+    @partner_name = partner.try(:name) || "Donational.org"
     @donor = params[:donor]
+    currency = Partners::GetPartnerForDonor.call(donor: @donor)&.currency || partner.try(:currency)
+    @currency = Money::Currency.new(currency)
 
     Time.use_zone(@donor.time_zone) do
       mail(

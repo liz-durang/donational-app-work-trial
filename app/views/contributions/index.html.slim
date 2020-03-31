@@ -49,11 +49,13 @@ section.section.embossed
                   | ago
               td.has-text-right
                 - if contribution.refunded_at?
-                  strong> style="text-decoration: line-through;" = cents_to_currency(contribution.total_charges_cents)
+                  strong> style="text-decoration: line-through;"
+                    = Money.new(contribution.total_charges_cents, @view_model.currency).format(with_currency: true)
                   br
                   .tag refunded
                 - else
-                  strong> = cents_to_currency(contribution.total_charges_cents)
+                  strong>
+                    = Money.new(contribution.total_charges_cents, @view_model.currency).format(with_currency: true)
                   br
                   - if contribution.processed_at?
                     ' to
@@ -65,7 +67,7 @@ section.section.embossed
                 td.has-text-right colspan=2
                   em => donation.organization.name
                 td.has-text-right
-                  em = cents_to_currency(donation.amount_cents)
+                  em = Money.new(donation.amount_cents, @view_model.currency).format(with_currency: true)
                 td &nbsp;
             - if contribution.tips_cents > 0
               tr.is-hidden data-accordion-panel-for="contribution-#{contribution.id}"
@@ -74,7 +76,7 @@ section.section.embossed
                   br
                   small Thanks for helping us grow!
                 td.has-text-right
-                  em = cents_to_currency(contribution.total_charges_cents)
+                  em = Money.new(contribution.total_charges_cents,  @view_model.currency).format(with_currency: true)
                 td &nbsp;
 section.section
   .container.content.has-text-centered style="max-width: 40rem;"

@@ -4,6 +4,7 @@ class PaymentMethodsMailer < ApplicationMailer
     @payment_method = payment_method
     @partner_name = partner.name
     @partner = partner
+    @currency = partner.currency
 
     Time.use_zone(contribution.donor.time_zone) do
       mail(

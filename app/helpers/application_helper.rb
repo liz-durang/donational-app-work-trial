@@ -59,12 +59,6 @@ module ApplicationHelper
     end.compact.reduce(:+)
   end
 
-  def cents_to_currency(cents, precision: 2)
-    return '' unless cents
-
-    number_to_currency(cents / 100.0, precision: precision)
-  end
-
   def cents_to_dollars(cents)
     return if cents.blank?
 

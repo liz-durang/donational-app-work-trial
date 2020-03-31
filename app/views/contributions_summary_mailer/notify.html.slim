@@ -14,7 +14,7 @@ p
   ' In
   = @year
   ' , you donated a total of
-  b => cents_to_currency(@total_contributions_cents)
+  b => Money.new(@total_contributions_cents, @currency).format
   ' to your
   => @partner_name
   | portfolio!
@@ -39,7 +39,7 @@ table border="0" cellpadding="0" cellspacing="0" width="100%"
             ' Receipt #
             = contribution.id
         td align="right"
-          b = cents_to_currency(contribution.total_charges_cents)
+          b = Money.new(contribution.total_charges_cents, @currency).format
 
 p
   ' Your contributions in

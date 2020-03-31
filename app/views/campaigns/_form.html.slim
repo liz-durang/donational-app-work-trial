@@ -23,7 +23,7 @@
     label.field
       .label Donation hint text
       .control
-        = f.text_field :contribution_amount_help_text, class: :input, placeholder: 'e.g. Our average donor gives $100 monthly (1% of their income)', value: @view_model.campaign.contribution_amount_help_text
+        = f.text_field :contribution_amount_help_text, class: :input, placeholder: "e.g. Our average donor gives #{Money.from_amount(100, @view_model.currency).format(no_cents_if_whole: true)} monthly (1% of their income)", value: @view_model.campaign.contribution_amount_help_text
       p.help Use this to educate donors about suggested amounts
   .column.is-6
     label.field

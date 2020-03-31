@@ -91,15 +91,15 @@
           .field.is-grouped.is-grouped-multiline
             - @view_model.default_contribution_amounts.each do |amount|
               a.control.button.is-expanded href='#' data-target='radio-select.button' data-action='radio-select#select' data-radio-select-value=amount
-                = number_to_currency(amount, precision: 0)
+                = Money.from_amount(amount.to_i, @view_model.currency).format(no_cents_if_whole: true)
           .field.has-addons
             .control
-              .button.is-static.is-medium Your donation:
-            .control.has-icons-left.is-expanded
+              .button.is-static.is-medium  = @view_model.currency.iso_code
+            .control.is-expanded
               = f.number_field :amount_dollars,
                 class: %w(input is-medium),
+                placeholder: 'Your donation amount',
                 data: { controller: 'integer-field', target: 'radio-select.output wizard.required_field_3', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection keypress->integer-field#allowKeypressWhenInteger' }
-              span.icon.is-left $
               span.help.display-when-errors This field is required
           p.help = @view_model.contribution_amount_help_text
         .field

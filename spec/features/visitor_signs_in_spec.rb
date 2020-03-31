@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Visitor signs in', type: :feature do
   scenario 'with valid credentials', js: true do
+    create(:partner, :default)
     visit root_path
     expect(page).to have_content('Sign in')
     sign_in_as!(first_name: 'Donny', last_name: 'Donator')

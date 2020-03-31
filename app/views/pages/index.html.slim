@@ -67,7 +67,10 @@ section.is-large.hero.has-background
 section.section.is-medium
   .container
     p.title The power of many.
-    p.subtitle.is-4 Give $1 or $1000, we can make a real impact together.
+    p.subtitle.is-4
+      ' Give #{Money.from_amount(1, @view_model.currency_code).format(no_cents_if_whole: true)} or
+      ' #{Money.from_amount(1000, @view_model.currency_code).format(no_cents_if_whole: true)},
+      | we can make a real impact together.
     .columns
       .column
         .tile.is-ancestor

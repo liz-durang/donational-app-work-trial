@@ -2,7 +2,8 @@
 # with its default values. The data can then be loaded with the
 # rails db:seed command (or created alongside the database with db:setup).
 
-one_for_the_world_charity = Organization.create(name: 'OFTW Operating Costs', ein: '84-2124550')
+one_for_the_world_charity = Organization.find_or_create_by(name: 'OFTW Operating Costs', ein: '84-2124550')
+one_for_the_world_uk_charity = Organization.find_or_create_by(name: 'OFTW UK Operating Costs', ein: '11-1111111')
 
 one_for_the_world = Partner.find_or_create_by(name: 'One For The World') do |p|
   p.website_url = 'http://1fortheworld.org'
@@ -12,6 +13,18 @@ one_for_the_world = Partner.find_or_create_by(name: 'One For The World') do |p|
   p.donor_questions_schema = { questions: [] }
   p.operating_costs_text = "For every $1 donated to One for the World, we raise $12 for effective charities. Please select here if you are happy for some of your donations to go to One for the World."
   p.operating_costs_organization = one_for_the_world_charity
+  p.currency = 'USD'
+end
+
+uk_partner = Partner.find_or_create_by(name: 'UK Partner') do |p|
+  p.website_url = 'http://example.org'
+  p.platform_fee_percentage = 0.02
+  p.payment_processor_account_id = '123456789'
+  p.description = "1% of the developed world's income can eliminate extreme poverty. Let it start with you."
+  p.donor_questions_schema = { questions: [] }
+  p.operating_costs_text = "For every £1 donated to UK Partner, we raise £12 for effective charities. Please select here if you are happy for some of your donations to go to One for the World."
+  p.operating_costs_organization = one_for_the_world_uk_charity
+  p.currency = 'GBP'
 end
 
 default_partner = Partner.find_or_create_by(name: Partner::DEFAULT_PARTNER_NAME) do |p|
@@ -40,12 +53,42 @@ Partners::UpdateCustomDonorQuestions.run(
   ]
 )
 
+Partners::UpdateCustomDonorQuestions.run(
+  partner: uk_partner,
+  donor_questions: [
+    Partner::DonorQuestion.new(
+      name: 'school',
+      title: 'What organization/school are you affiliated with?',
+      type: 'select',
+      options: ['Cambridge', 'Oxford', 'Other'],
+      required: true
+    ),
+    Partner::DonorQuestion.new(
+      name: 'city',
+      title: 'Which city will you be living in when your donation commences?',
+      type: 'text',
+      required: true
+    )
+  ]
+)
+
 Campaign.find_or_create_by(slug: '1ftw-wharton') do |c|
   c.partner = one_for_the_world
   c.title = 'The Wharton School Chapter'
   c.default_contribution_amounts = [10, 20, 50, 100]
   c.description = <<~EOTXT
     In the U.S., individuals with incomes between $100K-$200K donate on average 2.6% of their income to charity. How much will you give?
+
+    Your generous contribution will provide life-saving solutions to impoverished communities, where millions of children die from health problems with well-known solutions. Donate now and help us end these preventable deaths.
+  EOTXT
+end
+
+Campaign.find_or_create_by(slug: '1ftw-uk') do |c|
+  c.partner = uk_partner
+  c.title = 'UK'
+  c.default_contribution_amounts = [10, 20, 50, 100]
+  c.description = <<~EOTXT
+    In the U.K., individuals with incomes between £100-£200K donate on average 2.6% of their income to charity. How much will you give?
 
     Your generous contribution will provide life-saving solutions to impoverished communities, where millions of children die from health problems with well-known solutions. Donate now and help us end these preventable deaths.
   EOTXT
@@ -63,23 +106,39 @@ def create_portfolio_with_charities(charity_eins)
     )
   end
 end
-ManagedPortfolio.create(
+ManagedPortfolio.find_or_create_by(
   partner: one_for_the_world,
   name: 'Random Picks',
   portfolio: create_portfolio_with_charities(Organization.all.pluck(:ein).sample(8))
 )
-ManagedPortfolio.create(
+ManagedPortfolio.find_or_create_by(
   partner: one_for_the_world,
   name: "One charity - #{Organization.first.name}",
   portfolio: create_portfolio_with_charities([Organization.last.ein])
 )
-ManagedPortfolio.create(
+ManagedPortfolio.find_or_create_by(
   partner: one_for_the_world,
   name: "All Charities",
   portfolio: create_portfolio_with_charities(Organization.all.pluck(:ein))
 )
-ManagedPortfolio.create(
+ManagedPortfolio.find_or_create_by(
   partner: default_partner,
   name: "Random Picks",
   portfolio: create_portfolio_with_charities(Organization.all.pluck(:ein).sample(8))
+)
+
+ManagedPortfolio.find_or_create_by(
+  partner: uk_partner,
+  name: 'Random Picks',
+  portfolio: create_portfolio_with_charities(Organization.all.pluck(:ein).sample(8))
+)
+ManagedPortfolio.find_or_create_by(
+  partner: uk_partner,
+  name: "One charity - #{Organization.first.name}",
+  portfolio: create_portfolio_with_charities([Organization.last.ein])
+)
+ManagedPortfolio.find_or_create_by(
+  partner: uk_partner,
+  name: "All Charities",
+  portfolio: create_portfolio_with_charities(Organization.all.pluck(:ein))
 )

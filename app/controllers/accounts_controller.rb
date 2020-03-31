@@ -27,7 +27,8 @@ class AccountsController < ApplicationController
       target_amount_cents: target_amount_cents,
       partner_affiliation: partner_affiliation,
       selectable_portfolios: selectable_portfolios,
-      donor_responses: donor_responses
+      donor_responses: donor_responses,
+      currency: current_currency
     )
   end
 
@@ -96,7 +97,7 @@ class AccountsController < ApplicationController
 
   def selectable_portfolios
     portfolios = []
-    portfolios << [active_portfolio.id, 'My personalized portfolio'] unless managed_portfolio?    
+    portfolios << [active_portfolio.id, 'My personalized portfolio'] if active_portfolio && !managed_portfolio?
     portfolios += Partners::GetManagedPortfoliosForPartner.call(partner: partner).pluck(:portfolio_id, :name) if partner
     portfolios
   end

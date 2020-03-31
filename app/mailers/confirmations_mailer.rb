@@ -5,6 +5,7 @@ class ConfirmationsMailer < ApplicationMailer
     @partner_name = partner.name
     @partner = partner
     @cancelation = cancelation
+    @currency = Money::Currency.new(partner.currency)
 
     Time.use_zone(contribution.donor.time_zone) do
       mail(

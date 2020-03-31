@@ -7,7 +7,7 @@ hr
 
 h4
   => t :payment_method_failed, \
-    amount: number_to_currency(@contribution.amount_dollars), \
+    amount: Money.new(@contribution.amount_cents, @currency).format, \
     partner_name: @partner_name, \
     last4: @payment_method.last4
 

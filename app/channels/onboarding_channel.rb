@@ -70,7 +70,12 @@ class OnboardingChannel < ApplicationCable::Channel
 
     ApplicationController.renderer.render(
       partial: "conversations/#{step.display_as}",
-      locals: { step: step }
+      locals: { step: step, currency: donor_currency }
     )
+  end
+
+  def donor_currency
+    currency = Partners::GetPartnerForDonor.call(donor: current_donor).currency
+    Money::Currency.new(currency)
   end
 end

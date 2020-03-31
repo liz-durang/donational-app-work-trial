@@ -3,11 +3,12 @@
     .columns
       .column
         .field
-          label.control
-            .label Donation amount
-            .control.has-icons-left
-              = f.number_field :amount_dollars, class: 'input', value: cents_to_dollars(@view_model.recurring_contribution.amount_cents)
-              span.icon.is-left $
+          label.label Donation amount
+        .field.has-addons
+          .control
+            a.button.is-static = @view_model.currency
+          .control
+            = f.number_field :amount_dollars, class: 'input', value: cents_to_dollars(@view_model.recurring_contribution.amount_cents)
       .column
         .field
           - unless recurring_contribution.started?

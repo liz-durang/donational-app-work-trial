@@ -27,6 +27,7 @@
 
 FactoryBot.define do
   factory :donor do
+    
     trait :entity do
       entity_name { 'Company' }
     end

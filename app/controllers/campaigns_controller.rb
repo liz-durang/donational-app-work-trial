@@ -30,7 +30,8 @@ class CampaignsController < ApplicationController
       donor_questions: partner.donor_questions,
       default_operating_costs_donation_percentages: partner.default_operating_costs_donation_percentages,
       partner_operating_costs_text: partner.operating_costs_text,
-      partner_accepts_operating_costs_donations?: partner.accepts_operating_costs_donations?
+      partner_accepts_operating_costs_donations?: partner.accepts_operating_costs_donations?,
+      currency: partner_currency
     )
 
     respond_to do |format|
@@ -42,7 +43,11 @@ class CampaignsController < ApplicationController
   end
 
   def new
-    @view_model = OpenStruct.new(partner: partner, campaign: Campaign.new)
+    @view_model = OpenStruct.new(
+      partner: partner,
+      campaign: Campaign.new,
+      currency: partner_currency,
+    )
   end
 
   def edit
@@ -50,7 +55,8 @@ class CampaignsController < ApplicationController
       partner: partner,
       campaign: campaign_by_id,
       banner_image: campaign_by_id.banner_image,
-      default_contribution_amounts: campaign_by_id.default_contribution_amounts.join(", ")
+      default_contribution_amounts: campaign_by_id.default_contribution_amounts.join(", "),
+      currency: partner_currency,
     )
   end
 
@@ -133,6 +139,11 @@ class CampaignsController < ApplicationController
     )
   end
 
+  def partner_currency
+    currency = partner.currency
+    Money::Currency.new(currency)
+  end
+
   def campaign
     @campaign ||= Partners::GetCampaignBySlug.call(slug: params[:campaign_slug].parameterize)
   end
@@ -143,6 +154,10 @@ class CampaignsController < ApplicationController
 
   def partner
     @partner = Partners::GetPartnerById.call(id: params[:partner_id]) || campaign.partner
+  end
+
+  def donor_partner
+    Partners::GetPartnerForDonor.call(donor: current_donor)
   end
 
   def default_contribution_amounts

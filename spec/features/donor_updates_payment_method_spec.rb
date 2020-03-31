@@ -3,7 +3,10 @@ require 'stripe_mock'
 
 RSpec.describe 'Donors updates payment method', type: :feature do
   let(:stripe_helper) { StripeMock.create_test_helper }
-  before { StripeMock.start }
+  before do
+    create(:partner, :default)
+    StripeMock.start
+  end
   after { StripeMock.stop }
 
   scenario 'with valid credit card', js: true do

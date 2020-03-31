@@ -3,14 +3,14 @@ h4 Powered by Donational.org
 
 .total-donation
   span.label
-  = number_to_currency(@contribution.total_charges_cents / 100.0)
+  = Money.new(@contribution.total_charges_cents, @currency).format
 
 table border="0" cellpadding="0" cellspacing="0" width="100%"
   tr.summary-item
     td align="left"
       b Donation to Social Good Fund
     td align="right"
-      b = number_to_currency(@contribution.total_charges_cents / 100.0)
+      b = Money.new(@contribution.total_charges_cents, @currency).format
   tr.summary-item
     td colspan="2"
       ' Name:
