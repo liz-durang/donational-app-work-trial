@@ -28,6 +28,7 @@ Rails.application.routes.draw do
         get 'donors', format: :csv
         get 'donations', format: :csv
         get 'organizations', format: :csv
+        get 'gift_aid', format: :csv
       end
     end
   end

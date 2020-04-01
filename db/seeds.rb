@@ -19,7 +19,7 @@ end
 uk_partner = Partner.find_or_create_by(name: 'UK Partner') do |p|
   p.website_url = 'http://example.org'
   p.platform_fee_percentage = 0.02
-  p.payment_processor_account_id = '123456789'
+  p.payment_processor_account_id = ENV.fetch('DEFAULT_PAYMENT_PROCESSOR_ACCOUNT_ID')
   p.description = "1% of the developed world's income can eliminate extreme poverty. Let it start with you."
   p.donor_questions_schema = { questions: [] }
   p.operating_costs_text = "For every £1 donated to UK Partner, we raise £12 for effective charities. Please select here if you are happy for some of your donations to go to One for the World."
