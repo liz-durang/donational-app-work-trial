@@ -10,6 +10,7 @@ export default class extends Controller {
   next(event) {
     event.preventDefault();
     this.validateRequiredFields()
+    this.validateRequiredPostcode()
     if (this.valid) {
       this.showStep(this.index + 1)
       return false;
@@ -58,6 +59,19 @@ export default class extends Controller {
       }
     })
     this.valid = !anyEmpty
+  }
+
+  validateRequiredPostcode() {
+    let anyInvalid = false
+    let validated_field = "postcode_format_" + this.index;
+    let regex = /^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? [0-9][A-Za-z]{2}|[Gg][Ii][Rr] 0[Aa]{2})$/
+    this.targets.findAll(validated_field).forEach((element) => {
+      let isInvalid = !regex.test(element.value)
+      element.classList.toggle("is-danger", isInvalid)
+      element.parentElement.classList.toggle("field-with-errors", isInvalid)
+      anyInvalid = anyInvalid || isInvalid
+    })
+    this.valid = this.valid && !anyInvalid
   }
 
   get valid() {

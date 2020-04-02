@@ -33,6 +33,7 @@ class CampaignsController < ApplicationController
       default_operating_costs_donation_percentages: partner.default_operating_costs_donation_percentages,
       partner_operating_costs_text: partner.operating_costs_text,
       partner_accepts_operating_costs_donations?: partner.accepts_operating_costs_donations?,
+      uk_partner?: uk_partner?,
       currency: partner_currency
     )
 
@@ -164,6 +165,10 @@ class CampaignsController < ApplicationController
   def campaign_by_id
     @campaign_by_id ||= Partners::GetCampaignById.call(id: params[:id])
   end
+
+  def uk_partner?
+    partner.currency == 'GBP'
+  end 
 
   def partner
     @partner = Partners::GetPartnerById.call(id: params[:partner_id]) || campaign.partner

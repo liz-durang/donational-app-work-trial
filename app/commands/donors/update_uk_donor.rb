@@ -2,15 +2,18 @@ require Rails.root.join('lib','mutations','symbol_filter')
 require Rails.root.join('lib','mutations','decimal_filter')
 
 module Donors
-  class UpdateDonor < ApplicationCommand
+  class UpdateUkDonor < ApplicationCommand
     required do
-      model :donor
-    end
-
-    optional do
+      model :uk_donor
       string :first_name
       string :last_name
       string :email
+      string :title
+      string :house_name_or_number
+      string :postcode
+    end
+
+    optional do
       decimal :donation_rate
       integer :annual_income_cents
       boolean :donated_prior_year
@@ -27,11 +30,12 @@ module Donors
     end
 
     def execute
-      donor.update(updateable_attributes)
+      add_error(:uk_donor, :wrong_values, 'Wrong values') unless UkDonor.new(updateable_attributes).valid?
+      uk_donor.update(updateable_attributes)
     end
 
     def updateable_attributes
-      inputs.except(:donor)
+      inputs.except(:uk_donor)
     end
   end
 end

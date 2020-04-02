@@ -42,6 +42,21 @@
         h3.wizard-card-title About you
         = render 'wizard_nav', step: 2, of: 5
       .wizard-card-content
+        - if @view_model.uk_partner?
+          .field.is-horizontal
+            .field-label.is-normal
+              label.label Allow Gift Aid
+              = f.check_box :gift_aid
+            p Yes - I am a UK taxpayer and would like to Gift Aid my donations now and in future. I understand I must pay enough income tax and/or capital gains tax each tax year to cover the amount of Gift Aid that all charities and community amateur sports clubs claim on my donations in that tax year, and I am responsible for paying any difference.
+          .field.is-horizontal
+            .field-label.is-normal
+              label.label Title
+            .field-body
+              .field
+                .control.has-icons-left
+                  = icon_tag('fas fa-user')
+                  = f.text_field :title, class: :input, data: { target: 'wizard.required_field_1' }
+                  span.help.display-when-errors This field is required
         .field.is-horizontal
           .field-label.is-normal
             label.label First name
@@ -69,6 +84,28 @@
                 = icon_tag('fas fa-envelope')
                 = f.email_field :email, class: :input, data: { target: 'wizard.required_field_1' }
                 span.help.display-when-errors This field is required
+        - if @view_model.uk_partner?
+          .columns
+            .column
+              .field
+                .label.is-normal
+                  label.label House name or number
+                .field-body
+                  .field
+                    .control.has-icons-left
+                      = icon_tag('fas fa-home')
+                      = f.text_field :house_name_or_number, class: :input, data: { target: 'wizard.required_field_1' }
+                      span.help.display-when-errors This field is required
+            .column
+              .field
+                .label.is-normal
+                  label.label Postcode
+                .field-body
+                  .field
+                    .control.has-icons-left
+                      = icon_tag('fas fa-home')
+                      = f.text_field :postcode, class: :input, data: { target: 'wizard.postcode_format_1' }
+                      span.help.display-when-errors Postcode must be in the correct format
       .wizard-card-footer
         a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
     fieldset.wizard-card data-target='wizard.step'

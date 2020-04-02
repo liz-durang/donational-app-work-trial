@@ -24,12 +24,24 @@ class CampaignContributionsController < ApplicationController
   private
 
   def update_donor!
-    Donors::UpdateDonor.run(
-      donor: current_donor,
-      first_name: params[:campaign_contribution][:first_name],
-      last_name: params[:campaign_contribution][:last_name],
-      email: params[:campaign_contribution][:email]
-    )
+    if uk_partner?
+      Donors::UpdateUkDonor.run(
+        uk_donor: current_donor,
+        title: params[:campaign_contribution][:title],
+        first_name: params[:campaign_contribution][:first_name],
+        last_name: params[:campaign_contribution][:last_name],
+        email: params[:campaign_contribution][:email],
+        house_name_or_number: params[:campaign_contribution][:house_name_or_number],
+        postcode: params[:campaign_contribution][:postcode]
+      )
+    else
+       Donors::UpdateDonor.run(
+        donor: current_donor,
+        first_name: params[:campaign_contribution][:first_name],
+        last_name: params[:campaign_contribution][:last_name],
+        email: params[:campaign_contribution][:email]
+      )
+    end
   end
 
   def associate_donor_with_partner!
@@ -102,10 +114,9 @@ class CampaignContributionsController < ApplicationController
 
   def ensure_current_donor!
     return if current_donor
+    new_donor = Donors::CreateAnonymousDonor.run!(is_uk_donor: uk_partner?)
 
-    new_donor = Donors::CreateAnonymousDonor.run!
-
-    log_in! new_donor
+    log_in!(new_donor)
   end
 
   def campaign
@@ -114,5 +125,9 @@ class CampaignContributionsController < ApplicationController
 
   def partner
     @partner ||= campaign.partner
+  end
+
+  def uk_partner?
+    partner.currency == 'GBP'
   end
 end

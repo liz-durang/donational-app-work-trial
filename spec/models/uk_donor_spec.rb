@@ -18,7 +18,7 @@ RSpec.describe UkDonor, type: :model do
 
     context 'when correct postocde was provided' do
       let(:valid_postcodes) { ['EC1A 1BB', 'W1A 0AX', 'M1 1AE', 'B33 8TH', 'CR2 6XH', 'DN55 1PT'] }
-      let(:valid_uk_donors) do 
+      let(:valid_uk_donors) do
         valid_postcodes.map { |vp| build(:uk_donor, postcode: vp) }
       end
 
@@ -26,8 +26,8 @@ RSpec.describe UkDonor, type: :model do
     end
 
     context 'when incorrect postocde was provided' do
-      let(:invalid_postcodes) { ['EC1 A1BB', 'W1A 0AXA', 'MJ 1AE', 'CRZ 6XH', 'DN55 VPT'] }
-      let(:invalid_uk_donors) do 
+      let(:invalid_postcodes) { ['EC1 A1BB', 'W1A 0AXA', 'MJ 1AE', 'CRZ 6XH', 'DN55 VPT', 'ab12aa'] }
+      let(:invalid_uk_donors) do
         invalid_postcodes.map { |ip| build(:uk_donor, postcode: ip) }
       end
 

@@ -26,6 +26,19 @@ section.embossed.section
             h3 Contact Information
           .column style='background: #fff;'
             .form
+              - if @view_model.uk_partner?
+                .columns
+                  .column
+                    .field
+                      label.label Allow Gift Aid
+                      = f.check_box :gift_aid
+                    p Yes - I am a UK taxpayer and would like to Gift Aid my donations now and in future. I understand I must pay enough income tax and/or capital gains tax each tax year to cover the amount of Gift Aid that all charities and community amateur sports clubs claim on my donations in that tax year, and I am responsible for paying any difference.
+                .columns
+                  .column.is-one-third
+                    .field
+                      label.control
+                        = f.label :title, class: :label
+                        = f.text_field :title, class: :input
               .columns
                 .column
                   .field
@@ -37,6 +50,18 @@ section.embossed.section
                     label.control
                       = f.label :last_name, class: :label
                       = f.text_field :last_name, class: :input
+              - if @view_model.uk_partner?        
+                .columns
+                  .column
+                    .field
+                      label.control
+                        = f.label :house_name_or_number, class: :label
+                        = f.text_field :house_name_or_number, class: :input
+                  .column
+                    .field
+                      label.control
+                        = f.label :postcode, class: :label
+                        = f.text_field :postcode, class: :input
               .field
                 label.control
                   = f.label :email, class: :label
