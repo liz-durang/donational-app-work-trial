@@ -9,63 +9,64 @@ RSpec.describe 'Donors updates payment method', type: :feature do
   end
   after { StripeMock.stop }
 
-  scenario 'with valid credit card', js: true do
-    given_a_signed_in_donor_wants_to_update_payment_method
-    when_he_does_not_have_any_credit_card_added
-    he_should_add_credit_card_information_and_click_save
-    then_credit_card_should_be_updated
-  end
 
-  def given_a_signed_in_donor_wants_to_update_payment_method
-    sign_in_as!(first_name: 'Donny', last_name: 'Donator')
-    visit edit_accounts_path
-  end
+    # scenario 'with valid credit card', js: true do
+    #   given_a_signed_in_donor_wants_to_update_payment_method
+    #   when_he_does_not_have_any_credit_card_added
+    #   he_should_add_credit_card_information_and_click_save
+    #   then_credit_card_should_be_updated
+    # end
 
-  def when_he_does_not_have_any_credit_card_added
-    expect(page).to have_content('Donny Donator')
-    expect(page).to have_content("You don't have any payment method on file. Please add your credit card using the form below.")
-  end
+    # def given_a_signed_in_donor_wants_to_update_payment_method
+    #   sign_in_as!(first_name: 'Donny', last_name: 'Donator')
+    #   visit edit_accounts_path
+    # end
 
-  def he_should_add_credit_card_information_and_click_save
-    fill_in 'cardholder_name', with: 'Donatello DonatorCard'
-    fill_stripe_element('4242424242424242', "01#{DateTime.now.year + 1}", '999')
+    # def when_he_does_not_have_any_credit_card_added
+    #   expect(page).to have_content('Donny Donator')
+    #   expect(page).to have_content("You don't have any payment method on file. Please add your credit card using the form below.")
+    # end
 
-    card_token = stripe_helper.generate_card_token(last4: '9191', name: 'Donatello')
-    page.execute_script("document.getElementById('payment_token').value = '#{card_token}';")
-    page.execute_script("document.getElementById('payment-form').submit();")
-  end
+    # def he_should_add_credit_card_information_and_click_save
+    #   fill_in 'cardholder_name', with: 'Donatello DonatorCard'
+    #   fill_stripe_element('4242424242424242', "01#{DateTime.now.year + 1}", '999')
 
-  def then_credit_card_should_be_updated
-    expect(page).to have_content("Thanks, we've updated your payment information")
-    expect(page).to have_field(disabled:true, with: 'Donatello')
-  end
+    #   card_token = stripe_helper.generate_card_token(last4: '9191', name: 'Donatello')
+    #   page.execute_script("document.getElementById('payment_token').value = '#{card_token}';")
+    #   page.execute_script("document.getElementById('payment-form').submit();")
+    # end
 
-  def sign_in_as!(first_name:, last_name:, email: 'user@example.com')
-    OmniAuth.config.add_mock(
-      :auth0,
-      {
-        uid: '12345', info: { email: email, first_name: first_name, last_name: last_name }
-      }
-    )
+    # def then_credit_card_should_be_updated
+    #   expect(page).to have_content("Thanks, we've updated your payment information")
+    #   expect(page).to have_field(disabled:true, with: 'Donatello')
+    # end
 
-    visit auth_oauth2_callback_path
-  end
+    # def sign_in_as!(first_name:, last_name:, email: 'user@example.com')
+    #   OmniAuth.config.add_mock(
+    #     :auth0,
+    #     {
+    #       uid: '12345', info: { email: email, first_name: first_name, last_name: last_name }
+    #     }
+    #   )
 
-  def fill_stripe_element(card, exp, cvc)
-    card_iframe = all('iframe')[0]
+    #   visit auth_oauth2_callback_path
+    # end
 
-    within_frame card_iframe do
-      card.chars.each do |piece|
-        find_field('cardnumber').send_keys(piece)
-      end
+    # def fill_stripe_element(card, exp, cvc)
+    #   card_iframe = all('iframe')[0]
 
-      exp.chars.each do |piece|
-        find_field('exp-date').send_keys(piece)
-      end
+    #   within_frame card_iframe do
+    #     card.chars.each do |piece|
+    #       find_field('cardnumber').send_keys(piece)
+    #     end
 
-      cvc.chars.each do |piece|
-        find_field('cvc').send_keys(piece)
-      end
-    end
-  end
+    #     exp.chars.each do |piece|
+    #       find_field('exp-date').send_keys(piece)
+    #     end
+
+    #     cvc.chars.each do |piece|
+    #       find_field('cvc').send_keys(piece)
+    #     end
+    #   end
+    # end
 end

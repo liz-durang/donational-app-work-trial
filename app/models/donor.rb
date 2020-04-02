@@ -33,7 +33,17 @@ class Donor < ApplicationRecord
   has_and_belongs_to_many :partners
   has_many :partner_affiliations
   has_many :recurring_contributions
-
+  
+  with_options if: :uk_gift_aid_accepted do |uk_donor|
+    uk_donor.validates :title, presence: true, length: { maximum: 4 }
+    uk_donor.validates :first_name, presence: true, length: { maximum: 35 }
+    uk_donor.validates :last_name, presence: true, length: { maximum: 35 }
+    uk_donor.validates :house_name_or_number, presence: true
+    uk_donor.validates :postcode, presence: true, format: {
+      with: /\A([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})\z/,
+      message: 'is not a valid postcode' }
+  end
+  
   enum portfolio_diversity: { focused: 1, mixed: 2, broad: 3 }
 
   extend Enumerize

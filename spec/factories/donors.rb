@@ -36,5 +36,14 @@ FactoryBot.define do
       first_name { 'Donny' }
       last_name { 'Donator' }
     end
+
+    trait :with_uk_gift_aid_accepted do
+      uk_gift_aid_accepted { true }
+      first_name { 'John' }
+      last_name { 'Donor' }
+      title { 'Mr.' }
+      house_name_or_number { '10' }
+      postcode { 'PO1 3AX' }
+    end
   end
 end
