@@ -176,7 +176,7 @@
                       .control.has-icons-left
                         = icon_tag('fas fa-home')
                         = f.text_field :postcode, class: :input, placeholder: 'please include a space', data: { target: 'wizard.giftAidPostcode' }
-                        span.help.display-when-errors Postcode must be in the correct format
+                        span.help.display-when-errors Postcode must include a space e.g. AA1 3DD
       .wizard-card-footer
         a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
     fieldset.wizard-card data-target='wizard.step'

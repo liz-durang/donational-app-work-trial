@@ -78,7 +78,7 @@ section.embossed.section
                           .control.has-icons-left
                             = icon_tag('fas fa-home')
                             = f.text_field :postcode, class: :input, placeholder: 'please include a space'
-                            span.help.display-when-errors Postcode must be in the correct format
+                            span.help.display-when-errors Postcode must include a space e.g. AA1 3DD
               p.has-text-right
                 = f.submit "Save", class: %w(button is-primary)
     .box.flat-card style='background: #fafafa'
