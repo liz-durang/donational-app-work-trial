@@ -3,7 +3,7 @@ class AccountsController < ApplicationController
 
   def update
     pipeline = Flow.new
-    pipeline.chain { update_donor! } if params[:donor].present? || params[:uk_donor].present?
+    pipeline.chain { update_donor! } if params[:donor].present?
     pipeline.chain { update_custom_responses! } if params[:donor_responses].present?
 
     outcome = pipeline.run
@@ -36,24 +36,16 @@ class AccountsController < ApplicationController
   private
 
   def update_donor!
-    if uk_partner?
-      Donors::UpdateUkDonor.run(
-        uk_donor: current_donor,
-        title: params[:uk_donor][:title],
-        first_name: params[:uk_donor][:first_name],
-        last_name: params[:uk_donor][:last_name],
-        email: params[:uk_donor][:email],
-        house_name_or_number: params[:uk_donor][:house_name_or_number],
-        postcode: params[:uk_donor][:postcode]
-      )
-    else
-      Donors::UpdateDonor.run(
-        donor: current_donor,
-        first_name: params[:donor][:first_name],
-        last_name: params[:donor][:last_name],
-        email: params[:donor][:email]
-      )
-    end
+    Donors::UpdateDonor.run(
+      donor: current_donor,
+      title: params[:donor][:title],
+      first_name: params[:donor][:first_name],
+      last_name: params[:donor][:last_name],
+      email: params[:donor][:email],
+      house_name_or_number: params[:donor][:house_name_or_number],
+      postcode: params[:donor][:postcode],
+      uk_gift_aid_accepted: params[:donor][:uk_gift_aid_accepted]
+    )
   end
 
   def update_custom_responses!

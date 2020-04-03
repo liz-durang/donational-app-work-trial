@@ -28,7 +28,7 @@ RSpec.describe Donor, type: :model do
     end
 
     context 'when incorrect postocde was provided' do
-      let(:invalid_postcodes) { ['EC1 A1BB', 'W1A 0AXA', 'MJ 1AE', 'CRZ 6XH', 'DN55 VPT'] }
+      let(:invalid_postcodes) { ['EC1 A1BB', 'W1A 0AXA', 'MJ 1AE', 'CRZ 6XH', 'DN55 VPT', 'ab12aa'] }
       let(:invalid_uk_donors) do 
         invalid_postcodes.map { |ip| build(:donor, :with_uk_gift_aid_accepted, postcode: ip) }
       end
@@ -36,7 +36,7 @@ RSpec.describe Donor, type: :model do
       it 'all should not be valid', :aggregate_failures do
         invalid_uk_donors.map do |invalid_uk_donor|
           expect(invalid_uk_donor).not_to(be_valid)
-          expect(invalid_uk_donor.errors.messages).to include(postcode: ["is not a valid postcode"])
+          expect(invalid_uk_donor.errors.messages).to include(postcode: ["must include a space e.g. AA1 3DD"])
         end
       end
     end

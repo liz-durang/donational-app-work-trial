@@ -42,21 +42,6 @@
         h3.wizard-card-title About you
         = render 'wizard_nav', step: 2, of: 5
       .wizard-card-content
-        - if @view_model.uk_partner?
-          .field.is-horizontal
-            .field-label.is-normal
-              label.label Allow Gift Aid
-              = f.check_box :gift_aid
-            p Yes - I am a UK taxpayer and would like to Gift Aid my donations now and in future. I understand I must pay enough income tax and/or capital gains tax each tax year to cover the amount of Gift Aid that all charities and community amateur sports clubs claim on my donations in that tax year, and I am responsible for paying any difference.
-          .field.is-horizontal
-            .field-label.is-normal
-              label.label Title
-            .field-body
-              .field
-                .control.has-icons-left
-                  = icon_tag('fas fa-user')
-                  = f.text_field :title, class: :input, data: { target: 'wizard.required_field_1' }
-                  span.help.display-when-errors This field is required
         .field.is-horizontal
           .field-label.is-normal
             label.label First name
@@ -84,28 +69,6 @@
                 = icon_tag('fas fa-envelope')
                 = f.email_field :email, class: :input, data: { target: 'wizard.required_field_1' }
                 span.help.display-when-errors This field is required
-        - if @view_model.uk_partner?
-          .columns
-            .column
-              .field
-                .label.is-normal
-                  label.label House name or number
-                .field-body
-                  .field
-                    .control.has-icons-left
-                      = icon_tag('fas fa-home')
-                      = f.text_field :house_name_or_number, class: :input, data: { target: 'wizard.required_field_1' }
-                      span.help.display-when-errors This field is required
-            .column
-              .field
-                .label.is-normal
-                  label.label Postcode
-                .field-body
-                  .field
-                    .control.has-icons-left
-                      = icon_tag('fas fa-home')
-                      = f.text_field :postcode, class: :input, data: { target: 'wizard.postcode_format_1' }
-                      span.help.display-when-errors Postcode must be in the correct format
       .wizard-card-footer
         a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
     fieldset.wizard-card data-target='wizard.step'
@@ -127,7 +90,7 @@
         .field data-controller="radio-select"
           .field.is-grouped.is-grouped-multiline
             - @view_model.default_contribution_amounts.each do |amount|
-              a.control.button.is-expanded href='#' data-target='radio-select.button' data-action='radio-select#select' data-radio-select-value=amount
+              a.control.button.is-expanded href='#' data-target='radio-select.button' data-action='radio-select#select wizard#updateGiftAidAmount' data-radio-select-value=amount value=amount
                 = Money.from_amount(amount.to_i, @view_model.currency).format(no_cents_if_whole: true)
           .field.has-addons
             .control
@@ -136,7 +99,7 @@
               = f.number_field :amount_dollars,
                 class: %w(input is-medium),
                 placeholder: 'Your donation amount',
-                data: { controller: 'integer-field', target: 'radio-select.output wizard.required_field_3', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection keypress->integer-field#allowKeypressWhenInteger' }
+                data: { controller: 'integer-field', target: 'radio-select.output wizard.required_field_3 wizard.donationAmount', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection keypress->integer-field#allowKeypressWhenInteger input->wizard#updateGiftAidAmount' }
               span.help.display-when-errors This field is required
           p.help = @view_model.contribution_amount_help_text
         .field
@@ -164,6 +127,56 @@
                 a.control.button.is-expanded href='#' data-target='radio-select.button' data-action='radio-select#select' data-radio-select-value=amount
                   = number_to_percentage(amount, precision: 0)
               = f.hidden_field :partner_contribution_percentage, data: { controller: 'integer-field', target: 'radio-select.output' }
+        - if @view_model.uk_partner?
+          hr
+          .columns.is-mobile
+            .column
+              = image_tag('Gift_Aid_UK_Logo.svg')
+            .column
+              .has-text-justified
+                ' If you are a UK taxpayer your donation could be worth
+                span.has-text-weight-bold data-target='wizard.giftAidAmount'
+                  ' £0.00
+                | at no extra cost to you.
+          section.section
+            .columns.is-mobile
+              .column.is-1
+                .field
+                  = f.check_box :uk_gift_aid_accepted, { id: 'gift_aid_checkbox', data: { target: 'wizard.giftAidFieldsetVisible', action: 'input->wizard#updateGiftAidFieldsVisibility' } }
+              .column
+                p Yes - I am a UK taxpayer and would like to Gift Aid my donations now and in future. I understand I must pay enough income tax and/or capital gains tax each tax year to cover the amount of Gift Aid that all charities and community amateur sports clubs claim on my donations in that tax year, and I am responsible for paying any difference.
+          fieldset data-target='wizard.giftAidFieldset'
+            h4.subtitle We need these details to claim Gift Aid on your donation:
+            .field
+              .label.is-normal
+                label.label House name or number
+              .field-body
+                .field
+                  .control.has-icons-left
+                    = icon_tag('fas fa-home')
+                    = f.text_field :house_name_or_number, class: :input, data: { target: 'wizard.giftAidField' }
+                    span.help.display-when-errors This field is required
+            .columns
+              .column
+                .field
+                  .label
+                    label.label Title
+                  .field-body
+                    .field
+                      .control.has-icons-left
+                        = icon_tag('fas fa-user')
+                        = f.text_field :title, class: :input, placeholder: 'e.g. Mr or Ms', data: { target: 'wizard.giftAidField' }
+                        span.help.display-when-errors This field is required
+              .column
+                .field
+                  .label.is-normal
+                    label.label Postcode
+                  .field-body
+                    .field
+                      .control.has-icons-left
+                        = icon_tag('fas fa-home')
+                        = f.text_field :postcode, class: :input, placeholder: 'please include a space', data: { target: 'wizard.giftAidPostcode' }
+                        span.help.display-when-errors Postcode must be in the correct format
       .wizard-card-footer
         a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
     fieldset.wizard-card data-target='wizard.step'

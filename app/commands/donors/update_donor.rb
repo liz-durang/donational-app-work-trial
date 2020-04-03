@@ -11,6 +11,10 @@ module Donors
       string :first_name
       string :last_name
       string :email
+      string :title, empty: true, strip: true
+      string :house_name_or_number, empty: true, strip: true
+      string :postcode, empty: true, strip: true
+      boolean :uk_gift_aid_accepted
       decimal :donation_rate
       integer :annual_income_cents
       boolean :donated_prior_year
@@ -27,7 +31,11 @@ module Donors
     end
 
     def execute
-      donor.update(updateable_attributes)
+      return if donor.update(updateable_attributes)
+
+      donor.errors.full_messages.each do |message|
+        add_error(:donor, :validation_error, message)
+      end
     end
 
     def updateable_attributes

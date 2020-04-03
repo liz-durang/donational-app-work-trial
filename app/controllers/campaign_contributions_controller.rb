@@ -17,31 +17,23 @@ class CampaignContributionsController < ApplicationController
     if outcome.success?
       redirect_to portfolio_path(show_modal: true)
     else
-      redirect_to campaigns_path(campaign.slug), alert: outcome.errors.message_list.join('\n')
+      redirect_to campaigns_path(campaign.slug), alert: outcome.errors.message_list.join("\n")
     end
   end
 
   private
 
   def update_donor!
-    if uk_partner?
-      Donors::UpdateUkDonor.run(
-        uk_donor: current_donor,
-        title: params[:campaign_contribution][:title],
-        first_name: params[:campaign_contribution][:first_name],
-        last_name: params[:campaign_contribution][:last_name],
-        email: params[:campaign_contribution][:email],
-        house_name_or_number: params[:campaign_contribution][:house_name_or_number],
-        postcode: params[:campaign_contribution][:postcode]
-      )
-    else
-       Donors::UpdateDonor.run(
-        donor: current_donor,
-        first_name: params[:campaign_contribution][:first_name],
-        last_name: params[:campaign_contribution][:last_name],
-        email: params[:campaign_contribution][:email]
-      )
-    end
+    Donors::UpdateDonor.run(
+      donor: current_donor,
+      first_name: params[:campaign_contribution][:first_name],
+      last_name: params[:campaign_contribution][:last_name],
+      email: params[:campaign_contribution][:email],
+      title: params[:campaign_contribution][:title],
+      house_name_or_number: params[:campaign_contribution][:house_name_or_number],
+      postcode: params[:campaign_contribution][:postcode],
+      uk_gift_aid_accepted: params[:campaign_contribution][:uk_gift_aid_accepted]
+    )
   end
 
   def associate_donor_with_partner!
@@ -114,7 +106,7 @@ class CampaignContributionsController < ApplicationController
 
   def ensure_current_donor!
     return if current_donor
-    new_donor = Donors::CreateAnonymousDonor.run!(is_uk_donor: uk_partner?)
+    new_donor = Donors::CreateAnonymousDonor.run!
 
     log_in!(new_donor)
   end

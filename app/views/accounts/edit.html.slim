@@ -28,44 +28,57 @@ section.embossed.section
             .form
               - if @view_model.uk_partner?
                 .columns
-                  .column
+                  .column.is-3
                     .field
-                      label.label Allow Gift Aid
-                      = f.check_box :gift_aid
-                    p Yes - I am a UK taxpayer and would like to Gift Aid my donations now and in future. I understand I must pay enough income tax and/or capital gains tax each tax year to cover the amount of Gift Aid that all charities and community amateur sports clubs claim on my donations in that tax year, and I am responsible for paying any difference.
-                .columns
-                  .column.is-one-third
-                    .field
-                      label.control
-                        = f.label :title, class: :label
-                        = f.text_field :title, class: :input
-              .columns
-                .column
-                  .field
-                    label.control
-                      = f.label :first_name, class: :label
-                      = f.text_field :first_name, class: :input
-                .column
-                  .field
-                    label.control
-                      = f.label :last_name, class: :label
-                      = f.text_field :last_name, class: :input
-              - if @view_model.uk_partner?        
-                .columns
+                      .label
+                        label.label Title
+                      .field-body
+                        .field
+                          .control
+                            = f.text_field :title, class: :input, placeholder: 'e.g. Mr or Ms'
                   .column
                     .field
                       label.control
-                        = f.label :house_name_or_number, class: :label
-                        = f.text_field :house_name_or_number, class: :input
+                        = f.label :first_name, class: :label
+                        = f.text_field :first_name, class: :input
                   .column
                     .field
                       label.control
-                        = f.label :postcode, class: :label
-                        = f.text_field :postcode, class: :input
+                        = f.label :last_name, class: :label
+                        = f.text_field :last_name, class: :input
               .field
                 label.control
                   = f.label :email, class: :label
                   = f.email_field :email, class: :input
+              - if @view_model.uk_partner?
+                .columns
+                  .column.is-3
+                    .field
+                      = f.label :uk_gift_aid_accepted, 'Allow Gift Aid', class: :label
+                      = f.check_box :uk_gift_aid_accepted
+                  .column
+                    p Yes - I am a UK taxpayer and would like to Gift Aid my donations now and in future. I understand I must pay enough income tax and/or capital gains tax each tax year to cover the amount of Gift Aid that all charities and community amateur sports clubs claim on my donations in that tax year, and I am responsible for paying any difference.
+                .columns
+                  .column
+                    .field
+                      .label.is-normal
+                        label.label House name or number
+                      .field-body
+                        .field
+                          .control.has-icons-left
+                            = icon_tag('fas fa-home')
+                            = f.text_field :house_name_or_number, class: :input
+                            span.help.display-when-errors This field is required
+                  .column
+                    .field
+                      .label.is-normal
+                        label.label Postcode
+                      .field-body
+                        .field
+                          .control.has-icons-left
+                            = icon_tag('fas fa-home')
+                            = f.text_field :postcode, class: :input, placeholder: 'please include a space'
+                            span.help.display-when-errors Postcode must be in the correct format
               p.has-text-right
                 = f.submit "Save", class: %w(button is-primary)
     .box.flat-card style='background: #fafafa'

@@ -14,7 +14,7 @@ module Partners
         .where(
           donors: {
             id: PartnerAffiliation.where(partner: partner).select(:donor_id),
-            type: 'UkDonor'
+            uk_gift_aid_accepted: true
           }
         )
         .select(

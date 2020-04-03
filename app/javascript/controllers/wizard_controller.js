@@ -1,16 +1,23 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-  static targets = [ "step", "portfolioSelected" ]
+  static targets = [ "step", "portfolioSelected", "donationAmount", "giftAidAmount",
+    "giftAidField", "giftAidPostcode", "giftAidFieldset", "giftAidFieldsetVisible"]
 
   initialize() {
+    this.updateGiftAidFieldsVisibility();
+    this.updateGiftAidAmount();
     this.showStep(0)
   }
 
   next(event) {
     event.preventDefault();
     this.validateRequiredFields()
-    this.validateRequiredPostcode()
+
+    if (this.hasGiftAidFieldsetVisibleTarget && this.giftAidFieldsetVisibleTarget.checked)
+      this.validateGiftAidFields()
+
+
     if (this.valid) {
       this.showStep(this.index + 1)
       return false;
@@ -61,17 +68,30 @@ export default class extends Controller {
     this.valid = !anyEmpty
   }
 
-  validateRequiredPostcode() {
-    let anyInvalid = false
-    let validated_field = "postcode_format_" + this.index;
-    let regex = /^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? [0-9][A-Za-z]{2}|[Gg][Ii][Rr] 0[Aa]{2})$/
-    this.targets.findAll(validated_field).forEach((element) => {
-      let isInvalid = !regex.test(element.value)
-      element.classList.toggle("is-danger", isInvalid)
-      element.parentElement.classList.toggle("field-with-errors", isInvalid)
-      anyInvalid = anyInvalid || isInvalid
+  validateGiftAidFields() {
+    this.giftAidFieldTargets.forEach((element) => {
+      let isEmpty = element.value === ""
+      element.classList.toggle("is-danger", isEmpty)
+      element.parentElement.classList.toggle("field-with-errors", isEmpty)
+      this.valid = this.valid && !isEmpty
     })
-    this.valid = this.valid && !anyInvalid
+
+    let postcodeRegex = /^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? [0-9][A-Za-z]{2}|[Gg][Ii][Rr] 0[Aa]{2})$/
+    let element = this.giftAidPostcodeTarget
+    let isInvalid = !postcodeRegex.test(element.value)
+    element.classList.toggle("is-danger", isInvalid)
+    element.parentElement.classList.toggle("field-with-errors", isInvalid)
+    this.valid = this.valid && !isInvalid
+  }
+
+  updateGiftAidAmount() {
+    if(this.hasGiftAidFieldsetVisibleTarget)
+      this.giftAidAmountTarget.innerText = '£' + this.donationAmountTarget.value * 1.25 + ' ';
+  }
+
+  updateGiftAidFieldsVisibility() {
+    if(this.hasGiftAidFieldsetVisibleTarget)
+      this.giftAidFieldsetTarget.classList.toggle('is-hidden', !this.giftAidFieldsetVisibleTarget.checked);
   }
 
   get valid() {

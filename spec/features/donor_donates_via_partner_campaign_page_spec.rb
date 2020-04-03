@@ -6,116 +6,117 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
   before { StripeMock.start }
   after { StripeMock.stop }
 
-  # scenario 'as a new visitor', js: true do
-  #   slug = '1ftw-wharton'
-  #   create_new_partner!('USD', slug)
+  scenario 'as a new visitor', js: true do
+    slug = '1ftw-wharton'
+    create_new_partner!('USD', slug)
 
-  #   visit campaigns_path(slug)
+    visit campaigns_path(slug)
 
-  #   expect(page).not_to have_content('Managed Portfolio that has been hidden')
-  #   click_on_label 'Top Picks'
+    expect(page).not_to have_content('Managed Portfolio that has been hidden')
+    click_on_label 'Top Picks'
 
-  #   click_on 'Next'
+    click_on 'Next'
 
-  #   fill_in 'campaign_contribution[first_name]', with: 'Ian'
-  #   fill_in 'campaign_contribution[last_name]', with: 'Yamey'
-  #   fill_in 'campaign_contribution[email]', with: "ian+#{RSpec.configuration.seed}@donational.org"
+    fill_in 'campaign_contribution[first_name]', with: 'Ian'
+    fill_in 'campaign_contribution[last_name]', with: 'Yamey'
+    fill_in 'campaign_contribution[email]', with: "ian+#{RSpec.configuration.seed}@donational.org"
 
-  #   click_on 'Next'
+    click_on 'Next'
 
-  #   expect(page).to have_content('Which city will you be living in when your donation commences?')
-  #   fill_in 'campaign_contribution[donor_questions][city]', with: 'London'
-  #   select 'Wharton'
+    expect(page).to have_content('Which city will you be living in when your donation commences?')
+    fill_in 'campaign_contribution[donor_questions][city]', with: 'London'
+    select 'Wharton'
 
-  #   click_on 'Next'
+    click_on 'Next'
 
-  #   find('a', text: '$200').click
+    find('a', text: '$200').click
 
-  #   # Future date the donation
-  #   find('[data-accordion-trigger="show-date"]').click
-  #   find('input[type="date"]').click
-  #   [1, 2, 3].each do |i|
-  #     find('.calendar-nav-next-month').click
-  #     month_name = i.months.from_now.strftime("%B")
-  #     expect(page).to have_content(month_name)
-  #   end
-  #   click_on '12'
+    # Future date the donation
+    find('[data-accordion-trigger="show-date"]').click
+    find('input[type="date"]').click
+    [1, 2, 3].each do |i|
+      find('.calendar-nav-next-month').click
+      month_name = i.months.from_now.strftime("%B")
+      expect(page).to have_content(month_name)
+    end
+    click_on '12'
 
-  #   select 'Monthly'
+    select 'Monthly'
 
-  #   expect(page).to have_content('Please select here if you are happy for some of your donations to go to One for the World')
-  #   click_on '10%'
+    expect(page).to have_content('Please select here if you are happy for some of your donations to go to One for the World')
+    click_on '10%'
 
-  #   click_on 'Next'
+    click_on 'Next'
 
-  #   card_token = stripe_helper.generate_card_token(last4: '9191', name: 'Donatello')
-  #   page.execute_script("document.getElementById('payment_token').value = '#{card_token}';")
-  #   page.execute_script("document.getElementById('payment-form').submit();")
+    card_token = stripe_helper.generate_card_token(last4: '9191', name: 'Donatello')
+    page.execute_script("document.getElementById('payment_token').value = '#{card_token}';")
+    page.execute_script("document.getElementById('payment-form').submit();")
 
-  #   date_in_two_months_on_the_12th = (Date.new(Date.today.year, Date.today.month, 12) + 3.months).to_formatted_s(:long_ordinal)
-  #   expect(page).to have_content("Your next donation of $200.00 is scheduled for #{date_in_two_months_on_the_12th}")
+    date_in_two_months_on_the_12th = (Date.new(Date.today.year, Date.today.month, 12) + 3.months).to_formatted_s(:long_ordinal)
+    expect(page).to have_content("Your next donation of $200.00 is scheduled for #{date_in_two_months_on_the_12th}")
 
-  #   click_on 'View my portfolio'
+    click_on 'View my portfolio'
 
-  #   visit edit_accounts_path
-  #   expect(find_field('donor_responses[city]').value).to eq 'London'
+    visit edit_accounts_path
+    expect(find_field('donor_responses[city]').value).to eq 'London'
 
-  #   select 'Other Portfolio'
-  #   click_on 'Update donation plan'
-  # end
+    select 'Other Portfolio'
+    click_on 'Update donation plan'
+  end
 
-  # scenario 'as a new UK visitor', js: true do
-  #   slug = '1ftw-uk'
-  #   create_new_partner!('GBP', slug)
-  #   visit campaigns_path(slug)
+  scenario 'as a new UK visitor', js: true do
+    slug = '1ftw-uk'
+    create_new_partner!('GBP', slug)
+    visit campaigns_path(slug)
 
-  #   expect(page).not_to have_content('Managed Portfolio that has been hidden')
-  #   click_on_label 'Top Picks'
+    expect(page).not_to have_content('Managed Portfolio that has been hidden')
+    click_on_label 'Top Picks'
 
-  #   click_on 'Next'
+    click_on 'Next'
 
-  #   fill_in 'campaign_contribution[title]', with: 'Mr'
-  #   fill_in 'campaign_contribution[first_name]', with: 'Ian'
-  #   fill_in 'campaign_contribution[last_name]', with: 'Yamey'
-  #   fill_in 'campaign_contribution[email]', with: "ian+#{RSpec.configuration.seed}@donational.org"
-  #   fill_in 'campaign_contribution[house_name_or_number]', with: '100'
-  #   fill_in 'campaign_contribution[postcode]', with: 'PO1 3AX'
+    fill_in 'campaign_contribution[first_name]', with: 'Ian'
+    fill_in 'campaign_contribution[last_name]', with: 'Yamey'
+    fill_in 'campaign_contribution[email]', with: "ian+#{RSpec.configuration.seed}@donational.org"
+  
+    click_on 'Next'
 
-  #   click_on 'Next'
+    expect(page).to have_content('Which city will you be living in when your donation commences?')
+    fill_in 'campaign_contribution[donor_questions][city]', with: 'London'
+    select 'Wharton'
 
-  #   expect(page).to have_content('Which city will you be living in when your donation commences?')
-  #   fill_in 'campaign_contribution[donor_questions][city]', with: 'London'
-  #   select 'Wharton'
+    click_on 'Next'
 
-  #   click_on 'Next'
+    find('a', text: '£200').click
 
-  #   find('a', text: '£200').click
+    # Future date the donation
+    find('[data-accordion-trigger="show-date"]').click
+    find('input[type="date"]').click
+    [1, 2, 3].each do |i|
+      find('.calendar-nav-next-month').click
+      month_name = i.months.from_now.strftime("%B")
+      expect(page).to have_content(month_name)
+    end
+    click_on '12'
 
-  #   # Future date the donation
-  #   find('[data-accordion-trigger="show-date"]').click
-  #   find('input[type="date"]').click
-  #   [1, 2, 3].each do |i|
-  #     find('.calendar-nav-next-month').click
-  #     month_name = i.months.from_now.strftime("%B")
-  #     expect(page).to have_content(month_name)
-  #   end
-  #   click_on '12'
+    select 'Monthly'
 
-  #   select 'Monthly'
+    expect(page).to have_content('Please select here if you are happy for some of your donations to go to One for the World')
+    click_on '10%'
 
-  #   expect(page).to have_content('Please select here if you are happy for some of your donations to go to One for the World')
-  #   click_on '10%'
+    find('#gift_aid_checkbox').set(true)
+    fill_in 'campaign_contribution[house_name_or_number]', with: '100'
+    fill_in 'campaign_contribution[postcode]', with: 'PO1 3AX'
+    fill_in 'campaign_contribution[title]', with: 'Mr'
 
-  #   click_on 'Next'
+    click_on 'Next'
 
-  #   card_token = stripe_helper.generate_card_token(last4: '9191', name: 'Donatello')
-  #   page.execute_script("document.getElementById('payment_token').value = '#{card_token}';")
-  #   page.execute_script("document.getElementById('payment-form').submit();")
-
-  #   date_in_two_months_on_the_12th = (Date.new(Date.today.year, Date.today.month, 12) + 3.months).to_formatted_s(:long_ordinal)
-  #   expect(page).to have_content("Your next donation of £200.00 is scheduled for #{date_in_two_months_on_the_12th}")
+    card_token = stripe_helper.generate_card_token(last4: '9191', name: 'Donatello')
+    page.execute_script("document.getElementById('payment_token').value = '#{card_token}';")
+    page.execute_script("document.getElementById('payment-form').submit();")
+    date_in_two_months_on_the_12th = (Date.new(Date.today.year, Date.today.month, 12) + 3.months).to_formatted_s(:long_ordinal)
+    expect(page).to have_content("Your next donation of £200.00 is scheduled for #{date_in_two_months_on_the_12th}")
     
-  # end
+  end
 
   # TODO: This should be done by automating Partner/Campaign creation through the Admin interface
   def create_new_partner!(currency, slug)
