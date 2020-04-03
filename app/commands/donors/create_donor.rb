@@ -5,9 +5,13 @@ module Donors
     end
 
     optional do
-      string :first_name
-      string :last_name
+      string :first_name, strip: true
+      string :last_name, strip: true
       string :entity_name
+      string :title, strip: true
+      string :house_name_or_number, strip: true
+      string :postcode
+      boolean :uk_gift_aid_accepted
     end
 
     def validate
@@ -16,12 +20,7 @@ module Donors
     end
 
     def execute
-      Donor.create!(
-        first_name: first_name,
-        last_name: last_name,
-        entity_name: entity_name,
-        email: email
-      )
+      Donor.create!(inputs)
     end
 
     private

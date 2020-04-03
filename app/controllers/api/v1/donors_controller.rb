@@ -3,6 +3,7 @@ module Api
     class DonorsController < Api::V1::ApiController
       def create
         pipeline = Flow.new
+
         pipeline.chain { create_donor! }
         pipeline.chain { associate_donor_with_partner!(donor: @donor) }
 
@@ -28,7 +29,9 @@ module Api
       private
 
       def donor_params
-        params.require(:donor).permit(:first_name, :last_name, :entity_name, :email)
+        params.require(:donor)
+          .permit(:first_name, :last_name, :entity_name, :email,
+                  :title, :house_name_or_number, :postcode, :uk_gift_aid_accepted)
       end
 
       def search_params
@@ -36,12 +39,7 @@ module Api
       end
 
       def create_donor!
-        command = Donors::CreateDonor.run(
-          first_name: donor_params[:first_name],
-          last_name: donor_params[:last_name],
-          entity_name: donor_params[:entity_name],
-          email: donor_params[:email]
-        )
+        command = Donors::CreateDonor.run(donor_params)
 
         @donor = command.result if command.success?
         command

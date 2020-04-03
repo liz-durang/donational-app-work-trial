@@ -8,8 +8,8 @@ module Donors
     end
 
     optional do
-      string :first_name
-      string :last_name
+      string :first_name, strip: true
+      string :last_name, strip: true
       string :email
       string :title, empty: true, strip: true
       string :house_name_or_number, empty: true, strip: true
