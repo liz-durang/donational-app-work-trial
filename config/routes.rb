@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   # Acquisition
   root 'pages#index'
-  %w(mission donate-with-confidence methodology faq api).each do |page_slug|
+  %w[mission donate-with-confidence methodology faq api].each do |page_slug|
     get page_slug => 'pages#show', page: page_slug.underscore, format: :html
   end
 
@@ -37,6 +39,7 @@ Rails.application.routes.draw do
 
   # Revenue
   resources :contributions
+  resources :grants, only: :show, param: :short_id
 
   # Referral
   get 'profiles/:username' => 'profiles#show', as: :profiles, defaults: { format: :html }
@@ -47,12 +50,14 @@ Rails.application.routes.draw do
   get '/auth/failure' => 'auth0#failure'
 
   # Administration
-  require "sidekiq/web"
-  Sidekiq::Web.use Rack::Auth::Basic do |username, password|
-    ActiveSupport::SecurityUtils.secure_compare(::Digest::SHA256.hexdigest(username), ::Digest::SHA256.hexdigest(ENV["SIDEKIQ_USERNAME"])) &
-      ActiveSupport::SecurityUtils.secure_compare(::Digest::SHA256.hexdigest(password), ::Digest::SHA256.hexdigest(ENV["SIDEKIQ_PASSWORD"]))
-  end if Rails.env.production?
-  mount Sidekiq::Web, at: "/sidekiq"
+  require 'sidekiq/web'
+  if Rails.env.production?
+    Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+      ActiveSupport::SecurityUtils.secure_compare(::Digest::SHA256.hexdigest(username), ::Digest::SHA256.hexdigest(ENV['SIDEKIQ_USERNAME'])) &
+        ActiveSupport::SecurityUtils.secure_compare(::Digest::SHA256.hexdigest(password), ::Digest::SHA256.hexdigest(ENV['SIDEKIQ_PASSWORD']))
+    end
+  end
+  mount Sidekiq::Web, at: '/sidekiq'
 
   get '/:campaign_slug' => 'campaigns#show', as: :campaigns, defaults: { format: :html }
   post '/:campaign_slug/contributions' => 'campaign_contributions#create', as: :campaign_contributions
@@ -61,11 +66,11 @@ Rails.application.routes.draw do
   # API
   namespace :api do
     namespace :v1, defaults: { format: :json } do
-      resources :donors, only: [:create, :index, :show]
-      resources :organizations, only: [:index, :show]
+      resources :donors, only: %i[create index show]
+      resources :organizations, only: %i[index show]
       resources :contributions, only: :create
       resources :portfolios, only: :index
-      resources :hooks, only: [:index, :create]
+      resources :hooks, only: %i[index create]
     end
   end
 end

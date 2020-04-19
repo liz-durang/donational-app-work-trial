@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: donors
@@ -32,22 +34,19 @@
 
 FactoryBot.define do
   factory :donor do
-    
     trait :entity do
       entity_name { 'Company' }
+      first_name { nil }
+      last_name { nil }
     end
 
-    trait :person do
-      first_name { 'Donny' }
-      last_name { 'Donator' }
-    end
+    first_name { Faker::Name.first_name }
+    last_name { Faker::Name.last_name }
 
     trait :with_uk_gift_aid_accepted do
       uk_gift_aid_accepted { true }
-      first_name { 'John' }
-      last_name { 'Donor' }
-      title { 'Mr.' }
-      house_name_or_number { '10' }
+      title { Faker::Name.prefix }
+      house_name_or_number { Faker::Address.street_address }
       postcode { 'PO1 3AX' }
     end
   end

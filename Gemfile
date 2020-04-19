@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 # Set Ruby version
@@ -76,8 +78,6 @@ group :development, :test do
   gem 'byebug', platform: :mri
   gem 'pry'
   gem 'dotenv-rails'
-  gem 'factory_bot_rails'
-  gem 'rspec-rails'
 end
 
 group :development do
@@ -102,4 +102,7 @@ group :test do
   gem 'stripe-ruby-mock', '~> 2.5.4', require: 'stripe_mock'
   gem 'capybara-webmock'
   gem 'puffing-billy'
+  gem 'factory_bot_rails'
+  gem 'faker'
+  gem 'rspec-rails'
 end

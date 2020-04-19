@@ -1,0 +1,56 @@
+section.section
+  .container
+    h1.title.is-2 Grant to #{@grant.organization.name}
+    p This grant was made by the Social Good Fund, a 501(c)3 public charity, EIN 46-1323531.
+    p 
+        ' Donations were processed by
+        = link_to('Donational.org', root_url)
+        | , which provides simple online tools for accepting donations to a portfolio of charities
+    br
+
+    h3.title.is-3 Grant Details
+    table.table
+        tr
+            th From:
+            td Social Good Fund
+        tr
+            th To:
+            td = @grant.organization.name
+        tr
+            th Amount:
+            td = humanized_money_with_symbol @grant.amount
+        tr
+            th Date:
+            td = (@grant.processed_at || @grant.scheduled_at).to_date.to_formatted_s(:long)
+        tr
+            th Grant id:
+            td = @grant.short_id
+    
+    br
+
+    h3.title.is-3 Donors
+
+    p This grant is made up of #{pluralize(@donations.count, 'individual donation')}:
+
+    table.table
+        thead
+        tr
+            th Donor Name
+            th Donation Date
+            th Currency
+            th Amount
+            th Donor Affiliation
+        - @donations.each do |donation|
+            tr
+                th = donation.donor.anonymized_name
+                td = donation.created_at.to_date.to_formatted_s(:long)
+                td = donation.amount.currency
+                td = humanized_money_with_symbol donation.amount, no_cents_if_whole: false
+                td = link_to(donation.contribution.partner.name, donation.contribution.partner.website_url)
+
+    hr
+
+    p
+        ' For further information, please contact
+        = mail_to('support@donational.org')
+        

@@ -1,15 +1,16 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe 'GET api/v1/donors/:id', type: :request do
   let(:partner)              { create(:partner) }
-  let(:affiliated_donor)     { create(:donor, :person) }
+  let(:affiliated_donor)     { create(:donor) }
   let(:affiliated_entity)    { create(:donor, :entity) }
-  let(:unaffiliated_donor)   { create(:donor, :person) }
+  let(:unaffiliated_donor)   { create(:donor) }
   let!(:donor_partner_affiliation)  { create(:partner_affiliation, donor_id: affiliated_donor.id, partner_id: partner.id) }
   let!(:entity_partner_affiliation) { create(:partner_affiliation, donor_id: affiliated_entity.id, partner_id: partner.id) }
 
   describe 'GET show' do
-
     it 'returns a successful response' do
       get api_v1_donor_path(id: affiliated_donor.id), headers: { 'X-Api-Key': partner.api_key }, as: :json
 

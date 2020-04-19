@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: grants
@@ -17,4 +19,14 @@
 class Grant < ApplicationRecord
   belongs_to :organization, foreign_key: 'organization_ein'
   has_many :donations
+
+  monetize :amount_cents
+
+  def to_param
+    short_id
+  end
+
+  def short_id
+    id[0...6]
+  end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: partners
@@ -20,13 +22,13 @@
 
 FactoryBot.define do
   factory :partner do
-    name { "MyString" }
-    website_url { "MyString" }
-    description { "MyString" }
-    platform_fee_percentage { "2" }
-    primary_branding_color { "MyString" }
+    name { Faker::Company.name }
+    website_url { Faker::Internet.url(path: nil) }
+    description { Faker::Company.catch_phrase }
+    platform_fee_percentage { '2' }
+    primary_branding_color { 'MyString' }
     donor_questions_schema { { questions: [] } }
-    payment_processor_account_id { 'acc_123' }
+    payment_processor_account_id { "acc_#{Faker::Number.number(digits: 10)}" }
 
     trait :default do
       name { Partner::DEFAULT_PARTNER_NAME }

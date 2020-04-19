@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: donations
@@ -26,4 +28,6 @@ class Donation < ApplicationRecord
   scope(:paid, -> { where.not(grant: nil) })
 
   validates :contribution, :organization, :portfolio, presence: true
+
+  monetize :amount_cents
 end

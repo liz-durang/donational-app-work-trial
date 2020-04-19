@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: donors
@@ -31,7 +33,7 @@
 #
 
 class Donor < ApplicationRecord
-  has_many :selected_portfolios, -> { where(deactivated_at: nil)}
+  has_many :selected_portfolios, -> { where(deactivated_at: nil) }
   has_many :portfolios, through: :selected_portfolios
   has_many :payment_methods
   # Partner administrator
@@ -39,14 +41,15 @@ class Donor < ApplicationRecord
   has_many :partner_affiliations
   has_many :recurring_contributions
 
-  with_options if: :uk_gift_aid_accepted do |uk_donor|
-    uk_donor.validates :title, presence: true, length: { maximum: 4 }
-    uk_donor.validates :first_name, presence: true, length: { maximum: 35 }
-    uk_donor.validates :last_name, presence: true, length: { maximum: 35 }
-    uk_donor.validates :house_name_or_number, presence: true
-    uk_donor.validates :postcode, presence: true, format: {
+  with_options if: :uk_gift_aid_accepted do
+    validates :title, presence: true, length: { maximum: 4 }
+    validates :first_name, presence: true, length: { maximum: 35 }
+    validates :last_name, presence: true, length: { maximum: 35 }
+    validates :house_name_or_number, presence: true # TODO: Change to street_address
+    validates :postcode, presence: true, format: {
       with: /\A([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? [0-9][A-Za-z]{2}|[Gg][Ii][Rr] 0[Aa]{2})\z/,
-      message: 'must include a space e.g. AA1 3DD' }
+      message: 'must include a space e.g. AA1 3DD'
+    }
   end
 
   enum portfolio_diversity: { focused: 1, mixed: 2, broad: 3 }
@@ -72,6 +75,14 @@ class Donor < ApplicationRecord
 
   def name
     entity_name || [first_name, last_name].compact.join(' ')
+  end
+
+  def last_name_initial
+    last_name.first + '.' if last_name.present?
+  end
+
+  def anonymized_name
+    entity_name || [first_name, last_name_initial].compact.join(' ')
   end
 
   def short_name
