@@ -8,11 +8,8 @@
 #  name_on_card                  :string
 #  last4                         :string
 #  deactivated_at                :datetime
-#  billing_address               :string
-#  address_city                  :string
-#  address_state                 :string
-#  address_country               :string
 #  address_zip_code              :string
+#  retry_count                   :integer          default(0)
 #
 
 class PaymentMethod < ApplicationRecord

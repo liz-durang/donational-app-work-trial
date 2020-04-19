@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Contributions
   class ProcessContribution < ApplicationCommand
     required do
@@ -24,23 +26,28 @@ module Contributions
 
     def charge_customer_and_update_receipt!
       metadata = {
-        donor_id:         contribution.donor.id,
-        portfolio_id:     contribution.portfolio.id,
-        contribution_id:  contribution.id
+        donor_id: contribution.donor.id,
+        portfolio_id: contribution.portfolio.id,
+        contribution_id: contribution.id
       }
       Payments::ChargeCustomer.run(
-        customer_id:            payment_method.payment_processor_customer_id,
-        account_id:             payment_processor_account_id || contribution.payment_processor_account_id,
-        email:                  contribution.donor.email,
-        donation_amount_cents:  contribution.amount_cents,
-        tips_cents:             contribution.tips_cents,
-        currency:               contribution.amount_currency,
-        platform_fee_cents:     payment_fees.platform_fee_cents,
-        metadata:               metadata
+        customer_id: payment_method.payment_processor_customer_id,
+        account_id: payment_processor_account_id,
+        email: contribution.donor.email,
+        donation_amount_cents: contribution.amount_cents,
+        tips_cents: contribution.tips_cents,
+        currency: contribution.amount_currency,
+        platform_fee_cents: payment_fees.platform_fee_cents,
+        metadata: metadata
       ).tap do |command|
         if command.success?
           fee = command.result['balance_transaction']['fee_details'].detect { |fee| fee['type'] == 'stripe_fee' }
-          contribution.update(receipt: command.result, processed_at: Time.zone.now, payment_processor_fees_cents: fee['amount'])
+          contribution.update(
+            receipt: command.result,
+            processed_at: Time.zone.now,
+            payment_processor_fees_cents: fee['amount'],
+            payment_processor_account_id: payment_processor_account_id
+          )
           TriggerContributionProcessedWebhook.perform_async(contribution.id, contribution.partner.id)
         else
           payment_failed!(errors: command.errors.to_json)

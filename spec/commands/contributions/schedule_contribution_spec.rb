@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Contributions::ScheduleContribution do
@@ -21,7 +23,7 @@ RSpec.describe Contributions::ScheduleContribution do
     let(:scheduled_at) { nil }
 
     it 'does not run, and includes an error' do
-      command = Contributions::ScheduleContribution.run(params)
+      command = described_class.run(params)
 
       expect(command).not_to be_success
       expect(command.errors.symbolic).to include(scheduled_at: :nils)
@@ -45,11 +47,10 @@ RSpec.describe Contributions::ScheduleContribution do
           processed_at: nil,
           receipt: nil,
           partner_contribution_percentage: 0,
-          amount_currency: partner.currency,
-          payment_processor_account_id: partner.payment_processor_account_id
+          amount_currency: partner.currency
         )
 
-      command = Contributions::ScheduleContribution.run(params)
+      command = described_class.run(params)
 
       expect(command).to be_success
     end

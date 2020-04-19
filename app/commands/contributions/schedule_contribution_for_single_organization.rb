@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Contributions
   class ScheduleContributionForSingleOrganization < ApplicationCommand
     required do
@@ -46,8 +48,7 @@ module Contributions
         processed_at: processed_at,
         receipt: receipt,
         partner_contribution_percentage: partner_contribution_percentage,
-        amount_currency: partner.currency,
-        payment_processor_account_id: partner.payment_processor_account_id
+        amount_currency: partner.currency
       )
     end
 

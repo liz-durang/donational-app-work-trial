@@ -5,7 +5,7 @@
 #  id               :uuid             not null, primary key
 #  portfolio_id     :uuid             not null
 #  organization_ein :string           not null
-#  allocation_id    :uuid             not null
+#  allocation_id    :uuid
 #  contribution_id  :uuid             not null
 #  grant_id         :uuid
 #  amount_cents     :integer

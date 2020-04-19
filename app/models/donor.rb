@@ -23,6 +23,11 @@
 #  reasons_why_i_choose_an_organization        :string           default([]), is an Array
 #  contribution_frequency                      :string
 #  portfolio_diversity                         :integer
+#  entity_name                                 :string
+#  title                                       :string
+#  house_name_or_number                        :string
+#  postcode                                    :string
+#  uk_gift_aid_accepted                        :boolean          default(FALSE), not null
 #
 
 class Donor < ApplicationRecord

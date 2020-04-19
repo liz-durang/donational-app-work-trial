@@ -2,17 +2,21 @@
 #
 # Table name: recurring_contributions
 #
-#  id               :uuid             not null, primary key
-#  donor_id         :uuid
-#  portfolio_id     :uuid
-#  start_at         :datetime         not null
-#  deactivated_at   :datetime
-#  frequency        :string
-#  amount_cents     :integer
-#  tips_cents       :integer          default(0)
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  last_reminded_at :datetime
+#  id                              :uuid             not null, primary key
+#  donor_id                        :uuid
+#  portfolio_id                    :uuid
+#  start_at                        :datetime         not null
+#  deactivated_at                  :datetime
+#  frequency                       :string
+#  amount_cents                    :integer
+#  tips_cents                      :integer          default(0)
+#  created_at                      :datetime         not null
+#  updated_at                      :datetime         not null
+#  last_reminded_at                :datetime
+#  last_scheduled_at               :datetime
+#  partner_id                      :uuid
+#  partner_contribution_percentage :integer          default(0)
+#  amount_currency                 :string           default("usd"), not null
 #
 
 require 'rails_helper'

@@ -1,21 +1,27 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: contributions
 #
-#  id                           :uuid             not null, primary key
-#  portfolio_id                 :uuid
-#  amount_cents                 :integer
-#  receipt                      :json
-#  created_at                   :datetime         not null
-#  updated_at                   :datetime         not null
-#  scheduled_at                 :datetime
-#  processed_at                 :datetime
-#  tips_cents                   :integer          default(0)
-#  donor_id                     :uuid
-#  failed_at                    :datetime
-#  payment_processor_fees_cents :integer
-#  refunded_at                  :datetime
-#  external_reference_id        :string
+#  id                              :uuid             not null, primary key
+#  portfolio_id                    :uuid
+#  amount_cents                    :integer
+#  receipt                         :json
+#  created_at                      :datetime         not null
+#  updated_at                      :datetime         not null
+#  scheduled_at                    :datetime
+#  processed_at                    :datetime
+#  tips_cents                      :integer          default(0)
+#  donor_id                        :uuid
+#  failed_at                       :datetime
+#  payment_processor_fees_cents    :integer
+#  refunded_at                     :datetime
+#  external_reference_id           :string
+#  partner_id                      :uuid
+#  partner_contribution_percentage :integer          default(0)
+#  amount_currency                 :string           default("usd"), not null
+#  payment_processor_account_id    :string
 #
 
 FactoryBot.define do
@@ -26,7 +32,6 @@ FactoryBot.define do
     amount_cents { 123 }
     tips_cents { 2 }
     amount_currency { 'usd' }
-    payment_processor_account_id { 'acc_123' }
     scheduled_at { 1.day.ago }
     processed_at { nil }
 

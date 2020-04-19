@@ -1,4 +1,6 @@
-require Rails.root.join('lib','mutations','symbol_filter')
+# frozen_string_literal: true
+
+require Rails.root.join('lib', 'mutations', 'symbol_filter')
 
 module Contributions
   class CreateOrReplaceRecurringContribution < ApplicationCommand
@@ -31,8 +33,7 @@ module Contributions
           tips_cents: tips_cents,
           last_scheduled_at: frequency == :once ? nil : most_recent_last_scheduled_at,
           partner_contribution_percentage: partner_contribution_percentage,
-          amount_currency: partner.currency,
-          payment_processor_account_id: partner.payment_processor_account_id
+          amount_currency: partner.currency
         )
 
         Portfolios::SelectPortfolio.run(donor: donor, portfolio: portfolio)
@@ -48,7 +49,7 @@ module Contributions
     private
 
     def existing_recurring_contributions
-      @existing_recurring_contributions ||= 
+      @existing_recurring_contributions ||=
         Contributions::GetActiveRecurringContributions.call(donor: donor)
     end
 
