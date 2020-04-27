@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'boot'
 
 require 'rails/all'
@@ -18,7 +20,5 @@ module Donational
     config.active_job.queue_adapter = :sidekiq
     config.lograge.enabled = true
     config.lograge.base_controller_class = ['ActionController::API', 'ActionController::Base']
-    config.action_mailer.default_url_options = { host: ENV.fetch('DEFAULT_HOST') }
   end
 end
-  

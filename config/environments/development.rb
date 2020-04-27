@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.configure do
   # Verifies that versions and hashed value of the package contents in the project's package.json
   config.webpacker.check_yarn_integrity = true
@@ -36,7 +38,8 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.perform_deliveries = true
   config.action_mailer.perform_caching = false
-  config.action_mailer.asset_host = "http://#{ENV.fetch('DEFAULT_HOST')}"
+  config.action_mailer.asset_host = "http://#{ENV.fetch('HOST')}"
+  config.action_mailer.default_url_options = { host: ENV.fetch('HOST') }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log

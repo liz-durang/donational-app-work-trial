@@ -4,24 +4,6 @@
     "postdeploy": "bin/rails db:schema:load db:seed"
   },
   "stack": "heroku-18",
-  "env": {
-    "AUTH0_CLIENT_ID": { "required": true },
-    "AUTH0_CLIENT_SECRET": { "required": true },
-    "AUTH0_DOMAIN": { "required": true },
-    "RAILS_LOG_TO_STDOUT": { "required": true },
-    "RAILS_SERVE_STATIC_FILES": { "required": true },
-    "SEGMENT_RUBY_WRITE_KEY": "Pe9TTOBFO0pjhJJ6dJBZzUgB2hVwbzlE",
-    "SEGMENT_JAVASCRIPT_WRITE_KEY": "NVjy3azUr5S6AhhhXeWsaWd7m0SeewQo",
-    "SECRET_KEY_BASE": { "generator": "secret" },
-    "RAILS_ENV": "staging",
-    "DEFAULT_HOST": "some-review-app-name.herokuapp.com",
-    "HEROKU_APP_NAME": { "required": true },
-    "HEROKU_PARENT_APP_NAME": { "required": true },
-    "STRIPE_SECRET_KEY": "sk_test_QaS3Ao4UjJPLuhWA86UfHNyS",
-    "STRIPE_PUBLIC_KEY": "pk_test_JvMXIo3Rfg1pV1r1WaMVP3Za",
-    "STRIPE_CLIENT_ID": "ca_DADzbonnuFVMg0RTcQMqDn70fU5epXjl",
-    "DEFAULT_PAYMENT_PROCESSOR_ACCOUNT_ID": "acct_1CkEP6CqQ8lwp5WU"
-  },
   "environments": {
     "test": {
       "env": {
@@ -29,11 +11,7 @@
         "AUTH0_CLIENT_ID": "xxx",
         "AUTH0_CLIENT_SECRET": "xxx",
         "AUTH0_DOMAIN": "donatedirectly.auth0.com",
-        "SEGMENT_RUBY_WRITE_KEY": "Pe9TTOBFO0pjhJJ6dJBZzUgB2hVwbzlE",
-        "SEGMENT_JAVASCRIPT_WRITE_KEY": "NVjy3azUr5S6AhhhXeWsaWd7m0SeewQo",
         "DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL": "true",
-        "STRIPE_SECRET_KEY": "sk_test_QaS3Ao4UjJPLuhWA86UfHNyS",
-        "STRIPE_PUBLIC_KEY": "pk_test_JvMXIo3Rfg1pV1r1WaMVP3Za",
         "DEFAULT_HOST": "localhost"
       },
       "scripts": {
@@ -47,8 +25,7 @@
       ]
     }
   },
-  "formation": {
-  },
+  "formation": {},
   "addons": [
     "heroku-postgresql",
     "heroku-redis",
@@ -60,8 +37,5 @@
       }
     }
   ],
-  "buildpacks": [
-    { "url": "heroku/nodejs" },
-    { "url": "heroku/ruby" }
-  ]
+  "buildpacks": [{ "url": "heroku/nodejs" }, { "url": "heroku/ruby" }]
 }
