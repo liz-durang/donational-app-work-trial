@@ -76,6 +76,7 @@ Campaign.find_or_create_by(slug: '1ftw-wharton') do |c|
   c.partner = one_for_the_world
   c.title = 'The Wharton School Chapter'
   c.default_contribution_amounts = [10, 20, 50, 100]
+  c.contribution_amount_help_text = "$x a month is x\% of an x students' average starting salary post-graduation (x\% of $x)."
   c.description = <<~EOTXT
     In the U.S., individuals with incomes between $100K-$200K donate on average 2.6% of their income to charity. How much will you give?
 

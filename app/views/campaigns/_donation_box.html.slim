@@ -88,6 +88,7 @@
         = render 'wizard_nav', step: 4, of: 5
       .wizard-card-content
         .field data-controller="radio-select"
+          p = @view_model.contribution_amount_help_text
           .field.is-grouped.is-grouped-multiline
             - @view_model.default_contribution_amounts.each do |amount|
               a.control.button.is-expanded href='#' data-target='radio-select.button' data-action='radio-select#select wizard#updateGiftAidAmount' data-radio-select-value=amount value=amount
@@ -101,7 +102,6 @@
                 placeholder: 'Your donation amount',
                 data: { controller: 'integer-field', target: 'radio-select.output wizard.required_field_3 wizard.donationAmount', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection keypress->integer-field#allowKeypressWhenInteger input->wizard#updateGiftAidAmount' }
               span.help.display-when-errors This field is required
-          p.help = @view_model.contribution_amount_help_text
         .field
           .field.is-grouped.is-centered
             .control
