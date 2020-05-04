@@ -28,8 +28,8 @@
                     .level-left
                       .label
                         .span.icon = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}", data: { action: 'wizard#selectPortfolio' }
-                    .level-left style='flex-shrink: initial; flex-grow: 1; margin: 0 0.5rem'
-                        = mp.name
+                    .level-left style='flex-shrink: initial; flex-grow: 1; margin: 0 0.5rem' class=(mp.featured? ? 'has-text-weight-bold' : '')
+                      = mp.name
                     .level-right
                       .help = pluralize(mp.size, 'charity')
           = f.hidden_field :portfolio_selected, data: { target: "wizard.portfolioSelected wizard.required_field_0" }
@@ -88,7 +88,8 @@
         = render 'wizard_nav', step: 4, of: 5
       .wizard-card-content
         .field data-controller="radio-select"
-          p = @view_model.contribution_amount_help_text
+          p.has-text-weight-bold = @view_model.contribution_amount_help_text
+          br
           .field.is-grouped.is-grouped-multiline
             - @view_model.default_contribution_amounts.each do |amount|
               a.control.button.is-expanded href='#' data-target='radio-select.button' data-action='radio-select#select wizard#updateGiftAidAmount' data-radio-select-value=amount value=amount

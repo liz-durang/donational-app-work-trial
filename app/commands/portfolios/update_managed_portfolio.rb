@@ -8,6 +8,7 @@ module Portfolios
     end
 
     optional do
+      boolean :featured  
       string :description
       string :image
     end
@@ -52,7 +53,8 @@ module Portfolios
     def update_managed_portoflio
       managed_portfolio.update!(
         name: title,
-        description: description || ''
+        description: description,
+        featured: featured
       )
       managed_portfolio.image.attach(image) if image.present?
     end

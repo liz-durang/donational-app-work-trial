@@ -36,6 +36,12 @@ section.embossed.section
                 label.control
                   = f.label :description, class: :label
                   = f.text_area :description, class: :input, value: @view_model.managed_portfolio.description
+            .column
+              .field
+                label.control
+                  = f.label :featured, class: :label
+                  = f.check_box :featured, checked: @view_model.managed_portfolio.featured?
+                p.help Featuring this portfolio will highlight it to potential donors to your campaign.
           .columns
             .column
               label.control

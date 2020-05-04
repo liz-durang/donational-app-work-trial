@@ -24,6 +24,7 @@ class ManagedPortfoliosController < ApplicationController
       donor: current_donor,
       title: params[:title],
       description: params[:description].presence,
+      featured: params[:featured].presence,
       image: params[:image],
       charities: organizations
     )
@@ -39,6 +40,7 @@ class ManagedPortfoliosController < ApplicationController
       donor: current_donor,
       title: params[:title],
       description: params[:description].presence,
+      featured: params[:featured].presence,
       image: params[:image],
       organizations: organizations
     )

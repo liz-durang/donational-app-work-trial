@@ -7,6 +7,7 @@
 #  portfolio_id  :uuid
 #  name          :string
 #  description   :text
+#  featured      :boolean
 #  hidden_at     :datetime
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
