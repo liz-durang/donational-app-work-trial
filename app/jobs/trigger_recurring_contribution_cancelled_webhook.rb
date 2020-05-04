@@ -29,6 +29,7 @@ class TriggerRecurringContributionCancelledWebhook < ApplicationJob
           amount_dollars: recurring_contribution.amount_dollars,
           donor_name: recurring_contribution.donor_name,
           donor_email: recurring_contribution.donor_email,
+          partner_contribution_percentage: recurring_contribution.partner_contribution_percentage,
           portfolio: portfolio_name,
           donor: {
             name: recurring_contribution.donor_name,
