@@ -105,6 +105,9 @@ module Contributions
       partner = Partners::GetPartnerForDonor.call(donor: contribution.donor)
       PaymentMethodsMailer.send_payment_failed(contribution, payment_method, partner).deliver_now
 
+      # Send Zapier event
+      TriggerPaymentFailedWebhook.perform_async(contribution.id, partner.id)
+
       # Update payment method retry count and cancel donation plan
       Payments::IncrementRetryCount.run(payment_method: payment_method)
       if active_recurring_contribution.present? && payment_method.retry_count_limit_reached?

@@ -35,6 +35,9 @@ class Contribution < ApplicationRecord
   validates :external_reference_id, uniqueness: { scope: :partner }, allow_nil: true
   validates :amount_currency, presence: true
 
+  delegate :name, to: :donor, prefix: true
+  delegate :email, to: :donor, prefix: true
+
   def amount_dollars
     amount_cents / 100.0
   end
