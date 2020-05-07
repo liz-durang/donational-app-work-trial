@@ -40,7 +40,12 @@ module Contributions
 
         send_confirmation_email!(recurring_contribution)
 
-        TriggerRecurringContributionUpdatedWebhook.perform_async(recurring_contribution.id, partner.id)
+        if existing_recurring_contributions
+          TriggerRecurringContributionUpdatedWebhook.perform_async(recurring_contribution.id, partner.id)
+        else
+          TriggerRecurringContributionCreatedWebhook.perform_async(recurring_contribution.id, partner.id)
+        end
+
       end
 
       nil

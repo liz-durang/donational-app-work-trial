@@ -4,8 +4,10 @@ class TriggerPaymentFailedWebhook < ApplicationJob
     current_partner = Partners::GetPartnerById.call(id: partner_id)
     contribution = Contributions::GetContributionById.call(id: contribution_id)
 
+    donor = contribution.donor
+
     if ensure_partner_has_webhook(current_partner)
-      active_recurring_contribution = Contributions::GetActiveRecurringContribution.call(donor: contribution.donor)
+      active_recurring_contribution = Contributions::GetActiveRecurringContribution.call(donor: donor)
 
       base_url = current_partner.zapier_webhooks.find_by(hook_type: 'payment_failed').hook_url
 
@@ -15,7 +17,7 @@ class TriggerPaymentFailedWebhook < ApplicationJob
       end
 
       affiliation = Partners::GetPartnerAffiliationByDonorAndPartner.call(
-        donor: contribution.donor,
+        donor: donor,
         partner: current_partner
       )
 
@@ -41,7 +43,10 @@ class TriggerPaymentFailedWebhook < ApplicationJob
             portfolio: portfolio_name
           },
           donor: {
-            name: contribution.donor_name,
+            id: donor.id,
+            name: donor.name,
+            first_name: donor.first_name,
+            last_name: donor.last_name,
             email: contribution.donor_email,
             joined_at: contribution.donor.created_at,
             questions: affiliation.donor_responses.map { |r| [r.question.name, r.value]  }.to_h,

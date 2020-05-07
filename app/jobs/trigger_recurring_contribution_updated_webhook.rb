@@ -6,6 +6,8 @@ class TriggerRecurringContributionUpdatedWebhook < ApplicationJob
     if ensure_partner_has_webhook(current_partner)
       recurring_contribution = Contributions::GetRecurringContributionById.call(id: recurring_contribution_id)
 
+      donor = recurring_contribution.donor
+
       base_url = current_partner.zapier_webhooks.find_by(hook_type: 'update_recurring_contribution').hook_url
 
       conn = Faraday.new(url: base_url) do |faraday|
@@ -14,7 +16,7 @@ class TriggerRecurringContributionUpdatedWebhook < ApplicationJob
       end
 
       affiliation = Partners::GetPartnerAffiliationByDonorAndPartner.call(
-        donor: recurring_contribution.donor,
+        donor: donor,
         partner: current_partner
       )
 
@@ -23,6 +25,7 @@ class TriggerRecurringContributionUpdatedWebhook < ApplicationJob
       response = conn.post() do |req|
         req.body = {
           id: recurring_contribution.id,
+          updated_at: recurring_contribution.updated_at,
           start_at: recurring_contribution.start_at.to_date,
           frequency: recurring_contribution.frequency,
           amount_dollars: recurring_contribution.amount_dollars,
@@ -31,7 +34,10 @@ class TriggerRecurringContributionUpdatedWebhook < ApplicationJob
           partner_contribution_percentage: recurring_contribution.partner_contribution_percentage,
           portfolio: portfolio_name,
           donor: {
-            name: recurring_contribution.donor_name,
+            id: donor.id,
+            name: donor.name,
+            first_name: donor.first_name,
+            last_name: donor.last_name,
             email: recurring_contribution.donor_email,
             joined_at: recurring_contribution.donor.created_at,
             questions: affiliation.donor_responses.map { |r| [r.question.name, r.value]  }.to_h,
