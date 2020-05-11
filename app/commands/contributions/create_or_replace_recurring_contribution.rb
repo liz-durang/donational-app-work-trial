@@ -21,6 +21,7 @@ module Contributions
     def execute
       RecurringContribution.transaction do
         # ensure we don't force a new donation when donor updates their plan settings
+        new_contribution = existing_recurring_contributions.empty?
         most_recent_last_scheduled_at = previous_plans_most_recent_scheduled_at
         deactivate_existing_recurring_contributions!
         recurring_contribution = RecurringContribution.create!(
@@ -39,11 +40,10 @@ module Contributions
         Portfolios::SelectPortfolio.run(donor: donor, portfolio: portfolio)
 
         send_confirmation_email!(recurring_contribution)
-
-        if existing_recurring_contributions
-          TriggerRecurringContributionUpdatedWebhook.perform_async(recurring_contribution.id, partner.id)
-        else
+        if new_contribution
           TriggerRecurringContributionCreatedWebhook.perform_async(recurring_contribution.id, partner.id)
+        else
+          TriggerRecurringContributionUpdatedWebhook.perform_async(recurring_contribution.id, partner.id)
         end
 
       end

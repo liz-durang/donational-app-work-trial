@@ -28,7 +28,9 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
 
   context 'when there are no existing recurring donations for the donor' do
     it 'creates a new active recurring contribution' do
-      expect { subject }.to change { RecurringContribution.count }.from(0).to(1)
+      Contributions::CreateOrReplaceRecurringContribution.run(params)
+      expect(RecurringContribution.count).to eq(1)
+      expect(TriggerRecurringContributionCreatedWebhook.jobs.size).to eq(1)
 
       recurring_contribution = Contributions::GetActiveRecurringContribution.call(donor: donor)
 
@@ -39,7 +41,6 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
       expect(recurring_contribution.start_at.to_date).to eq Date.new(2000, 1, 1)
       expect(recurring_contribution.last_scheduled_at).to eq nil
       expect(recurring_contribution.partner).to eq partner
-      expect(TriggerRecurringContributionUpdatedWebhook.jobs.size).to eq(1)
       expect(recurring_contribution.partner_contribution_percentage).to eq 0
     end
 
@@ -56,7 +57,7 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
         Contributions::CreateOrReplaceRecurringContribution.run(params_without_start_date)
         recurring_contribution = Contributions::GetActiveRecurringContribution.call(donor: donor)
 
-        expect(TriggerRecurringContributionUpdatedWebhook.jobs.size).to eq(1)
+        expect(TriggerRecurringContributionCreatedWebhook.jobs.size).to eq(1)
         expect(recurring_contribution.start_at).to eq Date.new(2010, 1, 1)
       end
 
@@ -97,6 +98,7 @@ RSpec.describe Contributions::CreateOrReplaceRecurringContribution do
       expect(recurring_contribution.donor).to eq donor
       expect(recurring_contribution.amount_cents).to eq 8000
       expect(recurring_contribution.partner).to eq partner
+      expect(TriggerRecurringContributionUpdatedWebhook.jobs.size).to eq(1)
       expect(recurring_contribution.partner_contribution_percentage).to eq 0
     end
 
