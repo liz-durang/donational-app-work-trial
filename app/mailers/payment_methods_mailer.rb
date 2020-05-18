@@ -3,6 +3,7 @@ class PaymentMethodsMailer < ApplicationMailer
     @contribution = contribution
     @payment_method = payment_method
     @partner_name = partner.name
+    @partner_email_receipt_preamble = partner.email_receipt_preamble
     @partner = partner
     @currency = partner.currency
 

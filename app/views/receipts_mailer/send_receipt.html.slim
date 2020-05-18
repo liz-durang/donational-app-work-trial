@@ -1,5 +1,9 @@
-h1 Your tax-deductible donation to Social Good Fund
+h1
+  ' Your tax-deductible donation to Social Good Fund through 
+  = @partner_name
 h4 Powered by Donational.org
+
+p = markdown_to_html @partner_email_receipt_preamble
 
 .total-donation
   span.label

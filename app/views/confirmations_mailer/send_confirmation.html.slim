@@ -4,6 +4,7 @@
     = @partner_name
     '  charity portfolio was canceled succesfully
   hr
+  p = markdown_to_html @partner_email_receipt_preamble
   p
     ' To become a recurring donor,
     = link_to 'Log in to your Donational account', edit_accounts_url
@@ -20,4 +21,5 @@
     - else
       ' created succesfully
   hr
+  p = markdown_to_html @partner_email_receipt_preamble
   = render "reminders_mailer/body"

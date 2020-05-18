@@ -7,7 +7,8 @@ module Partners
     optional do
       string :name
       string :website_url
-      string :description
+      string :description, empty: true
+      string :email_receipt_preamble, empty: true
       string :payment_processor_account_id
       string :logo
       string :email_banner

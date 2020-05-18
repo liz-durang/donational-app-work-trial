@@ -69,6 +69,7 @@ class PartnersController < ApplicationController
       name: params[:partner][:name],
       website_url: params[:partner][:website_url],
       description: params[:partner][:description],
+      email_receipt_preamble: params[:partner][:email_receipt_preamble],
       logo: params[:partner][:logo],
       email_banner: params[:partner][:email_banner]
     )

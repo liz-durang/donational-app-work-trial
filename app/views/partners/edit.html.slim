@@ -54,6 +54,10 @@ section.embossed.section
                 label.control
                   = f.label :description, class: :label
                   = f.text_area :description, class: :input, value: @view_model.partner.description
+              .field
+                label.control
+                  = f.label :email_receipt_preamble, class: :label
+                  = f.text_area :email_receipt_preamble, class: :input, value: @view_model.partner.email_receipt_preamble
               br
               .columns
                 .column

@@ -14,6 +14,7 @@
 #  payment_processor_account_id     :string
 #  api_key                          :string
 #  operating_costs_text             :string
+#  email_receipt_preamble           :text
 #  operating_costs_organization_ein :string
 #  currency                         :string           default("usd"), not null
 #
