@@ -9,6 +9,7 @@ class ContributionsSummaryMailer < ApplicationMailer
     @donor = params[:donor]
     currency = Partners::GetPartnerForDonor.call(donor: @donor)&.currency || partner.try(:currency)
     @currency = Money::Currency.new(currency)
+    @currency_downcase = params[:partner]&.currency&.downcase || 'usd'
 
     Time.use_zone(@donor.time_zone) do
       mail(

@@ -20,8 +20,8 @@ p
   | portfolio!
 
 p
-  ' When entering this as a deduction on your taxes, please enter "Social Good Fund" as the name of the charity.
-  | Your donations are tax-deductible in the United States, and this email serves as your official tax receipt.
+  = t("#{@currency_downcase}.tax_info")
+  |  Your donations are tax-deductible, and this email serves as your official tax receipt.
 
 p
   ' Here is a list of each contribution that you made in
@@ -56,16 +56,9 @@ p Thanks for your generous support of important and impactful causes. Wishing yo
 hr
 
 .fine-print
-  p No goods or services were provided in return for your donations. They are tax-deductible in the United States to the fullest extent of the law.
-  p Your donation on Donational.org is managed by a program of the Social Good Fund, a 501(c)3 public charity, EIN 46-1323531.
+  p No goods or services were provided in return for your donations. They are tax-deductible to the fullest extent of the law.
 
-.fine-print
-  p Social Good Fund ("SGF") makes every reasonable effort to respect the wishes of its donors. However, to comply with federal tax laws and Internal Revenue Service regulations, the SGF must retain the exclusive authority, discretion, and legal control over all donated funds.
-  p In the rare event that the charity you have advised does not satisfy SGF's criteria or otherwise enable SGF to pay them (reasons for this include issues like: they do not or cannot accept donations, are not recognized by the IRS as a public charity, or are not in good standing with federal or state regulators, etc.), SGF may select an alternate nonprofit organization to receive the donation or have the donation allocated to a fund maintained by SGF and used solely for charitable purposes including, but not limited to, mission-based activities and grants. SGF's distributions to or for the benefit of your advised charity and/or purpose must not be used for the personal benefit of you, or any other donor advisor, or any other purpose conferring impermissible private benefit.
-
-hr
-
-h3 Thanks for using Donational.org!
+= render 'shared/how_it_works'
 
 p
   ' To update your preferences, donation frequency or payment method,

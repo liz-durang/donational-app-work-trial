@@ -1,0 +1,37 @@
+en:
+  usd:
+    how_it_works:
+      first_paragraph:
+        Your donation on Donational.org is managed by a program of the Social Good Fund, a 501(c)3 public charity, EIN 46-1323531. Social Good Fund ("SGF") makes every reasonable effort to respect the wishes of its donors. However, to comply with federal tax laws and Internal Revenue Service regulations, the SGF must retain the exclusive authority, discretion, and legal control over all donated funds.
+      second_paragraph:
+       "In the rare event that the charity you have advised does not satisfy SGF's criteria or otherwise enable SGF to pay them (reasons for this include issues like: they do not or cannot accept donations, are not recognized by the IRS as a public charity, or are not in good standing with federal or state regulators, etc.), SGF may select an alternate nonprofit organization to receive the donation or have the donation allocated to a fund maintained by SGF and used solely for charitable purposes including, but not limited to, mission-based activities and grants. SGF's distributions to or for the benefit of your advised charity and/or purpose must not be used for the personal benefit of you, or any other donor advisor, or any other purpose conferring impermissible private benefit."
+    tax_info:
+      When filling this as a deduction on your taxes, enter "Social Good Fund" as the name of the charity.
+    charity_name: Social Good Fund
+  gbp:
+    how_it_works:
+      first_paragraph:
+        First paragraph for UK
+      second_paragraph:
+        Second paragraph for UK
+    tax_info:
+      UK Tax info and charity name to enter on tax deduction
+    charity_name: charity name to enter on tax deduction for UK
+  cad:
+    how_it_works:
+      first_paragraph:
+        Your donation on Donational.org is managed by Rethink Charity Foundation, a Canadian Registered Charity, Business/Registration number 793187881 RR 0001. Address 308-303 E. Pender St, Vancouver, BC, V6A 0J3.
+      second_paragraph:
+        No goods or services were provided in exchange for this contribution.
+    tax_info:
+      When filling this as a deduction on your taxes, enter "Rethink Charity Foundation" as the name of the charity.
+    charity_name: Rethink Charity Foundation
+  aud:
+    how_it_works:
+      first_paragraph:
+        First paragraph for Australia
+      second_paragraph:
+        Second paragraph for Australia
+    tax_info:
+      Australia Tax info and charity name to enter on tax deduction
+    charity_name: charity name to enter on tax deduction for Australia

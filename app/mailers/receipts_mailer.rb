@@ -6,6 +6,7 @@ class ReceiptsMailer < ApplicationMailer
     @partner_email_receipt_preamble = partner.email_receipt_preamble
     @partner = partner
     @currency = partner.currency
+    @currency_downcase = partner.currency.downcase
 
     Time.use_zone(contribution.donor.time_zone) do
       mail(
