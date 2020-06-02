@@ -42,5 +42,24 @@
       = f.hidden_field :portfolio_id, value: @view_model.recurring_contribution.portfolio_id
     .has-text-right
       p = f.submit 'Update donation plan', class: %w(button is-primary)
-      - if recurring_contribution.future_contribution_scheduled?
-        p = link_to 'Cancel my upcoming donations', contribution_path(id: recurring_contribution), class: 'is-danger', method: :delete, data: { confirm: 'Are you sure you want to cancel your recurring donation?' }
+  - if recurring_contribution.future_contribution_scheduled?
+    .has-text-right
+      a.modal-button data-target="ask-to-pause-modal" Cancel my upcoming donations
+
+  #ask-to-pause-modal.modal
+    .modal-background
+    .modal-card
+      section.modal-card-body
+        p
+          strong Instead of cancelling, would you like to delay your next contribution by three months? We'll remind you before your contribution starts up again.
+        = form_with model: recurring_contribution, url: contributions_path, local: true, method: :post, class: 'form' do |f2|
+          = f2.hidden_field :amount_dollars, value: cents_to_dollars(@view_model.recurring_contribution.amount_cents)
+          = f2.hidden_field :frequency
+          = f2.hidden_field :portfolio_id
+          - if recurring_contribution.started?
+            = f2.hidden_field :start_at, class: :input, value: 3.months.from_now.to_date.iso8601
+          - else
+            = f2.hidden_field :start_at, class: :input, value: @view_model.recurring_contribution.start_at + 3.months
+          p = f2.submit 'Sounds great!', class: %w(button is-primary), id: 'pause_btn'
+        br
+        p = link_to 'No, I still want to cancel', contribution_path(id: recurring_contribution), class: 'is-danger', method: :delete

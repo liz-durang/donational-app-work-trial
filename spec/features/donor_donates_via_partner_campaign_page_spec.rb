@@ -52,13 +52,18 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     page.execute_script("document.getElementById('payment_token').value = '#{card_token}';")
     page.execute_script("document.getElementById('payment-form').submit();")
 
-    date_in_two_months_on_the_12th = (Date.new(Date.today.year, Date.today.month, 12) + 3.months).to_formatted_s(:long_ordinal)
-    expect(page).to have_content("Your next donation of $200.00 is scheduled for #{date_in_two_months_on_the_12th}")
+    date_in_two_months_on_the_12th = (Date.new(Date.today.year, Date.today.month, 12) + 3.months)
+    expect(page).to have_content("Your next donation of $200.00 is scheduled for #{date_in_two_months_on_the_12th.to_formatted_s(:long_ordinal)}")
 
     click_on 'View my portfolio'
 
     visit edit_accounts_path
     expect(find_field('donor_responses[city]').value).to eq 'London'
+    find('[data-target="ask-to-pause-modal"]').click
+    within('#ask-to-pause-modal') do
+      find('[value="Sounds great!"]').click
+    end
+    expect(page).to have_content("Your next donation of $200.00 is scheduled for #{(date_in_two_months_on_the_12th + 3.months).to_formatted_s(:long_ordinal)}")
 
     select 'Other Portfolio'
     click_on 'Update donation plan'
@@ -113,8 +118,16 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     card_token = stripe_helper.generate_card_token(last4: '9191', name: 'Donatello')
     page.execute_script("document.getElementById('payment_token').value = '#{card_token}';")
     page.execute_script("document.getElementById('payment-form').submit();")
-    date_in_two_months_on_the_12th = (Date.new(Date.today.year, Date.today.month, 12) + 3.months).to_formatted_s(:long_ordinal)
-    expect(page).to have_content("Your next donation of £200.00 is scheduled for #{date_in_two_months_on_the_12th}")
+    date_in_two_months_on_the_12th = (Date.new(Date.today.year, Date.today.month, 12) + 3.months)
+    expect(page).to have_content("Your next donation of £200.00 is scheduled for #{date_in_two_months_on_the_12th.to_formatted_s(:long_ordinal)}")
+
+    visit edit_accounts_path
+    expect(find_field('donor_responses[city]').value).to eq 'London'
+    find('[data-target="ask-to-pause-modal"]').click
+    within('#ask-to-pause-modal') do
+      find('[value="Sounds great!"]').click
+    end
+    expect(page).to have_content("Your next donation of £200.00 is scheduled for #{(date_in_two_months_on_the_12th + 3.months).to_formatted_s(:long_ordinal)}")
     
   end
 
