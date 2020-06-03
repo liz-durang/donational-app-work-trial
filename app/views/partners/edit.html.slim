@@ -58,6 +58,10 @@ section.embossed.section
                 label.control
                   = f.label :email_receipt_preamble, class: :label
                   = f.text_area :email_receipt_preamble, class: :input, value: @view_model.partner.email_receipt_preamble
+              .field
+                label.control
+                  = f.label :after_donation_thank_you_page_url, class: :label
+                  = f.text_area :after_donation_thank_you_page_url, class: :input, value: @view_model.partner.after_donation_thank_you_page_url
               br
               .columns
                 .column

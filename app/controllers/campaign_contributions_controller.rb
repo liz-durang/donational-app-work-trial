@@ -15,9 +15,20 @@ class CampaignContributionsController < ApplicationController
     outcome = pipeline.run
 
     if outcome.success?
-      redirect_to portfolio_path(show_modal: true)
+      if partner.after_donation_thank_you_page_url.nil? || partner.after_donation_thank_you_page_url.empty?
+        redirect_to portfolio_path(show_modal: true)
+      else
+        render 'partners/_redirect', locals: {redirect_url: partner.after_donation_thank_you_page_url}
+      end
     else
       redirect_to campaigns_path(campaign.slug), alert: outcome.errors.message_list.join("\n")
+    end
+
+    respond_to do |format|
+      format.js
+      format.html do
+        allow_iframe_embedding_on_partner_website!
+      end
     end
   end
 
@@ -73,6 +84,12 @@ class CampaignContributionsController < ApplicationController
       tips_cents: 0,
       partner_contribution_percentage: params[:campaign_contribution][:partner_contribution_percentage].to_i
     )
+  end
+
+  def allow_iframe_embedding_on_partner_website!
+    response.headers['X-Content-Security-Policy'] = "frame-ancestors #{partner.website_url}"
+    response.headers['Content-Security-Policy'] = "frame-ancestors #{partner.website_url}"
+    response.headers.delete 'X-Frame-Options'
   end
 
   def active_portfolio

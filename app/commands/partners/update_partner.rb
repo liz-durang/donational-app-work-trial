@@ -9,6 +9,7 @@ module Partners
       string :website_url
       string :description, empty: true
       string :email_receipt_preamble, empty: true
+      string :after_donation_thank_you_page_url, empty: true
       string :payment_processor_account_id
       string :logo
       string :email_banner

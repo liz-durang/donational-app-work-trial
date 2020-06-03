@@ -6,9 +6,60 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
   before { StripeMock.start }
   after { StripeMock.stop }
 
+  scenario 'as a new visitor with redirect', js: true do
+    slug = '1ftw-redirect'
+    thank_you_url = 'https://www.1fortheworld.org'
+    create_new_partner!('USD', slug, thank_you_url)
+
+    visit campaigns_path(slug)
+
+    expect(page).not_to have_content('Managed Portfolio that has been hidden')
+    click_on_label 'Top Picks'
+
+    click_on 'Next'
+
+    fill_in 'campaign_contribution[first_name]', with: 'Ian'
+    fill_in 'campaign_contribution[last_name]', with: 'Yamey'
+    fill_in 'campaign_contribution[email]', with: "ian+#{RSpec.configuration.seed}@donational.org"
+
+    click_on 'Next'
+
+    expect(page).to have_content('Which city will you be living in when your donation commences?')
+    fill_in 'campaign_contribution[donor_questions][city]', with: 'London'
+    select 'Wharton'
+
+    click_on 'Next'
+
+    find('a', text: '$200').click
+
+    # Future date the donation
+    find('[data-accordion-trigger="show-date"]').click
+    find('input[type="date"]').click
+    [1, 2, 3].each do |i|
+      find('.calendar-nav-next-month').click
+      month_name = i.months.from_now.strftime("%B")
+      expect(page).to have_content(month_name)
+    end
+    click_on '12'
+
+    select 'Monthly'
+
+    expect(page).to have_content('Please select here if you are happy for some of your donations to go to One for the World')
+    click_on '10%'
+
+    click_on 'Next'
+
+    card_token = stripe_helper.generate_card_token(last4: '9191', name: 'Donatello')
+    page.execute_script("document.getElementById('payment_token').value = '#{card_token}';")
+    page.execute_script("document.getElementById('payment-form').submit();")
+
+    expect(page).to have_current_path(thank_you_url, url: true)
+
+  end
+
   scenario 'as a new visitor', js: true do
     slug = '1ftw-wharton'
-    create_new_partner!('USD', slug)
+    create_new_partner!('USD', slug, nil)
 
     visit campaigns_path(slug)
 
@@ -71,7 +122,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
   scenario 'as a new UK visitor', js: true do
     slug = '1ftw-uk'
-    create_new_partner!('GBP', slug)
+    create_new_partner!('GBP', slug, nil)
     visit campaigns_path(slug)
 
     expect(page).not_to have_content('Managed Portfolio that has been hidden')
@@ -132,13 +183,14 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
   end
 
   # TODO: This should be done by automating Partner/Campaign creation through the Admin interface
-  def create_new_partner!(currency, slug)
+  def create_new_partner!(currency, slug, thank_you_url)
     one_for_the_world_operating_costs_charity = create(:organization, name: 'OFTW Operating Costs')
     
     partner = Partner.create(
       name: 'One for the World',
       currency: currency,
       platform_fee_percentage: 0.02,
+      after_donation_thank_you_page_url: thank_you_url,
       donor_questions_schema: {
         questions: [
           {

@@ -70,6 +70,7 @@ class PartnersController < ApplicationController
       website_url: params[:partner][:website_url],
       description: params[:partner][:description],
       email_receipt_preamble: params[:partner][:email_receipt_preamble],
+      after_donation_thank_you_page_url: params[:partner][:after_donation_thank_you_page_url],
       logo: params[:partner][:logo],
       email_banner: params[:partner][:email_banner]
     )
