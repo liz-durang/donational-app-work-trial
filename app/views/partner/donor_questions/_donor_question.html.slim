@@ -1,15 +1,18 @@
 .field
   = form.label donor_question.name do
-    .label = donor_question.title
     - if donor_question.type == 'select'
       - if donor_question.required
-        .select = form.collection_select donor_question.name, donor_question.options.zip(donor_question.options), :first, :last, { include_blank: true }, { "data-target" => "wizard.required_field_8" }
+        .label = donor_question.title + " (required)"
+        .select = form.collection_select donor_question.name, donor_question.options.zip(donor_question.options), :first, :last, { include_blank: true }, { "data-target" => "wizard.required_field_2" }
         span.help.is-danger.display-when-errors This field is required
       - else
+        .label = donor_question.title
         .select = form.collection_select donor_question.name, donor_question.options.zip(donor_question.options), :first, :last, include_blank: true
     - else
       - if donor_question.required
-        = form.text_field donor_question.name, class: :input, data: { target: "wizard.required_field_8" }
+        .label = donor_question.title + " (required)"
+        = form.text_field donor_question.name, class: :input, data: { target: "wizard.required_field_2" }
         span.help.is-danger.display-when-errors This field is required
       - else
+        .label = donor_question.title
         = form.text_field donor_question.name, class: :input

@@ -6,6 +6,78 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
   before { StripeMock.start }
   after { StripeMock.stop }
 
+  scenario 'as a new visitor without filling in required fields', js: true do
+    slug = '1ftw-requiredfields'
+    create_new_partner!('USD', slug, nil)
+
+    visit campaigns_path(slug)
+
+    expect(page).not_to have_content('Managed Portfolio that has been hidden')
+
+    click_on 'Next'
+
+    expect(page).to have_content('This field is required')
+
+    click_on_label 'Top Picks'
+
+    click_on 'Next'
+
+    click_on 'Next'
+
+    expect(page).to have_content('This field is required')
+
+    fill_in 'campaign_contribution[first_name]', with: 'Ian'
+    fill_in 'campaign_contribution[last_name]', with: 'Yamey'
+    fill_in 'campaign_contribution[email]', with: "ian+#{RSpec.configuration.seed}@donational.org"
+
+    click_on 'Next'
+
+    click_on 'Next'
+
+    expect(page).to have_content('This field is required')
+
+    expect(page).to have_content('Which city will you be living in when your donation commences?')
+    fill_in 'campaign_contribution[donor_questions][city]', with: 'London'
+    select 'Wharton'
+
+    click_on 'Next'
+
+    click_on 'Next'
+
+    expect(page).to have_content('This field is required')
+
+    find('a', text: '$200').click
+
+    # Future date the donation
+    find('[data-accordion-trigger="show-date"]').click
+    find('input[type="date"]').click
+    [1, 2, 3].each do |i|
+      find('.calendar-nav-next-month').click
+      month_name = i.months.from_now.strftime("%B")
+      expect(page).to have_content(month_name)
+    end
+    click_on '12'
+
+    select 'Monthly'
+
+    expect(page).to have_content('Please select here if you are happy for some of your donations to go to One for the World')
+    click_on '10%'
+
+    click_on 'Next'
+
+    click_on 'Donate'
+
+    expect(page).to have_content('Your card number is incomplete.')
+
+    card_token = stripe_helper.generate_card_token(last4: '9191', name: 'Donatello')
+    page.execute_script("document.getElementById('payment_token').value = '#{card_token}';")
+    page.execute_script("document.getElementById('payment-form').submit();")
+
+    date_in_two_months_on_the_12th = (Date.new(Date.today.year, Date.today.month, 12) + 3.months)
+    expect(page).to have_content("Your next donation of $200.00 is scheduled for #{date_in_two_months_on_the_12th.to_formatted_s(:long_ordinal)}")
+
+  end
+
   scenario 'as a new visitor with redirect', js: true do
     slug = '1ftw-redirect'
     thank_you_url = 'https://www.1fortheworld.org'
