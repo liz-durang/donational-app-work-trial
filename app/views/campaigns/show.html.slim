@@ -35,9 +35,4 @@ section.section.embossed
       .column.is-offset-1
         = display_flash_messages
         = render 'donation_box'
-        p.has-text-centered.help
-          | We use smart and secure online payments to ensure that your donations are simple, secure, and avoid fees.
-        p.has-text-centered.help
-          | All donations are tax-deductible operating under the Social Good Fund
-          br
-          | 501(c)3 public charity, EIN 46-1323531.
+        p.has-text-centered.help = t("#{@view_model.currency_code}.how_it_works.first_paragraph")

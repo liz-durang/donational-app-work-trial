@@ -88,4 +88,4 @@ section.embossed.section
                     - if !contribution.refunded_at.present? and !contribution.failed_at.present? and contribution.receipt.present?
                       = form_with url: partner_refunds_path, local: true, method: :post, class: 'form' do |f|
                         = f.hidden_field :contribution_id, value: contribution.id
-                        = f.submit class: %w(button is-primary is-small), value: 'Refund'
+                        = f.submit class: %w(button is-primary is-small), value: 'Refund', data: { confirm: 'Refund this contribution?' }

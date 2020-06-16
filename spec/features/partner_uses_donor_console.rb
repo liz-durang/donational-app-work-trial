@@ -140,6 +140,7 @@ RSpec.describe 'Partner uses donor console', type: :feature do
 
   def then_the_partner_refunds_an_ungranted_contribution
     click_on 'Refund'
+    page.accept_alert
     expect(page).to have_content("Contribution Refunded Successfully")
   end
 
@@ -149,6 +150,7 @@ RSpec.describe 'Partner uses donor console', type: :feature do
 
   def then_the_partner_tries_to_refund_a_granted_contribution
     click_on 'Refund'
+    page.accept_alert
     expect(page).to have_content("This contribution could not be refunded, as it has already been assigned to one or more grants to organizations")
   end
 

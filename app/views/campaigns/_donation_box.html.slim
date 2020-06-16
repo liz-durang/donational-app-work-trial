@@ -122,7 +122,8 @@
                 = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 4.years.from_now.to_date.iso8601
         .field data-controller="radio-select"
           - if @view_model.partner_accepts_operating_costs_donations?
-            p.help = @view_model.partner_operating_costs_text
+            p class='help' style='margin-bottom: 10px'
+              = @view_model.partner_operating_costs_text
             .field.is-grouped.is-grouped-multiline
               - @view_model.default_operating_costs_donation_percentages.each do |amount|
                 a.control.button.is-expanded href='#' data-target='radio-select.button' data-action='radio-select#select' data-radio-select-value=amount

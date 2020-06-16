@@ -34,7 +34,8 @@ class CampaignsController < ApplicationController
       partner_operating_costs_text: partner.operating_costs_text,
       partner_accepts_operating_costs_donations?: partner.accepts_operating_costs_donations?,
       uk_partner?: uk_partner?,
-      currency: partner_currency
+      currency: partner_currency,
+      currency_code: campaign.partner.currency.downcase
     )
 
     respond_to do |format|
