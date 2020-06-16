@@ -1,0 +1,12 @@
+= form_with url: partner_payment_methods_path, method: :post, id: 'payment-form', local: true do |f|
+  = f.hidden_field :payment_token, id: 'payment_token'
+  = f.hidden_field :id, value: params[:id]
+
+  = render 'partners/payment_methods/credit_card_form'
+  .field
+    .control
+      span.help
+        | We use smart and secure online payments to ensure that your donations are simple, secure, and avoid fees.
+
+  .field.has-text-right
+    = f.submit class: %w(button is-primary), value: 'Update card'

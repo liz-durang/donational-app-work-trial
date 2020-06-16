@@ -162,6 +162,18 @@ GEM
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     jwt (2.2.1)
+    kaminari (1.2.1)
+      activesupport (>= 4.1.0)
+      kaminari-actionview (= 1.2.1)
+      kaminari-activerecord (= 1.2.1)
+      kaminari-core (= 1.2.1)
+    kaminari-actionview (1.2.1)
+      actionview
+      kaminari-core (= 1.2.1)
+    kaminari-activerecord (1.2.1)
+      activerecord
+      kaminari-core (= 1.2.1)
+    kaminari-core (1.2.1)
     kramdown (2.1.0)
     launchy (2.4.3)
       addressable (~> 2.3)
@@ -443,6 +455,7 @@ DEPENDENCIES
   faraday
   jbuilder (~> 2.7.0)
   jquery-rails
+  kaminari
   letter_opener
   listen (~> 3.0.5)
   lograge

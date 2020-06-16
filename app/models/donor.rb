@@ -33,6 +33,21 @@
 #
 
 class Donor < ApplicationRecord
+  searchkick word_start: [:name], batch_size: 1000, callbacks: :async
+
+  def search_data
+    {
+      email: email,
+      name: name,
+      partner_id: Partners::GetPartnerForDonor.call(donor: self).id
+    }
+  end
+  
+  self.primary_key = 'id'
+
+  def self.search_for(query, limit: 10)
+    self.search(query, limit: limit, misspellings: { prefix_length: 2 }, match: :word_start)
+  end
   has_many :selected_portfolios, -> { where(deactivated_at: nil) }
   has_many :portfolios, through: :selected_portfolios
   has_many :payment_methods

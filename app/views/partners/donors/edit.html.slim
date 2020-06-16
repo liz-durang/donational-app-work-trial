@@ -1,0 +1,91 @@
+section.section
+  .container.has-text-centered
+      h1.title 
+        = "Edit Donor: " + @view_model.donor.name
+
+.is-sticky
+  .tabs.is-centered
+    ul
+      li = link_to edit_partner_path(@view_model.partner) do
+        = icon_tag('fa-user')
+        | Basic Information
+      li = link_to partner_managed_portfolios_path(@view_model.partner) do
+        = icon_tag('fa-address-book')
+        | Portfolios
+      li = link_to partner_campaigns_path(@view_model.partner) do
+        = icon_tag('fa-globe')
+        | Campaigns
+      li = link_to partner_reports_path(@view_model.partner) do
+        = icon_tag('fa-folder')
+        | Reports
+      li.is-active = link_to partner_donors_path(@view_model.partner) do
+        = icon_tag('fa-user')
+        | Donors
+
+section.embossed.section
+  .container
+    = display_flash_messages
+    .box.flat-card
+      = form_with url: partner_donor_path, local: true, method: :put, class: 'form' do |f|
+        = render 'form', f: f
+    .box.flat-card
+      .columns.is-vcentered
+        - if @view_model.payment_method.present?
+          .column.has-text-centered
+            p: span.far.fa-credit-card.fa-2x
+            h3 Payment Information
+          .column style='background: #fff;'
+            = render @view_model.payment_method
+    .box.flat-card
+      .columns.is-vcentered
+        .column.has-text-centered
+          p: span.far.fa-calendar.fa-2x
+          h3 Donor's donation plan
+          br
+        .column style='background: #fff;'
+          = render 'partners/recurring_contributions/next_contribution',
+            first_contribution: @view_model.first_contribution,
+            recurring_contribution: @view_model.recurring_contribution
+          hr
+          - if @view_model.recurring_contribution
+            = render @view_model.recurring_contribution
+    .box.flat-card
+      h2 Donor's Contributions
+      .columns.is-vcentered
+        .column
+          table.table.is-hoverable.is-fullwidth.has-cells-centered data-behavior="accordion"
+              tr
+                th Amount
+                th Receipt
+                th Scheduled At
+                th Refunded At
+                th Failed At
+                th Action
+              - @view_model.contributions.each do |contribution|
+                tr
+                  td
+                    p
+                      = Money.new(contribution.amount_cents, @view_model.partnercurrency).format(no_cents_if_whole: false)
+                  td
+                    p
+                      - if contribution.receipt.present?
+                        - if contribution.receipt["receipt_url"].present?
+                          = link_to 'Receipt', contribution.receipt["receipt_url"]
+                        -else
+                          | N/A
+                      - else
+                        | N/A
+                  td
+                    p
+                      = contribution.scheduled_at.strftime("%-d/%-m/%y: %H:%M %Z")
+                  td
+                    p
+                      = contribution.refunded_at.present? ? contribution.refunded_at.strftime("%-d/%-m/%y: %H:%M %Z") : 'N/A'
+                  td
+                    p
+                      = contribution.failed_at.present? ? contribution.failed_at.strftime("%-d/%-m/%y: %H:%M %Z") : 'N/A'
+                  td
+                    - if !contribution.refunded_at.present? and !contribution.failed_at.present? and contribution.receipt.present?
+                      = form_with url: partner_refunds_path, local: true, method: :post, class: 'form' do |f|
+                        = f.hidden_field :contribution_id, value: contribution.id
+                        = f.submit class: %w(button is-primary is-small), value: 'Refund'

@@ -1,0 +1,27 @@
+.columns
+  .column.is-4
+    label.field
+      .label First Name (Required)
+      .control
+        = f.text_field :first_name, class: :input, value: @view_model.donor.first_name
+  .column.is-4
+    label.field
+      .label Last Name (Required)
+      .control
+        = f.text_field :last_name, class: :input, value: @view_model.donor.last_name
+  .column.is-4
+    label.field
+      .label Email (Required)
+      .control
+        = f.text_field :email, class: :input, value: @view_model.donor.email
+- @view_model.partner.donor_questions.each do |donor_question|
+  .field
+    = f.label donor_question.name do
+      .label = donor_question.required ? donor_question.title + " (Required)" : donor_question.title
+      - if donor_question.type == 'select'
+        .select = f.collection_select donor_question.name, donor_question.options.zip(donor_question.options), :first, :last, selected: (@view_model.donor_responses.present? ? @view_model.donor_responses[donor_question.name].presence : nil)
+      - else
+        = f.text_field donor_question.name, class: :input, value: (@view_model.donor_responses.present? ? @view_model.donor_responses[donor_question.name].presence : nil)
+.field.has-text-centered.content
+  .control.has-text-centered
+    = f.submit class: %w(button is-primary is-medium)

@@ -24,6 +24,7 @@ gem 'enumerize', '~> 2.1'
 # Views
 gem 'commonmarker', '~> 0.17.9'
 gem 'premailer-rails'
+gem 'kaminari'
 
 # Jobs
 gem 'sidekiq'

@@ -1,6 +1,6 @@
 section.section
   .container.has-text-centered
-      h1.title Edit Campaign
+      h1.title New Donor
 
 .is-sticky
   .tabs.is-centered
@@ -11,13 +11,13 @@ section.section
       li = link_to partner_managed_portfolios_path(@view_model.partner) do
         = icon_tag('fa-address-book')
         | Portfolios
-      li.is-active = link_to partner_campaigns_path(@view_model.partner) do
+      li = link_to partner_campaigns_path(@view_model.partner) do
         = icon_tag('fa-globe')
         | Campaigns
       li = link_to partner_reports_path(@view_model.partner) do
         = icon_tag('fa-folder')
         | Reports
-      li. = link_to partner_donors_path(@view_model.partner) do
+      li.is-active = link_to partner_donors_path(@view_model.partner) do
         = icon_tag('fa-user')
         | Donors
 
@@ -27,5 +27,5 @@ section.embossed.section
     .columns.is-centered
       .column.is-8
         .box
-          = form_with url: partner_campaign_path, local: true, method: :put, class: 'form' do |f|
+          = form_with url: partner_donors_path, local: true, method: :post, class: 'form' do |f|
             = render 'form', f: f

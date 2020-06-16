@@ -17,6 +17,9 @@ section.section
       li.is-active = link_to partner_reports_path(@view_model.partner) do
         = icon_tag('fa-folder')
         | Reports
+      li = link_to partner_donors_path(@view_model.partner) do
+        = icon_tag('fa-user')
+        | Donors
 
 section.embossed.section
   .container

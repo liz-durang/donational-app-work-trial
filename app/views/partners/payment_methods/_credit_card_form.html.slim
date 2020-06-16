@@ -1,0 +1,49 @@
+label.label Card Details for Donor
+.control
+  #card-element
+  #card-errors role="alert"
+p.control.has-icons-left
+  input.input.StripeElement id="cardholder_name" type="text" placeholder="Cardholder name"
+  span.icon.is-left.is-small: i.fa.fa-user
+
+javascript:
+  var stripe = Stripe("#{ENV.fetch('STRIPE_PUBLIC_KEY')}");
+  var elements = stripe.elements();
+
+  var style = {
+    base: {
+      fontSmoothing: 'antialiased',
+      fontSize: '16px',
+      '::placeholder': { color: '#C2C2C2' }
+    }
+  };
+
+  var card = elements.create('card', { style: style });
+  card.mount('#card-element');
+
+  card.addEventListener('change', function(event) {
+    var displayError = document.getElementById('card-errors');
+    if (event.error) {
+      displayError.textContent = event.error.message;
+    } else {
+      displayError.textContent = '';
+    }
+  });
+
+  var form = document.getElementById('payment-form');
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+    var tokenData = {
+      name: document.getElementById('cardholder_name').value
+    }
+    stripe.createToken(card, tokenData).then(function(result) {
+      if (result.error) {
+        var errorElement = document.getElementById('card-errors');
+        errorElement.textContent = result.error.message;
+        document.querySelector('#payment-form input[type=submit]').disabled = false;
+      } else {
+        document.getElementById('payment_token').value = result.token.id;
+        form.submit();
+      }
+    });
+  });
