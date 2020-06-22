@@ -29,9 +29,9 @@ en:
   aud:
     how_it_works:
       first_paragraph:
-        First paragraph for Australia
+        Your donation on Donational.org is managed by Australian Communities Foundation, a Deductible Gift Recepient, Australian Business Number 57 967 620 066.
       second_paragraph:
-        Second paragraph for Australia
+        No goods or services were provided in exchange for this contribution, which is a gift.
     tax_info:
-      Australia Tax info and charity name to enter on tax deduction
-    charity_name: charity name to enter on tax deduction for Australia
+      When filling this as a deduction on your taxes, enter "Australian Communities Foundation" as the name of the charity.
+    charity_name: Australian Communities Foundation
