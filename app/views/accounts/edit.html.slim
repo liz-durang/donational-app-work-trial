@@ -121,6 +121,12 @@ section.embossed.section
                     - if donor_response.question.type == 'select'
                       .select = f.collection_select donor_response.question.name, donor_response.question.options.zip(donor_response.question.options), :first, :last,
                                 selected: donor_response.value
+                    - elsif donor_response.question.type == 'checkbox'
+                      - if donor_response.value == "1"
+                        = f.check_box donor_response.question.name, checked: true
+                      - else
+                        = f.check_box donor_response.question.name
+                    - elsif donor_response.question.type == 'statictext'
                     - else
                       = f.text_field donor_response.question.name, class: :input,
                         value: donor_response.value

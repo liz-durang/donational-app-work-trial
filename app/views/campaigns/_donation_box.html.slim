@@ -17,25 +17,46 @@
         span.icon: i.fas.fa-handshake
         h3.wizard-card-title Pledge now
         = render 'wizard_nav', step: 1, of: 5
-      .wizard-card-content
+      .wizard-card-content style="height: 330px; overflow-y:scroll;"
         .field
-          = f.label :managed_portfolio_id, class: :label, value: 'Select a portfolio'
+          - if @view_model.managed_portfolios.where(featured: true).empty?
+            = f.label :managed_portfolio_id, class: :label, value: 'Choose from one of our portfolios:'
+          - else
+            = f.label :managed_portfolio_id, class: :label, value: 'Donate to our recommended charities:'
           .field
-            - @view_model.managed_portfolios.each do |mp|
-              .control
-                label for="portfolio-#{mp.id}"
-                  .level.is-mobile
-                    .level-left
-                      .label
-                        .span.icon = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}", data: { action: 'wizard#selectPortfolio' }
-                    .level-left style='flex-shrink: initial; flex-grow: 1; margin: 0 0.5rem' class=(mp.featured? ? 'has-text-weight-bold' : '')
-                      = mp.name
-                    .level-right
-                      .help = pluralize(mp.size, 'charity')
+            div.columns.is-multiline.is-mobile
+              - @view_model.managed_portfolios.where(featured: true).each do |mp|
+                .control.column.is-full
+                  label for="portfolio-#{mp.id}"
+                    level.is-mobile data-action="wizard#selectPortfolio"
+                      div.card.has-background-primary style="cursor: pointer;" id="portfolio-link-#{mp.id}"
+                        div.card-content
+                          .label
+                            .span.icon.is-hidden = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}", data: { action: 'wizard#selectPortfolio' }
+                          p.title.is-4.has-text-light = mp.name
+                          p.subtitle.is-6.has-text-light = pluralize(mp.size, 'charity')
+                          div.content.has-text-light = mp.description
+            - unless @view_model.managed_portfolios.where(featured: true).empty?
+              span.column.label Or choose from one of our other portfolios &darr;
+            div.columns.is-multiline.is-mobile
+              - @view_model.managed_portfolios.each do |mp|
+                - unless mp.featured == true
+                  .control.column.is-full
+                    label for="portfolio-#{mp.id}"
+                      div.card.is-mobile data-action="wizard#selectPortfolio" style="cursor: pointer;"
+                        div.card-content
+                          .level
+                            .level-left
+                              .label
+                                .span.icon.is-hidden = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}", data: { action: 'wizard#selectPortfolio' }
+                            .level-left style='flex-shrink: initial; flex-grow: 1; margin: 0 0.5rem'
+                              span.title.is-6
+                                a id="portfolio-link-#{mp.id}"
+                                  = mp.name
+                            .level-right
+                              .help = pluralize(mp.size, 'charity')
           = f.hidden_field :portfolio_selected, data: { target: "wizard.portfolioSelected wizard.required_field_0" }
           span.help.display-when-errors This field is required
-      .wizard-card-footer
-        a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
     fieldset.wizard-card data-target='wizard.step'
       .wizard-card-header
         a.icon data-action="wizard#previous" &larr;
@@ -74,18 +95,8 @@
     fieldset.wizard-card data-target='wizard.step'
       .wizard-card-header
         a.icon data-action="wizard#previous" &larr;
-        h3.wizard-card-title About you
-        = render 'wizard_nav', step: 3, of: 5
-      .wizard-card-content
-        = f.fields_for :donor_questions do |questions_form|
-          = render @view_model.donor_questions, form: questions_form
-      .wizard-card-footer
-        a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
-    fieldset.wizard-card data-target='wizard.step'
-      .wizard-card-header
-        a.icon data-action="wizard#previous" &larr;
         h3.wizard-card-title Your donation
-        = render 'wizard_nav', step: 4, of: 5
+        = render 'wizard_nav', step: 3, of: 5
       .wizard-card-content
         .field data-controller="radio-select"
           p.has-text-weight-bold = @view_model.contribution_amount_help_text
@@ -101,9 +112,12 @@
               = f.number_field :amount_dollars,
                 class: %w(input is-medium),
                 placeholder: 'Your donation amount',
-                data: { controller: 'integer-field', target: 'radio-select.output wizard.required_field_3 wizard.donationAmount', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection keypress->integer-field#allowKeypressWhenInteger input->wizard#updateGiftAidAmount' }
+                data: { controller: 'integer-field', target: 'radio-select.output wizard.required_field_2 wizard.donationAmount', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection keypress->integer-field#allowKeypressWhenInteger input->wizard#updateGiftAidAmount' }
               span.help.display-when-errors This field is required
         .field
+          <div class="notification is-light">
+            | Did you know that this donation is tax-deductible? Depending on your income, this contribution may only cost you 60-80% of your selected amount.
+          </div>
           .field.is-grouped.is-centered
             .control
               - if @view_model.donation_frequencies.size == 1
@@ -120,15 +134,6 @@
             .control.is-expanded.has-icons-left.is-hidden data-accordion-panel-for="show-date"
                 = icon_tag('fas fa-calendar')
                 = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 4.years.from_now.to_date.iso8601
-        .field data-controller="radio-select"
-          - if @view_model.partner_accepts_operating_costs_donations?
-            p class='help' style='margin-bottom: 10px'
-              = @view_model.partner_operating_costs_text
-            .field.is-grouped.is-grouped-multiline
-              - @view_model.default_operating_costs_donation_percentages.each do |amount|
-                a.control.button.is-expanded href='#' data-target='radio-select.button' data-action='radio-select#select' data-radio-select-value=amount
-                  = number_to_percentage(amount, precision: 0)
-              = f.hidden_field :partner_contribution_percentage, data: { controller: 'integer-field', target: 'radio-select.output' }
         - if @view_model.uk_partner?
           hr
           .columns.is-mobile
@@ -185,8 +190,25 @@
       .wizard-card-header
         a.icon data-action="wizard#previous" &larr;
         h3.wizard-card-title Payment
+        = render 'wizard_nav', step: 4, of: 5
+      .wizard-card-content
+        .field data-controller="radio-select"
+          - if @view_model.partner_accepts_operating_costs_donations?
+            p class='help' style='margin-bottom: 10px'
+              = @view_model.partner_operating_costs_text
+            .field.is-grouped.is-grouped-multiline
+              - @view_model.default_operating_costs_donation_percentages.each do |amount|
+                a.control.button.is-expanded href='#' data-target='radio-select.button' data-action='radio-select#select' data-radio-select-value=amount
+                  = number_to_percentage(amount, precision: 0)
+              = f.hidden_field :partner_contribution_percentage, data: { controller: 'integer-field', target: 'radio-select.output' }
+      = render 'credit_card_form'
+    fieldset.wizard-card data-target='wizard.step'
+      .wizard-card-header
+        a.icon data-action="wizard#previous" &larr;
+        h3.wizard-card-title About you
         = render 'wizard_nav', step: 5, of: 5
       .wizard-card-content
-        = render 'payment_methods/credit_card_form'
+        = f.fields_for :donor_questions do |questions_form|
+          = render @view_model.donor_questions, form: questions_form
       .wizard-card-footer
-        = f.submit class: %w(button is-primary is-fullwidth), value: 'Donate', data: { 'disable-with': 'Donate' }
+        a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#donate" Donate

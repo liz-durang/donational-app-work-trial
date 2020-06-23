@@ -20,6 +20,12 @@
       .label = donor_question.required ? donor_question.title + " (Required)" : donor_question.title
       - if donor_question.type == 'select'
         .select = f.collection_select donor_question.name, donor_question.options.zip(donor_question.options), :first, :last, selected: (@view_model.donor_responses.present? ? @view_model.donor_responses[donor_question.name].presence : nil)
+      - elsif donor_question.type == 'checkbox'
+        - if @view_model.donor_responses.present? && @view_model.donor_responses[donor_question.name] == "1"
+          = f.check_box donor_question.name, checked: true
+        - else
+          = f.check_box donor_question.name
+      - elsif donor_question.type == 'statictext'
       - else
         = f.text_field donor_question.name, class: :input, value: (@view_model.donor_responses.present? ? @view_model.donor_responses[donor_question.name].presence : nil)
 .field.has-text-centered.content

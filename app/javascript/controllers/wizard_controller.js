@@ -37,7 +37,18 @@ export default class extends Controller {
   }
 
   selectPortfolio(event) {
-    this.portfolioSelectedTarget.value = true.toString()
+    this.portfolioSelectedTarget.value = true.toString();
+    this.next(event)
+  }
+
+  donate(event) {
+    event.preventDefault();
+    var form = document.getElementById('payment-form');
+    this.validateRequiredFields()
+    if (this.valid) {
+      form.submit();
+      return false;
+    }
   }
 
   private

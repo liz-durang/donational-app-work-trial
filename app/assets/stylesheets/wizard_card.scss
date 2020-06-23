@@ -10,9 +10,8 @@
   max-width: 100%;
 
   .wizard-card-header {
-    padding: 1rem;
+    padding: 1.5rem;
     display: flex;
-    background: #eee;
     align-items: center;
   }
 
@@ -29,11 +28,11 @@
   }
 
   .wizard-card-content {
-    padding: 1rem;
+    padding: 1.5rem;
   }
 
   .wizard-card-footer {
     margin-top: auto;
-    padding: 1rem;
+    padding: 1.5rem;
   }
 }

@@ -100,7 +100,7 @@ section.section
                   td
                     = q.text_field :title, class: :input, placeholder: 'eg What is your favorite color?'
                   td
-                    .select.control = q.select :type, [['Text', 'text'], ['Drop-down', 'select']]
+                    .select.control = q.select :type, [['Text', 'text'], ['Drop-down', 'select'], ['Checkbox', 'checkbox'], ['Static Text', 'statictext']]
                   td
                     = q.text_field :options, class: :input, placeholder: 'i.e. Red, Blue, Green, Other', value: donor_question.options.join(', ')
                   td
