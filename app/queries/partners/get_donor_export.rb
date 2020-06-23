@@ -14,6 +14,7 @@ module Partners
         .where('recurring_contributions.created_at = (SELECT MAX(recurring_contributions.created_at) FROM recurring_contributions WHERE recurring_contributions.donor_id = donors.id)')
         .select(
           'donors.id as donor_id',
+          'recurring_contributions.id AS recurring_contribution_id',
           'donors.created_at as donor_joined_at',
           :first_name,
           :last_name,
