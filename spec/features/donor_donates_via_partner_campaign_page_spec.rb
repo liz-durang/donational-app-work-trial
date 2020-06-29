@@ -32,13 +32,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     # Future date the donation
     find('[data-accordion-trigger="show-date"]').click
-    find('input[type="date"]').click
-    [1, 2, 3].each do |i|
-      find('.calendar-nav-next-month').click
-      month_name = i.months.from_now.strftime("%B")
-      expect(page).to have_content(month_name)
-    end
-    click_on '12'
+    select Date::ABBR_MONTHNAMES[Date.today.month + 3]
 
     select 'Monthly'
 
@@ -66,8 +60,8 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     click_on 'Donate'
 
-    date_in_two_months_on_the_12th = (Date.new(Date.today.year, Date.today.month, 12) + 3.months)
-    expect(page).to have_content("Your next donation of $200.00 is scheduled for #{date_in_two_months_on_the_12th.to_formatted_s(:long_ordinal)}")
+    date_in_three_months_on_the_15th = (Date.new(Date.today.year, Date.today.month, 15) + 3.months)
+    expect(page).to have_content("Your next donation of $200.00 is scheduled for #{date_in_three_months_on_the_15th.to_formatted_s(:long_ordinal)}")
 
   end
 
@@ -91,13 +85,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     # Future date the donation
     find('[data-accordion-trigger="show-date"]').click
-    find('input[type="date"]').click
-    [1, 2, 3].each do |i|
-      find('.calendar-nav-next-month').click
-      month_name = i.months.from_now.strftime("%B")
-      expect(page).to have_content(month_name)
-    end
-    click_on '12'
+    select Date::ABBR_MONTHNAMES[Date.today.month + 3]
 
     select 'Monthly'
 
@@ -140,13 +128,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     # Future date the donation
     find('[data-accordion-trigger="show-date"]').click
-    find('input[type="date"]').click
-    [1, 2, 3].each do |i|
-      find('.calendar-nav-next-month').click
-      month_name = i.months.from_now.strftime("%B")
-      expect(page).to have_content(month_name)
-    end
-    click_on '12'
+    select Date::ABBR_MONTHNAMES[Date.today.month + 3]
 
     select 'Monthly'
 
@@ -165,9 +147,8 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     select 'Wharton'
 
     click_on 'Donate'
-
-    date_in_two_months_on_the_12th = (Date.new(Date.today.year, Date.today.month, 12) + 3.months)
-    expect(page).to have_content("Your next donation of $200.00 is scheduled for #{date_in_two_months_on_the_12th.to_formatted_s(:long_ordinal)}")
+    date_in_three_months_on_the_15th = (Date.new(Date.today.year, Date.today.month, 15) + 3.months)
+    expect(page).to have_content("Your next donation of $200.00 is scheduled for #{date_in_three_months_on_the_15th.to_formatted_s(:long_ordinal)}")
 
     click_on 'View my portfolio'
 
@@ -177,7 +158,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     within('#ask-to-pause-modal') do
       find('[value="Sounds great!"]').click
     end
-    expect(page).to have_content("Your next donation of $200.00 is scheduled for #{(date_in_two_months_on_the_12th + 3.months).to_formatted_s(:long_ordinal)}")
+    expect(page).to have_content("Your next donation of $200.00 is scheduled for #{(date_in_three_months_on_the_15th + 3.months).to_formatted_s(:long_ordinal)}")
 
     select 'Other Portfolio'
     click_on 'Update donation plan'
@@ -201,13 +182,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     # Future date the donation
     find('[data-accordion-trigger="show-date"]').click
-    find('input[type="date"]').click
-    [1, 2, 3].each do |i|
-      find('.calendar-nav-next-month').click
-      month_name = i.months.from_now.strftime("%B")
-      expect(page).to have_content(month_name)
-    end
-    click_on '12'
+    select Date::ABBR_MONTHNAMES[Date.today.month + 3]
 
     select 'Monthly'
 
@@ -232,8 +207,8 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     click_on 'Donate'
 
-    date_in_two_months_on_the_12th = (Date.new(Date.today.year, Date.today.month, 12) + 3.months)
-    expect(page).to have_content("Your next donation of £200.00 is scheduled for #{date_in_two_months_on_the_12th.to_formatted_s(:long_ordinal)}")
+    date_in_three_months_on_the_15th = (Date.new(Date.today.year, Date.today.month, 15) + 3.months)
+    expect(page).to have_content("Your next donation of £200.00 is scheduled for #{date_in_three_months_on_the_15th.to_formatted_s(:long_ordinal)}")
 
     visit edit_accounts_path
     expect(find_field('donor_responses[city]').value).to eq 'London'
@@ -241,7 +216,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     within('#ask-to-pause-modal') do
       find('[value="Sounds great!"]').click
     end
-    expect(page).to have_content("Your next donation of £200.00 is scheduled for #{(date_in_two_months_on_the_12th + 3.months).to_formatted_s(:long_ordinal)}")
+    expect(page).to have_content("Your next donation of £200.00 is scheduled for #{(date_in_three_months_on_the_15th + 3.months).to_formatted_s(:long_ordinal)}")
     
   end
 

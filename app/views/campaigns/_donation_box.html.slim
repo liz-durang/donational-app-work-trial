@@ -115,9 +115,8 @@
                 data: { controller: 'integer-field', target: 'radio-select.output wizard.required_field_2 wizard.donationAmount', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection keypress->integer-field#allowKeypressWhenInteger input->wizard#updateGiftAidAmount' }
               span.help.display-when-errors This field is required
         .field
-          <div class="notification is-light">
+          .notification.is-light
             | Did you know that this donation is tax-deductible? Depending on your income, this contribution may only cost you 60-80% of your selected amount.
-          </div>
           .field.is-grouped.is-centered
             .control
               - if @view_model.donation_frequencies.size == 1
@@ -131,9 +130,10 @@
               a.button.is-text data-accordion-trigger="show-date"
                 = icon_tag('fas fa-calendar')
                 span today
-            .control.is-expanded.has-icons-left.is-hidden data-accordion-panel-for="show-date"
-                = icon_tag('fas fa-calendar')
-                = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 4.years.from_now.to_date.iso8601
+            .control.is-expanded.is-hidden data-accordion-panel-for="show-date"
+                .select = f.select :start_at_month, Date::ABBR_MONTHNAMES[1..], selected: Date::ABBR_MONTHNAMES[Date.today.month]
+                .select = f.select :start_at_year, Date.today.year.. 4.years.from_now.year
+          p.help.is-hidden data-accordion-panel-for="show-date" Recurring contributions are charged on the 15th of the month
         - if @view_model.uk_partner?
           hr
           .columns.is-mobile

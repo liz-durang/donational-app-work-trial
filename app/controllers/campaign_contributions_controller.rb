@@ -109,8 +109,12 @@ class CampaignContributionsController < ApplicationController
   end
 
   def start_at
-    start_at_param = params.dig(:campaign_contribution, :start_at)
-    Time.zone.parse(start_at_param) if start_at_param
+    start_at_month = params.dig(:campaign_contribution, :start_at_month)
+    start_at_year = params.dig(:campaign_contribution, :start_at_year)
+
+    return nil if start_at_month.blank? || start_at_year.blank?
+
+    Time.zone.local(start_at_year, start_at_month, 15)
   end
 
   def custom_question_responses
