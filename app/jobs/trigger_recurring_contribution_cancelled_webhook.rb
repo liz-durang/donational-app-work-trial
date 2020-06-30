@@ -26,7 +26,7 @@ class TriggerRecurringContributionCancelledWebhook < ApplicationJob
         req.body = {
           id: recurring_contribution.id,
           start_at: recurring_contribution.start_at.to_date,
-          cancelled_at: recurring_contribution.deactivated_at.to_date,
+          cancelled_at: recurring_contribution.deactivated_at,
           frequency: recurring_contribution.frequency,
           amount_dollars: recurring_contribution.amount_dollars,
           donor_name: recurring_contribution.donor_name,
