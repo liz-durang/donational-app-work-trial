@@ -38,7 +38,7 @@ RSpec.describe Payments::UpdatePaymentMethod do
           donor: donor,
           payment_token: payment_token
         )
-
+        expect(TriggerPaymentMethodUpdatedWebhook.jobs.size).to eq(1)
         expect(command).to be_success
         expect(Payments::GetActivePaymentMethod.call(donor: donor).last4).to eq '4242'
       end
@@ -70,6 +70,7 @@ RSpec.describe Payments::UpdatePaymentMethod do
           donor: donor,
           payment_token: payment_token
         )
+        expect(TriggerPaymentMethodUpdatedWebhook.jobs.size).to eq(1)
 
         expect(command).to be_success
         expect(Payments::GetActivePaymentMethod.call(donor: donor).payment_processor_customer_id).to include 'test_cus_'
@@ -81,6 +82,7 @@ RSpec.describe Payments::UpdatePaymentMethod do
             donor: donor,
             payment_token: payment_token
           )
+          expect(TriggerPaymentMethodUpdatedWebhook.jobs.size).to eq(1)
 
           expect(command).to be_success
           expect(Payments::GetActivePaymentMethod.call(donor: donor).last4).to eq '4242'

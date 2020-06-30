@@ -30,6 +30,8 @@ module Payments
         )
       end
 
+      TriggerPaymentMethodUpdatedWebhook.perform_async(donor.id)
+
       nil
     end
 
