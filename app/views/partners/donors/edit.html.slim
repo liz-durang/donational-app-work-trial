@@ -89,3 +89,16 @@ section.embossed.section
                       = form_with url: partner_refunds_path, local: true, method: :post, class: 'form' do |f|
                         = f.hidden_field :contribution_id, value: contribution.id
                         = f.submit class: %w(button is-primary is-small), value: 'Refund', data: { confirm: 'Refund this contribution?' }
+    .box.flat-card
+      - if @view_model.partner.donors.include?(@view_model.donor)
+        p.subtitle This user has admin privileges
+        = form_with url: partner_admin_path, local: true, method: :put, class: 'form' do |f|
+          = f.hidden_field :partner_id, value: @view_model.partner.id
+          = f.hidden_field :donor_id, value: @view_model.donor.id
+          = f.submit class: %w(button is-primary), value: "Revoke this user's admin privileges", data: { confirm: "Revoke this user's admin privileges?" }
+      - else
+        p.subtitle This user does not have admin privileges
+        = form_with url: partner_admins_path, local: true, method: :post, class: 'form' do |f|
+          = f.hidden_field :partner_id, value: @view_model.partner.id
+          = f.hidden_field :donor_id, value: @view_model.donor.id
+          = f.submit class: %w(button is-primary), value: "Make this user an Admin", data: { confirm: "Make this user an admin?" }

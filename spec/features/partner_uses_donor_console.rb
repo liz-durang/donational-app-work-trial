@@ -20,6 +20,8 @@ RSpec.describe 'Partner uses donor console', type: :feature do
     then_the_partner_searches_for_the_donor
     then_the_partner_edits_the_donors_city_without_required_fields
     then_the_partner_edits_the_donors_city_with_required_fields
+    then_the_partner_makes_the_donor_an_admin
+    then_the_partner_revokes_the_donors_admin_privileges
   end
 
   scenario 'with existing donors, and before grants have been processed', js: true do
@@ -87,6 +89,20 @@ RSpec.describe 'Partner uses donor console', type: :feature do
     fill_in 'Which city will you be living in when your donation commences?', with: 'NYC'
     click_on 'Save'
     expect(page).to have_content("Donor Updated Successfully")
+  end
+
+  def then_the_partner_makes_the_donor_an_admin
+    click_on 'Make this user an Admin'
+    page.accept_alert
+    expect(page).to have_content("Admin Privileges Granted")
+    expect(Donor.find_by(email: 'dcooper@test.test').partners.include?(@partner))
+  end
+
+  def then_the_partner_revokes_the_donors_admin_privileges
+    click_on "Revoke this user's admin privileges"
+    page.accept_alert
+    expect(page).to have_content("Admin Privileges Revoked")
+    expect(!Donor.find_by(email: 'dcooper@test.test').partners.include?(@partner))
   end
 
   def other_partner_signs_in

@@ -36,6 +36,7 @@ Rails.application.routes.draw do
     resources :donors, module: :partners, only: %i[index new edit create update]
     resources :payment_methods, module: :partners, only: %i[create]
     resources :refunds, module: :partners, only: %i[create]
+    resources :admins, module: :partners, only: %i[index new edit create update]
     resources :contributions, module: :partners
   end
   resources :searchable_organizations, only: :index
