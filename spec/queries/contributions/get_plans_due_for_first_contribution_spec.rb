@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Contributions::GetPlansDueForFirstContribution do
+  include ActiveSupport::Testing::TimeHelpers
+
   subject { Contributions::GetPlansDueForFirstContribution.call }
 
   context 'when the plans all have at least one contribution' do
@@ -36,6 +38,11 @@ RSpec.describe Contributions::GetPlansDueForFirstContribution do
   end
 
   context 'when there are active unprocessed plans with past start dates' do
+    around do |spec|
+      travel_to(Date.new(Date.today.year,Date.today.month,20)) do
+        spec.run
+      end
+    end
     let!(:recently_created_plan) { create(:recurring_contribution, start_at: Time.zone.now, last_scheduled_at: nil) }
     let!(:older_plan_that_still_has_no_contributons_scheduled) {
       create(:recurring_contribution, start_at: 1.week.ago, last_scheduled_at: nil)
