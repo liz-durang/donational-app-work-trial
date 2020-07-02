@@ -73,6 +73,19 @@ section.embossed.section
                 .column.has-text-right
                   p.has-text-rigth
                   = f.submit "Save", class: %w(button is-primary)
+    .box.flat-card style='background: #fafafa'
+      = form_with class: 'form' do |f|  
+        .columns.is-vcentered
+          .column.has-text-centered
+            h3.subtitle.is-spaced Advanced
+          .column style='background: #fff;'
+            .form
+              .field
+                label.control
+                  = f.label :api_key, class: :label
+                    | API Key
+                  = f.text_field :api_key, class: :input, value: @view_model.partner.api_key, readonly: true
+                  p.hint This key should be kept private
 
 section.section
   .container
