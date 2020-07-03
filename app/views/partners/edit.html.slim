@@ -66,13 +66,7 @@ section.embossed.section
                   = f.label :after_donation_thank_you_page_url, class: :label
                   = f.text_area :after_donation_thank_you_page_url, class: :input, value: @view_model.partner.after_donation_thank_you_page_url
               br
-              .columns
-                .column
-                  p.has-text-left
-                  = link_to "Connect with Stripe", @view_model.stripe_connect_url, class: %w(button is-primary)
-                .column.has-text-right
-                  p.has-text-rigth
-                  = f.submit "Save", class: %w(button is-primary)
+              = f.submit "Save", class: %w(button is-primary)
     .box.flat-card style='background: #fafafa'
       = form_with class: 'form' do |f|  
         .columns.is-vcentered
@@ -86,7 +80,13 @@ section.embossed.section
                     | API Key
                   = f.text_field :api_key, class: :input, value: @view_model.partner.api_key, readonly: true
                   p.hint This key should be kept private
-
+              .field
+                label.control
+                  .label Connect with Stripe
+                  - if @view_model.partner.payment_processor_account_id.present?
+                    p Stripe is already connected
+                  - else
+                    = link_to "Click here to connect", @view_model.stripe_connect_url, class: %w(button is-primary)
 section.section
   .container
     p.subtitle.is-spaced.has-text-centered
