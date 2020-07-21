@@ -5,7 +5,7 @@ module Partners
     end
 
     def call(donor:)
-      @relation.find_by(donor: donor)
+      @relation.order(created_at: :desc).where(donor: donor).first
     end
   end
 end

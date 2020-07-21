@@ -5,7 +5,7 @@ module Partners
     end
 
     def call(donor:)
-      @relation.find_by(donor: donor).try(:partner) || default_partner
+      @relation.order(created_at: :desc).where(donor: donor).first.try(:partner) || default_partner
     end
 
     def default_partner

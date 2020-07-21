@@ -32,6 +32,8 @@ RSpec.describe 'Partner uses donor console', type: :feature do
     then_the_partner_delays_the_donation_plan
     then_the_partner_cancels_the_donation_plan
     then_the_partner_refunds_an_ungranted_contribution
+    then_the_partner_gets_admin_privileges_for_first_partner
+    then_the_partner_migrates_donor_to_first_partner
   end
 
   scenario 'with existing donors, and after grants have been processed', js: true do
@@ -158,6 +160,19 @@ RSpec.describe 'Partner uses donor console', type: :feature do
     click_on 'Refund'
     page.accept_alert
     expect(page).to have_content("Contribution Refunded Successfully")
+  end
+
+  def then_the_partner_gets_admin_privileges_for_first_partner
+    Partners::AssignPartnerAdminPrivilegesToDonor.run(
+      donor: Donor.find_by(email: 'user@example.com'),
+      partner: @partner)
+  end
+
+  def then_the_partner_migrates_donor_to_first_partner
+    select 'One for the World'
+    click_on 'Migrate to this partner'
+    page.accept_alert
+    expect(page).to have_content("Donor Migrated Successfully")
   end
 
   def given_grants_are_processed

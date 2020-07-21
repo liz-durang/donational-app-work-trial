@@ -102,3 +102,11 @@ section.embossed.section
           = f.hidden_field :partner_id, value: @view_model.partner.id
           = f.hidden_field :donor_id, value: @view_model.donor.id
           = f.submit class: %w(button is-primary), value: "Make this user an Admin", data: { confirm: "Make this user an admin?" }
+    - if (current_donor.partners.count > 1)
+      .box.flat-card
+        p.subtitle Migrate donor to another partner
+        = form_with url: partner_donor_migrations_path, local: true, method: :post, class: 'form' do |f|
+          = f.hidden_field :donor_id, value: @view_model.donor.id
+          = f.hidden_field :source_partner_id , value: @view_model.partner.id
+          .select = f.select :destination_partner_id, current_donor.partners.collect { |p| [ p.name, p.id ] }
+          = f.submit class: %w(button is-primary), value: 'Migrate to this partner', data: { confirm: 'Migrate this donor?' }

@@ -16,6 +16,7 @@ module Contributions
     optional do
       time :start_at
       integer :partner_contribution_percentage, min: 0, default: 0
+      boolean :migration, default: false
     end
 
     def execute
@@ -39,6 +40,8 @@ module Contributions
 
         Portfolios::SelectPortfolio.run(donor: donor, portfolio: portfolio)
 
+        return if migration
+        
         send_confirmation_email!(recurring_contribution)
         if new_contribution
           TriggerRecurringContributionCreatedWebhook.perform_async(recurring_contribution.id, partner.id)
