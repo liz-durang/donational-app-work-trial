@@ -1,6 +1,6 @@
 h1
   ' Your tax-deductible donation to 
-  = t("#{@currency_downcase}.charity_name")
+  = @partner.receipt_charity_name
 h4 Powered by Donational.org
 
 p = markdown_to_html @partner_email_receipt_preamble
@@ -14,7 +14,7 @@ table border="0" cellpadding="0" cellspacing="0" width="100%"
     td align="left"
       b
         ' Donation to
-        = t("#{@currency_downcase}.charity_name")
+        = @partner.receipt_charity_name
     td align="right"
       b = Money.new(@contribution.total_charges_cents, @currency).format
   tr.summary-item
@@ -52,7 +52,7 @@ h4 Tax-Time
 .fine-print
   p Please retain this information for your tax records. No goods or services were received for this donation, so it is tax-deductible to the fullest extent of the law.
   p
-    = t("#{@currency_downcase}.tax_info")
+    = @partner.receipt_tax_info
     |  To make things easy at tax-time, we'll send you a summary of all the donations you make this year.
 
 h4 How it works?

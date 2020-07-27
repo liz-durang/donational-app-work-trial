@@ -17,7 +17,13 @@ RSpec.describe ContributionsSummaryMailer, type: :mailer do
     let(:end_fund) { create(:organization, name: 'The End Fund') }
     let(:dollars) { Money::Currency.new('usd') }
     let(:pounds) { Money::Currency.new('gbp') }
-    let(:partner) { create(:partner, name: 'Example Partner', currency: currency.iso_code) }
+    let(:partner) { create(:partner,
+      name: 'Example Partner',
+      currency: currency.iso_code,
+      receipt_first_paragraph: "First Paragraph",
+      receipt_second_paragraph: "Second Paragraph",
+      receipt_tax_info: "Tax Info",
+      receipt_charity_name: "Charity Name") }
     let(:contributions) do
       [
         create(:contribution_with_donations_to_organizations, amount_cents: 1000, tips_cents: 0, processed_at: Date.new(2018, 2, 10), organizations: [gd, amf]),
@@ -64,6 +70,9 @@ RSpec.describe ContributionsSummaryMailer, type: :mailer do
         expect(mail.body.encoded).to include("Against Malaria Foundation")
         expect(mail.body.encoded).to include("Give Directly")
         expect(mail.body.encoded).to include("The End Fund")
+        expect(mail.body.encoded).to include("First Paragraph")
+        expect(mail.body.encoded).to include("Second Paragraph")
+        expect(mail.body.encoded).to include("Tax Info")
       end
     end
 

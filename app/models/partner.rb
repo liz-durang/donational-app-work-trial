@@ -15,6 +15,10 @@
 #  api_key                          :string
 #  operating_costs_text             :string
 #  email_receipt_preamble           :text
+#  receipt_first_paragraph          :text
+#  receipt_second_paragraph         :text
+#  receipt_tax_info                 :text
+#  receipt_charity_name             :string
 #  after_donation_thank_you_page_url  :string
 #  operating_costs_organization_ein :string
 #  currency                         :string           default("usd"), not null

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_03_210000) do
+ActiveRecord::Schema.define(version: 2020_07_22_184603) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -241,6 +241,10 @@ ActiveRecord::Schema.define(version: 2020_06_03_210000) do
     t.string "currency", default: "usd", null: false
     t.text "email_receipt_preamble"
     t.string "after_donation_thank_you_page_url"
+    t.text "receipt_first_paragraph"
+    t.text "receipt_second_paragraph"
+    t.text "receipt_tax_info"
+    t.string "receipt_charity_name"
   end
 
   create_table "payment_methods", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -63,6 +63,22 @@ section.embossed.section
                   = f.text_area :email_receipt_preamble, class: :input, value: @view_model.partner.email_receipt_preamble
               .field
                 label.control
+                  = f.label :receipt_first_paragraph, class: :label
+                  = f.text_area :receipt_first_paragraph, class: :input, value: @view_model.partner.receipt_first_paragraph || t('receipt_defaults.first_paragraph')
+              .field
+                label.control
+                  = f.label :receipt_second_paragraph, class: :label
+                  = f.text_area :receipt_second_paragraph, class: :input, value: @view_model.partner.receipt_second_paragraph || t('receipt_defaults.second_paragraph')
+              .field
+                label.control
+                  = f.label :receipt_tax_info, class: :label
+                  = f.text_area :receipt_tax_info, class: :input, value: @view_model.partner.receipt_tax_info || t('receipt_defaults.tax_info')
+              .field
+                label.control
+                  = f.label :receipt_charity_name, class: :label
+                  = f.text_area :receipt_charity_name, class: :input, value: @view_model.partner.receipt_charity_name || t('receipt_defaults.charity_name')
+              .field
+                label.control
                   = f.label :after_donation_thank_you_page_url, class: :label
                   = f.text_area :after_donation_thank_you_page_url, class: :input, value: @view_model.partner.after_donation_thank_you_page_url
               br

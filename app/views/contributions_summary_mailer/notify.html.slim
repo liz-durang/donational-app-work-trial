@@ -20,7 +20,7 @@ p
   | portfolio!
 
 p
-  = t("#{@currency_downcase}.tax_info")
+  = @partner.receipt_tax_info
   |  Your donations are tax-deductible, and this email serves as your official tax receipt.
 
 p

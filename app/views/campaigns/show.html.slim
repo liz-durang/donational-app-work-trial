@@ -35,4 +35,4 @@ section.section.embossed
       .column.is-offset-1
         = display_flash_messages
         = render 'donation_box'
-        p.has-text-centered.help = t("#{@view_model.currency_code}.how_it_works.first_paragraph")
+        p.has-text-centered.help = @view_model.footer_text

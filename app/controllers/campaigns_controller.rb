@@ -19,6 +19,7 @@ class CampaignsController < ApplicationController
       partner_description: partner.description,
       partner_website_url: partner.website_url,
       partner_logo: partner.logo,
+      footer_text: partner.receipt_first_paragraph,
       banner_image: campaign.banner_image,
       campaign_title: campaign.title,
       campaign_slug: campaign.slug,
