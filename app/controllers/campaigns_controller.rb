@@ -121,7 +121,9 @@ class CampaignsController < ApplicationController
       default_operating_costs_donation_percentages: partner.default_operating_costs_donation_percentages,
       partner_operating_costs_text: partner.operating_costs_text,
       partner_accepts_operating_costs_donations?: partner.accepts_operating_costs_donations?,
-      currency: partner_currency
+      currency: partner_currency,
+      uk_partner?: uk_partner?,
+      currency_code: campaign.partner.currency.downcase
     )
 
     respond_to do |format|
@@ -170,7 +172,7 @@ class CampaignsController < ApplicationController
 
   def uk_partner?
     partner.currency == 'GBP'
-  end 
+  end
 
   def partner
     @partner = Partners::GetPartnerById.call(id: params[:partner_id]) || campaign.partner

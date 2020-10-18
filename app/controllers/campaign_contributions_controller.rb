@@ -139,8 +139,4 @@ class CampaignContributionsController < ApplicationController
   def partner
     @partner ||= campaign.partner
   end
-
-  def uk_partner?
-    partner.currency == 'GBP'
-  end
 end
