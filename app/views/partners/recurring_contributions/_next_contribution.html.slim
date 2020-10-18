@@ -1,9 +1,10 @@
-- if recurring_contribution&.start_at&.to_date&.today?
-  p = t :first_contribution_message, amount: Money.new(recurring_contribution.amount_cents, @view_model.partner.currency).format(no_cents_if_whole: false)
+- if @view_model.active
+  - if recurring_contribution&.start_at&.to_date&.today?
+    p = t :first_contribution_message, amount: Money.new(recurring_contribution.amount_cents, @view_model.partner.currency).format(no_cents_if_whole: false)
 
-- if recurring_contribution&.future_contribution_scheduled?
-  p = t recurring_contribution.frequency, scope: :next_contribution, \
-      amount: Money.new(recurring_contribution.amount_cents, @view_model.partner.currency).format(no_cents_if_whole: false), \
-      date: humanized_date(recurring_contribution.next_contribution_at)
+  - if recurring_contribution&.future_contribution_scheduled?
+    p = t recurring_contribution.frequency, scope: :next_contribution, \
+        amount: Money.new(recurring_contribution.amount_cents, @view_model.partner.currency).format(no_cents_if_whole: false), \
+        date: humanized_date(recurring_contribution.next_contribution_at)
 - else
   p = "This donor has no future donations scheduled"

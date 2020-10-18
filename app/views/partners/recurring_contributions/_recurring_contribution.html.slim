@@ -43,7 +43,7 @@
       = f.hidden_field :portfolio_id, value: @view_model.recurring_contribution.portfolio_id
     .has-text-right
       p = f.submit 'Update donation plan', class: %w(button is-primary)
-  - if recurring_contribution.future_contribution_scheduled?
+  - if @view_model.active && recurring_contribution.future_contribution_scheduled?
     .has-text-right
       a.modal-button data-target="ask-to-pause-modal" Cancel my upcoming donations
 

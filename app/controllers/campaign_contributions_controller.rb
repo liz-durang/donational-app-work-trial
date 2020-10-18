@@ -114,7 +114,7 @@ class CampaignContributionsController < ApplicationController
 
     return nil if start_at_month.blank? || start_at_year.blank?
 
-    Time.zone.local(start_at_year, start_at_month, 15)
+    Time.zone.local(start_at_year, start_at_month, 15, 12, 0)
   end
 
   def custom_question_responses

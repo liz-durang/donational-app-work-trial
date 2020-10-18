@@ -31,6 +31,7 @@ RSpec.describe 'Partner uses donor console', type: :feature do
     then_the_partner_updates_the_donation_plan
     then_the_partner_delays_the_donation_plan
     then_the_partner_cancels_the_donation_plan
+    then_the_partner_starts_the_donation_plan_again
     then_the_partner_refunds_an_ungranted_contribution
     then_the_partner_gets_admin_privileges_for_first_partner
     then_the_partner_migrates_donor_to_first_partner
@@ -154,6 +155,14 @@ RSpec.describe 'Partner uses donor console', type: :feature do
       click_on 'No, I still want to cancel'
     end
     expect(page).to have_content("We've cancelled the donation plan")
+  end
+
+  def then_the_partner_starts_the_donation_plan_again
+    fill_in 'recurring_contribution[amount_dollars]', with: '100'
+    click_on 'Monthly'
+    find('[data-disable-with="Update donation plan"]').click
+    date_in_one_month_on_the_15th = (Date.new(Date.today.year, Date.today.month, 15) + 1.month)
+    expect(page).to have_content("Your next donation of $100.00 is scheduled for #{date_in_one_month_on_the_15th.to_formatted_s(:long_ordinal)}")
   end
 
   def then_the_partner_refunds_an_ungranted_contribution

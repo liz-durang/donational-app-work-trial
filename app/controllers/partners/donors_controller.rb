@@ -18,7 +18,8 @@ module Partners
         partner: partner,
         donor_responses: donor_responses,
         donor: donor,
-        recurring_contribution: active_recurring_contribution,
+        active: active_recurring_contribution.present?,
+        recurring_contribution: active_recurring_contribution || new_recurring_contribution,
         first_contribution: Contributions::GetFirstContribution.call(donor: donor),
         partner_affiliation: partner_affiliation,
         selectable_portfolios: selectable_portfolios,
@@ -128,6 +129,10 @@ module Partners
 
     def new_payment_method
       donor.payment_methods.new
+    end
+
+    def new_recurring_contribution
+      donor.recurring_contributions.new
     end
 
     def active_payment_method

@@ -32,8 +32,9 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     # Future date the donation
     find('[data-accordion-trigger="show-date"]').click
-    select Date::ABBR_MONTHNAMES[Date.today.month + 3]
-
+    select Date::ABBR_MONTHNAMES[3.months.from_now.month]
+    select 3.months.from_now.year
+    
     select 'Monthly'
 
     click_on 'Next'
@@ -85,7 +86,9 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     # Future date the donation
     find('[data-accordion-trigger="show-date"]').click
-    select Date::ABBR_MONTHNAMES[Date.today.month + 3]
+    
+    select Date::ABBR_MONTHNAMES[3.months.from_now.month]
+    select 3.months.from_now.year
 
     select 'Monthly'
 
@@ -128,8 +131,9 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     # Future date the donation
     find('[data-accordion-trigger="show-date"]').click
-    select Date::ABBR_MONTHNAMES[Date.today.month + 3]
-
+    select Date::ABBR_MONTHNAMES[3.months.from_now.month]
+    select 3.months.from_now.year
+    
     select 'Monthly'
 
     click_on 'Next'
@@ -182,8 +186,9 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     # Future date the donation
     find('[data-accordion-trigger="show-date"]').click
-    select Date::ABBR_MONTHNAMES[Date.today.month + 3]
-
+    select Date::ABBR_MONTHNAMES[3.months.from_now.month]
+    select 3.months.from_now.year
+    
     select 'Monthly'
 
     find('#gift_aid_checkbox').set(true)
