@@ -16,7 +16,7 @@ module Partners
              .where(partner_affiliations: { partner: partner })
              .distinct
              .order(updated_at: :desc)
-             .page(params[:page])
+             .page(page)
              .per(per_page)
       end
     end
