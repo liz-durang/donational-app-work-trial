@@ -18,10 +18,16 @@ class PartnerAffiliation < ApplicationRecord
   delegate :title, to: :campaign, prefix: true
   delegate :name, to: :partner, prefix: true
 
+  after_commit :reindex_donor
+
   def donor_responses
     partner.donor_questions.map do |q|
       DonorResponse.new(question: q, value: custom_donor_info[q.name])
     end
+  end
+
+  def reindex_donor
+    donor.reindex
   end
 
   class DonorResponse
