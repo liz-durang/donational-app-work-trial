@@ -171,11 +171,7 @@ module Partners
     end
 
     def donors
-      @donors = if search
-        Partners::ListDonorsFromSearch.call(search: search, partner: partner, page: params[:page])
-      else
-        Donor.joins(:partner_affiliations).where(partner_affiliations: { partner_id: partner.id }).order('updated_at': :desc).page(params[:page]).per(10)
-      end
+      @donors = Partners::ListDonors.call(search: search, partner: partner, page: params[:page])
     end
 
     def contributions
@@ -185,7 +181,7 @@ module Partners
     end
 
     def search
-      @search = params[:term].present? ? params[:term] : nil
+      @search = params[:term].presence
     end
 
     def donor_responses
@@ -195,7 +191,7 @@ module Partners
       )
       return [] unless partner_affiliation.custom_donor_info
 
-      partner_affiliation.donor_responses.map{ |r| [r.question.name,r.value] }.to_h
+      partner_affiliation.donor_responses.map { |r| [r.question.name, r.value] }.to_h
     end
   end
 end
