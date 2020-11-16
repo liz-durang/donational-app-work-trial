@@ -37,6 +37,34 @@
       - elsif donor_question.type == 'statictext'
       - else
         = f.text_field donor_question.name, class: :input, value: (@view_model.donor_responses.present? ? @view_model.donor_responses[donor_question.name].presence : nil)
+- if @view_model.partner.supports_gift_aid?
+  .column.is-4
+    label.field
+      .label
+        | Gift Aid Accepted
+      .control
+        = f.check_box :uk_gift_aid_accepted, checked: @view_model.uk_gift_aid_accepted
+  .column.is-4
+    label.field
+      .label
+        | Title
+      .control
+        = f.text_field :title, class: :input, placeholder: 'e.g. Mr or Ms', value: @view_model.title
+  .column.is-4
+    label.field
+      .label
+        | Street Address
+      .control
+        = f.text_field :house_name_or_number, class: :input, value: @view_model.house_name_or_number
+  .column.is-4
+    label.field
+      .label
+        | Postcode
+      .control
+        = f.text_field :postcode, class: :input, placeholder: 'e.g. AA1 3DD', value: @view_model.postcode
+
+
+
 .field.has-text-centered.content
   .control.has-text-centered
     = f.submit class: %w(button is-primary is-medium)

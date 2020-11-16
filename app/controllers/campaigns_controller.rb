@@ -34,7 +34,7 @@ class CampaignsController < ApplicationController
       default_operating_costs_donation_percentages: partner.default_operating_costs_donation_percentages,
       partner_operating_costs_text: partner.operating_costs_text,
       partner_accepts_operating_costs_donations?: partner.accepts_operating_costs_donations?,
-      uk_partner?: uk_partner?,
+      supports_gift_aid?: partner.supports_gift_aid?,
       currency: partner_currency,
       currency_code: campaign.partner.currency.downcase
     )
@@ -122,7 +122,7 @@ class CampaignsController < ApplicationController
       partner_operating_costs_text: partner.operating_costs_text,
       partner_accepts_operating_costs_donations?: partner.accepts_operating_costs_donations?,
       currency: partner_currency,
-      uk_partner?: uk_partner?,
+      supports_gift_aid?: supports_gift_aid?,
       currency_code: campaign.partner.currency.downcase
     )
 
@@ -168,10 +168,6 @@ class CampaignsController < ApplicationController
 
   def campaign_by_id
     @campaign_by_id ||= Partners::GetCampaignById.call(id: params[:id])
-  end
-
-  def uk_partner?
-    partner.currency == 'GBP'
   end
 
   def partner

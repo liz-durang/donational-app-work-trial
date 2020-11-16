@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: partners
@@ -35,9 +37,9 @@ class Partner < ApplicationRecord
   has_one_attached :logo
   has_one_attached :email_banner
   belongs_to :operating_costs_organization,
-    class_name: 'Organization',
-    optional: true,
-    foreign_key: :operating_costs_organization_ein
+             class_name: 'Organization',
+             optional: true,
+             foreign_key: :operating_costs_organization_ein
 
   validates :currency, inclusion: { in: Money::Currency,
                                     message: '%{value} is not a valid currency iso code' }
@@ -84,6 +86,10 @@ class Partner < ApplicationRecord
       @options = options || []
       @required = required || false
     end
+  end
+
+  def supports_gift_aid?
+    currency == 'GBP'
   end
 
   private

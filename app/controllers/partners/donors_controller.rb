@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Partners
   class DonorsController < ApplicationController
     before_action :ensure_donor_has_permission!
@@ -25,7 +27,11 @@ module Partners
         selectable_portfolios: selectable_portfolios,
         payment_method: active_payment_method || new_payment_method,
         contributions: contributions,
-        donor_path: partner_donor_path
+        donor_path: partner_donor_path,
+        uk_gift_aid_accepted: donor.uk_gift_aid_accepted,
+        title: donor.title,
+        house_name_or_number: donor.house_name_or_number,
+        postcode: donor.postcode,
       )
     end
 
@@ -34,30 +40,36 @@ module Partners
         pipeline = Flow.new
         new_donor = Donors::CreateAnonymousDonor.run!
         pipeline.chain { Partners::AffiliateDonorWithPartner.run(donor: new_donor, partner: partner) }
-        pipeline.chain {
-        Donors::UpdateDonor.run(
-          donor: new_donor,
-          email: params[:email].presence,
-          first_name: params[:first_name].presence,
-          last_name: params[:last_name].presence
-        ) }
-        pipeline.chain {
-        Partners::UpdateCustomDonorInformation.run(
-          donor: new_donor,
-          partner: partner,
-          responses: custom_responses
-        ) }
+        pipeline.chain do
+          Donors::UpdateDonor.run(
+            donor: new_donor,
+            email: params[:email].presence,
+            first_name: params[:first_name].presence,
+            last_name: params[:last_name].presence,
+            title: params[:title].presence,
+            house_name_or_number: params[:house_name_or_number].presence,
+            postcode: params[:postcode].presence,
+            uk_gift_aid_accepted: params[:uk_gift_aid_accepted].presence
+          )
+        end
+        pipeline.chain do
+          Partners::UpdateCustomDonorInformation.run(
+            donor: new_donor,
+            partner: partner,
+            responses: custom_responses
+          )
+        end
 
         outcome = pipeline.run
 
         if outcome.success?
-          flash[:success] = "Donor Created Successfully"
+          flash[:success] = 'Donor Created Successfully'
         else
           flash[:error] = outcome.errors.message_list.join("\n")
         end
-        redirect_to partner_donors_path(partner)  
+        redirect_to partner_donors_path(partner)
       else
-        flash[:error] = "Please fill in the required field(s):\n" + required_fields_left_blank.join(", ")
+        flash[:error] = "Please fill in the required field(s):\n" + required_fields_left_blank.join(', ')
         redirect_to new_partner_donor_path(partner)
       end
     end
@@ -71,7 +83,7 @@ module Partners
         outcome = pipeline.run
 
         if outcome.success?
-          flash[:success] = "Donor Updated Successfully"
+          flash[:success] = 'Donor Updated Successfully'
         else
           flash[:error] = outcome.errors.message_list.join("\n")
         end
@@ -88,7 +100,11 @@ module Partners
         donor: donor,
         email: params[:email].presence,
         first_name: params[:first_name].presence,
-        last_name: params[:last_name].presence
+        last_name: params[:last_name].presence,
+        title: params[:title].presence,
+        house_name_or_number: params[:house_name_or_number].presence,
+        postcode: params[:postcode].presence,
+        uk_gift_aid_accepted: params[:uk_gift_aid_accepted].presence
       )
     end
 
@@ -109,12 +125,12 @@ module Partners
 
     def required_fields_left_blank
       validated = []
-      validated << 'Email' if !params[:email].present?
-      validated << 'First Name' if !params[:first_name].present?
-      validated << 'Last Name' if !params[:last_name].present?
+      validated << 'Email' if params[:email].blank?
+      validated << 'First Name' if params[:first_name].blank?
+      validated << 'Last Name' if params[:last_name].blank?
       @partner.donor_questions.each do |question|
         if question.required
-          validated << question.title if !params[question.name].present?
+          validated << question.title if params[question.name].blank?
         end
       end
       validated
@@ -157,8 +173,12 @@ module Partners
 
     def selectable_portfolios
       portfolios = []
-      portfolios << [active_portfolio.id, 'My personalized portfolio'] if active_portfolio && !managed_portfolio?
-      portfolios += Partners::GetManagedPortfoliosForPartner.call(partner: partner).pluck(:portfolio_id, :name) if partner
+      if active_portfolio && !managed_portfolio?
+        portfolios << [active_portfolio.id, 'My personalized portfolio']
+      end
+      if partner
+        portfolios += Partners::GetManagedPortfoliosForPartner.call(partner: partner).pluck(:portfolio_id, :name)
+      end
       portfolios
     end
 

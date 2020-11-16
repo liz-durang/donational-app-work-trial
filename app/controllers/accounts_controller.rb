@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AccountsController < ApplicationController
   include Secured
 
@@ -29,7 +31,7 @@ class AccountsController < ApplicationController
       selectable_portfolios: selectable_portfolios,
       donor_responses: donor_responses,
       currency: current_currency,
-      uk_partner?: uk_partner?
+      supports_gift_aid?: partner.supports_gift_aid?
     )
   end
 
@@ -102,16 +104,16 @@ class AccountsController < ApplicationController
 
   def selectable_portfolios
     portfolios = []
-    portfolios << [active_portfolio.id, 'My personalized portfolio'] if active_portfolio && !managed_portfolio?
-    portfolios += Partners::GetManagedPortfoliosForPartner.call(partner: partner).pluck(:portfolio_id, :name) if partner
+    if active_portfolio && !managed_portfolio?
+      portfolios << [active_portfolio.id, 'My personalized portfolio']
+    end
+    if partner
+      portfolios += Partners::GetManagedPortfoliosForPartner.call(partner: partner).pluck(:portfolio_id, :name)
+    end
     portfolios
   end
 
   def partner
     @partner ||= Partners::GetPartnerForDonor.call(donor: current_donor)
-  end
-
-  def uk_partner?
-    partner.currency == 'GBP'
   end
 end

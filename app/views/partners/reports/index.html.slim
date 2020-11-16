@@ -62,7 +62,7 @@ section.embossed.section
                   button.button type='submit' formaction=organizations_partner_reports_path(format: :csv)
                     = icon_tag('fa-download')
                     span Export for specified timeframe
-          - if @view_model.partner.currency.downcase == 'gbp'
+          - if @view_model.partner.supports_gift_aid?
             .column
               h2 Gift Aid
               .field

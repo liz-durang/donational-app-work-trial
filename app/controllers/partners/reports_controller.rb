@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Partners
   class ReportsController < ApplicationController
     include Secured
@@ -47,7 +49,7 @@ module Partners
     end
 
     def gift_aid
-      return head :forbidden unless partner.currency.downcase == 'gbp'
+      return head :forbidden unless partner.supports_gift_aid?
 
       respond_to do |format|
         format.csv do
@@ -90,8 +92,8 @@ module Partners
     end
 
     def stream_sql_data_as_csv(sql_query, filename:)
-      response.headers["Content-Type"] = "application/octet-stream"
-      response.headers["Content-Disposition"] = "inline; filename=#{filename}"
+      response.headers['Content-Type'] = 'application/octet-stream'
+      response.headers['Content-Disposition'] = "inline; filename=#{filename}"
 
       conn = ActiveRecord::Base.connection.raw_connection
       conn.copy_data "COPY (#{sql_query}) TO STDOUT WITH CSV HEADER;" do

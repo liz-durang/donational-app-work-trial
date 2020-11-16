@@ -26,7 +26,7 @@ section.embossed.section
             h3 Contact Information
           .column style='background: #fff;'
             .form
-              - if @view_model.uk_partner?
+              - if @view_model.supports_gift_aid?
                 .columns
                   .column.is-3
                     .field
@@ -50,7 +50,7 @@ section.embossed.section
                 label.control
                   = f.label :email, class: :label
                   = f.email_field :email, class: :input
-              - if @view_model.uk_partner?
+              - if @view_model.supports_gift_aid?
                 .columns
                   .column.is-3
                     .field
