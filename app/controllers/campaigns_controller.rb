@@ -122,7 +122,7 @@ class CampaignsController < ApplicationController
       partner_operating_costs_text: partner.operating_costs_text,
       partner_accepts_operating_costs_donations?: partner.accepts_operating_costs_donations?,
       currency: partner_currency,
-      supports_gift_aid?: supports_gift_aid?,
+      supports_gift_aid?: partner.supports_gift_aid?,
       currency_code: campaign.partner.currency.downcase
     )
 
