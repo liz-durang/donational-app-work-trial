@@ -9,8 +9,9 @@ module Partners
 
       @relation
         .where(created_at: donated_between)
-        .left_joins(:organization, contribution: { donor: { partner_affiliations: [:partner, :campaign] } })
-        .where(contributions: { donor: PartnerAffiliation.where(partner: partner).select(:donor_id) })
+        .left_joins(:organization)
+        .left_joins(:contribution)
+        .where(contributions: { partner: partner })
         .group(:organization_ein)
         .select(
           :organization_ein,

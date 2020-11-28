@@ -17,7 +17,7 @@
         = icon_tag('fa-heart')
         | &nbsp;
         | Donate
-      - current_donor.partners.each do |partner|
+      - current_donor.partners.order(:name).each do |partner|
         a.navbar-item href=edit_partner_path(partner)
           = icon_tag('fa-handshake')
           | &nbsp;

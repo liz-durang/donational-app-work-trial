@@ -11,12 +11,8 @@ module Partners
         .where(created_at: donated_between)
         .left_joins(:organization)
         .left_joins(contribution: [:donor])
-        .where(
-          donors: {
-            id: PartnerAffiliation.where(partner: partner).select(:donor_id),
-            uk_gift_aid_accepted: true
-          }
-        )
+        .where(contributions: { partner: partner })
+        .where(donors: { uk_gift_aid_accepted: true })
         .select(
           'donors.title as title',
           :first_name,

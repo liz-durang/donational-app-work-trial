@@ -8,7 +8,7 @@ module Partners
       return nil if partner.blank?
 
       @relation
-        .joins(partner_affiliations: [:partner, :campaign])
+        .left_joins(partner_affiliations: [:partner, :campaign])
         .where(partner_affiliations: { partner: partner })
         .left_joins(recurring_contributions: { portfolio: [:managed_portfolio]})
         .where('recurring_contributions.created_at = (SELECT MAX(recurring_contributions.created_at) FROM recurring_contributions WHERE recurring_contributions.donor_id = donors.id)')

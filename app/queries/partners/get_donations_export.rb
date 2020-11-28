@@ -11,8 +11,8 @@ module Partners
         .where(created_at: donated_between)
         .left_joins(:organization)
         .left_joins(portfolio: [:managed_portfolio])
-        .left_joins(contribution: { donor: { partner_affiliations: [:partner, :campaign] } })
-        .where(contributions: { donor: PartnerAffiliation.where(partner: partner).select(:donor_id) })
+        .left_joins(contribution: [:donor])
+        .where(contributions: { partner: partner })
         .select(
           'donors.id as donor_id',
           :first_name,
