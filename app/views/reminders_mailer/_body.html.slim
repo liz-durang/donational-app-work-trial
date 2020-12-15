@@ -7,7 +7,7 @@ h4
 h4
   => t @contribution.frequency, scope: :next_contribution, \
     amount: Money.new(@contribution.amount_cents, @currency).format, \
-    date: humanized_date(@contribution.start_at)
+    date: humanized_date(@contribution.next_contribution_at || @contribution.start_at)
   ' On this date, we will charge your registered credit card.
   ' Once the donation is processed, we will send you a tax-deductible email receipt for your records.
 

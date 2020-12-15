@@ -35,9 +35,36 @@ RSpec.describe RecurringContribution, type: :model do
       let(:start_at) { Date.parse('2001-01-01') }
       let(:now) { Date.parse('2000-01-01') }
 
-      it 'returns the start date' do
-          donation = build(:recurring_contribution, start_at: start_at)
+      context 'and the frequency is monthly' do
+        context 'and start day is before the 15th' do
+          it 'returns 15th of the month of start date' do
+            donation = build(:recurring_contribution, start_at: start_at, frequency: :monthly)
+            expect(donation.next_contribution_at).to eq Date.parse('2001-01-15')
+          end
+        end
+
+        context 'and start day is after the 15th' do
+          let(:start_at) { Date.parse('2001-01-16') }
+
+          it 'returns the next 15th of the month after start date' do
+            donation = build(:recurring_contribution, start_at: start_at, frequency: :monthly)
+            expect(donation.next_contribution_at).to eq Date.parse('2001-02-15')
+          end
+        end
+      end
+
+      context 'and the frequency is quarterly' do
+        it 'returns the start date' do
+          donation = build(:recurring_contribution, start_at: start_at, frequency: :quarterly)
           expect(donation.next_contribution_at).to eq Date.parse('2001-01-01')
+        end
+      end
+
+      context 'and the frequency is annually' do
+        it 'returns the start date' do
+          donation = build(:recurring_contribution, start_at: start_at, frequency: :annually)
+          expect(donation.next_contribution_at).to eq Date.parse('2001-01-01')
+        end
       end
     end
 
@@ -91,8 +118,8 @@ RSpec.describe RecurringContribution, type: :model do
         context 'and the current day is before the 15th of the month' do
           let(:now) { Date.parse('2000-01-01') }
 
-          it 'is the 15th of the next month' do
-            expect(monthly_contribution.next_contribution_at).to eq Date.parse('2000-02-15')
+          it 'is the 15th of this month' do
+            expect(monthly_contribution.next_contribution_at).to eq Date.parse('2000-01-15')
           end
         end
 

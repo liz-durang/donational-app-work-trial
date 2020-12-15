@@ -32,9 +32,12 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     # Future date the donation
     find('[data-accordion-trigger="show-date"]').click
+    # select Date::ABBR_MONTHNAMES[(Date.new(Date.today.year, Date.today.month, 20) + 3.months).month]
+    # select (Date.new(Date.today.year, Date.today.month, 20) + 3.months).year
+
     select Date::ABBR_MONTHNAMES[3.months.from_now.month]
     select 3.months.from_now.year
-    
+
     select 'Monthly'
 
     click_on 'Next'
@@ -61,7 +64,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     click_on 'Donate'
 
-    date_in_three_months_on_the_15th = (Date.new(Date.today.year, Date.today.month, 15) + 3.months)
+    date_in_three_months_on_the_15th = next_15th_of_the_month_after(Date.today + 3.months)
     expect(page).to have_content("Your next donation of $200.00 is scheduled for #{date_in_three_months_on_the_15th.to_formatted_s(:long_ordinal)}")
 
   end
@@ -86,7 +89,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     # Future date the donation
     find('[data-accordion-trigger="show-date"]').click
-    
+
     select Date::ABBR_MONTHNAMES[3.months.from_now.month]
     select 3.months.from_now.year
 
@@ -133,7 +136,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     find('[data-accordion-trigger="show-date"]').click
     select Date::ABBR_MONTHNAMES[3.months.from_now.month]
     select 3.months.from_now.year
-    
+
     select 'Monthly'
 
     click_on 'Next'
@@ -151,7 +154,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     select 'Wharton'
 
     click_on 'Donate'
-    date_in_three_months_on_the_15th = (Date.new(Date.today.year, Date.today.month, 15) + 3.months)
+    date_in_three_months_on_the_15th = next_15th_of_the_month_after(Date.today + 3.months)
     expect(page).to have_content("Your next donation of $200.00 is scheduled for #{date_in_three_months_on_the_15th.to_formatted_s(:long_ordinal)}")
 
     click_on 'View my portfolio'
@@ -188,7 +191,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     find('[data-accordion-trigger="show-date"]').click
     select Date::ABBR_MONTHNAMES[3.months.from_now.month]
     select 3.months.from_now.year
-    
+
     select 'Monthly'
 
     find('#gift_aid_checkbox').set(true)
@@ -212,7 +215,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     click_on 'Donate'
 
-    date_in_three_months_on_the_15th = (Date.new(Date.today.year, Date.today.month, 15) + 3.months)
+    date_in_three_months_on_the_15th = next_15th_of_the_month_after(Date.today + 3.months)
     expect(page).to have_content("Your next donation of £200.00 is scheduled for #{date_in_three_months_on_the_15th.to_formatted_s(:long_ordinal)}")
 
     visit edit_accounts_path
@@ -228,7 +231,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
   # TODO: This should be done by automating Partner/Campaign creation through the Admin interface
   def create_new_partner!(currency, slug, thank_you_url)
     one_for_the_world_operating_costs_charity = create(:organization, name: 'OFTW Operating Costs')
-    
+
     partner = Partner.create(
       name: 'One for the World',
       currency: currency,
@@ -293,5 +296,17 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
       portfolio: other_portfolio,
       name: 'Other Portfolio'
     )
+  end
+
+  def next_15th_of_the_month_after(date)
+    if date.day < 15
+      month = date.month
+      year = date.year
+    else
+      month = date.next_month.month
+      year = date.next_month.year
+    end
+
+    Date.new(year, month, 15)
   end
 end

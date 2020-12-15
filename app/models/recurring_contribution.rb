@@ -56,14 +56,14 @@ class RecurringContribution < ApplicationRecord
   def next_contribution_at
     today = Date.today
 
-    return start_at if start_at.to_date > today
+    return start_at if start_at.to_date > today && !monthly?
 
     if monthly?
-      # Since we make a contribution immediately, the earlist start date for the
-      # first automated contribution is the beginning of the following month`
-      earliest_monthly = [today, start_at.at_beginning_of_month + 1.month].max
-
-      next_15th_of_the_month_after(earliest_monthly)
+      if start_at.to_date < today
+        next_15th_of_the_month_after(today)
+      else
+        next_15th_of_the_month_after(start_at)
+      end
     elsif quarterly?
       today.next_quarter.at_beginning_of_quarter
     elsif annually?
@@ -74,7 +74,14 @@ class RecurringContribution < ApplicationRecord
   private
 
   def next_15th_of_the_month_after(date)
-    month = date.day < 15 ? date.month : date.next_month.month
-    Date.new(date.year, month, 15)
+    if date.day < 15
+      month = date.month
+      year = date.year
+    else
+      month = date.next_month.month
+      year = date.next_month.year
+    end
+
+    Date.new(year, month, 15)
   end
 end
