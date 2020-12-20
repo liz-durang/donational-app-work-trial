@@ -1,6 +1,6 @@
-class TriggerRecurringContributionCancelledWebhook < ApplicationJob
+class TriggerSubscriptionCancelledWebhook < ApplicationJob
 
-  def perform(recurring_contribution_id, partner_id)
+  def perform(subscription_id, partner_id)
     current_partner = Partners::GetPartnerById.call(id: partner_id)
 
     if ensure_partner_has_webhook(current_partner)
@@ -11,35 +11,35 @@ class TriggerRecurringContributionCancelledWebhook < ApplicationJob
         faraday.adapter Faraday.default_adapter
       end
 
-      recurring_contribution = Contributions::GetRecurringContributionById.call(id: recurring_contribution_id)
+      subscription = Contributions::GetSubscriptionById.call(id: subscription_id)
 
-      donor = recurring_contribution.donor
+      donor = subscription.donor
 
       affiliation = Partners::GetPartnerAffiliationByDonorAndPartner.call(
         donor: donor,
         partner: current_partner
       )
 
-      portfolio_name = recurring_contribution.portfolio.managed_portfolio.try(:name) || 'Custom Portfolio'
+      portfolio_name = subscription.portfolio.managed_portfolio.try(:name) || 'Custom Portfolio'
 
       response = conn.post() do |req|
         req.body = {
-          id: recurring_contribution.id,
-          start_at: recurring_contribution.start_at.to_date,
-          cancelled_at: recurring_contribution.deactivated_at,
-          frequency: recurring_contribution.frequency,
-          amount_dollars: recurring_contribution.amount_dollars,
-          donor_name: recurring_contribution.donor_name,
-          donor_email: recurring_contribution.donor_email,
-          partner_contribution_percentage: recurring_contribution.partner_contribution_percentage,
+          id: subscription.id,
+          start_at: subscription.start_at.to_date,
+          cancelled_at: subscription.deactivated_at,
+          frequency: subscription.frequency,
+          amount_dollars: subscription.amount_dollars,
+          donor_name: subscription.donor_name,
+          donor_email: subscription.donor_email,
+          partner_contribution_percentage: subscription.partner_contribution_percentage,
           portfolio: portfolio_name,
           donor: {
             id: donor.id,
             name: donor.name,
             first_name: donor.first_name,
             last_name: donor.last_name,
-            email: recurring_contribution.donor_email,
-            joined_at: recurring_contribution.donor.created_at,
+            email: subscription.donor_email,
+            joined_at: subscription.donor.created_at,
             questions: affiliation.donor_responses.map { |r| [r.question.name, r.value]  }.to_h,
             campaign: affiliation.campaign_title,
             partner: affiliation.partner_name

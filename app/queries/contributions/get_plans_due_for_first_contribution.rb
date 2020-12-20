@@ -1,6 +1,6 @@
 module Contributions
   class GetPlansDueForFirstContribution < ApplicationQuery
-    def initialize(relation = RecurringContribution.all)
+    def initialize(relation = Subscription.all)
       @relation = relation
     end
 

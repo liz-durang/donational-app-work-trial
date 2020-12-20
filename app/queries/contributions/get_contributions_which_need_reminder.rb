@@ -1,6 +1,6 @@
 module Contributions
   class GetContributionsWhichNeedReminder < ApplicationQuery
-    def initialize(relation = RecurringContribution.all)
+    def initialize(relation = Subscription.all)
       @relation = relation
     end
 

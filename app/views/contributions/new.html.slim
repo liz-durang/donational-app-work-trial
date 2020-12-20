@@ -22,7 +22,7 @@ section.section.embossed
       .column.is-8
         p.content We use smart and secure online payments to ensure that your donations are simple, secure, and avoid fees.
         .box
-          = form_with model: @view_model.recurring_contribution, url: contributions_path, local: true, id: 'payment-form', method: :post, class: 'form' do |f|
+          = form_with model: @view_model.subscription, url: contributions_path, local: true, id: 'payment-form', method: :post, class: 'form' do |f|
             = f.hidden_field :payment_token, id: 'payment_token'
             .columns
               .column.is-4
@@ -38,7 +38,7 @@ section.section.embossed
                   label.label Frequency
                 .field
                   .control.buttons
-                    = f.collection_radio_buttons(:frequency, RecurringContribution.frequency.options, :last, :first) do |b| \
+                    = f.collection_radio_buttons(:frequency, Subscription.frequency.options, :last, :first) do |b| \
                         b.radio_button(class: 'is-hidden') + b.label(class: 'button') \
                       end
             p.has-text-centered.help All donations are tax-deductible operating under the Social Good Fund, a 501(c)3 public charity, EIN 46-1323531.
@@ -63,14 +63,14 @@ section.section.embossed
                     label.control
                       .label Portfolio
 
-                      .select 
+                      .select
                         = f.collection_select :portfolio_id,
                           @view_model.selectable_portfolios,
                           :first,
                           :last
 
             - else
-              = f.hidden_field :portfolio_id, value: @view_model.recurring_contribution.portfolio_id
+              = f.hidden_field :portfolio_id, value: @view_model.subscription.portfolio_id
               .field
                 .label Help us grow!
                 p.help.content

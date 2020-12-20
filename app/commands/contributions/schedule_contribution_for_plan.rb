@@ -1,24 +1,24 @@
 module Contributions
   class ScheduleContributionForPlan < ApplicationCommand
     required do
-      model :recurring_contribution
+      model :subscription
       time :scheduled_at
     end
 
     def execute
       chain {
         Contributions::ScheduleContribution.run(
-          donor: recurring_contribution.donor,
-          portfolio: recurring_contribution.portfolio,
-          amount_cents: recurring_contribution.amount_cents,
-          tips_cents: recurring_contribution.tips_cents,
+          donor: subscription.donor,
+          portfolio: subscription.portfolio,
+          amount_cents: subscription.amount_cents,
+          tips_cents: subscription.tips_cents,
           scheduled_at: Time.zone.now,
-          partner: recurring_contribution.partner,
-          partner_contribution_percentage: recurring_contribution.partner_contribution_percentage
+          partner: subscription.partner,
+          partner_contribution_percentage: subscription.partner_contribution_percentage
         )
       }
 
-      recurring_contribution.update!(last_scheduled_at: Time.zone.now) unless has_errors?
+      subscription.update!(last_scheduled_at: Time.zone.now) unless has_errors?
 
       nil
     end

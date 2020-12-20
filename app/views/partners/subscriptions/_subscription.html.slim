@@ -1,5 +1,5 @@
 .content
-  = form_with model: recurring_contribution, url: partner_contributions_path, local: true, method: :post, class: 'form' do |f|
+  = form_with model: subscription, url: partner_contributions_path, local: true, method: :post, class: 'form' do |f|
     = f.hidden_field :donor_id, value: @view_model.donor.id
     .columns
       .column
@@ -9,10 +9,10 @@
           .control
             a.button.is-static = @view_model.partner.currency
           .control
-            = f.number_field :amount_dollars, class: 'input', value: cents_to_dollars(@view_model.recurring_contribution.amount_cents)
+            = f.number_field :amount_dollars, class: 'input', value: cents_to_dollars(@view_model.subscription.amount_cents)
       .column
         .field
-          - unless recurring_contribution.started?
+          - unless subscription.started?
             label.control
               .label Starting on
               .control.has-icons-left
@@ -23,7 +23,7 @@
       label.control
         .label Frequency
         .control.buttons
-          = f.collection_radio_buttons(:frequency, RecurringContribution.frequency.options, :last, :first) do |b| \
+          = f.collection_radio_buttons(:frequency, Subscription.frequency.options, :last, :first) do |b| \
               b.radio_button(class: 'is-hidden') + b.label(class: 'button is-outlined') \
             end
 
@@ -32,18 +32,18 @@
         label.control
           .label Portfolio
 
-          .select 
+          .select
             = f.collection_select :portfolio_id,
               @view_model.selectable_portfolios,
               :first,
               :last,
-              selected: @view_model.recurring_contribution.portfolio_id
+              selected: @view_model.subscription.portfolio_id
 
     - else
-      = f.hidden_field :portfolio_id, value: @view_model.recurring_contribution.portfolio_id
+      = f.hidden_field :portfolio_id, value: @view_model.subscription.portfolio_id
     .has-text-right
       p = f.submit 'Update donation plan', class: %w(button is-primary)
-  - if @view_model.active && recurring_contribution.future_contribution_scheduled?
+  - if @view_model.active && subscription.future_contribution_scheduled?
     .has-text-right
       a.modal-button data-target="ask-to-pause-modal" Cancel my upcoming donations
 
@@ -53,15 +53,15 @@
       section.modal-card-body
         p
           strong Instead of cancelling, would you like to delay your next contribution by three months? We'll remind you before your contribution starts up again.
-        = form_with model: recurring_contribution, url: partner_contributions_path, local: true, method: :post, class: 'form' do |f2|
-          = f2.hidden_field :amount_dollars, value: cents_to_dollars(@view_model.recurring_contribution.amount_cents)
+        = form_with model: subscription, url: partner_contributions_path, local: true, method: :post, class: 'form' do |f2|
+          = f2.hidden_field :amount_dollars, value: cents_to_dollars(@view_model.subscription.amount_cents)
           = f2.hidden_field :frequency
           = f2.hidden_field :portfolio_id
           = f2.hidden_field :donor_id, value: @view_model.donor.id
-          - if recurring_contribution.started?
+          - if subscription.started?
             = f2.hidden_field :start_at, class: :input, value: 3.months.from_now.to_date.iso8601
           - else
-            = f2.hidden_field :start_at, class: :input, value: @view_model.recurring_contribution.start_at + 3.months
+            = f2.hidden_field :start_at, class: :input, value: @view_model.subscription.start_at + 3.months
           p = f2.submit 'Sounds great!', class: %w(button is-primary), id: 'pause_btn'
         br
         p = link_to 'No, I still want to cancel', partner_contribution_path, class: 'is-danger', method: :delete

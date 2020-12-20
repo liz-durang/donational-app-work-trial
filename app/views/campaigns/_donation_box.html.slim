@@ -133,7 +133,7 @@
             .control.is-expanded.is-hidden data-accordion-panel-for="show-date"
                 .select = f.select :start_at_month, Date::ABBR_MONTHNAMES[1..], selected: Date::ABBR_MONTHNAMES[Date.today.month]
                 .select = f.select :start_at_year, Date.today.year.. 4.years.from_now.year
-          p.help.is-hidden data-accordion-panel-for="show-date" Recurring contributions are charged on the 15th of the month
+          p.help.is-hidden data-accordion-panel-for="show-date" Subscriptions are charged on the 15th of the month
         - if @view_model.supports_gift_aid?
           hr
           .columns.is-mobile

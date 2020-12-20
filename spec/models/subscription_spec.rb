@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: recurring_contributions
+# Table name: subscriptions
 #
 #  id                              :uuid             not null, primary key
 #  donor_id                        :uuid
@@ -21,7 +21,7 @@
 
 require 'rails_helper'
 
-RSpec.describe RecurringContribution, type: :model do
+RSpec.describe Subscription, type: :model do
   include ActiveSupport::Testing::TimeHelpers
 
   context '#next_contribution_at' do
@@ -38,7 +38,7 @@ RSpec.describe RecurringContribution, type: :model do
       context 'and the frequency is monthly' do
         context 'and start day is before the 15th' do
           it 'returns 15th of the month of start date' do
-            donation = build(:recurring_contribution, start_at: start_at, frequency: :monthly)
+            donation = build(:subscription, start_at: start_at, frequency: :monthly)
             expect(donation.next_contribution_at).to eq Date.parse('2001-01-15')
           end
         end
@@ -47,7 +47,7 @@ RSpec.describe RecurringContribution, type: :model do
           let(:start_at) { Date.parse('2001-01-16') }
 
           it 'returns the next 15th of the month after start date' do
-            donation = build(:recurring_contribution, start_at: start_at, frequency: :monthly)
+            donation = build(:subscription, start_at: start_at, frequency: :monthly)
             expect(donation.next_contribution_at).to eq Date.parse('2001-02-15')
           end
         end
@@ -55,14 +55,14 @@ RSpec.describe RecurringContribution, type: :model do
 
       context 'and the frequency is quarterly' do
         it 'returns the start date' do
-          donation = build(:recurring_contribution, start_at: start_at, frequency: :quarterly)
+          donation = build(:subscription, start_at: start_at, frequency: :quarterly)
           expect(donation.next_contribution_at).to eq Date.parse('2001-01-01')
         end
       end
 
       context 'and the frequency is annually' do
         it 'returns the start date' do
-          donation = build(:recurring_contribution, start_at: start_at, frequency: :annually)
+          donation = build(:subscription, start_at: start_at, frequency: :annually)
           expect(donation.next_contribution_at).to eq Date.parse('2001-01-01')
         end
       end
@@ -72,7 +72,7 @@ RSpec.describe RecurringContribution, type: :model do
       let(:start_at) { Date.parse('2000-01-01') }
 
       context 'and the frequency is monthly' do
-        let(:monthly_contribution) { build(:recurring_contribution, start_at: start_at, frequency: :monthly) }
+        let(:monthly_contribution) { build(:subscription, start_at: start_at, frequency: :monthly) }
 
         context 'and the current day is before the 15th of the month' do
           let(:now) { Date.parse('2000-02-07') }
@@ -93,7 +93,7 @@ RSpec.describe RecurringContribution, type: :model do
 
       context 'and the frequency is quarterly' do
         let(:now) { Date.parse('2000-10-07') }
-        let(:quarterly_contribution) { build(:recurring_contribution, start_at: start_at, frequency: :quarterly) }
+        let(:quarterly_contribution) { build(:subscription, start_at: start_at, frequency: :quarterly) }
 
         it 'is the first day of the next quarter' do
           expect(quarterly_contribution.next_contribution_at).to eq Date.parse('2001-01-01')
@@ -102,7 +102,7 @@ RSpec.describe RecurringContribution, type: :model do
 
       context 'and the frequency is annually' do
         let(:now) { Date.parse('2000-03-21') }
-        let(:quarterly_contribution) { build(:recurring_contribution, start_at: start_at, frequency: :annually) }
+        let(:quarterly_contribution) { build(:subscription, start_at: start_at, frequency: :annually) }
 
         it 'is the first day of next year' do
           expect(quarterly_contribution.next_contribution_at).to eq Date.parse('2001-01-01')
@@ -112,7 +112,7 @@ RSpec.describe RecurringContribution, type: :model do
 
     context 'when the start date was in the current month' do
       let(:start_at) { Date.parse('2000-01-01') }
-      let(:monthly_contribution) { build(:recurring_contribution, start_at: start_at, frequency: :monthly) }
+      let(:monthly_contribution) { build(:subscription, start_at: start_at, frequency: :monthly) }
 
       context 'and the frequency is monthly' do
         context 'and the current day is before the 15th of the month' do
@@ -134,7 +134,7 @@ RSpec.describe RecurringContribution, type: :model do
 
       context 'and the frequency is quarterly' do
         let(:now) { Date.parse('2000-01-02') }
-        let(:quarterly_contribution) { build(:recurring_contribution, start_at: start_at, frequency: :quarterly) }
+        let(:quarterly_contribution) { build(:subscription, start_at: start_at, frequency: :quarterly) }
 
         it 'is the first day of the next quarter' do
           expect(quarterly_contribution.next_contribution_at).to eq Date.parse('2000-04-01')
@@ -143,7 +143,7 @@ RSpec.describe RecurringContribution, type: :model do
 
       context 'and the frequency is annually' do
         let(:now) { Date.parse('2000-01-02') }
-        let(:quarterly_contribution) { build(:recurring_contribution, start_at: start_at, frequency: :annually) }
+        let(:quarterly_contribution) { build(:subscription, start_at: start_at, frequency: :annually) }
 
         it 'is the first day of next year' do
           expect(quarterly_contribution.next_contribution_at).to eq Date.parse('2001-01-01')

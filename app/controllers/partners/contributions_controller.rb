@@ -6,7 +6,7 @@ module Partners
 
     def create
       pipeline = Flow.new
-      pipeline.chain { update_recurring_contribution! }
+      pipeline.chain { update_subscription! }
 
       outcome = pipeline.run
 
@@ -20,7 +20,7 @@ module Partners
     end
 
     def destroy
-      Contributions::DeactivateRecurringContribution.run(recurring_contribution: active_recurring_contribution)
+      Contributions::DeactivateSubscription.run(subscription: active_subscription)
 
       flash[:success] = "We've cancelled the donation plan"
       redirect_to edit_partner_donor_path(partner, donor)
@@ -44,8 +44,8 @@ module Partners
       end
     end
 
-    def update_recurring_contribution!
-      Contributions::CreateOrReplaceRecurringContribution.run(
+    def update_subscription!
+      Contributions::CreateOrReplaceSubscription.run(
         donor: donor,
         portfolio: Portfolio.find(portfolio_id),
         partner: partner,
@@ -58,7 +58,7 @@ module Partners
     end
 
     def donor
-      @donor = Donors::GetDonorById.call(id: params[:id]) || Donors::GetDonorById.call(id: params[:recurring_contribution][:donor_id])
+      @donor = Donors::GetDonorById.call(id: params[:id]) || Donors::GetDonorById.call(id: params[:subscription][:donor_id])
     end
 
     def payment_method
@@ -69,8 +69,8 @@ module Partners
       @active_portfolio ||= Portfolios::GetActivePortfolio.call(donor: donor)
     end
 
-    def active_recurring_contribution
-      @active_contribution ||= Contributions::GetActiveRecurringContribution.call(donor: donor)
+    def active_subscription
+      @active_subscription ||= Contributions::GetActiveSubscription.call(donor: donor)
     end
 
     def partner_affiliation
@@ -92,8 +92,8 @@ module Partners
       portfolios
     end
 
-    def new_recurring_contribution
-      RecurringContribution.new(
+    def new_subscription
+      Subscription.new(
         donor: donor,
         amount_cents: target_amount_cents,
         portfolio: active_portfolio,
@@ -104,7 +104,7 @@ module Partners
     def target_amount_cents
       Contributions::GetTargetContributionAmountCents.call(
         donor: donor,
-        frequency: active_recurring_contribution.try(:frequency) || donor.contribution_frequency
+        frequency: active_subscription.try(:frequency) || donor.contribution_frequency
       )
     end
 
@@ -113,27 +113,27 @@ module Partners
     end
 
     def tips_cents
-      params[:recurring_contribution][:tips_cents].to_i
+      params[:subscription][:tips_cents].to_i
     end
 
     def amount_dollars
-      params[:recurring_contribution][:amount_dollars].to_i
+      params[:subscription][:amount_dollars].to_i
     end
 
     def payment_token
-      params[:recurring_contribution][:payment_token]
+      params[:subscription][:payment_token]
     end
 
     def frequency
-      params[:recurring_contribution][:frequency]
+      params[:subscription][:frequency]
     end
 
     def portfolio_id
-      params[:recurring_contribution][:portfolio_id]
+      params[:subscription][:portfolio_id]
     end
 
     def start_at
-      start_at_param = params.dig(:recurring_contribution, :start_at)
+      start_at_param = params.dig(:subscription, :start_at)
       Time.zone.parse(start_at_param) if start_at_param
     end
   end

@@ -2,7 +2,7 @@
 
 # == Schema Information
 #
-# Table name: recurring_contributions
+# Table name: subscriptions
 #
 #  id                              :uuid             not null, primary key
 #  donor_id                        :uuid
@@ -22,7 +22,7 @@
 #
 
 FactoryBot.define do
-  factory :recurring_contribution do
+  factory :subscription do
     donor
     portfolio
     partner

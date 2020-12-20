@@ -11,6 +11,7 @@
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  display_order :integer
+#  featured      :boolean          default(FALSE), not null
 #
 
 require 'rails_helper'

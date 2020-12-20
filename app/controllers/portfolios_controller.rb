@@ -36,7 +36,7 @@ class PortfoliosController < ApplicationController
       organizations: organizations_by_cause_area,
       managed_portfolio?: portfolio_manager.present?,
       portfolio_manager_name: portfolio_manager.try(:name),
-      recurring_contribution: active_recurring_contribution,
+      subscription: active_subscription,
       first_contribution: Contributions::GetFirstContribution.call(donor: current_donor),
       show_modal: params[:show_modal].to_s == 'true',
       show_blank_state: active_portfolio.blank?,
@@ -66,7 +66,7 @@ class PortfoliosController < ApplicationController
     Portfolios::GetActivePortfolio.call(donor: current_donor)
   end
 
-  def active_recurring_contribution
-    Contributions::GetActiveRecurringContribution.call(donor: current_donor)
+  def active_subscription
+    Contributions::GetActiveSubscription.call(donor: current_donor)
   end
 end

@@ -42,7 +42,7 @@ class Donor < ApplicationRecord
       partner_id: Partners::GetPartnerForDonor.call(donor: self).id
     }
   end
-  
+
   self.primary_key = 'id'
 
   def self.search_for(query, limit: 10)
@@ -54,7 +54,7 @@ class Donor < ApplicationRecord
   # Partner administrator
   has_and_belongs_to_many :partners
   has_many :partner_affiliations
-  has_many :recurring_contributions
+  has_many :subscriptions
 
   with_options if: :uk_gift_aid_accepted do
     validates :title, presence: true, length: { maximum: 4 }

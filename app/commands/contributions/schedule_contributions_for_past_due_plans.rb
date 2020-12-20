@@ -3,14 +3,14 @@ module Contributions
     def execute
       plans_due_for_first_contribution.each do |plan|
         Contributions::ScheduleContributionForPlan.run(
-          recurring_contribution: plan,
+          subscription: plan,
           scheduled_at: Time.zone.now
         )
       end
 
-      plans_due_recurring_contribution.each do |plan|
+      plans_due_subscription.each do |plan|
         Contributions::ScheduleContributionForPlan.run(
-          recurring_contribution: plan,
+          subscription: plan,
           scheduled_at: Time.zone.now
         )
       end
@@ -24,8 +24,8 @@ module Contributions
       Contributions::GetPlansDueForFirstContribution.call
     end
 
-    def plans_due_recurring_contribution
-      Contributions::GetPlansDueRecurringContribution.call
+    def plans_due_subscription
+      Contributions::GetPlansDueSubscription.call
     end
   end
 end

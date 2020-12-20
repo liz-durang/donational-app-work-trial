@@ -10,11 +10,11 @@ module Partners
       @relation
         .left_joins(partner_affiliations: [:partner, :campaign])
         .where(partner_affiliations: { partner: partner })
-        .left_joins(recurring_contributions: { portfolio: [:managed_portfolio]})
-        .where('recurring_contributions.created_at = (SELECT MAX(recurring_contributions.created_at) FROM recurring_contributions WHERE recurring_contributions.donor_id = donors.id)')
+        .left_joins(subscriptions: { portfolio: [:managed_portfolio]})
+        .where('subscriptions.created_at = (SELECT MAX(subscriptions.created_at) FROM subscriptions WHERE subscriptions.donor_id = donors.id)')
         .select(
           'donors.id as donor_id',
-          'recurring_contributions.id AS recurring_contribution_id',
+          'subscriptions.id AS subscription_id',
           'donors.created_at as donor_joined_at',
           :first_name,
           :last_name,
@@ -25,9 +25,9 @@ module Partners
           :frequency,
           'CAST(CAST(amount_cents / 100.0 AS DECIMAL(10,2)) AS VARCHAR) AS contribution_amount',
           'start_at AS donations_start_at',
-          'recurring_contributions.created_at AS plan_updated_at',
-          'recurring_contributions.deactivated_at AS plan_cancelled_at',
-          'recurring_contributions.partner_contribution_percentage AS partner_contribution_percentage',
+          'subscriptions.created_at AS plan_updated_at',
+          'subscriptions.deactivated_at AS plan_cancelled_at',
+          'subscriptions.partner_contribution_percentage AS partner_contribution_percentage',
           *custom_donor_fields_for(partner)
         )
         .order('donors.created_at')

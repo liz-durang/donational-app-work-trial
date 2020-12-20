@@ -23,9 +23,9 @@ class Campaign < ApplicationRecord
 
   def allowable_donation_frequencies
     if allow_one_time_contributions?
-      RecurringContribution.frequency.options.select { |k,v| v.in? ['once', 'monthly'] } 
+      Subscription.frequency.options.select { |k,v| v.in? ['once', 'monthly'] }
     else
-      RecurringContribution.frequency.options.select { |k,v| v == 'monthly' }
+      Subscription.frequency.options.select { |k,v| v == 'monthly' }
     end
   end
 end

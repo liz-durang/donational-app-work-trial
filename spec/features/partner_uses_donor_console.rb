@@ -38,7 +38,7 @@ RSpec.describe 'Partner uses donor console', type: :feature do
   end
 
   scenario 'with existing donors, and after grants have been processed', js: true do
-    given_grants_are_processed 
+    given_grants_are_processed
     other_partner_signs_in
     then_the_partner_goes_to_the_next_page_and_edits_donor
     then_the_partner_tries_to_refund_a_granted_contribution
@@ -116,13 +116,13 @@ RSpec.describe 'Partner uses donor console', type: :feature do
       partner: @other_partner)
     visit partner_donors_path(@other_partner)
   end
-  
+
   def then_the_partner_goes_to_the_next_page_and_edits_donor
     click_on 'Next ›'
     click_on 'Edit'
     expect(page).to have_content("Edit Donor: John Doe 11")
   end
-  
+
   def then_the_partner_changes_the_donors_payment_method
     find('[data-accordion-trigger="update-card"]').click
     fill_in 'cardholder_name', with: 'Donatello DonatorCard'
@@ -132,14 +132,14 @@ RSpec.describe 'Partner uses donor console', type: :feature do
     page.execute_script("document.getElementById('payment_token').value = '#{card_token}';")
     page.execute_script("document.getElementById('payment-form').submit();")
   end
-  
+
   def then_the_partner_updates_the_donation_plan
-    fill_in 'recurring_contribution[amount_dollars]', with: '100'
+    fill_in 'subscription[amount_dollars]', with: '100'
     find('[data-disable-with="Update donation plan"]').click
     date_in_one_month_on_the_15th = (Date.new(Date.today.year, Date.today.month, 15) + 1.month)
     expect(page).to have_content("Your next donation of $100.00 is scheduled for #{date_in_one_month_on_the_15th.to_formatted_s(:long_ordinal)}")
   end
-  
+
   def then_the_partner_delays_the_donation_plan
     find('[data-target="ask-to-pause-modal"]').click
     within('#ask-to-pause-modal') do
@@ -148,7 +148,7 @@ RSpec.describe 'Partner uses donor console', type: :feature do
     date_in_three_months = (Date.today + 3.months)
     expect(page).to have_content("Your next donation of $100.00 is scheduled for #{date_in_three_months.to_formatted_s(:long_ordinal)}")
   end
-  
+
   def then_the_partner_cancels_the_donation_plan
     find('[data-target="ask-to-pause-modal"]').click
     within('#ask-to-pause-modal') do
@@ -158,7 +158,7 @@ RSpec.describe 'Partner uses donor console', type: :feature do
   end
 
   def then_the_partner_starts_the_donation_plan_again
-    fill_in 'recurring_contribution[amount_dollars]', with: '100'
+    fill_in 'subscription[amount_dollars]', with: '100'
     click_on 'Monthly'
     find('[data-disable-with="Update donation plan"]').click
     date_in_one_month_on_the_15th = (Date.new(Date.today.year, Date.today.month, 15) + 1.month)
@@ -283,7 +283,7 @@ RSpec.describe 'Partner uses donor console', type: :feature do
         cvc: '999'
       })
     )
-    Contributions::CreateOrReplaceRecurringContribution.run({
+    Contributions::CreateOrReplaceSubscription.run({
       donor: target_donor,
       portfolio: Portfolio.first,
       partner: @other_partner,

@@ -24,7 +24,7 @@ class AccountsController < ApplicationController
       donor: current_donor,
       accounts_path: accounts_path,
       payment_method: active_payment_method || new_payment_method,
-      recurring_contribution: active_recurring_contribution,
+      subscription: active_subscription,
       first_contribution: Contributions::GetFirstContribution.call(donor: current_donor),
       target_amount_cents: target_amount_cents,
       partner_affiliation: partner_affiliation,
@@ -79,14 +79,14 @@ class AccountsController < ApplicationController
     @active_payment_method ||= Payments::GetActivePaymentMethod.call(donor: current_donor)
   end
 
-  def active_recurring_contribution
-    @active_contribution ||= Contributions::GetActiveRecurringContribution.call(donor: current_donor)
+  def active_subscription
+    @active_subscription ||= Contributions::GetActiveSubscription.call(donor: current_donor)
   end
 
   def target_amount_cents
     Contributions::GetTargetContributionAmountCents.call(
       donor: current_donor,
-      frequency: active_recurring_contribution&.frequency || current_donor.contribution_frequency
+      frequency: active_subscription&.frequency || current_donor.contribution_frequency
     )
   end
 

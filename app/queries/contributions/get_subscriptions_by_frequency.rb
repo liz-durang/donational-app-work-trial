@@ -1,6 +1,6 @@
 module Contributions
-  class GetRecurringContributionsByFrequency < ApplicationQuery
-    def initialize(relation = RecurringContribution.all)
+  class GetSubscriptionsByFrequency < ApplicationQuery
+    def initialize(relation = Subscription.all)
       @relation = relation
     end
 

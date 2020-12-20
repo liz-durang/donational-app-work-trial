@@ -1,11 +1,11 @@
 module Contributions
-  class GetActiveRecurringContribution < ApplicationQuery
-    def initialize(relation = RecurringContribution.all)
+  class GetActiveSubscription < ApplicationQuery
+    def initialize(relation = Subscription.all)
       @relation = relation
     end
 
     def call(donor:)
-      GetActiveRecurringContributions
+      GetActiveSubscriptions
         .new(@relation)
         .call(donor: donor)
         .order(created_at: :desc)

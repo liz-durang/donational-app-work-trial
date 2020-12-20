@@ -2,7 +2,7 @@
 
 # == Schema Information
 #
-# Table name: recurring_contributions
+# Table name: subscriptions
 #
 #  id                              :uuid             not null, primary key
 #  donor_id                        :uuid
@@ -21,7 +21,7 @@
 #  amount_currency                 :string           default("usd"), not null
 #
 
-class RecurringContribution < ApplicationRecord
+class Subscription < ApplicationRecord
   belongs_to :donor
   belongs_to :portfolio
   belongs_to :partner

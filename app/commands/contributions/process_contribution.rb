@@ -79,8 +79,8 @@ module Contributions
       @payment_method ||= Payments::GetActivePaymentMethod.call(donor: contribution.donor)
     end
 
-    def active_recurring_contribution
-      @active_contribution ||= Contributions::GetActiveRecurringContribution.call(donor: contribution.donor)
+    def active_subscription
+      @active_contribution ||= Contributions::GetActiveSubscription.call(donor: contribution.donor)
     end
 
     def create_donations_based_on_active_allocations
@@ -110,8 +110,8 @@ module Contributions
 
       # Update payment method retry count and cancel donation plan
       Payments::IncrementRetryCount.run(payment_method: payment_method)
-      if active_recurring_contribution.present? && payment_method.retry_count_limit_reached?
-        Contributions::DeactivateRecurringContribution.run(recurring_contribution: active_recurring_contribution)
+      if active_subscription.present? && payment_method.retry_count_limit_reached?
+        Contributions::DeactivateSubscription.run(subscription: active_subscription)
       end
     end
 

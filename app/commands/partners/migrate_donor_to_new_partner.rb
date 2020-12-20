@@ -11,7 +11,7 @@ module Partners
         Partners::MigrateAffiliationToNewPartner.run(partner_affiliation: current_affiliation, partner: partner)
       }
       pipeline.chain {
-        Contributions::MigrateRecurringContributionToNewPartner.run(recurring_contribution: current_recurring_contribution, partner: partner)
+        Contributions::MigrateSubscriptionToNewPartner.run(subscription: current_subscription, partner: partner)
       }
 
       outcome = pipeline.run
@@ -24,8 +24,8 @@ module Partners
       @current_affiliation = Partners::GetPartnerAffiliationByDonor.call(donor: donor)
     end
 
-    def current_recurring_contribution
-      @current_recurring_contribution = Contributions::GetActiveRecurringContribution.call(donor: donor)
+    def current_subscription
+      @current_subscription = Contributions::GetActiveSubscription.call(donor: donor)
     end
   end
 end

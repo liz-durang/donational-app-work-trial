@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_22_184603) do
+ActiveRecord::Schema.define(version: 2020_12_10_170946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -268,27 +268,6 @@ ActiveRecord::Schema.define(version: 2020_07_22_184603) do
     t.index ["creator_id"], name: "index_portfolios_on_creator_id"
   end
 
-  create_table "recurring_contributions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "donor_id"
-    t.uuid "portfolio_id"
-    t.datetime "start_at", null: false
-    t.datetime "deactivated_at"
-    t.string "frequency"
-    t.integer "amount_cents"
-    t.integer "tips_cents", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "last_reminded_at"
-    t.datetime "last_scheduled_at"
-    t.uuid "partner_id"
-    t.integer "partner_contribution_percentage", default: 0
-    t.string "amount_currency", default: "usd", null: false
-    t.index ["deactivated_at"], name: "index_recurring_contributions_on_deactivated_at"
-    t.index ["donor_id"], name: "index_recurring_contributions_on_donor_id"
-    t.index ["partner_id"], name: "index_recurring_contributions_on_partner_id"
-    t.index ["portfolio_id"], name: "index_recurring_contributions_on_portfolio_id"
-  end
-
   create_table "searchable_organizations", id: false, force: :cascade do |t|
     t.string "ein", null: false
     t.string "name", null: false
@@ -333,6 +312,27 @@ ActiveRecord::Schema.define(version: 2020_07_22_184603) do
     t.index ["portfolio_id"], name: "index_selected_portfolios_on_portfolio_id"
   end
 
+  create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "donor_id"
+    t.uuid "portfolio_id"
+    t.datetime "start_at", null: false
+    t.datetime "deactivated_at"
+    t.string "frequency"
+    t.integer "amount_cents"
+    t.integer "tips_cents", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "last_reminded_at"
+    t.datetime "last_scheduled_at"
+    t.uuid "partner_id"
+    t.integer "partner_contribution_percentage", default: 0
+    t.string "amount_currency", default: "usd", null: false
+    t.index ["deactivated_at"], name: "index_subscriptions_on_deactivated_at"
+    t.index ["donor_id"], name: "index_subscriptions_on_donor_id"
+    t.index ["partner_id"], name: "index_subscriptions_on_partner_id"
+    t.index ["portfolio_id"], name: "index_subscriptions_on_portfolio_id"
+  end
+
   create_table "zapier_webhooks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "hook_url"
     t.string "hook_type"
@@ -364,10 +364,10 @@ ActiveRecord::Schema.define(version: 2020_07_22_184603) do
   add_foreign_key "partners", "organizations", column: "operating_costs_organization_ein", primary_key: "ein"
   add_foreign_key "payment_methods", "donors"
   add_foreign_key "portfolios", "donors", column: "creator_id"
-  add_foreign_key "recurring_contributions", "donors"
-  add_foreign_key "recurring_contributions", "partners"
-  add_foreign_key "recurring_contributions", "portfolios"
   add_foreign_key "selected_portfolios", "donors"
   add_foreign_key "selected_portfolios", "portfolios"
+  add_foreign_key "subscriptions", "donors"
+  add_foreign_key "subscriptions", "partners"
+  add_foreign_key "subscriptions", "portfolios"
   add_foreign_key "zapier_webhooks", "partners"
 end

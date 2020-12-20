@@ -4,10 +4,10 @@ module Contributions
       @relation = relation
     end
 
-    def call(recurring_contribution:)
+    def call(subscription:)
       @relation
-        .where(donor: recurring_contribution.donor)
-        .where(portfolio: recurring_contribution.portfolio)
+        .where(donor: subscription.donor)
+        .where(portfolio: subscription.portfolio)
         .order(scheduled_at: :desc)
         .first&.scheduled_at&.to_date
     end

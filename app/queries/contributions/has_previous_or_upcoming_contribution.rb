@@ -13,7 +13,7 @@ module Contributions
     end
 
     def planned_contribution?
-      RecurringContribution.exists?(donor: @donor, deactivated_at: nil)
+      Subscription.exists?(donor: @donor, deactivated_at: nil)
     end
   end
 end

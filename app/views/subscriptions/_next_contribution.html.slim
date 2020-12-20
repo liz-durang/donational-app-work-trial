@@ -1,0 +1,9 @@
+- if subscription&.start_at&.to_date&.today?
+  p = t :first_contribution_message, amount: Money.new(subscription.amount_cents, @view_model.currency).format(no_cents_if_whole: false)
+
+- if subscription&.future_contribution_scheduled?
+  p = t subscription.frequency, scope: :next_contribution, \
+      amount: Money.new(subscription.amount_cents, @view_model.currency).format(no_cents_if_whole: false), \
+      date: humanized_date(subscription.next_contribution_at)
+- else
+  p = t 'no_future_donations'

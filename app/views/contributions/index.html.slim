@@ -25,9 +25,9 @@ section.section.embossed
           strong => pluralize(@view_model.contributions.count, 'donation')
           | to your charity portfolio.
     .box
-      = render 'recurring_contributions/next_contribution',
+      = render 'subscriptions/next_contribution',
         first_contribution: @view_model.first_contribution,
-        recurring_contribution: @view_model.recurring_contribution
+        subscription: @view_model.subscription
 
     - if @view_model.contributions.present?
       = display_flash_messages

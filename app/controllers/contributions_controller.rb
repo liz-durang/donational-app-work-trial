@@ -6,24 +6,24 @@ class ContributionsController < ApplicationController
     @view_model = OpenStruct.new(
       contributions: Contributions::GetContributions.call(donor: current_donor),
       first_contribution: Contributions::GetFirstContribution.call(donor: current_donor),
-      recurring_contribution: active_recurring_contribution,
+      subscription: active_subscription,
       currency: current_currency
     )
   end
 
   def new
-    if active_recurring_contribution.present?
+    if active_subscription.present?
       redirect_to edit_accounts_path
     else
       @view_model = OpenStruct.new(
         target_amount_cents: target_amount_cents,
-        recurring_contribution: new_recurring_contribution,
+        subscription: new_subscription,
         active_payment_method?: payment_method.present?,
         partner_affiliation: partner_affiliation,
         partner_affiliation?: partner_affiliation.present?,
         selectable_portfolios: selectable_portfolios,
         currency_code: current_currency.iso_code,
-        amount_cents: new_recurring_contribution.amount_cents,
+        amount_cents: new_subscription.amount_cents,
         tips_options: tips_options
       )
     end
@@ -32,7 +32,7 @@ class ContributionsController < ApplicationController
   def create
     pipeline = Flow.new
     pipeline.chain { update_donor_payment_method! } if payment_token.present?
-    pipeline.chain { update_recurring_contribution! }
+    pipeline.chain { update_subscription! }
 
     outcome = pipeline.run
 
@@ -46,7 +46,7 @@ class ContributionsController < ApplicationController
   end
 
   def destroy
-    Contributions::DeactivateRecurringContribution.run(recurring_contribution: active_recurring_contribution)
+    Contributions::DeactivateSubscription.run(subscription: active_subscription)
 
     flash[:success] = "We've cancelled your donation plan"
     redirect_to edit_accounts_path
@@ -70,8 +70,8 @@ class ContributionsController < ApplicationController
     )
   end
 
-  def update_recurring_contribution!
-    Contributions::CreateOrReplaceRecurringContribution.run(
+  def update_subscription!
+    Contributions::CreateOrReplaceSubscription.run(
       donor: current_donor,
       portfolio: Portfolio.find(portfolio_id),
       partner: partner,
@@ -91,8 +91,8 @@ class ContributionsController < ApplicationController
     @active_portfolio ||= Portfolios::GetActivePortfolio.call(donor: current_donor)
   end
 
-  def active_recurring_contribution
-    @active_contribution ||= Contributions::GetActiveRecurringContribution.call(donor: current_donor)
+  def active_subscription
+    @active_subscription ||= Contributions::GetActiveSubscription.call(donor: current_donor)
   end
 
   def partner_affiliation
@@ -114,8 +114,8 @@ class ContributionsController < ApplicationController
     portfolios
   end
 
-  def new_recurring_contribution
-    RecurringContribution.new(
+  def new_subscription
+    Subscription.new(
       donor: current_donor,
       amount_cents: target_amount_cents,
       portfolio: active_portfolio,
@@ -126,7 +126,7 @@ class ContributionsController < ApplicationController
   def target_amount_cents
     Contributions::GetTargetContributionAmountCents.call(
       donor: current_donor,
-      frequency: active_recurring_contribution.try(:frequency) || current_donor.contribution_frequency
+      frequency: active_subscription.try(:frequency) || current_donor.contribution_frequency
     )
   end
 
@@ -135,27 +135,27 @@ class ContributionsController < ApplicationController
   end
 
   def tips_cents
-    params[:recurring_contribution][:tips_cents].to_i
+    params[:subscription][:tips_cents].to_i
   end
 
   def amount_dollars
-    params[:recurring_contribution][:amount_dollars].to_i
+    params[:subscription][:amount_dollars].to_i
   end
 
   def payment_token
-    params[:recurring_contribution][:payment_token]
+    params[:subscription][:payment_token]
   end
 
   def frequency
-    params[:recurring_contribution][:frequency]
+    params[:subscription][:frequency]
   end
 
   def portfolio_id
-    params[:recurring_contribution][:portfolio_id]
+    params[:subscription][:portfolio_id]
   end
 
   def start_at
-    start_at_param = params.dig(:recurring_contribution, :start_at)
+    start_at_param = params.dig(:subscription, :start_at)
     Time.zone.parse(start_at_param) if start_at_param
   end
 end

@@ -3,12 +3,12 @@
 require Rails.root.join('lib', 'mutations', 'symbol_filter')
 
 module Contributions
-  class CreateOrReplaceRecurringContribution < ApplicationCommand
+  class CreateOrReplaceSubscription < ApplicationCommand
     required do
       model :donor
       model :portfolio
       model :partner
-      symbol :frequency, default: :monthly, in: RecurringContribution.frequency.values
+      symbol :frequency, default: :monthly, in: Subscription.frequency.values
       integer :amount_cents, min: 0
       integer :tips_cents, min: 0, default: 0
     end
@@ -20,12 +20,12 @@ module Contributions
     end
 
     def execute
-      RecurringContribution.transaction do
+      Subscription.transaction do
         # ensure we don't force a new donation when donor updates their plan settings
-        new_contribution = existing_recurring_contributions.empty?
+        new_contribution = existing_subscriptions.empty?
         most_recent_last_scheduled_at = previous_plans_most_recent_scheduled_at
-        deactivate_existing_recurring_contributions!
-        recurring_contribution = RecurringContribution.create!(
+        deactivate_existing_subscriptions!
+        subscription = Subscription.create!(
           donor: donor,
           portfolio: portfolio,
           partner: partner,
@@ -41,12 +41,12 @@ module Contributions
         Portfolios::SelectPortfolio.run(donor: donor, portfolio: portfolio)
 
         return if migration
-        
-        send_confirmation_email!(recurring_contribution)
+
+        send_confirmation_email!(subscription)
         if new_contribution
-          TriggerRecurringContributionCreatedWebhook.perform_async(recurring_contribution.id, partner.id)
+          TriggerSubscriptionCreatedWebhook.perform_async(subscription.id, partner.id)
         else
-          TriggerRecurringContributionUpdatedWebhook.perform_async(recurring_contribution.id, partner.id)
+          TriggerSubscriptionUpdatedWebhook.perform_async(subscription.id, partner.id)
         end
 
       end
@@ -56,25 +56,25 @@ module Contributions
 
     private
 
-    def existing_recurring_contributions
-      @existing_recurring_contributions ||=
-        Contributions::GetActiveRecurringContributions.call(donor: donor)
+    def existing_subscriptions
+      @existing_subscriptions ||=
+        Contributions::GetActiveSubscriptions.call(donor: donor)
     end
 
     def previous_plans_most_recent_scheduled_at
-      existing_recurring_contributions.maximum(:last_scheduled_at)
+      existing_subscriptions.maximum(:last_scheduled_at)
     end
 
-    def deactivate_existing_recurring_contributions!
-      existing_recurring_contributions.update_all(deactivated_at: Time.zone.now)
+    def deactivate_existing_subscriptions!
+      existing_subscriptions.update_all(deactivated_at: Time.zone.now)
     end
 
-    def send_confirmation_email!(recurring_contribution)
-      payment_method = Payments::GetActivePaymentMethod.call(donor: recurring_contribution.donor)
-      partner = Partners::GetPartnerForDonor.call(donor: recurring_contribution.donor)
+    def send_confirmation_email!(subscription)
+      payment_method = Payments::GetActivePaymentMethod.call(donor: subscription.donor)
+      partner = Partners::GetPartnerForDonor.call(donor: subscription.donor)
 
       ConfirmationsMailer.send_confirmation(
-        contribution: recurring_contribution,
+        contribution: subscription,
         payment_method: payment_method,
         partner: partner,
         cancelation: false

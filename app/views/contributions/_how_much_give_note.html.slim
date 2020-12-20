@@ -16,11 +16,11 @@
                 | %
               ' .
               ' Your target
-              - if @view_model.recurring_contribution.annually?
+              - if @view_model.subscription.annually?
                 ' annual
-              - elsif @view_model.recurring_contribution.quarterly?
+              - elsif @view_model.subscription.quarterly?
                 ' quarterly
-              - else @view_model.recurring_contribution.monthly?
+              - else @view_model.subscription.monthly?
                 ' monthly
               ' contribution is
               strong> = Money.new(@view_model.target_amount_cents, @view_model.currency).format(no_cents_if_whole: true)

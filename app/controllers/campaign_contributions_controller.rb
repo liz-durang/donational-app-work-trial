@@ -10,7 +10,7 @@ class CampaignContributionsController < ApplicationController
     pipeline.chain { store_custom_donor_information! }
     pipeline.chain { subscribe_donor_to_managed_portfolio! }
     pipeline.chain { update_donor_payment_method! } if payment_token.present?
-    pipeline.chain { update_recurring_contribution! }
+    pipeline.chain { update_subscription! }
 
     outcome = pipeline.run
 
@@ -73,8 +73,8 @@ class CampaignContributionsController < ApplicationController
     )
   end
 
-  def update_recurring_contribution!
-    Contributions::CreateOrReplaceRecurringContribution.run(
+  def update_subscription!
+    Contributions::CreateOrReplaceSubscription.run(
       donor: current_donor,
       portfolio: active_portfolio,
       partner: partner,
@@ -96,8 +96,8 @@ class CampaignContributionsController < ApplicationController
     @active_portfolio ||= Portfolios::GetActivePortfolio.call(donor: current_donor)
   end
 
-  def active_recurring_contribution
-    @active_contribution ||= Contributions::GetActiveRecurringContribution.call(donor: current_donor)
+  def active_subscription
+    @active_subscription ||= Contributions::GetActiveSubscription.call(donor: current_donor)
   end
 
   def managed_portfolio_id

@@ -32,8 +32,6 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     # Future date the donation
     find('[data-accordion-trigger="show-date"]').click
-    # select Date::ABBR_MONTHNAMES[(Date.new(Date.today.year, Date.today.month, 20) + 3.months).month]
-    # select (Date.new(Date.today.year, Date.today.month, 20) + 3.months).year
 
     select Date::ABBR_MONTHNAMES[3.months.from_now.month]
     select 3.months.from_now.year
@@ -225,7 +223,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
       find('[value="Sounds great!"]').click
     end
     expect(page).to have_content("Your next donation of £200.00 is scheduled for #{(date_in_three_months_on_the_15th + 3.months).to_formatted_s(:long_ordinal)}")
-    
+
   end
 
   # TODO: This should be done by automating Partner/Campaign creation through the Admin interface

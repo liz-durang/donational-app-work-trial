@@ -10,12 +10,12 @@ class AllocationsController < ApplicationController
 
   def create
     pipeline = Flow.new
-    pipeline.chain { 
+    pipeline.chain {
       Organizations::FindOrCreateDonorSuggestedCharity.run(
         ein: params[:organization][:ein],
         name: params[:organization][:name],
         suggested_by: current_donor
-      )  
+      )
     }
     pipeline.chain { convert_managed_portfolio_into_custom_portfolio! } if managed_portfolio?
     pipeline.chain {
@@ -27,7 +27,7 @@ class AllocationsController < ApplicationController
     outcome = pipeline.run
 
     organization = Organizations::GetOrganizationByEin.call(ein: params[:organization][:ein])
-    
+
     if outcome.success?
       flash[:success] = "#{organization.name} has been added to your portfolio"
     else
@@ -81,7 +81,7 @@ class AllocationsController < ApplicationController
         allocations: managed_portfolio_allocations.as_json(only: [:organization_ein, :percentage])
       )
 
-      active_recurring_contribution.update!(portfolio: active_portfolio) if active_recurring_contribution
+      active_subscription.update!(portfolio: active_portfolio) if active_subscription
     end
 
     cmd
@@ -103,7 +103,7 @@ class AllocationsController < ApplicationController
     Portfolios::GetActivePortfolio.call(donor: current_donor)
   end
 
-  def active_recurring_contribution
-    Contributions::GetActiveRecurringContribution.call(donor: current_donor)
+  def active_subscription
+    Contributions::GetActiveSubscription.call(donor: current_donor)
   end
 end

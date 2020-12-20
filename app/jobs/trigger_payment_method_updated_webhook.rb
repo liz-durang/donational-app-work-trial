@@ -12,16 +12,16 @@ class TriggerPaymentMethodUpdatedWebhook < ApplicationJob
         faraday.adapter Faraday.default_adapter
       end
 
-      if Contributions::GetActiveRecurringContribution.call(donor: donor).present?
-        recurring_contribution_id = Contributions::GetActiveRecurringContribution.call(donor: donor).id
+      if Contributions::GetActiveSubscription.call(donor: donor).present?
+        subscription_id = Contributions::GetActiveSubscription.call(donor: donor).id
       else
-        recurring_contribution_id = nil
+        subscription_id = nil
       end
 
       response = conn.post() do |req|
         req.body = {
           updated_at: Time.zone.now,
-          recurring_contribution_id: recurring_contribution_id,
+          subscription_id: subscription_id,
           donor: {
             id: donor.id,
             name: donor.name,
