@@ -22,7 +22,7 @@ class TriggerPaymentFailedWebhook < ApplicationJob
       )
 
       portfolio_name = contribution.portfolio.managed_portfolio.try(:name) || 'Custom Portfolio'
-      recurring_portfolio_name = active_subscription.portfolio.managed_portfolio.try(:name) || 'Custom Portfolio'
+      active_subscription_portfolio_name = active_subscription.portfolio.managed_portfolio.try(:name) || 'Custom Portfolio'
 
       response = conn.post() do |req|
         req.body = {
@@ -40,7 +40,7 @@ class TriggerPaymentFailedWebhook < ApplicationJob
             frequency: active_subscription.frequency,
             amount_dollars: active_subscription.amount_dollars,
             partner_contribution_percentage: active_subscription.partner_contribution_percentage,
-            portfolio: portfolio_name
+            portfolio: active_subscription_portfolio_name
           },
           donor: {
             id: donor.id,
