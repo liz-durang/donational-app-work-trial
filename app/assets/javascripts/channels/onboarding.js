@@ -43,7 +43,7 @@ function createOnboardingChannel(uuid) {
           .css({ 'animation-delay': cumulativeDelay + 'ms'})
           .appendTo(chatMessages);
 
-        let messageText = $('<span>').text(message.body).appendTo(pendingMessage);
+        let messageText = $('<span>').html(message.body).appendTo(pendingMessage);
 
         // Give the user time to read the current message
         cumulativeDelay += readingDelay * message.body.length;

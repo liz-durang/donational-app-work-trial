@@ -51,7 +51,7 @@ Rails.application.routes.draw do
   get 'profiles/:username' => 'profiles#show', as: :profiles, defaults: { format: :html }
 
   # Sessions and Authentication
-  resource :sessions, only: %i[new destroy]
+  resource :sessions, only: %i[new show destroy]
   get '/auth/oauth2/callback' => 'auth0#callback'
   get '/auth/failure' => 'auth0#failure'
 

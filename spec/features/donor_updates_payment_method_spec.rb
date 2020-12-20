@@ -5,6 +5,7 @@ RSpec.describe 'Donors updates payment method', type: :feature do
   let(:stripe_helper) { StripeMock.create_test_helper }
   before do
     create(:partner, :default)
+    create(:donor, first_name: 'Donny', last_name: 'Donator', email: 'user@example.com')
     StripeMock.start
   end
   after { StripeMock.stop }
@@ -17,7 +18,7 @@ RSpec.describe 'Donors updates payment method', type: :feature do
   end
 
   def given_a_signed_in_donor_wants_to_update_payment_method
-    sign_in_as!(first_name: 'Donny', last_name: 'Donator')
+    sign_in_as!(email: 'user@example.com')
     visit edit_accounts_path
   end
 
@@ -40,11 +41,11 @@ RSpec.describe 'Donors updates payment method', type: :feature do
     expect(page).to have_field(disabled:true, with: 'Donatello')
   end
 
-  def sign_in_as!(first_name:, last_name:, email: 'user@example.com')
+  def sign_in_as!(email:)
     OmniAuth.config.add_mock(
       :auth0,
       {
-        uid: '12345', info: { email: email, first_name: first_name, last_name: last_name }
+        uid: '12345', info: { email: email }
       }
     )
 

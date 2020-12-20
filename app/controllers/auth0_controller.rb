@@ -1,10 +1,18 @@
 class Auth0Controller < ApplicationController
   def callback
-    log_in! Donors::FindOrCreateDonorFromAuth.run!(request.env['omniauth.auth'])
 
-    Analytics::TrackEvent.run(user_id: current_donor.id, event: 'Signed in')
+    if matching_donor
+      log_in! matching_donor
+      Analytics::TrackEvent.run(user_id: current_donor.id, event: 'Signed in')
+      redirect_to portfolio_path
+    else
+      flash[:error] = "Could not find an account that matches this email address"
+      redirect_to sessions_path
+    end
+  end
 
-    redirect_to portfolio_path
+  def matching_donor
+    @matching_donor ||= Donors::FindOrCreateDonorFromAuth.run!(request.env['omniauth.auth'])
   end
 
   def failure

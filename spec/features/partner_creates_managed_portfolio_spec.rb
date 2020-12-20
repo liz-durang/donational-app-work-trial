@@ -5,6 +5,8 @@ RSpec.describe 'Partner creates managed portfolio', type: :feature do
     create_default_partner!
     create_new_partner!
     create_organizations!
+
+    create(:donor, email: 'admin@partner.example')
   end
 
   scenario 'with valid credit card', js: true do
@@ -15,7 +17,7 @@ RSpec.describe 'Partner creates managed portfolio', type: :feature do
   end
 
   def given_a_signed_in_partner_admin_wants_to_create_managed_portfolio
-    sign_in_as!(first_name: 'Partner', last_name: 'Admin')
+    sign_in_as!(first_name: 'Partner', last_name: 'Admin', email: 'admin@partner.example')
     # Add admin permission to edit partner
     Donor.first.partners << @partner
 
