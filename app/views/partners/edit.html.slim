@@ -24,7 +24,7 @@ section.section
 section.embossed.section
   .container
     = display_flash_messages
-    .box.flat-card style='background: #fafafa'
+    .box style='background: #fafafa'
       = form_with model: @view_model.partner, url: @view_model.partner_path, local: true, method: :put, class: 'form' do |f|
         .columns.is-vcentered
           .column.has-text-centered
@@ -83,7 +83,7 @@ section.embossed.section
                   = f.text_area :after_donation_thank_you_page_url, class: :input, value: @view_model.partner.after_donation_thank_you_page_url
               br
               = f.submit "Save", class: %w(button is-primary)
-    .box.flat-card style='background: #fafafa'
+    .box style='background: #fafafa'
       = form_with class: 'form' do |f|  
         .columns.is-vcentered
           .column.has-text-centered

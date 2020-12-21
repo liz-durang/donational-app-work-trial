@@ -5,23 +5,29 @@ section.section
 .is-sticky
   .tabs.is-centered
     ul
-      li.is-active: a
-        = icon_tag('fa-address-book')
-        | Charities
       - if @view_model.show_blank_state
+        li.is-active: a
+          = icon_tag('fa-address-book')
+          | Charities
         li.is-disabled = link_to edit_allocations_path do
           = icon_tag('fa-balance-scale')
           | Portfolio Allocation
-        li.is-disabled = link_to new_contribution_path do
-          = icon_tag('fa-heart')
-          | Donate
       - else
+        li.is-active: a
+          = icon_tag('fa-address-book')
+          | Charities
         li = link_to edit_allocations_path do
           = icon_tag('fa-balance-scale')
           | Portfolio Allocation
         li = link_to new_contribution_path do
           = icon_tag('fa-heart')
           | Donate
+        li = link_to edit_accounts_path do
+          = icon_tag('fa-cog')
+          | Account settings
+        li = link_to contributions_path do
+          = icon_tag('fa-clipboard')
+          | Donation history
 
 - if @view_model.show_modal
   = render "thank_you_modal"

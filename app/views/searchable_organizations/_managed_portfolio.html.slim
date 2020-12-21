@@ -1,26 +1,18 @@
-- @organizations.each do |organization|
-  = form_with class: 'card is-fullheight column is-4 search-result', method: :get do |f|
-    = f.fields :organization do |organization_form|
-      = organization_form.hidden_field :ein, value: organization.formatted_ein
-    .card-content.is-4
-      h3.title.is-4
-        = organization.formatted_name
-      .field.is-grouped.is-grouped-multiline
-        .control
-          span.tags.has-addons
-            span.tag.is-dark EIN
-            span.tag.is-light
-              = organization.formatted_ein
-        .control
-          span.tags.has-addons
-            span.tag.is-dark State
-            span.tag.is-light
-              = organization.state
-    .card-footer
-      .card-footer-item
-        = link_to 'Add to portfolio', 'javascript:;', class:'button is-success is-outlined is-fullwidth', onClick: "addSearchedCharity('#{organization.formatted_name}', '#{organization.formatted_ein}');"
+table.table.is-fullwidth
+  - @organizations.each do |organization|
+    tr = form_with class: 'search-result', method: :get do |f|
+      = f.fields :organization do |organization_form|
+        = organization_form.hidden_field :ein, value: organization.formatted_ein
+      th.is-4
+          = organization.formatted_name
+      td
+        span.tags.has-addons
+          span.tag.is-dark EIN
+          span.tag.is-light
+            = organization.formatted_ein
+      td
+          = link_to 'Add to portfolio', 'javascript:;', class:'button is-success is-small is-outlined', onClick: "addCharity('#{organization.formatted_name}', '#{organization.formatted_ein}');"
 
 - if @organizations.empty?
-  h3.subtitle
-  h3.subtitle
-    | We didn't find any results for the search
+  p.has-text-danger
+    = "No results found for '#{params[:name]}'"

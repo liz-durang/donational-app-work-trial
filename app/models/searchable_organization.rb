@@ -44,7 +44,7 @@ class SearchableOrganization < ApplicationRecord
   
   self.primary_key = 'ein'
 
-  def self.search_for(query, limit: 10)
+  def self.search_for(query, limit: 5)
     self.search(query, limit: limit, misspellings: { prefix_length: 2 }, match: :word_start)
   end
   

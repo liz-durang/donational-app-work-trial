@@ -1,6 +1,6 @@
 section.section
   .container.has-text-centered
-      h1.title Your personal charity portfolio
+      h1.title Donate to your portfolio
 
 .is-sticky
   .tabs.is-centered
@@ -14,6 +14,12 @@ section.section
       li.is-active: a
         = icon_tag('fa-heart')
         | Donate
+      li = link_to edit_accounts_path do
+        = icon_tag('fa-cog')
+        | Account settings
+      li = link_to contributions_path do
+        = icon_tag('fa-clipboard')
+        | Donation history
 
 section.section.embossed
   .container

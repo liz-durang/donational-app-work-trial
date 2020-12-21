@@ -5,7 +5,10 @@ module Portfolios
     end
 
     def call(portfolio:)
-      @relation.where(portfolio: portfolio, deactivated_at: nil).order(percentage: :desc, organization_ein: :asc)
+      @relation
+        .where(portfolio: portfolio, deactivated_at: nil)
+        .order(percentage: :desc, organization_ein: :asc)
+        .includes([:organization])
     end
   end
 end

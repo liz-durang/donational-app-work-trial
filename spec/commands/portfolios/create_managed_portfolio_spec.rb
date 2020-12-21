@@ -13,8 +13,7 @@ RSpec.describe Portfolios::CreateManagedPortfolio do
           partner: partner,
           donor: donor,
           title: "Title",
-          description: "Description",
-          charities: ["#{organization.name}, #{organization.ein}", "#{another_organization.name}, #{another_organization.ein}"]
+          description: "Description"
         )
       }.to change { ManagedPortfolio.count }.from(0).to(1)
 

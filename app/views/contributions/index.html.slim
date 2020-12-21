@@ -1,12 +1,19 @@
 section.section
-  .container
-    .content.has-text-centered
-      h1.title.is-spaced
-        = current_donor.name
+  .container.has-text-centered
+      h1.title Donation history
 
 .is-sticky
   .tabs.is-centered
     ul
+      li = link_to portfolio_path do
+        = icon_tag('fa-address-book')
+        | Charities
+      li = link_to edit_allocations_path do
+        = icon_tag('fa-balance-scale')
+        | Portfolio Allocation
+      li = link_to new_contribution_path do
+        = icon_tag('fa-heart')
+        | Donate
       li = link_to edit_accounts_path do
         = icon_tag('fa-cog')
         | Account settings

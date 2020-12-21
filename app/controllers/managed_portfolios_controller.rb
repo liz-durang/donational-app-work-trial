@@ -29,9 +29,13 @@ class ManagedPortfoliosController < ApplicationController
       charities: organizations
     )
 
-    flash[:success] = "Portfolio created successfully." if command.success?
-    flash[:error] = command.errors.message_list.join('. ') unless command.success?
-    redirect_to new_partner_managed_portfolio_path(partner)
+    if command.success?
+      flash[:success] = "Portfolio created successfully." 
+      redirect_to edit_partner_managed_portfolio_path(id: command.result)
+    else
+      flash[:error] = command.errors.message_list.join('. ') unless command.success?
+      redirect_to new_partner_managed_portfolio_path
+    end
   end
 
   def update

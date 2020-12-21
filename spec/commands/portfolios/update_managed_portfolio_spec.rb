@@ -14,10 +14,6 @@ RSpec.describe Portfolios::UpdateManagedPortfolio do
       donor: donor,
       title: "Title",
       description: "Description",
-      organizations: [
-        "#{organization.name}, #{organization.ein}",
-        "#{another_organization.name}, #{another_organization.ein}"
-      ]
     )
   end
 

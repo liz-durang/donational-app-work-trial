@@ -25,10 +25,10 @@ section.section
 section.embossed.section
   .container
     = display_flash_messages
-    .box.flat-card
+    .box
       = form_with url: partner_donor_path, local: true, method: :put, class: 'form' do |f|
         = render 'form', f: f
-    .box.flat-card
+    .box
       .columns.is-vcentered
         - if @view_model.payment_method.present?
           .column.has-text-centered
@@ -36,7 +36,7 @@ section.embossed.section
             h3 Payment Information
           .column style='background: #fff;'
             = render @view_model.payment_method
-    .box.flat-card
+    .box
       .columns.is-vcentered
         .column.has-text-centered
           p: span.far.fa-calendar.fa-2x
@@ -49,7 +49,7 @@ section.embossed.section
           hr
           - if @view_model.subscription
             = render @view_model.subscription
-    .box.flat-card
+    .box
       h2 Donor's Contributions
       .columns.is-vcentered
         .column
@@ -89,7 +89,7 @@ section.embossed.section
                       = form_with url: partner_refunds_path, local: true, method: :post, class: 'form' do |f|
                         = f.hidden_field :contribution_id, value: contribution.id
                         = f.submit class: %w(button is-primary is-small), value: 'Refund', data: { confirm: 'Refund this contribution?' }
-    .box.flat-card
+    .box
       - if @view_model.partner.donors.include?(@view_model.donor)
         p.subtitle This user has admin privileges
         = form_with url: partner_admin_path, local: true, method: :put, class: 'form' do |f|
@@ -103,7 +103,7 @@ section.embossed.section
           = f.hidden_field :donor_id, value: @view_model.donor.id
           = f.submit class: %w(button is-primary), value: "Make this user an Admin", data: { confirm: "Make this user an admin?" }
     - if (current_donor.partners.count > 1)
-      .box.flat-card
+      .box
         p.subtitle Migrate donor to another partner
         = form_with url: partner_donor_migrations_path, local: true, method: :post, class: 'form' do |f|
           = f.hidden_field :donor_id, value: @view_model.donor.id

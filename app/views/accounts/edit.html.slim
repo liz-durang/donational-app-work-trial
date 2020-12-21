@@ -1,12 +1,19 @@
 section.section
-  .container
-    .content.has-text-centered
-      h1.title.is-spaced
-        = current_donor.name
+  .container.has-text-centered
+      h1.title Account Settings
 
 .is-sticky
   .tabs.is-centered
     ul
+      li = link_to portfolio_path do
+        = icon_tag('fa-address-book')
+        | Charities
+      li = link_to edit_allocations_path do
+        = icon_tag('fa-balance-scale')
+        | Portfolio Allocation
+      li = link_to new_contribution_path do
+        = icon_tag('fa-heart')
+        | Donate
       li.is-active: a
         = icon_tag('fa-cog')
         | Account settings
@@ -14,11 +21,12 @@ section.section
         = icon_tag('fa-clipboard')
         | Donation history
 
+
 section.embossed.section
   .container
     .new-line = display_flash_messages
     br
-    .box.flat-card style='background: #fafafa'
+    .box style='background: #fafafa'
       = form_with model: @view_model.donor, url: @view_model.accounts_path, local: true, method: :put do |f|
         .columns.is-vcentered
           .column.has-text-centered
@@ -81,14 +89,14 @@ section.embossed.section
                             span.help.display-when-errors Postcode must include a space e.g. AA1 3DD
               p.has-text-right
                 = f.submit "Save", class: %w(button is-primary)
-    .box.flat-card style='background: #fafafa'
+    .box style='background: #fafafa'
       .columns.is-vcentered
         .column.has-text-centered
           p: span.far.fa-credit-card.fa-2x
           h3 Payment Information
         .column style='background: #fff;'
           = render @view_model.payment_method
-    .box.flat-card style='background: #fafafa'
+    .box style='background: #fafafa'
       .columns.is-vcentered
         .column.has-text-centered
           p: span.far.fa-calendar.fa-2x
@@ -106,7 +114,7 @@ section.embossed.section
               p = link_to new_contribution_path, class: 'button is-primary' do
                 | Donate now
     - if @view_model.partner_affiliation.present?
-      .box.flat-card style='background: #fafafa'
+      .box style='background: #fafafa'
         .columns.is-vcentered
           .column.has-text-centered
             p: span.far.fa-address-book.fa-2x
