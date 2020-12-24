@@ -1,6 +1,6 @@
 module Partners
   class GetGiftAidExport < ApplicationQuery
-    def initialize(relation = Donation.all)
+    def initialize(relation = Contribution.all)
       @relation = relation
     end
 
@@ -10,8 +10,8 @@ module Partners
       @relation
         .where(created_at: donated_between)
         .left_joins(:organization)
-        .left_joins(contribution: [:donor])
-        .where(contributions: { partner: partner })
+        .left_join(:donor)
+        .where(partner: partner)
         .where(donors: { uk_gift_aid_accepted: true })
         .select(
           'donors.title as title',
@@ -21,8 +21,8 @@ module Partners
           'UPPER(postcode) as postcode',
           'NULL as aggregated_donations',
           'NULL as sponsored_event',
-          "to_char(donations.created_at, 'DD/MM/YY') as date",
-          'CAST(donations.amount_cents / 100.0 AS DECIMAL(10,2)) AS amount'
+          "to_char(contributions.created_at, 'DD/MM/YY') as date",
+          'CAST(contributions.amount_cents / 100.0 AS DECIMAL(10,2)) AS amount'
         )
     end
   end
