@@ -68,6 +68,7 @@ Rails.application.routes.draw do
   get '/:campaign_slug' => 'campaigns#show', as: :campaigns, defaults: { format: :html }
   post '/:campaign_slug/contributions' => 'campaign_contributions#create', as: :campaign_contributions
   get '/:campaign_slug/donation-box' => 'campaigns#donation_box', as: :campaigns_donation_box, defaults: { format: :html }
+  post '/get_bank_token' => 'plaid_auth#get_bank_token'
 
   # API
   namespace :api do

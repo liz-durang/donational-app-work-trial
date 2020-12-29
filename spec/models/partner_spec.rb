@@ -39,4 +39,24 @@ RSpec.describe Partner, type: :model do
       )
     end
   end
+
+  describe 'Plaid compatibility' do
+    around do |example|
+      ClimateControl.modify(PLAID_ENABLED: 'true') do
+        example.run
+      end
+    end
+    
+    it 'supports Plaid if the currency is USD' do
+      partner = build(:partner, currency: 'usd')
+      expect(partner.supports_plaid?).to be true
+    end
+
+    it 'does not support Plaid if the currency is not USD' do
+      partner1 = build(:partner, currency: 'gbp')
+      partner2 = build(:partner, currency: 'eur')
+      expect(partner1.supports_plaid?).to be false
+      expect(partner2.supports_plaid?).to be false
+    end
+  end
 end

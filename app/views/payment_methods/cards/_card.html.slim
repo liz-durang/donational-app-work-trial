@@ -1,0 +1,18 @@
+- if defined?(summary)
+  span
+    ' Credit Card:
+    => masked_card_number(last4: card.last4)
+- else
+  .form.columns
+    .column
+      .field
+        .label Name on card
+        p.control.has-icons-left
+          input.input disabled=true value=card.name
+          span.icon.is-left.is-small: i.fa.fa-user
+    .column
+      .field
+        .label Card number
+        p.control.has-icons-left
+          input.input disabled=true value=masked_card_number(last4: card.last4)
+          span.icon.is-left.is-small: i.fa.fa-credit-card

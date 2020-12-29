@@ -1,14 +1,14 @@
 h4
-  = t @contribution.frequency, scope: :reminder_next_contribution, \
-    amount: Money.new(@contribution.amount_cents, @currency).format, \
-    date: @contribution.created_at.strftime("%Y/%m/%d"), \
+  = t @subscription.frequency, scope: :reminder_next_contribution, \
+    amount: Money.new(@subscription.amount_cents, @currency).format, \
+    date: @subscription.created_at.strftime("%Y/%m/%d"), \
     partner_name: @partner_name
 
 h4
-  => t @contribution.frequency, scope: :next_contribution, \
-    amount: Money.new(@contribution.amount_cents, @currency).format, \
-    date: humanized_date(@contribution.next_contribution_at || @contribution.start_at)
-  ' On this date, we will charge your registered credit card.
+  => t @subscription.frequency, scope: :next_contribution, \
+    amount: Money.new(@subscription.amount_cents, @currency).format, \
+    date: humanized_date(@subscription.next_contribution_at || @subscription.start_at)
+  ' On this date, we will charge your registered payment method.
   ' Once the donation is processed, we will send you a tax-deductible email receipt for your records.
 
 table border="0" cellpadding="0" cellspacing="0" width="100%"
@@ -18,25 +18,23 @@ table border="0" cellpadding="0" cellspacing="0" width="100%"
         ' Donation to
         = @partner_name
     td align="right"
-      b = Money.new(@contribution.amount_cents, @currency).format
+      b = Money.new(@subscription.amount_cents, @currency).format
   tr.summary-item
     td colspan="2"
       ' Name:
-      = @contribution.donor.name
+      = @subscription.donor.name
   tr.summary-item
     td colspan="2"
       ' Date:
-      = @contribution.start_at.strftime("%Y/%m/%d")
+      = @subscription.start_at.strftime("%Y/%m/%d")
   tr.summary-item
     td colspan="2"
-      span
-      ' Credit card: **** **** ****
-      = @payment_method&.last4
 
+      = render @payment_method, summary: true
 h3 Charities in your Portfolio
 h4 Your donation will be distributed to the charities in your portfolio.
 table border="0" cellpadding="0" cellspacing="0" width="100%"
-  - @contribution.portfolio.active_allocations.each do |allocation|
+  - @subscription.portfolio.active_allocations.each do |allocation|
     tr.summary-item
       td colspan="2"
         = allocation.organization_name

@@ -36,7 +36,10 @@ class CampaignsController < ApplicationController
       partner_accepts_operating_costs_donations?: partner.accepts_operating_costs_donations?,
       supports_gift_aid?: partner.supports_gift_aid?,
       currency: partner_currency,
-      currency_code: campaign.partner.currency.downcase
+      currency_code: campaign.partner.currency.downcase,
+      link_token: Payments::GeneratePlaidLinkToken.call(donor_id: generated_id),
+      donor_id: generated_id,
+      show_plaid?: partner.supports_plaid?
     )
 
     respond_to do |format|
@@ -184,5 +187,9 @@ class CampaignsController < ApplicationController
 
   def managed_portfolios
     Partners::GetManagedPortfoliosForPartner.call(partner: partner)
+  end
+
+  def generated_id
+    @generated_id ||= SecureRandom.uuid
   end
 end

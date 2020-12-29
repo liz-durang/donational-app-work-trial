@@ -74,7 +74,7 @@ module Contributions
       partner = Partners::GetPartnerForDonor.call(donor: subscription.donor)
 
       ConfirmationsMailer.send_confirmation(
-        contribution: subscription,
+        subscription: subscription,
         payment_method: payment_method,
         partner: partner,
         cancelation: false

@@ -12,6 +12,7 @@
 - else
   = form_with model: @view_model.new_campaign_contribution, data: { controller: 'wizard' }, local: true, id: 'payment-form', method: :post, class: 'form' do |f|
     = f.hidden_field :payment_token, id: 'payment_token'
+    = f.hidden_field :donor_id, value: @view_model.donor_id
     fieldset.wizard-card data-target='wizard.step'
       .wizard-card-header
         span.icon: i.fas.fa-handshake
@@ -184,14 +185,7 @@
                         = icon_tag('fas fa-home')
                         = f.text_field :postcode, class: :input, placeholder: 'please include a space', data: { target: 'wizard.giftAidPostcode' }
                         span.help.display-when-errors Postcode must include a space e.g. AA1 3DD
-      .wizard-card-footer
-        a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
-    fieldset.wizard-card data-target='wizard.step'
-      .wizard-card-header
-        a.icon data-action="wizard#previous" &larr;
-        h3.wizard-card-title Payment
-        = render 'wizard_nav', step: 4, of: 5
-      .wizard-card-content
+        hr
         .field data-controller="radio-select"
           - if @view_model.partner_accepts_operating_costs_donations?
             p class='help' style='margin-bottom: 10px'
@@ -201,7 +195,17 @@
                 a.control.button.is-expanded href='#' data-target='radio-select.button' data-action='radio-select#select' data-radio-select-value=amount
                   = number_to_percentage(amount, precision: 0)
               = f.hidden_field :partner_contribution_percentage, data: { controller: 'integer-field', target: 'radio-select.output' }
-      = render 'credit_card_form'
+      .wizard-card-footer
+        a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
+
+    fieldset.wizard-card data-target='wizard.step'
+      .wizard-card-header
+        a.icon data-action="wizard#previous" &larr;
+        h3.wizard-card-title Payment
+        = render 'wizard_nav', step: 4, of: 5
+
+      = render 'payment_method_form'
+
     fieldset.wizard-card data-target='wizard.step'
       .wizard-card-header
         a.icon data-action="wizard#previous" &larr;

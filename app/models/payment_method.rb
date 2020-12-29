@@ -5,11 +5,13 @@
 #  id                            :uuid             not null, primary key
 #  donor_id                      :uuid             not null
 #  payment_processor_customer_id :string
-#  name_on_card                  :string
+#  name                          :string
 #  last4                         :string
 #  deactivated_at                :datetime
 #  address_zip_code              :string
 #  retry_count                   :integer          default(0)
+#  type                          :string           default("PaymentMethods::Card")
+#  institution                   :string
 #
 
 class PaymentMethod < ApplicationRecord
@@ -18,4 +20,9 @@ class PaymentMethod < ApplicationRecord
   def retry_count_limit_reached?
     retry_count == 3
   end
+end
+
+module PaymentMethods
+  class Card < PaymentMethod; end
+  class BankAccount < PaymentMethod; end
 end

@@ -89,7 +89,13 @@ class Partner < ApplicationRecord
   end
 
   def supports_gift_aid?
-    currency == 'GBP'
+    currency.downcase == 'gbp'
+  end
+
+  def supports_plaid?
+    return false unless ENV['PLAID_ENABLED']
+
+    currency.downcase == 'usd'
   end
 
   private

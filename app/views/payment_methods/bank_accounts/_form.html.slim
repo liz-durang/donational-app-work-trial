@@ -1,0 +1,4 @@
+  = form_with url: payment_methods_path, local: true, id: 'plaid-form', method: 'post' , class: 'is-hidden' do |f|
+    = f.hidden_field :payment_token, id: 'plaid-payment-token'
+    = f.submit id: 'plaid-success-target'
+  = render 'shared/plaid_form', link_token: @view_model.link_token, token_field: 'plaid-payment-token', submission_field: 'plaid-success-target'

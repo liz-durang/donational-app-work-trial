@@ -2,16 +2,7 @@ require 'rails_helper'
 require 'stripe_mock'
 
 RSpec.describe Payments::ChargeCustomer do
-  around do |example|
-    ClimateControl.modify(STRIPE_SECRET_KEY: 'sk_test_123') do
-      example.run
-    end
-  end
-
   let(:stripe_helper) { StripeMock.create_test_helper }
-  before { StripeMock.start }
-  after { StripeMock.stop }
-
   let(:card_params) do
     {
       number: '4242424242424242',
@@ -22,9 +13,13 @@ RSpec.describe Payments::ChargeCustomer do
   end
   let(:currency) { 'usd' }
 
+  before { StripeMock.start }
+
+  after { StripeMock.stop }
+
   before do
     Payments::CreateCustomer.run
-    Payments::UpdateCustomerCard.run(
+    Payments::UpdateCustomerPaymentSource.run(
       customer_id: 'test_cus_1',
       payment_token: stripe_helper.generate_card_token(card_params)
     )
@@ -83,7 +78,7 @@ RSpec.describe Payments::ChargeCustomer do
         customer_id: customer_id,
         account_id: account_id,
         email: email,
-        donation_amount_cents: 100, 
+        donation_amount_cents: 100,
         currency: currency
       )
 

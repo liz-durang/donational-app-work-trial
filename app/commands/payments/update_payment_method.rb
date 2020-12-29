@@ -11,7 +11,7 @@ module Payments
         return
       end
 
-      outcome = Payments::UpdateCustomerCard.run(customer_id: customer[:id], payment_token: payment_token)
+      outcome = Payments::UpdateCustomerPaymentSource.run(customer_id: customer[:id], payment_token: payment_token)
 
       unless outcome.success?
         add_error(:customer, :payment_error, 'Could not update card')
@@ -21,10 +21,19 @@ module Payments
       PaymentMethod.transaction do
         deactivate_existing_payment_method!
 
+        payment_method_type = case outcome.result[:payment_source_type]
+                              when 'card'
+                                PaymentMethods::Card
+                              when 'bank_account'
+                                PaymentMethods::BankAccount
+                              end
+
         PaymentMethod.create!(
+          type: payment_method_type,
           donor: donor,
           payment_processor_customer_id: customer[:id],
-          name_on_card: outcome.result[:name_on_card],
+          name: outcome.result[:name],
+          institution: outcome.result[:institution],
           last4: outcome.result[:last4],
           address_zip_code: outcome.result[:address_zip_code]
         )
@@ -46,10 +55,11 @@ module Payments
     end
 
     def customer_by_id
-      return nil unless payment_method&.payment_processor_customer_id.present?
+      return nil if payment_method&.payment_processor_customer_id.blank?
 
       find_by_id = Payments::FindCustomerById.run(customer_id: payment_method.payment_processor_customer_id)
       return nil unless find_by_id.success?
+
       find_by_id.result
     end
 
@@ -57,6 +67,7 @@ module Payments
       metadata        = { donor_id: donor.id }
       create_customer = Payments::CreateCustomer.run(metadata: metadata)
       return nil unless create_customer.success?
+
       create_customer.result
     end
 

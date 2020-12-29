@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_10_170946) do
+ActiveRecord::Schema.define(version: 2020_12_28_203557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -250,11 +250,13 @@ ActiveRecord::Schema.define(version: 2020_12_10_170946) do
   create_table "payment_methods", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "donor_id", null: false
     t.string "payment_processor_customer_id"
-    t.string "name_on_card"
+    t.string "name"
     t.string "last4"
     t.datetime "deactivated_at"
     t.string "address_zip_code"
     t.integer "retry_count", default: 0
+    t.string "type", default: "PaymentMethods::Card"
+    t.string "institution"
     t.index ["deactivated_at"], name: "index_payment_methods_on_deactivated_at"
     t.index ["donor_id"], name: "index_payment_methods_on_donor_id"
   end

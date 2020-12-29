@@ -27,9 +27,7 @@ table border="0" cellpadding="0" cellspacing="0" width="100%"
       = @contribution.processed_at.to_formatted_s(:long_ordinal)
   tr.summary-item
     td colspan="2"
-      span
-      ' Charged to credit card: **** **** ****
-      = @payment_method.last4
+      = render @payment_method, summary: true
   tr.summary-item
     td colspan="2"
       ' Receipt #:

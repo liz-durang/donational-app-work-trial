@@ -1,7 +1,7 @@
 require 'stripe'
 
 module Payments
-  class UpdateCustomerCard < ApplicationCommand
+  class UpdateCustomerPaymentSource < ApplicationCommand
     required do
       string :customer_id
       string :payment_token
@@ -14,10 +14,14 @@ module Payments
         { source: payment_token }
       )
 
+      source = response[:sources][:data][0]
+
       OpenStruct.new(
-        name_on_card: response[:sources][:data][0][:name],
-        last4: response[:sources][:data][0][:last4],
-        address_zip_code: response[:sources][:data][0][:address_zip]
+        payment_source_type: source[:object],
+        name: source[:name] || source[:account_holder_name],
+        institution: source[:brand] || source[:bank_name],
+        last4: source[:last4],
+        address_zip_code: source[:address_zip]
       )
     rescue Stripe::InvalidRequestError, Stripe::StripeError => e
       add_error(:customer, :stripe_error, e.message)

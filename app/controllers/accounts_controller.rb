@@ -31,7 +31,9 @@ class AccountsController < ApplicationController
       selectable_portfolios: selectable_portfolios,
       donor_responses: donor_responses,
       currency: current_currency,
-      supports_gift_aid?: partner.supports_gift_aid?
+      supports_gift_aid?: partner.supports_gift_aid?,
+      link_token: Payments::GeneratePlaidLinkToken.call(donor_id: current_donor.id),
+      show_plaid?: partner.supports_plaid?
     )
   end
 

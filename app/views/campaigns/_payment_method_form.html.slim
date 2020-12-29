@@ -1,10 +1,21 @@
-label.label Card Details
-.control
-  #card-element
-  #card-errors role="alert"
-p.control.has-icons-left
-  input.input.StripeElement id="cardholder_name" type="text" placeholder="Cardholder name"
-  span.icon.is-left.is-small: i.fa.fa-user
+.wizard-card-content
+  .control
+    #card-element
+    #card-errors role="alert"
+  p.control.has-icons-left
+    input.input.StripeElement id="cardholder_name" type="text" placeholder="Cardholder name"
+    span.icon.is-left.is-small: i.fa.fa-user
+
+  - if @view_model.show_plaid?
+    .has-text-centered
+      br
+      p.is-3.is-italic -- OR --
+      br
+      = render 'shared/plaid_form', link_token: @view_model.link_token, token_field: 'payment_token', submission_field: 'payment-validated'
+.wizard-card-footer
+  a.button.is-primary.is-medium.is-fullwidth id="payment-next" href="#" Next &rarr;
+  a.is-hidden.plaid-success-target data-action="wizard#next" id="payment-validated"
+  
 
 javascript:
   var stripe = Stripe("#{ENV.fetch('STRIPE_PUBLIC_KEY')}");
@@ -31,7 +42,10 @@ javascript:
   });
 
   var form = document.getElementById('payment-form');
-  form.addEventListener('submit', function(event) {
+  var nextbutton = document.getElementById('payment-next');
+  var validated = document.getElementById('payment-validated');
+
+  nextbutton.addEventListener('click', function(event) {
     event.preventDefault();
     var tokenData = {
       name: document.getElementById('cardholder_name').value
@@ -43,7 +57,7 @@ javascript:
         document.querySelector('#payment-form input[type=submit]').disabled = false;
       } else {
         document.getElementById('payment_token').value = result.token.id;
-        form.submit();
+        validated.click()
       }
     });
   });

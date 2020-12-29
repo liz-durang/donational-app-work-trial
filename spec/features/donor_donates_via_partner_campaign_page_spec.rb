@@ -3,7 +3,12 @@ require 'support/capybara_form_helpers'
 
 RSpec.describe "Donor makes a donation from a partner's campaign page", type: :feature do
   let(:stripe_helper) { StripeMock.create_test_helper }
-  before { StripeMock.start }
+  before do
+    StripeMock.start
+    allow_any_instance_of(Payments::GeneratePlaidLinkToken).to receive(:call).and_return(
+      OpenStruct.new(link_token: 'token_of_my_affection')
+    )
+  end
   after { StripeMock.stop }
 
   scenario 'as a new visitor without filling in required fields', js: true do
@@ -18,33 +23,14 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     expect(page).to have_content('This field is required')
 
-    fill_in 'campaign_contribution[first_name]', with: 'Ian'
-    fill_in 'campaign_contribution[last_name]', with: 'Yamey'
-    fill_in 'campaign_contribution[email]', with: "ian+#{RSpec.configuration.seed}@donational.org"
+    submit_donor_info
 
     click_on 'Next'
-
-    click_on 'Next'
-
     expect(page).to have_content('This field is required')
 
-    find('a', text: '$200').click
-
-    # Future date the donation
-    find('[data-accordion-trigger="show-date"]').click
-
-    select Date::ABBR_MONTHNAMES[3.months.from_now.month]
-    select 3.months.from_now.year
-
-    select 'Monthly'
+    fill_in_donation_info
 
     click_on 'Next'
-
-    expect(page).to have_content('Please select here if you are happy for some of your donations to go to One for the World')
-    click_on '10%'
-
-    click_on 'Next'
-
     expect(page).to have_content('Your card number is incomplete.')
 
     card_token = stripe_helper.generate_card_token(last4: '9191', name: 'Donatello')
@@ -77,26 +63,8 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     expect(page).not_to have_content('Managed Portfolio that has been hidden')
     find("#portfolio-link-#{ManagedPortfolio.find_by(name: 'Top Picks').id}").click
 
-    fill_in 'campaign_contribution[first_name]', with: 'Ian'
-    fill_in 'campaign_contribution[last_name]', with: 'Yamey'
-    fill_in 'campaign_contribution[email]', with: "ian+#{RSpec.configuration.seed}@donational.org"
-
-    click_on 'Next'
-
-    find('a', text: '$200').click
-
-    # Future date the donation
-    find('[data-accordion-trigger="show-date"]').click
-
-    select Date::ABBR_MONTHNAMES[3.months.from_now.month]
-    select 3.months.from_now.year
-
-    select 'Monthly'
-
-    click_on 'Next'
-
-    expect(page).to have_content('Please select here if you are happy for some of your donations to go to One for the World')
-    click_on '10%'
+    submit_donor_info
+    fill_in_donation_info
 
     card_token = stripe_helper.generate_card_token(last4: '9191', name: 'Donatello')
     page.execute_script("document.getElementById('payment_token').value = '#{card_token}';")
@@ -122,25 +90,9 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     expect(page).not_to have_content('Managed Portfolio that has been hidden')
     find("#portfolio-link-#{ManagedPortfolio.find_by(name: 'Top Picks').id}").click
 
-    fill_in 'campaign_contribution[first_name]', with: 'Ian'
-    fill_in 'campaign_contribution[last_name]', with: 'Yamey'
-    fill_in 'campaign_contribution[email]', with: "ian+#{RSpec.configuration.seed}@donational.org"
-
-    click_on 'Next'
-
-    find('a', text: '$200').click
-
-    # Future date the donation
-    find('[data-accordion-trigger="show-date"]').click
-    select Date::ABBR_MONTHNAMES[3.months.from_now.month]
-    select 3.months.from_now.year
-
-    select 'Monthly'
-
-    click_on 'Next'
-
-    expect(page).to have_content('Please select here if you are happy for some of your donations to go to One for the World')
-    click_on '10%'
+    submit_donor_info
+    
+    fill_in_donation_info
 
     card_token = stripe_helper.generate_card_token(last4: '9191', name: 'Donatello')
     page.execute_script("document.getElementById('payment_token').value = '#{card_token}';")
@@ -177,30 +129,14 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     expect(page).not_to have_content('Managed Portfolio that has been hidden')
     find("#portfolio-link-#{ManagedPortfolio.find_by(name: 'Top Picks').id}").click
 
-    fill_in 'campaign_contribution[first_name]', with: 'Ian'
-    fill_in 'campaign_contribution[last_name]', with: 'Yamey'
-    fill_in 'campaign_contribution[email]', with: "ian+#{RSpec.configuration.seed}@donational.org"
-
-    click_on 'Next'
-
-    find('a', text: '£200').click
-
-    # Future date the donation
-    find('[data-accordion-trigger="show-date"]').click
-    select Date::ABBR_MONTHNAMES[3.months.from_now.month]
-    select 3.months.from_now.year
-
-    select 'Monthly'
+    submit_donor_info
 
     find('#gift_aid_checkbox').set(true)
     fill_in 'campaign_contribution[house_name_or_number]', with: '100'
     fill_in 'campaign_contribution[postcode]', with: 'PO1 3AX'
     fill_in 'campaign_contribution[title]', with: 'Mr'
 
-    click_on 'Next'
-
-    expect(page).to have_content('Please select here if you are happy for some of your donations to go to One for the World')
-    click_on '10%'
+    fill_in_donation_info
 
     card_token = stripe_helper.generate_card_token(last4: '9191', name: 'Donatello')
     page.execute_script("document.getElementById('payment_token').value = '#{card_token}';")
@@ -306,5 +242,29 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     end
 
     Date.new(year, month, 15)
+  end
+
+  def submit_donor_info
+    fill_in 'campaign_contribution[first_name]', with: 'Ian'
+    fill_in 'campaign_contribution[last_name]', with: 'Yamey'
+    fill_in 'campaign_contribution[email]', with: "ian+#{RSpec.configuration.seed}@donational.org"
+
+    click_on 'Next'
+  end
+
+  def fill_in_donation_info
+    find('a', text: /200/).click
+
+    # Future date the donation
+    find('[data-accordion-trigger="show-date"]').click
+    select Date::ABBR_MONTHNAMES[3.months.from_now.month]
+    select 3.months.from_now.year
+
+    select 'Monthly'
+
+    expect(page).to have_content('Please select here if you are happy for some of your donations to go to One for the World')
+    click_on '10%'
+
+    click_on 'Next'
   end
 end

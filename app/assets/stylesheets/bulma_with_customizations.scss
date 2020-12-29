@@ -1,13 +1,13 @@
 // Font resources
-@import url('https://fonts.googleapis.com/css?family=Lato:300,400|Lora:300,400');
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400|Lora:300,400");
 
 // Initial Variables for Bulma
 $family-sans-serif: "Lato", Helvetica, Arial, sans-serif;
-$family-serif: 'Lora', serif;
+$family-serif: "Lora", serif;
 $family-primary: $family-sans-serif;
 
-$primary: #8600ED;
-$link: #8600ED;
+$primary: #8600ed;
+$link: #8600ed;
 $primary-invert: white;
 
 $control-radius: 0px;
@@ -16,6 +16,9 @@ $footer-background-color: none;
 // Bulma
 @import "bulma";
 
+button {
+  font-weight: 300;
+}
 html {
   height: 100vh;
 }
@@ -30,7 +33,9 @@ body.minimal {
   display: flex;
   flex-direction: column;
 
-  main { flex: 1; }
+  main {
+    flex: 1;
+  }
   .container {
     max-width: $tablet;
     margin: 0 auto;
@@ -58,7 +63,10 @@ section {
 }
 
 .table.has-cells-centered {
- th, td { vertical-align: middle; }
+  th,
+  td {
+    vertical-align: middle;
+  }
 }
 
 // Overrides
@@ -66,7 +74,13 @@ body {
   font-weight: $weight-light;
 }
 
-h1, h2, h3, h4, h5, h6, .title {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.title {
   font-family: $family-serif;
   font-weight: 400;
 }
@@ -113,11 +127,12 @@ select.greyColor option:not(:first-child) {
 }
 
 .display-when-errors {
-  display: none
+  display: none;
 }
 
-.field-with-errors .display-when-errors, .field-with-errors + .display-when-errors {
-  display: block
+.field-with-errors .display-when-errors,
+.field-with-errors + .display-when-errors {
+  display: block;
 }
 
 .new-line {

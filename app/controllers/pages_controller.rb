@@ -8,7 +8,7 @@ class PagesController < ApplicationController
     render params[:page]
   end
 
-  private 
+  private
 
   def view_model
     OpenStruct.new(

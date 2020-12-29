@@ -1,0 +1,50 @@
+button#link-button.button.is-warning type='button' Connect your bank account
+
+javascript:
+  (async function() {
+    const configs = {
+      // Pass the link_token generated in step 2.
+      token: "#{link_token}",
+      onLoad: function() {
+        // The Link module finished loading.
+      },
+      onSuccess: function(public_token, metadata) {
+        // The onSuccess function is called when the user has
+        // successfully authenticated and selected an account to
+        // use.
+        //
+        // When called, you will send the public_token
+        // and the selected account ID, metadata.accounts,
+        // to your backend app server.
+        //
+        $.post('/get_bank_token', {
+            account_id: metadata.accounts[0].id,
+            public_token: public_token
+          },
+          function( data ) {
+            var validated = document.getElementById("#{submission_field}");
+
+            document.getElementById("#{token_field}").value = data['bank_account_token'];
+            validated.click()
+          }
+        );
+      },
+      onExit: async function(err, metadata) {
+        // The user exited the Link flow.
+        if (err != null) {
+            // The user encountered a Plaid API error
+            // prior to exiting.
+        }
+        // metadata contains information about the institution
+        // that the user selected and the most recent
+        // API request IDs.
+        // Storing this information can be helpful for support.
+      },
+    };
+
+    var linkHandler = Plaid.create(configs);
+
+    document.getElementById('link-button').onclick = function() {
+      linkHandler.open();
+    };
+  })();

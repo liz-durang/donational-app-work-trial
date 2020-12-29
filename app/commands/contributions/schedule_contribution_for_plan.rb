@@ -2,6 +2,8 @@ module Contributions
   class ScheduleContributionForPlan < ApplicationCommand
     required do
       model :subscription
+
+      # This seems deletable (subject to fixing the classes that will try and pass it in):
       time :scheduled_at
     end
 

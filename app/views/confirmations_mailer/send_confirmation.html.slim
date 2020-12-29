@@ -16,7 +16,7 @@
     ' Your donation plan to your
     = @partner_name
     '  charity portfolio was
-    - if @contribution.donor.subscriptions.count > 1
+    - if @subscription.donor.subscriptions.count > 1
       ' updated succesfully
     - else
       ' created succesfully

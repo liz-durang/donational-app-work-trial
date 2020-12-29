@@ -96,10 +96,6 @@ class CampaignContributionsController < ApplicationController
     @active_portfolio ||= Portfolios::GetActivePortfolio.call(donor: current_donor)
   end
 
-  def active_subscription
-    @active_subscription ||= Contributions::GetActiveSubscription.call(donor: current_donor)
-  end
-
   def managed_portfolio_id
     params[:campaign_contribution][:managed_portfolio_id]
   end
@@ -127,7 +123,9 @@ class CampaignContributionsController < ApplicationController
 
   def ensure_current_donor!
     return if current_donor
-    new_donor = Donors::CreateAnonymousDonor.run!
+    new_donor = Donors::CreateAnonymousDonor.run!(
+      donor_id: params[:campaign_contribution][:donor_id]
+    )
 
     log_in!(new_donor)
   end

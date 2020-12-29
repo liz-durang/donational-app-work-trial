@@ -4,6 +4,7 @@ RSpec.describe Contributions::CreateOrReplaceSubscription do
 
   before do |example|
     create(:partner, :default)
+    create(:payment_method, donor: donor)
   end
 
   subject do

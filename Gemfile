@@ -66,6 +66,7 @@ gem 'rspec_api_documentation'
 
 # Payments
 gem 'stripe'
+gem 'plaid'
 
 # Search
 gem 'searchkick'
@@ -106,4 +107,5 @@ group :test do
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'rspec-rails'
+  gem 'webmock'
 end

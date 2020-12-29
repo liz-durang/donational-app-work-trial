@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'stripe_mock'
 
-RSpec.describe Payments::UpdateCustomerCard do
+RSpec.describe Payments::UpdateCustomerPaymentSource do
   around do |example|
     ClimateControl.modify(STRIPE_SECRET_KEY: 'sk_test_123') do
       example.run
@@ -29,7 +29,7 @@ RSpec.describe Payments::UpdateCustomerCard do
     let(:payment_token) { stripe_helper.generate_card_token(card_params) }
 
     it 'updates the customer card' do
-      command = Payments::UpdateCustomerCard.run(customer_id: 'test_cus_1', payment_token: payment_token)
+      command = Payments::UpdateCustomerPaymentSource.run(customer_id: 'test_cus_1', payment_token: payment_token)
 
       expect(command).to be_success
       expect(command.result[:last4]).to eq('4242')
@@ -43,7 +43,7 @@ RSpec.describe Payments::UpdateCustomerCard do
       stripe_error = Stripe::StripeError.new('Some error message')
       StripeMock.prepare_error(stripe_error, :update_customer)
 
-      command = Payments::UpdateCustomerCard.run(customer_id: 'test_cus_1', payment_token: payment_token)
+      command = Payments::UpdateCustomerPaymentSource.run(customer_id: 'test_cus_1', payment_token: payment_token)
 
       expect(command).not_to be_success
       expect(command.errors.symbolic).to include(customer: :stripe_error)

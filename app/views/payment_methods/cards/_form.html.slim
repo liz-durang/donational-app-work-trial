@@ -1,14 +1,13 @@
-.wizard-card-content
-  label.label Card Details
+= form_with url: payment_methods_path, method: :post, id: 'payment-form', local: true do |f|
+  = f.hidden_field :payment_token, id: 'payment_token'
   .control
     #card-element
     #card-errors role="alert"
   p.control.has-icons-left
     input.input.StripeElement id="cardholder_name" type="text" placeholder="Cardholder name"
     span.icon.is-left.is-small: i.fa.fa-user
-.wizard-card-footer
-   a.button.is-primary.is-medium.is-fullwidth href='#' id="payment-next" Next &rarr;
-   a.is-hidden data-action="wizard#next" id="payment-validated"
+  .field.has-text-right
+    = f.submit class: %w(button is-primary), value: 'Update card'
 
 javascript:
   var stripe = Stripe("#{ENV.fetch('STRIPE_PUBLIC_KEY')}");
@@ -35,10 +34,7 @@ javascript:
   });
 
   var form = document.getElementById('payment-form');
-  var nextbutton = document.getElementById('payment-next');
-  var validated = document.getElementById('payment-validated');
-
-  nextbutton.addEventListener('click', function(event) {
+  form.addEventListener('submit', function(event) {
     event.preventDefault();
     var tokenData = {
       name: document.getElementById('cardholder_name').value
@@ -50,7 +46,7 @@ javascript:
         document.querySelector('#payment-form input[type=submit]').disabled = false;
       } else {
         document.getElementById('payment_token').value = result.token.id;
-        validated.click()
+        form.submit();
       }
     });
   });

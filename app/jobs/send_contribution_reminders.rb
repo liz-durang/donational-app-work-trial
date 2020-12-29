@@ -2,12 +2,12 @@ class SendContributionReminders < ApplicationJob
   include ScheduledToRepeat
 
   def perform
-    remindable_contributions.each do |contribution|
-      payment_method = Payments::GetActivePaymentMethod.call(donor: contribution.donor)
-      partner = Partners::GetPartnerForDonor.call(donor: contribution.donor)
-      RemindersMailer.send_reminder(contribution, payment_method, partner).deliver_now
+    remindable_subscriptions.each do |subscription|
+      payment_method = Payments::GetActivePaymentMethod.call(donor: subscription.donor)
+      partner = Partners::GetPartnerForDonor.call(donor: subscription.donor)
+      RemindersMailer.send_reminder(subscription, payment_method, partner).deliver_now
 
-      contribution.update!(last_reminded_at: Time.zone.now)
+      subscription.update!(last_reminded_at: Time.zone.now)
     end
 
     nil
@@ -15,7 +15,7 @@ class SendContributionReminders < ApplicationJob
 
   private
 
-  def remindable_contributions
-    Contributions::GetContributionsWhichNeedReminder.call
+  def remindable_subscriptions
+    Contributions::GetSubscriptionsWhichNeedReminder.call
   end
 end

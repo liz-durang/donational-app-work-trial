@@ -2,7 +2,8 @@ import { Controller } from "stimulus"
 
 export default class extends Controller {
   static targets = [ "step", "portfolioSelected", "donationAmount", "giftAidAmount",
-    "giftAidField", "giftAidPostcode", "giftAidFieldset", "giftAidFieldsetVisible"]
+    "giftAidField", "giftAidPostcode", "giftAidFieldset", "giftAidFieldsetVisible", 
+    "paymentOptionPlaid", "paymentOptionCard"]
 
   initialize() {
     this.updateGiftAidFieldsVisibility();
@@ -111,5 +112,15 @@ export default class extends Controller {
 
   set valid(value) {
     this.data.valid = value
+  }
+
+  showPlaidPayment() {
+    this.paymentOptionPlaidTarget.classList.toggle('is-hidden', false)
+    this.paymentOptionCardTarget.classList.toggle('is-hidden', true)
+  }
+
+  showCardPayment() {
+    this.paymentOptionPlaidTarget.classList.toggle('is-hidden', true)
+    this.paymentOptionCardTarget.classList.toggle('is-hidden', false)
   }
 }

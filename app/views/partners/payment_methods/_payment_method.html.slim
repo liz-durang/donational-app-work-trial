@@ -1,25 +1,13 @@
 - if payment_method.new_record?
   p.notification.is-danger
-    | This donor doesn't have any payment method on file. Please add their credit card using the form below.
+    | This donor doesn't have any payment method on file. Please add a credit/debit card using the form below.
 
   = render 'partners/payment_methods/form'
 - else
   .content data-accordion-panel-for='existing-card'
-    p The following card will be used for this donor's charitable contributions:
+    p The following payment method will be used for this donor's charitable contributions:
 
-    .form.columns
-      .column
-        .field
-          .label Name on card
-          p.control.has-icons-left
-            input.input disabled=true value=payment_method.name_on_card
-            span.icon.is-left.is-small: i.fa.fa-user
-      .column
-        .field
-          .label Card number
-          p.control.has-icons-left
-            input.input disabled=true value=masked_card_number(last4: payment_method.last4)
-            span.icon.is-left.is-small: i.fa.fa-credit-card
+    = render payment_method
 
     .field.has-text-right
       a.button.is-warning data-accordion-trigger='update-card' Use a different card

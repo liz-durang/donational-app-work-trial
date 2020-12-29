@@ -10,8 +10,9 @@ p = markdown_to_html @partner_email_receipt_preamble
 h4
   => t :payment_method_failed, \
     amount: Money.new(@contribution.amount_cents, @currency).format, \
-    partner_name: @partner_name, \
-    last4: @payment_method.last4
+    partner_name: @partner_name
+
+= render @payment_method, summary: true
 
 h4 For the donation to be processed, please update your payment method.
 p

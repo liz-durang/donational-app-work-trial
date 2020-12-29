@@ -1,5 +1,5 @@
 module Contributions
-  class GetContributionsWhichNeedReminder < ApplicationQuery
+  class GetSubscriptionsWhichNeedReminder < ApplicationQuery
     def initialize(relation = Subscription.all)
       @relation = relation
     end
