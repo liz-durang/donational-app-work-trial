@@ -7,7 +7,7 @@
   .content data-accordion-panel-for='existing-card'
     p The following payment method will be used for this donor's charitable contributions:
 
-    = render payment_method
+    = render partial: payment_method.to_partial_path, object: payment_method
 
     .field.has-text-right
       a.button.is-warning data-accordion-trigger='update-card' Use a different card
