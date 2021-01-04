@@ -126,7 +126,8 @@ class CampaignsController < ApplicationController
       partner_accepts_operating_costs_donations?: partner.accepts_operating_costs_donations?,
       currency: partner_currency,
       supports_gift_aid?: partner.supports_gift_aid?,
-      currency_code: campaign.partner.currency.downcase
+      currency_code: campaign.partner.currency.downcase,
+      show_plaid?: partner.supports_plaid?
     )
 
     respond_to do |format|
