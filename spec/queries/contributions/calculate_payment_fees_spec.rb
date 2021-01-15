@@ -19,7 +19,7 @@ RSpec.describe Contributions::CalculatePaymentFees do
   end
 
   context 'when the donor is affiliated with a partner' do
-    let(:partner) { build(:partner, platform_fee_percentage: 0.02 ) }
+    let(:partner) { build(:partner, platform_fee_percentage: 0.02, donor_advised_fund_fee_percentage: 0.02 ) }
 
     it 'calculates the platform fee based on the amount (excluding tips)' do
       expect(subject.platform_fee_cents).to eq 200
@@ -32,8 +32,8 @@ RSpec.describe Contributions::CalculatePaymentFees do
         total_charge_amount_cents: 105_00, # ($100 + $5 tip)
         platform_fee_cents: 2_00, # ($100 * 2%)
         payment_processor_fees_cents: 261, # ($105 * 2.2% + $0.30)
-        donor_advised_fund_fees_cents: 100, # ($100 * 1%)
-        amount_donated_after_fees_cents: 9439 # ($100 - $2 platform fee - $2.61 payment fee - $1 DAF fee)
+        donor_advised_fund_fees_cents: 200, # ($100 * 2%)
+        amount_donated_after_fees_cents: 9339 # ($100 - $2 platform fee - $2.61 payment fee - $2 DAF fee)
       })
     end
   end
@@ -57,6 +57,4 @@ RSpec.describe Contributions::CalculatePaymentFees do
       })
     end
   end
-
-
 end

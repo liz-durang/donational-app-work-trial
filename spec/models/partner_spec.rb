@@ -22,6 +22,7 @@
 #  receipt_second_paragraph          :text
 #  receipt_tax_info                  :text
 #  receipt_charity_name              :string
+#  donor_advised_fund_fee_percentage :decimal(, )      default(0.01)
 #
 
 require 'rails_helper'

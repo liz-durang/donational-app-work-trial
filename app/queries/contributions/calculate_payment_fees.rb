@@ -8,7 +8,7 @@ module Contributions
     def call(contribution:)
       @contribution = contribution
 
-      payment_fees =  OpenStruct.new(
+      payment_fees = OpenStruct.new(
         amount_cents: contribution.amount_cents,
         tips_cents: contribution.tips_cents,
         total_charge_amount_cents: total_charge_amount_cents,
@@ -26,9 +26,11 @@ module Contributions
 
     private
 
-    def platform_fee_cents
-      partner = Partners::GetPartnerForDonor.call(donor: contribution.donor)
+    def partner
+      @partner ||= Partners::GetPartnerForDonor.call(donor: contribution.donor)
+    end
 
+    def platform_fee_cents
       fee_rate = partner ? partner.platform_fee_percentage : DONATIONAL_PLATFORM_FEE_RATE
 
       (contribution.amount_cents * fee_rate).ceil
@@ -43,7 +45,8 @@ module Contributions
     end
 
     def donor_advised_fund_fees_cents
-      fee_rate = DONOR_ADVISED_FUND_FEE_RATE
+      fee_rate = partner ? partner.donor_advised_fund_fee_percentage : DONOR_ADVISED_FUND_FEE_RATE
+
       (contribution.amount_cents * fee_rate).ceil
     end
 

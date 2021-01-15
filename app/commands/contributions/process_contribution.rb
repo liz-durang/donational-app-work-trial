@@ -25,6 +25,7 @@ module Contributions
     class ChargeCustomerError < RuntimeError; end
 
     def charge_customer_and_update_receipt!
+      platform_fee_cents = payment_fees.platform_fee_cents
       metadata = {
         donor_id: contribution.donor.id,
         portfolio_id: contribution.portfolio.id,
@@ -37,7 +38,7 @@ module Contributions
         donation_amount_cents: contribution.amount_cents,
         tips_cents: contribution.tips_cents,
         currency: contribution.amount_currency,
-        platform_fee_cents: payment_fees.platform_fee_cents,
+        platform_fee_cents: platform_fee_cents,
         metadata: metadata
       ).tap do |command|
         if command.success?
@@ -45,9 +46,12 @@ module Contributions
           contribution.update(
             receipt: command.result,
             processed_at: Time.zone.now,
+            platform_fees_cents: platform_fee_cents,
             payment_processor_fees_cents: fee['amount'],
             payment_processor_account_id: payment_processor_account_id
           )
+          # We need to update donor_advised_fund_fees_cents after processed_at is set.
+          contribution.update(donor_advised_fund_fees_cents: payment_fees.donor_advised_fund_fees_cents)
           TriggerContributionProcessedWebhook.perform_async(contribution.id, contribution.partner.id)
         else
           payment_failed!(errors: command.errors.to_json)

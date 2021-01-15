@@ -22,6 +22,8 @@
 #  partner_contribution_percentage :integer          default(0)
 #  amount_currency                 :string           default("usd"), not null
 #  payment_processor_account_id    :string
+#  platform_fees_cents             :integer
+#  donor_advised_fund_fees_cents   :integer
 #
 
 # Funds withdrawn from a Donor and transferred to Donational
