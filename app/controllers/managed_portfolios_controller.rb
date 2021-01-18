@@ -2,7 +2,11 @@ class ManagedPortfoliosController < ApplicationController
   before_action :ensure_donor_has_permission!
 
   def index
-    @view_model = OpenStruct.new(partner: partner)
+    @view_model = OpenStruct.new(
+      partner: partner,
+      active_managed_portfolios: active_managed_portfolios,
+      archived_managed_portfolios: archived_managed_portfolios
+    )
   end
 
   def new
@@ -30,7 +34,7 @@ class ManagedPortfoliosController < ApplicationController
     )
 
     if command.success?
-      flash[:success] = "Portfolio created successfully." 
+      flash[:success] = "Portfolio created successfully."
       redirect_to edit_partner_managed_portfolio_path(id: command.result)
     else
       flash[:error] = command.errors.message_list.join('. ') unless command.success?
@@ -45,6 +49,7 @@ class ManagedPortfoliosController < ApplicationController
       title: params[:title],
       description: params[:description].presence,
       featured: params[:featured].presence,
+      archived: params[:archived].presence,
       image: params[:image],
       organizations: organizations
     )
@@ -52,6 +57,14 @@ class ManagedPortfoliosController < ApplicationController
     flash[:success] = "Portfolio updated successfully." if command.success?
     flash[:error] = command.errors.message_list.join('. ') unless command.success?
     redirect_to edit_partner_managed_portfolio_path(partner, managed_portfolio)
+  end
+
+  def unarchive
+    command = Portfolios::UnarchiveManagedPortfolio.run(managed_portfolio: managed_portfolio)
+
+    flash[:success] = "Portfolio unarchived successfully." if command.success?
+    flash[:error] = command.errors.message_list.join('. ') unless command.success?
+    redirect_to partner_managed_portfolios_path(partner)
   end
 
   def order
@@ -77,6 +90,14 @@ class ManagedPortfoliosController < ApplicationController
 
   def managed_portfolio
     @managed_portfolio = Partners::GetManagedPortfolioById.call(id: params[:id])
+  end
+
+  def active_managed_portfolios
+    @active_managed_portfolios = Partners::GetManagedPortfoliosForPartner.call(partner: partner)
+  end
+
+  def archived_managed_portfolios
+    @archived_managed_portfolios = Partners::GetArchivedManagedPortfoliosForPartner.call(partner: partner)
   end
 
   def organizations

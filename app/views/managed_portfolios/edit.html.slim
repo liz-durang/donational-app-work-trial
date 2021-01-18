@@ -51,6 +51,11 @@ section.embossed.section
                   = f.label :featured, class: :label do
                     => f.check_box :featured, checked: @view_model.managed_portfolio.featured?
                     | Feature this portfolio
+              .field
+                label.control
+                  = f.label :archived, class: :label do
+                    => f.check_box :archived, checked: @view_model.managed_portfolio.archived?
+                    | Archive this portfolio
       .box style='background: #fafafa'
         .columns.is-vcentered
           .column.has-text-centered
@@ -80,7 +85,7 @@ section.embossed.section
                 .select.is-fullwidth = f.select :charity, Organizations::GetRecommendedOrganizations.call.collect { |o| [o.name, o.ein] }, { include_blank: true, class: :input }, id: 'select-charity'
               .control
                 = link_to 'Add', 'javascript:;', class:  %w(button is-success is-outlined), onClick: "addSelectedCharity();"
-              
+
             label.control
               = f.label :search_for_a_charity, class: :label
               p.help You can add any 501(c)3 recognized organization to your portfolio

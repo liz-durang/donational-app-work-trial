@@ -24,4 +24,8 @@ class ManagedPortfolio < ApplicationRecord
   def available_to_new_donors?
     hidden_at.blank?
   end
+
+  def archived?
+    hidden_at.present?
+  end
 end

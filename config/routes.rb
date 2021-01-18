@@ -24,6 +24,9 @@ Rails.application.routes.draw do
       collection do
         put 'order'
       end
+      member do
+        put 'unarchive'
+      end
     end
     resources :reports, module: :partners, only: :index do
       collection do

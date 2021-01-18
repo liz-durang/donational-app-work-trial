@@ -8,7 +8,8 @@ module Portfolios
     end
 
     optional do
-      boolean :featured  
+      boolean :featured
+      boolean :archived
       string :description
       string :image
     end
@@ -54,7 +55,8 @@ module Portfolios
       managed_portfolio.update!(
         name: title,
         description: description,
-        featured: featured
+        featured: featured,
+        hidden_at: archived ? Time.zone.now : nil
       )
       managed_portfolio.image.attach(image) if image.present?
     end
