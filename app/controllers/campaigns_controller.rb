@@ -127,6 +127,7 @@ class CampaignsController < ApplicationController
       currency: partner_currency,
       supports_gift_aid?: partner.supports_gift_aid?,
       currency_code: campaign.partner.currency.downcase,
+      donor_id: generated_id,
       show_plaid?: partner.supports_plaid?
     )
 
