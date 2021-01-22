@@ -124,7 +124,9 @@ class CampaignContributionsController < ApplicationController
   def ensure_current_donor!
     return if current_donor
     new_donor = Donors::CreateAnonymousDonor.run!(
-      donor_id: params[:campaign_contribution][:donor_id]
+      donor_id: params[:campaign_contribution][:donor_id],
+      partner_id: partner.id,
+      campaign: campaign
     )
 
     log_in!(new_donor)

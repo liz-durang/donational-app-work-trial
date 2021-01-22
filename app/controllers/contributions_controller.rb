@@ -19,6 +19,7 @@ class ContributionsController < ApplicationController
         target_amount_cents: target_amount_cents,
         subscription: new_subscription,
         active_payment_method?: payment_method.present?,
+        payment_method: payment_method || current_donor.payment_methods.new,
         partner_affiliation: partner_affiliation,
         partner_affiliation?: partner_affiliation.present?,
         selectable_portfolios: selectable_portfolios,

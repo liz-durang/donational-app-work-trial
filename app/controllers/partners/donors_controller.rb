@@ -38,8 +38,7 @@ module Partners
     def create
       if required_fields_left_blank.blank?
         pipeline = Flow.new
-        new_donor = Donors::CreateAnonymousDonor.run!
-        pipeline.chain { Partners::AffiliateDonorWithPartner.run(donor: new_donor, partner: partner) }
+        new_donor = Donors::CreateAnonymousDonor.run!(partner_id: partner.id)
         pipeline.chain do
           Donors::UpdateDonor.run(
             donor: new_donor,

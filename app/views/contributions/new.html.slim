@@ -52,7 +52,7 @@ section.section.embossed
             hr
 
             - unless @view_model.active_payment_method?
-              = render 'payment_methods/credit_card_form'
+              = render 'payment_methods/form', payment_method: @view_model.payment_method
               hr
 
 
