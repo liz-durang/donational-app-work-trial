@@ -10,7 +10,7 @@ class OnboardingController < ApplicationController
   def ensure_current_donor!
     return if current_donor
 
-    new_donor = Donors::CreateAnonymousDonor.run!
+    new_donor = Donors::CreateAnonymousDonorAffiliatedWithPartner.run!
 
     log_in! new_donor
   end

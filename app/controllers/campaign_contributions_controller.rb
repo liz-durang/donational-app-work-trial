@@ -123,9 +123,10 @@ class CampaignContributionsController < ApplicationController
 
   def ensure_current_donor!
     return if current_donor
-    new_donor = Donors::CreateAnonymousDonor.run!(
+
+    new_donor = Donors::CreateAnonymousDonorAffiliatedWithPartner.run!(
       donor_id: params[:campaign_contribution][:donor_id],
-      partner_id: partner.id,
+      partner: partner,
       campaign: campaign
     )
 
