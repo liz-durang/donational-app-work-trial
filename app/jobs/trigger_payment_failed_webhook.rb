@@ -7,7 +7,7 @@ class TriggerPaymentFailedWebhook < ApplicationJob
     donor = contribution.donor
 
     if ensure_partner_has_webhook(current_partner)
-      active_subscription = Contributions::GetActiveSubscription.call(donor: donor)
+      subscription = Contributions::GetActiveSubscription.call(donor: donor) || Contributions::GetLastDeactivatedSubscription.call(donor: donor)
 
       base_url = current_partner.zapier_webhooks.find_by(hook_type: 'payment_failed').hook_url
 
@@ -22,7 +22,7 @@ class TriggerPaymentFailedWebhook < ApplicationJob
       )
 
       portfolio_name = contribution.portfolio.managed_portfolio.try(:name) || 'Custom Portfolio'
-      active_subscription_portfolio_name = active_subscription.portfolio.managed_portfolio.try(:name) || 'Custom Portfolio'
+      subscription_portfolio_name = subscription.portfolio.managed_portfolio.try(:name) || 'Custom Portfolio'
 
       response = conn.post() do |req|
         req.body = {
@@ -35,12 +35,12 @@ class TriggerPaymentFailedWebhook < ApplicationJob
             portfolio: portfolio_name
           },
           subscription: {
-            id: active_subscription.id,
-            start_at: active_subscription.start_at.to_date,
-            frequency: active_subscription.frequency,
-            amount_dollars: active_subscription.amount_dollars,
-            partner_contribution_percentage: active_subscription.partner_contribution_percentage,
-            portfolio: active_subscription_portfolio_name
+            id: subscription.id,
+            start_at: subscription.start_at.to_date,
+            frequency: subscription.frequency,
+            amount_dollars: subscription.amount_dollars,
+            partner_contribution_percentage: subscription.partner_contribution_percentage,
+            portfolio: subscription_portfolio_name
           },
           donor: {
             id: donor.id,
