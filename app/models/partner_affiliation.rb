@@ -15,7 +15,7 @@ class PartnerAffiliation < ApplicationRecord
   belongs_to :partner
   belongs_to :donor
   belongs_to :campaign, optional: true
-  delegate :title, to: :campaign, prefix: true
+  delegate :title, to: :campaign, prefix: true, allow_nil: true
   delegate :name, to: :partner, prefix: true
 
   after_commit :reindex_donor
