@@ -91,7 +91,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     find("#portfolio-link-#{ManagedPortfolio.find_by(name: 'Top Picks').id}").click
 
     submit_donor_info
-    
+
     fill_in_donation_info
 
     card_token = stripe_helper.generate_card_token(last4: '9191', name: 'Donatello')
@@ -233,13 +233,8 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
   end
 
   def next_15th_of_the_month_after(date)
-    if date.day < 15
-      month = date.month
-      year = date.year
-    else
-      month = date.next_month.month
-      year = date.next_month.year
-    end
+    month = date.next_month.month
+    year = date.next_month.year
 
     Date.new(year, month, 15)
   end
