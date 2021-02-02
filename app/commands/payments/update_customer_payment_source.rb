@@ -9,9 +9,13 @@ module Payments
 
     def execute
       Stripe.api_key = ENV.fetch('STRIPE_SECRET_KEY')
+
       response = Stripe::Customer.update(
         customer_id,
-        { source: payment_token }
+        {
+          expand: ['sources'],
+          source: payment_token
+        }
       )
 
       source = response[:sources][:data][0]
