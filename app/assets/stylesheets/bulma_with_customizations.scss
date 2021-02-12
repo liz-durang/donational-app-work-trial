@@ -135,6 +135,15 @@ select.greyColor option:not(:first-child) {
   display: block;
 }
 
+.display-when-validation-errors {
+  display: none;
+}
+
+.field-with-validation-errors .display-when-validation-errors,
+.field-with-validation-errors + .display-when-validation-errors {
+  display: block;
+}
+
 .new-line {
   white-space: pre-wrap;
 }

@@ -13,11 +13,18 @@
   .label Description
   .control
     = f.text_area :description, class: :textarea, rows: 10, value: @view_model.campaign.description
-.field
-  .label Default contribution amounts
-  .control
-    = f.text_field :default_contribution_amounts, class: :input, placeholder: 'i.e. 10, 20, 50, 100', value: @view_model.default_contribution_amounts
-  p.help Please, enter values separated by comma.
+.columns
+  .column.is-6
+    .field
+      .label Default contribution amounts
+      .control
+        = f.text_field :default_contribution_amounts, class: :input, placeholder: 'i.e. 10, 20, 50, 100', value: @view_model.default_contribution_amounts
+      p.help Please, enter values separated by comma.
+  .column.is-6
+    .field
+      .label Minimum contribution amount
+      .control
+        = f.number_field :minimum_contribution_amount, class: :input, value: @view_model.minimum_contribution_amount
 .columns
   .column.is-6
     label.field

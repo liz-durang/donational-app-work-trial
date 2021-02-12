@@ -2,7 +2,7 @@ import { Controller } from "stimulus"
 
 export default class extends Controller {
   static targets = [ "step", "portfolioSelected", "donationAmount", "giftAidAmount",
-    "giftAidField", "giftAidPostcode", "giftAidFieldset", "giftAidFieldsetVisible", 
+    "giftAidField", "giftAidPostcode", "giftAidFieldset", "giftAidFieldsetVisible",
     "paymentOptionPlaid", "paymentOptionCard"]
 
   initialize() {
@@ -14,6 +14,10 @@ export default class extends Controller {
   next(event) {
     event.preventDefault();
     this.validateRequiredFields()
+
+    // Donation step
+    if (this.valid && this.index == 2)
+      this.validateMinimumDonationAmount()
 
     if (this.hasGiftAidFieldsetVisibleTarget && this.giftAidFieldsetVisibleTarget.checked)
       this.validateGiftAidFields()
@@ -78,6 +82,15 @@ export default class extends Controller {
       }
     })
     this.valid = !anyEmpty
+  }
+
+  validateMinimumDonationAmount() {
+    let donationAmount = parseInt(this.donationAmountTarget.value)
+    let minimumDonationAmount = parseInt(this.donationAmountTarget.dataset.minimumDonationAmount)
+    let isValid = donationAmount >= minimumDonationAmount
+    this.donationAmountTarget.classList.toggle("is-danger", !isValid)
+    this.donationAmountTarget.parentElement.classList.toggle("field-with-validation-errors", !isValid)
+    this.valid = this.valid && isValid
   }
 
   validateGiftAidFields() {

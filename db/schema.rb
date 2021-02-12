@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_14_141054) do
+ActiveRecord::Schema.define(version: 2021_02_11_130220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(version: 2021_01_14_141054) do
     t.datetime "updated_at", null: false
     t.string "contribution_amount_help_text"
     t.boolean "allow_one_time_contributions", default: true, null: false
+    t.integer "minimum_contribution_amount", default: 10
     t.index ["partner_id"], name: "index_campaigns_on_partner_id"
   end
 

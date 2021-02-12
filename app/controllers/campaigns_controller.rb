@@ -27,6 +27,7 @@ class CampaignsController < ApplicationController
       contribution_amount_help_text: campaign.contribution_amount_help_text,
       donation_frequencies: campaign.allowable_donation_frequencies,
       default_contribution_amounts: campaign.default_contribution_amounts,
+      minimum_contribution_amount: campaign.minimum_contribution_amount,
       campaign_contributions_path: campaign_contributions_path(campaign.slug),
       new_campaign_contribution: new_campaign_contribution,
       managed_portfolios: managed_portfolios,
@@ -64,6 +65,7 @@ class CampaignsController < ApplicationController
       campaign: campaign_by_id,
       banner_image: campaign_by_id.banner_image,
       default_contribution_amounts: campaign_by_id.default_contribution_amounts.join(', '),
+      minimum_contribution_amount: campaign_by_id.minimum_contribution_amount,
       currency: partner_currency
     )
   end
@@ -76,6 +78,7 @@ class CampaignsController < ApplicationController
       slug: params[:slug],
       banner_image: params[:banner_image],
       default_contribution_amounts: default_contribution_amounts,
+      minimum_contribution_amount: params[:minimum_contribution_amount],
       contribution_amount_help_text: params[:contribution_amount_help_text].presence,
       allow_one_time_contributions: params[:allow_one_time_contributions]
     )
@@ -93,6 +96,7 @@ class CampaignsController < ApplicationController
       slug: params[:slug],
       banner_image: params[:banner_image],
       default_contribution_amounts: default_contribution_amounts,
+      minimum_contribution_amount: params[:minimum_contribution_amount],
       contribution_amount_help_text: params[:contribution_amount_help_text].presence,
       allow_one_time_contributions: params[:allow_one_time_contributions]
     )
@@ -117,6 +121,7 @@ class CampaignsController < ApplicationController
       contribution_amount_help_text: campaign.contribution_amount_help_text,
       donation_frequencies: campaign.allowable_donation_frequencies,
       default_contribution_amounts: campaign.default_contribution_amounts,
+      minimum_contribution_amount: campaign.minimum_contribution_amount,
       campaign_contributions_path: campaign_contributions_path(campaign.slug),
       new_campaign_contribution: new_campaign_contribution,
       managed_portfolios: managed_portfolios,

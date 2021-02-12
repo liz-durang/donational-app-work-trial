@@ -13,6 +13,7 @@
 #  updated_at                    :datetime         not null
 #  contribution_amount_help_text :string
 #  allow_one_time_contributions  :boolean          default(TRUE), not null
+#  minimum_contribution_amount   :integer          default(10)
 #
 
 FactoryBot.define do
