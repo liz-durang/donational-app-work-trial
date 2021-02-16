@@ -261,6 +261,7 @@ ActiveRecord::Schema.define(version: 2021_02_11_130220) do
     t.integer "retry_count", default: 0
     t.string "type", default: "PaymentMethods::Card"
     t.string "institution"
+    t.string "payment_processor_source_id"
     t.index ["deactivated_at"], name: "index_payment_methods_on_deactivated_at"
     t.index ["donor_id"], name: "index_payment_methods_on_donor_id"
   end
