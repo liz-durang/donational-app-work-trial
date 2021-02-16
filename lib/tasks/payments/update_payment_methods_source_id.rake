@@ -18,16 +18,20 @@ namespace :payments do
     Stripe.api_key = ENV.fetch('STRIPE_SECRET_KEY')
 
     active_payment_methods_without_source_id.each do |payment_method|
-      sources = Stripe::Customer.list_sources(payment_method.payment_processor_customer_id)
+      begin
+        sources = Stripe::Customer.list_sources(payment_method.payment_processor_customer_id)
 
-      if sources[:data].count.zero?
-        puts "Could not find a source for customer: #{payment_method.payment_processor_customer_id}"
+        if sources[:data].count.zero?
+          puts "Could not find a source for customer: #{payment_method.payment_processor_customer_id}"
 
-        next
+          next
+        end
+
+        payment_method.update_column(:payment_processor_source_id, sources[:data][0][:id])
+        print "."
+      rescue Stripe::InvalidRequestError, Stripe::StripeError => e
+        puts e.message
       end
-
-      payment_method.update_column(:payment_processor_source_id, sources[:data][0][:id])
-      print "."
     end
 
     puts 'Completed updating payment processor source IDs'
