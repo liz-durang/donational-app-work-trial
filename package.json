@@ -3,7 +3,7 @@
     "@rails/webpacker": "^4.2.0",
     "activestorage": "^5.2.0",
     "dotenv": "^6.0.0",
-    "stimulus": "^1.0.1",
+    "stimulus": "^2.0.0",
     "underscore": "^1.9.1"
   },
   "devDependencies": {
