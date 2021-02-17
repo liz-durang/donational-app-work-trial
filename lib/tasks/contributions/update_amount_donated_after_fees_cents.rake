@@ -14,10 +14,14 @@ namespace :contributions do
     end
 
     processed_contributions.each do |contribution|
-      payment_fees = Contributions::CalculatePaymentFees.call(contribution: contribution)
-      contribution.update_column(:amount_donated_after_fees_cents, payment_fees.amount_donated_after_fees_cents)
+      begin
+        payment_fees = Contributions::CalculatePaymentFees.call(contribution: contribution)
+        contribution.update_column(:amount_donated_after_fees_cents, payment_fees.amount_donated_after_fees_cents)
 
-      print '.'
+        print '.'
+      rescue Exception => e
+        puts e.message
+      end
     end
 
     puts 'Completed updating amount donated after fees cents for contributions'
