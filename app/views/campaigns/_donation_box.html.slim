@@ -12,6 +12,7 @@
 - else
   = form_with model: @view_model.new_campaign_contribution, data: { controller: 'wizard' }, local: true, id: 'payment-form', method: :post, class: 'form' do |f|
     = f.hidden_field :payment_token, id: 'payment_token'
+    = f.hidden_field :payment_method_id, id: 'payment-method-id'
     = f.hidden_field :donor_id, value: @view_model.donor_id
     fieldset.wizard-card data-target='wizard.step'
       .wizard-card-header
@@ -208,7 +209,7 @@
         h3.wizard-card-title Payment
         = render 'wizard_nav', step: 4, of: 5
 
-      = render 'payment_method_form'
+      = render 'payment_method_form', payment_method_field: 'payment-method-id'
 
     fieldset.wizard-card data-target='wizard.step'
       .wizard-card-header

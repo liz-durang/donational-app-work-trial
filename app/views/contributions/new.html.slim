@@ -28,8 +28,10 @@ section.section.embossed
       .column.is-8
         p.content We use smart and secure online payments to ensure that your donations are simple, secure, and avoid fees.
         .box
+          - unless @view_model.active_payment_method?
+            = render 'payment_methods/form', payment_method: @view_model.payment_method, show_plaid: @view_model.show_plaid?
+            hr
           = form_with model: @view_model.subscription, url: contributions_path, local: true, id: 'payment-form', method: :post, class: 'form' do |f|
-            = f.hidden_field :payment_token, id: 'payment_token'
             .columns
               .column.is-4
                 .field
@@ -50,11 +52,6 @@ section.section.embossed
             p.has-text-centered.help All donations are tax-deductible operating under the Social Good Fund, a 501(c)3 public charity, EIN 46-1323531.
 
             hr
-
-            - unless @view_model.active_payment_method?
-              = render 'payment_methods/form', payment_method: @view_model.payment_method
-              hr
-
 
             - if @view_model.partner_affiliation?
               .columns

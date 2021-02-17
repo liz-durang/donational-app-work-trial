@@ -2,19 +2,35 @@ module Payments
   class UpdatePaymentMethod < ApplicationCommand
     required do
       model :donor
-      string :payment_token, empty: false
+    end
+
+    optional do
+      string :payment_method_id, empty: true
+      string :payment_token, empty: true
     end
 
     def execute
-      unless customer
-        add_error(:customer, :empty, 'Customer does not exist and could not be created')
+      if payment_method_id.blank? && payment_token.blank?
+        add_error(:payment_method, :empty, 'A payment method must be provided')
+
         return
       end
 
-      outcome = Payments::UpdateCustomerPaymentSource.run(customer_id: customer[:id], payment_token: payment_token)
+      unless customer
+        add_error(:customer, :empty, 'Customer does not exist and could not be created')
+
+        return
+      end
+
+      outcome = if payment_method_id.present?
+                  Payments::UpdateCustomerCard.run(customer_id: customer[:id], payment_method_id: payment_method_id)
+                else
+                  Payments::UpdateCustomerPaymentSource.run(customer_id: customer[:id], payment_token: payment_token)
+                end
 
       unless outcome.success?
-        add_error(:customer, :payment_error, 'Could not update card')
+        add_error(:customer, :payment_error, 'Could not update payment method')
+
         return
       end
 
@@ -29,13 +45,14 @@ module Payments
                               end
 
         PaymentMethod.create!(
-          type: payment_method_type,
+          address_zip_code: outcome.result[:address_zip_code],
           donor: donor,
-          payment_processor_customer_id: customer[:id],
-          name: outcome.result[:name],
           institution: outcome.result[:institution],
           last4: outcome.result[:last4],
-          address_zip_code: outcome.result[:address_zip_code]
+          name: outcome.result[:name],
+          payment_processor_customer_id: customer[:id],
+          payment_processor_source_id: outcome.result[:payment_processor_source_id],
+          type: payment_method_type
         )
       end
 
@@ -55,20 +72,23 @@ module Payments
     end
 
     def customer_by_id
-      return nil if payment_method&.payment_processor_customer_id.blank?
+      return nil unless payment_method.present?
 
-      find_by_id = Payments::FindCustomerById.run(customer_id: payment_method.payment_processor_customer_id)
-      return nil unless find_by_id.success?
+      return nil if payment_method.payment_processor_customer_id.blank?
 
-      find_by_id.result
+      outcome = Payments::FindCustomerById.run(customer_id: payment_method.payment_processor_customer_id)
+
+      return nil unless outcome.success?
+
+      outcome.result
     end
 
     def create_customer
-      metadata        = { donor_id: donor.id }
-      create_customer = Payments::CreateCustomer.run(metadata: metadata)
-      return nil unless create_customer.success?
+      outcome = Payments::CreateCustomer.run(metadata: { donor_id: donor.id })
 
-      create_customer.result
+      return nil unless outcome.success?
+
+      outcome.result
     end
 
     def deactivate_existing_payment_method!

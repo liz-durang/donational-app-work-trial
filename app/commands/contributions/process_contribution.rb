@@ -13,16 +13,11 @@ module Contributions
 
     def execute
       chain { charge_customer_and_update_receipt! }
-      chain { create_donations_based_on_active_allocations }
-      chain { send_tax_deductible_receipt }
-      chain { track_contribution_processed_event }
 
       nil
     end
 
     private
-
-    class ChargeCustomerError < RuntimeError; end
 
     def charge_customer_and_update_receipt!
       platform_fee_cents = payment_fees.platform_fee_cents
@@ -31,34 +26,46 @@ module Contributions
         portfolio_id: contribution.portfolio.id,
         contribution_id: contribution.id
       }
-      Payments::ChargeCustomer.run(
-        customer_id: payment_method.payment_processor_customer_id,
-        account_id: payment_processor_account_id,
-        email: contribution.donor.email,
-        donation_amount_cents: contribution.amount_cents,
-        tips_cents: contribution.tips_cents,
-        currency: contribution.amount_currency,
-        platform_fee_cents: platform_fee_cents,
-        metadata: metadata
-      ).tap do |command|
+
+      charge_command = if payment_method.is_a?(PaymentMethods::Card)
+                         Payments::ChargeCustomerCard
+                       else
+                         Payments::ChargeCustomerBankAccount
+                       end
+
+      outcome = charge_command.run(
+                  account_id: payment_processor_account_id,
+                  currency: contribution.amount_currency,
+                  donation_amount_cents: contribution.amount_cents,
+                  metadata: metadata,
+                  payment_method: payment_method,
+                  platform_fee_cents: platform_fee_cents,
+                  tips_cents: contribution.tips_cents
+                )
+
+      outcome.tap do |command|
         if command.success?
-          fee = command.result['balance_transaction']['fee_details'].detect { |fee| fee['type'] == 'stripe_fee' }
           contribution.update(
-            receipt: command.result,
+            receipt: command.result[:receipt],
             processed_at: Time.zone.now,
             platform_fees_cents: platform_fee_cents,
-            payment_processor_fees_cents: fee['amount'],
-            payment_processor_account_id: payment_processor_account_id
+            payment_processor_fees_cents: command.result[:payment_processor_fees_cents],
+            payment_processor_account_id: payment_processor_account_id,
+            payment_status: :pending
           )
-          # We need to update donor_advised_fund_fees_cents after processed_at is set.
-          contribution.update(donor_advised_fund_fees_cents: payment_fees.donor_advised_fund_fees_cents)
+          # We need to update donor_advised_fund_fees_cents and amount_donated_after_fees_cents after processed_at is set.
+          contribution.update(
+            donor_advised_fund_fees_cents: payment_fees.donor_advised_fund_fees_cents,
+            amount_donated_after_fees_cents: payment_fees.amount_donated_after_fees_cents
+          )
           TriggerContributionProcessedWebhook.perform_async(contribution.id, contribution.partner.id)
         else
-          payment_failed!(errors: command.errors.to_json)
+          Contributions::ProcessContributionPaymentFailed.run(contribution: contribution, errors: command.errors.to_json)
         end
       end
     end
 
+    # Validations
     def ensure_donor_has_payment_method!
       return if payment_method.present?
 
@@ -71,6 +78,7 @@ module Contributions
       add_error(:contribution, :already_processed, 'The payment has already been processed')
     end
 
+    # Accessors
     def payment_fees
       @payment_fees = Contributions::CalculatePaymentFees.call(contribution: contribution)
     end
@@ -81,50 +89,6 @@ module Contributions
 
     def payment_method
       @payment_method ||= Payments::GetActivePaymentMethod.call(donor: contribution.donor)
-    end
-
-    def active_subscription
-      @active_contribution ||= Contributions::GetActiveSubscription.call(donor: contribution.donor)
-    end
-
-    def create_donations_based_on_active_allocations
-      Donations::CreateDonationsFromContributionIntoPortfolio.run(
-        contribution: contribution,
-        donation_amount_cents: payment_fees.amount_donated_after_fees_cents
-      )
-    end
-
-    def send_tax_deductible_receipt
-      partner = Partners::GetPartnerForDonor.call(donor: contribution.donor)
-      ReceiptsMailer.send_receipt(contribution, payment_method, partner).deliver_now
-      Mutations::Outcome.new(true, nil, [], nil)
-    end
-
-    def payment_failed!(errors:)
-      # Track error
-      Appsignal.set_error(ChargeCustomerError.new(errors), contribution_id: contribution.id)
-      contribution.update(receipt: errors, failed_at: Time.zone.now)
-
-      # Send payment failed email
-      partner = Partners::GetPartnerForDonor.call(donor: contribution.donor)
-      PaymentMethodsMailer.send_payment_failed(contribution, payment_method, partner).deliver_now
-
-      # Send Zapier event
-      TriggerPaymentFailedWebhook.perform_async(contribution.id, partner.id)
-
-      # Update payment method retry count and cancel donation plan
-      Payments::IncrementRetryCount.run(payment_method: payment_method)
-      if active_subscription.present? && payment_method.retry_count_limit_reached?
-        Contributions::DeactivateSubscription.run(subscription: active_subscription)
-      end
-    end
-
-    def track_contribution_processed_event
-      Analytics::TrackEvent.run(
-        user_id: contribution.donor.id,
-        event: 'Donation processed',
-        traits: { revenue: contribution.amount_dollars, tip_dollars: contribution.tips_cents / 100 }
-      )
     end
   end
 end

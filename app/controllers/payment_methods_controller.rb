@@ -4,7 +4,8 @@ class PaymentMethodsController < ApplicationController
   def create
     outcome = Payments::UpdatePaymentMethod.run(
       donor: current_donor,
-      payment_token: params[:payment_token]
+      payment_token: params[:payment_token],
+      payment_method_id: params[:payment_method_id]
     )
 
     flash[:success] = "Thanks, we've updated your payment information" if outcome.success?

@@ -15,12 +15,11 @@
 .wizard-card-footer
   a.button.is-primary.is-medium.is-fullwidth id="payment-next" href="#" Next &rarr;
   a.is-hidden.plaid-success-target data-action="wizard#next" id="payment-validated"
-  
+
 
 javascript:
   var stripe = Stripe("#{ENV.fetch('STRIPE_PUBLIC_KEY')}");
   var elements = stripe.elements();
-
   var style = {
     base: {
       fontSmoothing: 'antialiased',
@@ -47,17 +46,24 @@ javascript:
 
   nextbutton.addEventListener('click', function(event) {
     event.preventDefault();
-    var tokenData = {
-      name: document.getElementById('cardholder_name').value
-    }
-    stripe.createToken(card, tokenData).then(function(result) {
-      if (result.error) {
-        var errorElement = document.getElementById('card-errors');
-        errorElement.textContent = result.error.message;
-        document.querySelector('#payment-form input[type=submit]').disabled = false;
-      } else {
-        document.getElementById('payment_token').value = result.token.id;
-        validated.click()
+
+    $.post('/get_setup_intent_client_secret',
+      function( data ) {
+        var clientSecret = data['client_secret'];
+        var paymentMethodData = {
+          card: card,
+          billing_details: { name: document.getElementById('cardholder_name').value }
+        }
+        stripe.confirmCardSetup(clientSecret, { payment_method: paymentMethodData }).then(function(result) {
+          if (result.error) {
+            var errorElement = document.getElementById('card-errors');
+            errorElement.textContent = result.error.message;
+            document.querySelector('#payment-form input[type=submit]').disabled = false;
+          } else {
+            document.getElementById("#{payment_method_field}").value = result.setupIntent.payment_method;
+            validated.click();
+          }
+        });
       }
-    });
+    );
   });

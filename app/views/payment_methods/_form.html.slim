@@ -6,7 +6,7 @@ div data-accordion-panel-for='existing-card'
     .has-text-right
       button.button.is-warning data-accordion-trigger='update-payment-details'
         | Add a Credit/Debit Card
-      - if @view_model.show_plaid?
+      - if show_plaid
         =< render 'payment_methods/bank_accounts/form'
   - else
     = render payment_method
@@ -14,7 +14,7 @@ div data-accordion-panel-for='existing-card'
     .has-text-right
       a.button.is-warning data-accordion-trigger='update-payment-details'
         | Add a Credit/Debit Card
-      - if @view_model.show_plaid?
+      - if show_plaid
         =< render 'payment_methods/bank_accounts/form'
 
 .is-hidden data-accordion-panel-for='update-payment-details'

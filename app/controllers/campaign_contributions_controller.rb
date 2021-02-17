@@ -9,7 +9,7 @@ class CampaignContributionsController < ApplicationController
     pipeline.chain { associate_donor_with_partner! }
     pipeline.chain { store_custom_donor_information! }
     pipeline.chain { subscribe_donor_to_managed_portfolio! }
-    pipeline.chain { update_donor_payment_method! } if payment_token.present?
+    pipeline.chain { update_donor_payment_method! } if payment_method_id.present? || payment_token.present?
     pipeline.chain { update_subscription! }
 
     outcome = pipeline.run
@@ -69,7 +69,8 @@ class CampaignContributionsController < ApplicationController
   def update_donor_payment_method!
     Payments::UpdatePaymentMethod.run(
       donor: current_donor,
-      payment_token: params[:campaign_contribution][:payment_token]
+      payment_token: payment_token,
+      payment_method_id: payment_method_id
     )
   end
 
@@ -98,6 +99,10 @@ class CampaignContributionsController < ApplicationController
 
   def managed_portfolio_id
     params[:campaign_contribution][:managed_portfolio_id]
+  end
+
+  def payment_method_id
+    params[:campaign_contribution][:payment_method_id]
   end
 
   def payment_token

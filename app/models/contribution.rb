@@ -34,6 +34,14 @@ class Contribution < ApplicationRecord
   has_many :donations
   has_many :organizations, through: :donations
 
+  enum payment_status: {
+    unprocessed: 'unprocessed',
+    pending: 'pending',
+    succeeded: 'succeeded',
+    failed: 'failed',
+    refunded: 'refunded'
+  }
+
   validates :external_reference_id, uniqueness: { scope: :partner }, allow_nil: true
   validates :amount_currency, presence: true
 

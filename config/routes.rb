@@ -73,6 +73,10 @@ Rails.application.routes.draw do
   get '/:campaign_slug/donation-box' => 'campaigns#donation_box', as: :campaigns_donation_box, defaults: { format: :html }
   post '/get_bank_token' => 'plaid_auth#get_bank_token'
 
+  # Stripe
+  post :get_setup_intent_client_secret, to: 'stripe#get_setup_intent_client_secret'
+  post :webhook, to: 'stripe#webhook'
+
   # API
   namespace :api do
     namespace :v1, defaults: { format: :json } do

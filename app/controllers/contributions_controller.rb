@@ -25,17 +25,23 @@ class ContributionsController < ApplicationController
         selectable_portfolios: selectable_portfolios,
         currency_code: current_currency.iso_code,
         amount_cents: new_subscription.amount_cents,
-        tips_options: tips_options
+        tips_options: tips_options,
+        show_plaid?: partner.supports_plaid?
       )
     end
   end
 
   def create
-    pipeline = Flow.new
-    pipeline.chain { update_donor_payment_method! } if payment_token.present?
-    pipeline.chain { update_subscription! }
-
-    outcome = pipeline.run
+    outcome = Contributions::CreateOrReplaceSubscription.run(
+      donor: current_donor,
+      portfolio: Portfolio.find(portfolio_id),
+      partner: partner,
+      frequency: frequency,
+      amount_cents: amount_cents,
+      tips_cents: tips_cents,
+      start_at: start_at,
+      partner_contribution_percentage: 0
+    )
 
     if outcome.success?
       track_analytics_event_via_browser('Goal: Donation', { revenue: amount_dollars })
@@ -62,26 +68,6 @@ class ContributionsController < ApplicationController
         Money.new(amount, current_currency).format(no_cents_if_whole: true, display_free: 'No tip')
       ]
     end
-  end
-
-  def update_donor_payment_method!
-    Payments::UpdatePaymentMethod.run(
-      donor: current_donor,
-      payment_token: payment_token
-    )
-  end
-
-  def update_subscription!
-    Contributions::CreateOrReplaceSubscription.run(
-      donor: current_donor,
-      portfolio: Portfolio.find(portfolio_id),
-      partner: partner,
-      frequency: frequency,
-      amount_cents: amount_cents,
-      tips_cents: tips_cents,
-      start_at: start_at,
-      partner_contribution_percentage: 0
-    )
   end
 
   def payment_method

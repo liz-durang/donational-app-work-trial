@@ -101,7 +101,7 @@ group :test do
   gem 'capybara'
   gem 'capybara-selenium'
   gem 'selenium-webdriver', '~> 3.12.0'
-  gem 'stripe-ruby-mock', '~> 2.5.4', require: 'stripe_mock'
+  gem 'stripe-ruby-mock', '~> 3.0.1', require: 'stripe_mock'
   gem 'capybara-webmock'
   gem 'puffing-billy'
   gem 'factory_bot_rails'

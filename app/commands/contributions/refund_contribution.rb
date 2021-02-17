@@ -7,25 +7,37 @@ module Contributions
     end
 
     def execute
-      chain { refund_charge_and_update_receipt! }
+      chain { refund_contribution_and_update_receipt! }
       chain { delete_donations! }
     end
 
     private
-    
+
     class RefundChargeError < RuntimeError; end
 
-    def refund_charge_and_update_receipt!
+    def refund_contribution_and_update_receipt!
       metadata = {
         donor_id: donor.id,
         contribution_id: contribution.id
       }
-      Payments::RefundCharge.run(
-        account_id: payment_processor_account_id,
-        charge_id: charge_id
-      ).tap do |command|
+
+      outcome = if payment_type == 'charge'
+                  Payments::RefundCharge.run(
+                    account_id: payment_processor_account_id,
+                    charge_id: payment_id,
+                    metadata: metadata
+                  )
+                else
+                  Payments::RefundPaymentIntent.run(
+                    metadata: metadata,
+                    payment_intent_id: payment_id
+                  )
+                end
+
+      outcome.tap do |command|
         if command.success?
           contribution.update(
+            payment_status: :refunded,
             refunded_at: Time.zone.now
           )
         else
@@ -48,8 +60,16 @@ module Contributions
       @donor = contribution.donor
     end
 
-    def charge_id
-      @charge_id = contribution.receipt.present? ? contribution.receipt["id"] : nil
+    def payment_id
+      return nil unless contribution.receipt.present?
+
+      @payment_id = contribution.receipt["id"]
+    end
+
+    def payment_type
+      return nil unless contribution.receipt.present?
+
+      @payment_type = contribution.receipt["object"]
     end
 
     def payment_processor_account_id

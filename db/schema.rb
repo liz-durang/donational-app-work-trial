@@ -107,6 +107,7 @@ ActiveRecord::Schema.define(version: 2021_02_12_172648) do
     t.string "payment_processor_account_id"
     t.integer "platform_fees_cents"
     t.integer "donor_advised_fund_fees_cents"
+    t.string "payment_status", default: "unprocessed"
     t.integer "amount_donated_after_fees_cents"
     t.index ["donor_id"], name: "index_contributions_on_donor_id"
     t.index ["partner_id"], name: "index_contributions_on_partner_id"

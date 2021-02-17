@@ -12,12 +12,13 @@ RSpec.describe Payments::UpdateCustomerPaymentSource do
   after { StripeMock.stop }
   let(:stripe_helper) { StripeMock.create_test_helper }
 
-  let(:card_params) do
+  let(:bank_account_params) do
     {
-      number: '4242424242424242',
-      exp_month: 12,
-      exp_year: 1.year.from_now.year,
-      cvc: '999'
+      account_holder_name: 'Donatello Donor',
+      account_holder_type: 'individual',
+      country: 'US',
+      routing_number: '110000000',
+      account_number: '000123456789'
     }
   end
 
@@ -25,19 +26,21 @@ RSpec.describe Payments::UpdateCustomerPaymentSource do
     Payments::CreateCustomer.run(email: 'user@example.com')
   end
 
-  context 'when a card can be added to the customer' do
-    let(:payment_token) { stripe_helper.generate_card_token(card_params) }
+  context 'when a bank account can be added to the customer' do
+    let(:payment_token) { stripe_helper.generate_bank_token(bank_account_params) }
 
     it 'updates the customer card' do
       command = Payments::UpdateCustomerPaymentSource.run(customer_id: 'test_cus_1', payment_token: payment_token)
 
       expect(command).to be_success
-      expect(command.result[:last4]).to eq('4242')
+      expect(command.result[:last4]).to eq('6789')
+      expect(command.result[:name]).to eq('Donatello Donor')
+      expect(command.result[:payment_source_type]).to eq('bank_account')
     end
   end
 
   context 'when a customer card cannot be created' do
-    let(:payment_token) { stripe_helper.generate_card_token(card_params) }
+    let(:payment_token) { stripe_helper.generate_bank_token(bank_account_params) }
 
     it 'fails with errors' do
       stripe_error = Stripe::StripeError.new('Some error message')

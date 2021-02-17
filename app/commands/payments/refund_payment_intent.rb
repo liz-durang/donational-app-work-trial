@@ -1,10 +1,9 @@
 require 'stripe'
 
 module Payments
-  class RefundCharge < ApplicationCommand
+  class RefundPaymentIntent < ApplicationCommand
     required do
-      string :account_id, empty: false
-      string :charge_id, empty: false
+      string :payment_intent_id, empty: false
     end
 
     optional do
@@ -19,9 +18,9 @@ module Payments
         Stripe.api_key = ENV.fetch('STRIPE_SECRET_KEY')
 
         Stripe::Refund.create({
-          charge: charge_id,
-          metadata: metadata
-        }, stripe_account: account_id)
+          metadata: metadata,
+          payment_intent: payment_intent_id
+        })
       rescue Stripe::InvalidRequestError, Stripe::StripeError => e
         add_error(:customer, :stripe_error, e.message)
 

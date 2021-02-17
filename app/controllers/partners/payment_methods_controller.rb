@@ -5,7 +5,8 @@ module Partners
     def create
       outcome = Payments::UpdatePaymentMethod.run(
         donor: donor,
-        payment_token: params[:payment_token]
+        payment_token: params[:payment_token],
+        payment_method_id: params[:payment_method_id]
       )
 
       flash[:success] = "Thanks, we've updated this donor's payment information" if outcome.success?

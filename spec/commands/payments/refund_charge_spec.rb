@@ -16,41 +16,45 @@ RSpec.describe Payments::RefundCharge do
     Payments::CreateCustomer.run
   end
 
-  context 'when the charge id and account id are supplied' do
+  context 'when the charge ID and account ID are supplied' do
     let(:charge_id) { 'test_charge_1' }
     let(:account_id) { 'test_acc_1' }
-    let(:charge) { Stripe::Charge.create(
-      amount: 100,
-      currency: 'usd',
-      customer: 'test_customer_1'
-    ) }
+    let(:charge) do
+      Stripe::Charge.create(
+        amount: 100,
+        currency: 'usd',
+        customer: 'test_customer_1'
+      )
+    end
 
     context 'and the stripe response is successful' do
-      it "refunds the charge" do
+      it 'refunds the charge' do
         command = described_class.run(
           charge_id: charge.id,
           account_id: account_id
         )
+
         expect(command).to be_success
       end
     end
 
-    context 'and the charge id is invalid' do
-      let(:error_message) { "No such charge: invalid id" }
+    context 'and the charge ID is invalid' do
+      let(:error_message) { "No such charge: invalid ID" }
 
       it 'fails with errors' do
         stripe_error = Stripe::StripeError.new(error_message)
         command = described_class.run(
-          charge_id: 'invalid id',
+          charge_id: 'invalid ID',
           account_id: account_id
         )
+
         expect(command).not_to be_success
         expect(command.errors.symbolic).to include(customer: :stripe_error)
       end
     end
   end
 
-  context 'when the charge id and account id are not supplied' do
+  context 'when the charge ID and account ID are not supplied' do
     let(:charge_id) { '' }
     let(:account_id) { '' }
 

@@ -10,11 +10,8 @@ module Payments
 
     def execute
       Stripe.api_key = ENV.fetch('STRIPE_SECRET_KEY')
-      response = Stripe::Customer.create(
-        {
-          metadata: metadata
-        }
-      )
+
+      Stripe::Customer.create({ metadata: metadata })
     rescue Stripe::InvalidRequestError, Stripe::StripeError => e
       add_error(:customer, :stripe_error, e.message)
 
