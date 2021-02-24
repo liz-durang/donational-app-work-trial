@@ -90,23 +90,30 @@ section.embossed.section
                         = f.hidden_field :contribution_id, value: contribution.id
                         = f.submit class: %w(button is-primary is-small), value: 'Refund', data: { confirm: 'Refund this contribution?' }
     .box
-      - if @view_model.partner.donors.include?(@view_model.donor)
-        p.subtitle This user has admin privileges
-        = form_with url: partner_admin_path, local: true, method: :put, class: 'form' do |f|
-          = f.hidden_field :partner_id, value: @view_model.partner.id
-          = f.hidden_field :donor_id, value: @view_model.donor.id
-          = f.submit class: %w(button is-primary), value: "Revoke this user's admin privileges", data: { confirm: "Revoke this user's admin privileges?" }
-      - else
-        p.subtitle This user does not have admin privileges
-        = form_with url: partner_admins_path, local: true, method: :post, class: 'form' do |f|
-          = f.hidden_field :partner_id, value: @view_model.partner.id
-          = f.hidden_field :donor_id, value: @view_model.donor.id
-          = f.submit class: %w(button is-primary), value: "Make this user an Admin", data: { confirm: "Make this user an admin?" }
-    - if (current_donor.partners.count > 1)
-      .box
-        p.subtitle Migrate donor to another partner
-        = form_with url: partner_donor_migrations_path, local: true, method: :post, class: 'form' do |f|
-          = f.hidden_field :donor_id, value: @view_model.donor.id
-          = f.hidden_field :source_partner_id , value: @view_model.partner.id
-          .select = f.select :destination_partner_id, current_donor.partners.collect { |p| [ p.name, p.id ] }
-          = f.submit class: %w(button is-primary), value: 'Migrate to this partner', data: { confirm: 'Migrate this donor?' }
+      h2 Actions
+      br
+      .columns.is-vcentered
+        .column
+          - if @view_model.partner.donors.include?(@view_model.donor)
+            p This user has admin privileges
+            = form_with url: partner_admin_path, local: true, method: :put, class: 'form' do |f|
+              = f.hidden_field :partner_id, value: @view_model.partner.id
+              = f.hidden_field :donor_id, value: @view_model.donor.id
+              = f.submit class: %w(button is-primary), value: "Revoke this user's admin privileges", data: { confirm: "Revoke this user's admin privileges?" }
+          - else
+            = form_with url: partner_admins_path, local: true, method: :post, class: 'form' do |f|
+              = f.hidden_field :partner_id, value: @view_model.partner.id
+              = f.hidden_field :donor_id, value: @view_model.donor.id
+              = f.submit class: %w(button is-primary), value: "Make this user an admin", data: { confirm: "Make this user an admin?" }
+          - if (current_donor.partners.count > 1)
+            br
+            br
+            = form_with url: partner_donor_migrations_path, local: true, method: :post, class: 'form' do |f|
+              = f.hidden_field :donor_id, value: @view_model.donor.id
+              = f.hidden_field :source_partner_id , value: @view_model.partner.id
+              .select = f.select :destination_partner_id, current_donor.partners.collect { |p| [ p.name, p.id ] }
+              = f.submit class: %w(button is-primary), value: 'Migrate to this partner', data: { confirm: 'Migrate this donor?' }
+          br
+          br
+          = form_with url: partner_donor_path(partner: @view_model.partner, donor: @view_model.donor), local: true, method: :delete, class: 'form' do |f|
+            = f.submit class: %w(button is-primary), value: 'Delete this donor', data: { confirm: 'Delete this donor?' }

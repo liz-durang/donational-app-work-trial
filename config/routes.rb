@@ -36,7 +36,7 @@ Rails.application.routes.draw do
         get 'gift_aid', format: :csv
       end
     end
-    resources :donors, module: :partners, only: %i[index new edit create update]
+    resources :donors, module: :partners, only: %i[index new edit create update destroy]
     resources :payment_methods, module: :partners, only: %i[create]
     resources :refunds, module: :partners, only: %i[create]
     resources :donor_migrations, module: :partners, only: %i[create]

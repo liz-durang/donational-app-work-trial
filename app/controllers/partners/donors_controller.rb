@@ -92,6 +92,18 @@ module Partners
       redirect_to edit_partner_donor_path(partner, donor)
     end
 
+    def destroy
+      outcome = Donors::DeactivateDonor.run(donor: donor)
+
+      if outcome.success?
+        flash[:success] = 'Donor deleted successfully'
+        redirect_to partner_donors_path(partner)
+      else
+        flash[:error] = outcome.errors.message_list.join("\n")
+        redirect_to edit_partner_donor_path(partner, donor)
+      end
+    end
+
     private
 
     def update_donor!

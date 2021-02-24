@@ -39,7 +39,8 @@ class Donor < ApplicationRecord
     {
       email: email,
       name: name,
-      partner_id: Partners::GetPartnerForDonor.call(donor: self).id
+      partner_id: Partners::GetPartnerForDonor.call(donor: self).id,
+      deactivated_at: deactivated_at
     }
   end
 
@@ -86,6 +87,10 @@ class Donor < ApplicationRecord
     else
       self.username = candidate_username
     end
+  end
+
+  def active?
+    deactivated_at.blank?
   end
 
   def name

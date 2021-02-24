@@ -8,6 +8,7 @@ module Partners
       return nil if partner.blank?
 
       @relation
+        .where(deactivated_at: nil)
         .left_joins(partner_affiliations: [:partner, :campaign])
         .where(partner_affiliations: { partner: partner })
         .left_joins(subscriptions: { portfolio: [:managed_portfolio]})
