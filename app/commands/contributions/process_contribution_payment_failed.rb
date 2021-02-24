@@ -9,7 +9,6 @@ module Contributions
 
     def validate
       ensure_contribution_not_processed!
-      ensure_contribution_payment_not_failed!
     end
 
     def execute
@@ -48,12 +47,6 @@ module Contributions
       return if contribution.processed_at.blank?
 
       add_error(:contribution, :already_processed, 'The payment has already been processed')
-    end
-
-    def ensure_contribution_payment_not_failed!
-      return unless contribution.failed?
-
-      add_error(:contribution, :payment_already_failed, 'The payment has already failed')
     end
 
     # Accessors
