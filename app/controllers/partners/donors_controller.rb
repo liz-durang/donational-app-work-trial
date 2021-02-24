@@ -38,26 +38,8 @@ module Partners
     def create
       if required_fields_left_blank.blank?
         pipeline = Flow.new
-        new_donor = Donors::CreateAnonymousDonorAffiliatedWithPartner.run!(partner: partner)
-        pipeline.chain do
-          Donors::UpdateDonor.run(
-            donor: new_donor,
-            email: params[:email].presence,
-            first_name: params[:first_name].presence,
-            last_name: params[:last_name].presence,
-            title: params[:title].presence,
-            house_name_or_number: params[:house_name_or_number].presence,
-            postcode: params[:postcode].presence,
-            uk_gift_aid_accepted: params[:uk_gift_aid_accepted].presence
-          )
-        end
-        pipeline.chain do
-          Partners::UpdateCustomDonorInformation.run(
-            donor: new_donor,
-            partner: partner,
-            responses: custom_responses
-          )
-        end
+        pipeline.chain { create_donor! }
+        pipeline.chain { update_custom_donor_information! }
 
         outcome = pipeline.run
 
@@ -106,8 +88,33 @@ module Partners
 
     private
 
+    def create_donor!
+      outcome = Donors::CreateDonorAffiliatedWithPartner.run(
+        email: params[:email].presence,
+        first_name: params[:first_name].presence,
+        last_name: params[:last_name].presence,
+        title: params[:title].presence,
+        house_name_or_number: params[:house_name_or_number].presence,
+        postcode: params[:postcode].presence,
+        uk_gift_aid_accepted: params[:uk_gift_aid_accepted].presence,
+        partner: partner
+      )
+
+      @new_donor = outcome.result if outcome.success?
+
+      outcome
+    end
+
+    def update_custom_donor_information!
+      Partners::UpdateCustomDonorInformation.run(
+        donor: @new_donor,
+        partner: partner,
+        responses: custom_responses
+      )
+    end
+
     def update_donor!
-      command = Donors::UpdateDonor.run(
+      Donors::UpdateDonor.run(
         donor: donor,
         email: params[:email].presence,
         first_name: params[:first_name].presence,

@@ -2,9 +2,8 @@ class CampaignContributionsController < ApplicationController
   skip_forgery_protection only: [:create]
 
   def create
-    ensure_current_donor!
-
     pipeline = Flow.new
+    pipeline.chain { create_donor! } unless current_donor
     pipeline.chain { update_donor! }
     pipeline.chain { associate_donor_with_partner! }
     pipeline.chain { store_custom_donor_information! }
@@ -126,16 +125,18 @@ class CampaignContributionsController < ApplicationController
       .to_h
   end
 
-  def ensure_current_donor!
-    return if current_donor
-
-    new_donor = Donors::CreateAnonymousDonorAffiliatedWithPartner.run!(
-      donor_id: params[:campaign_contribution][:donor_id],
+  def create_donor!
+    outcome = Donors::CreateDonorAffiliatedWithPartner.run(
+      first_name: params[:campaign_contribution][:first_name],
+      last_name: params[:campaign_contribution][:last_name],
+      email: params[:campaign_contribution][:email],
       partner: partner,
       campaign: campaign
     )
 
-    log_in!(new_donor)
+    log_in!(outcome.result) if outcome.success?
+
+    outcome
   end
 
   def campaign

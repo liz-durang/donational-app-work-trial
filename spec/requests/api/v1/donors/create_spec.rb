@@ -116,7 +116,7 @@ describe 'POST api/v1/donors/', type: :request do
 
         json = JSON.parse(response.body).with_indifferent_access
         expect(response.status).to eq(failed_response)
-        expect(json[:errors][:donor][0]).to eq('Either entity_name or first_name and last_name should be present')
+        expect(json[:errors][:donor][0]).to eq('Either entity name or first name and last name should be present')
       end
     end
   end

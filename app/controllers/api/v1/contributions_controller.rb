@@ -72,17 +72,31 @@ module Api
       end
 
       def donor
-        if donor_id.present?
-          @donor ||= Donors::GetDonorById.call(id: donor_id)
+        return donor_by_id if donor_id.present?
+
+        return donor_by_email if donor_email.present? && donor_by_email.present?
+
+        outcome = Donors::CreateDonorAffiliatedWithPartner.run(
+          email: donor_email,
+          entity_name: donor_entity_name,
+          first_name: donor_first_name,
+          last_name: donor_last_name,
+          partner: current_partner
+        )
+
+        if outcome.success?
+          @donor ||= outcome.result
         else
-          command = Donors::FindOrCreateDonorByEmail.run(email: donor_email, first_name: donor_first_name, last_name: donor_last_name,
-                                                          entity_name: donor_entity_name, partner: current_partner)
-          if command.success?
-            @donor ||= command.result
-          else
-            render_errors(command.errors.message, :bad_request)
-          end
+          render_errors(outcome.errors.message, :bad_request)
         end
+      end
+
+      def donor_by_id
+        @donor ||= Donors::GetDonorById.call(id: donor_id)
+      end
+
+      def donor_by_email
+        @donor ||= Donors::GetDonorByEmail.call(email: donor_email)
       end
 
       def donor_id

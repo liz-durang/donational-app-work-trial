@@ -30,7 +30,7 @@ module Onboarding
     end
 
     def email_already_registered?
-      Donor.where.not(id: donor.id).exists?(email: response)
+      Donor.where.not(id: donor.id).exists?(email: response, deactivated_at: nil)
     end
 
     class ComingSoonNotificationMailer < ActionMailer::Base

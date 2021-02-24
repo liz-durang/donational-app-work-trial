@@ -140,7 +140,7 @@ resource 'Donors' do
 
           expect(status).to eq(400)
           response = JSON.parse(response_body)
-          expect(response['errors']['donor'][0]).to eq('Either entity_name or first_name and last_name should be present')
+          expect(response['errors']['donor'][0]).to eq('Either entity name or first name and last name should be present')
         end
       end
 
