@@ -257,9 +257,6 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     select 'Monthly'
 
-    expect(page).to have_content('Please select here if you are happy for some of your donations to go to One for the World')
-    click_on '10%'
-
     click_on 'Next'
   end
 end

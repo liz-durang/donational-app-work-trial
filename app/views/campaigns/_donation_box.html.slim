@@ -190,16 +190,6 @@
                         = icon_tag('fas fa-home')
                         = f.text_field :postcode, class: :input, placeholder: 'please include a space', data: { target: 'wizard.giftAidPostcode' }
                         span.help.display-when-errors Postcode must include a space e.g. AA1 3DD
-        hr
-        .field data-controller="radio-select"
-          - if @view_model.partner_accepts_operating_costs_donations?
-            p class='help' style='margin-bottom: 10px'
-              = @view_model.partner_operating_costs_text
-            .field.is-grouped.is-grouped-multiline
-              - @view_model.default_operating_costs_donation_percentages.each do |amount|
-                a.control.button.is-expanded href='#' data-target='radio-select.button' data-action='radio-select#select' data-radio-select-value=amount
-                  = number_to_percentage(amount, precision: 0)
-              = f.hidden_field :partner_contribution_percentage, data: { controller: 'integer-field', target: 'radio-select.output' }
       .wizard-card-footer
         a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
 
