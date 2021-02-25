@@ -79,7 +79,7 @@ RSpec.describe Contributions::ProcessContributionPaymentFailed do
         expect(contribution.processed_at).to be nil
         expect(contribution.failed_at).to eq Time.zone.now
         expect(contribution.payment_status).to eq 'failed'
-        expect(contribution.receipt).to eq '{"some":"error"}'
+        expect(contribution.receipt).to eq JSON.parse(charge_errors)
         expect(TriggerPaymentFailedWebhook.jobs.size).to eq(1)
       end
 

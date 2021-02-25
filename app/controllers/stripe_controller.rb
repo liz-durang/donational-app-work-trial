@@ -29,8 +29,6 @@ class StripeController < ApplicationController
     when 'charge.succeeded', 'payment_intent.succeeded'
       head handle_payment_success(payment: event.data.object)
     end
-
-    head 200
   end
 
   private
@@ -59,7 +57,7 @@ class StripeController < ApplicationController
 
     contribution = Contribution.find_by(id: contribution_id)
 
-    outcome = Contributions::ProcessContributionPaymentSucceeded.run(contribution: contribution)
+    outcome = Contributions::ProcessContributionPaymentSucceeded.run(contribution: contribution, receipt: payment.to_json)
 
     outcome.success? ? 200 : 400
   end

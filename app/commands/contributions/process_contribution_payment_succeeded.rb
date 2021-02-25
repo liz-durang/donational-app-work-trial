@@ -4,6 +4,7 @@ module Contributions
   class ProcessContributionPaymentSucceeded < ApplicationCommand
     required do
       model :contribution
+      string :receipt
     end
 
     def validate
@@ -11,7 +12,7 @@ module Contributions
     end
 
     def execute
-      chain { update_contribution_payment_status }
+      chain { update_contribution }
       chain { create_donations_based_on_active_allocations }
       chain { send_tax_deductible_receipt }
       chain { track_contribution_processed_event }
@@ -34,8 +35,11 @@ module Contributions
     end
 
     # Methods
-    def update_contribution_payment_status
-      contribution.update(payment_status: :succeeded)
+    def update_contribution
+      contribution.update(
+        payment_status: :succeeded,
+        receipt: JSON.parse(receipt)
+      )
 
       Mutations::Outcome.new(true, nil, [], nil)
     end

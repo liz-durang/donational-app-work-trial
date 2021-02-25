@@ -39,6 +39,7 @@ RSpec.describe Contributions::ProcessContributionPaymentSucceeded do
     let(:amount_donated_after_fees_cents) { 1_000 - 56 - (0.01 * 1_000) - (0.03 * 1_000) }
     let(:payment_fees) { OpenStruct.new(amount_donated_after_fees_cents: amount_donated_after_fees_cents) }
     let(:payment_method) { build(:payment_method, payment_processor_customer_id: 'cus_123', type: PaymentMethods::Card) }
+    let(:receipt) { { id: 'py_test_1' }.to_json }
 
     before do
       expect(Payments::GetActivePaymentMethod)
@@ -58,12 +59,13 @@ RSpec.describe Contributions::ProcessContributionPaymentSucceeded do
       end
     end
 
-    it 'updates contribution payment status' do
-      command = described_class.run(contribution: contribution)
+    it 'updates contribution payment status and receipt' do
+      command = described_class.run(contribution: contribution, receipt: receipt)
 
       expect(command).to be_success
       expect(contribution.payment_status).to eq 'succeeded'
       expect(contribution.failed_at).to be nil
+      expect(contribution.receipt).to eq JSON.parse(receipt)
     end
 
     it "creates donations based on the donor's allocations" do
@@ -74,7 +76,7 @@ RSpec.describe Contributions::ProcessContributionPaymentSucceeded do
           donation_amount_cents: amount_donated_after_fees_cents
         ).and_return(double(success?: true))
 
-      command = described_class.run(contribution: contribution)
+      command = described_class.run(contribution: contribution, receipt: receipt)
 
       expect(command).to be_success
     end
@@ -82,7 +84,7 @@ RSpec.describe Contributions::ProcessContributionPaymentSucceeded do
     it 'tracks contribution processed event' do
       expect(Analytics::TrackEvent).to receive(:run).and_return(successful_track_event)
 
-      command = described_class.run(contribution: contribution)
+      command = described_class.run(contribution: contribution, receipt: receipt)
 
       expect(command).to be_success
     end

@@ -18,7 +18,7 @@ module Contributions
       # Update Contribution
       contribution.update(
         failed_at: Time.zone.now,
-        receipt: errors,
+        receipt: JSON.parse(errors),
         payment_status: :failed
       )
 
