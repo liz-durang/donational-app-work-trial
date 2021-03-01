@@ -23,10 +23,8 @@ class StripeController < ApplicationController
 
     case event.type
     when 'charge.failed'
-      head handle_payment_failed(payment: event.data.object, event_type: 'charge')
-    when 'payment_intent.payment_failed'
-      head handle_payment_failed(payment: event.data.object, event_type: 'payment_intent')
-    when 'charge.succeeded', 'payment_intent.succeeded'
+      head handle_payment_failed(payment: event.data.object)
+    when 'charge.succeeded'
       head handle_payment_success(payment: event.data.object)
     end
   end
@@ -39,11 +37,7 @@ class StripeController < ApplicationController
     return 400 unless contribution_id.present?
 
     contribution = Contribution.find_by(id: contribution_id)
-    errors = if event_type == 'charge'
-               { error_code: payment[:failure_code], error_message: payment[:failure_message] }.to_json
-             else
-               { error_code: payment[:last_payment_error][:code], error_message: payment[:last_payment_error][:message] }.to_json
-             end
+    errors = { error_code: payment[:failure_code], error_message: payment[:failure_message] }.to_json
 
     outcome = Contributions::ProcessContributionPaymentFailed.run(contribution: contribution, errors: errors)
 
