@@ -31,7 +31,7 @@ class StripeController < ApplicationController
 
   private
 
-  def handle_payment_failed(payment:, event_type:)
+  def handle_payment_failed(payment:)
     contribution_id = payment[:metadata][:contribution_id]
 
     return 400 unless contribution_id.present?
