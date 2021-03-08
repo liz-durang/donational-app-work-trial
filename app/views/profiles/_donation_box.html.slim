@@ -1,0 +1,105 @@
+- if logged_in?
+  fieldset.wizard-card data-target='wizard.step'
+    .wizard-card-header
+      span.icon: i.fas.fa-lock
+      h3.wizard-card-title Donate now
+    .wizard-card-content
+      p You are currently logged in
+      p
+        => link_to 'Edit your account', edit_accounts_path
+        ' or
+        = sign_out_link
+- else
+  = form_with model: @view_model.new_profile_contribution, data: { controller: 'wizard' }, local: true, id: 'payment-form', method: :post, class: 'form' do |f|
+    = f.hidden_field :payment_token, id: 'payment_token'
+    = f.hidden_field :payment_method_id, id: 'payment-method-id'
+    = f.hidden_field :referrer_donor_id, value: @view_model.donor.id
+    = f.hidden_field :portfolio_id, value: @view_model.portfolio_id
+    fieldset.wizard-card data-target='wizard.step'
+      .wizard-card-header
+        h3.wizard-card-title About you
+        = render 'shared/wizard_nav', step: 1, of: 3
+      .wizard-card-content
+        .field.is-horizontal
+          .field-label.is-normal
+            label.label First name
+          .field-body
+            .field
+              .control.has-icons-left
+                = icon_tag('fas fa-user')
+                = f.text_field :first_name, class: :input, data: { target: 'wizard.required_field_0' }
+                span.help.display-when-errors This field is required
+        .field.is-horizontal
+          .field-label.is-normal
+            label.label Last name
+          .field-body
+            .field
+              .control.has-icons-left
+                = icon_tag('fas fa-user')
+                = f.text_field :last_name, class: :input, data: { target: 'wizard.required_field_0' }
+                span.help.display-when-errors This field is required
+        .field.is-horizontal
+          .field-label.is-normal
+            label.label Email
+          .field-body
+            .field
+              .control.has-icons-left
+                = icon_tag('fas fa-envelope')
+                = f.email_field :email, class: :input, data: { target: 'wizard.required_field_0' }
+                span.help.display-when-errors This field is required
+      .wizard-card-footer
+        a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
+    fieldset.wizard-card data-target='wizard.step'
+      .wizard-card-header
+        a.icon data-action="wizard#previous" &larr;
+        h3.wizard-card-title Your donation
+        = render 'shared/wizard_nav', step: 2, of: 3
+      .wizard-card-content
+        .field data-controller="radio-select"
+          .field.is-grouped.is-grouped-multiline
+            - @view_model.default_contribution_amounts.each do |amount|
+              a.control.button.is-expanded href='#' data-target='radio-select.button' data-action='radio-select#select wizard#updateGiftAidAmount' data-radio-select-value=amount value=amount
+                = Money.from_amount(amount.to_i, @view_model.currency).format(no_cents_if_whole: true)
+          .field.has-addons
+            .control
+              .button.is-static.is-medium  = @view_model.currency.iso_code
+            .control.is-expanded
+              = f.number_field :amount_dollars,
+                class: %w(input is-medium),
+                placeholder: 'Your donation amount',
+                data: { controller: 'integer-field',
+                        target: 'radio-select.output wizard.required_field_1 wizard.donationAmount',
+                        action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection keypress->integer-field#allowKeypressWhenInteger input->wizard#updateGiftAidAmount',
+                        'minimum-donation-amount' => @view_model.minimum_contribution_amount }
+              span.help.display-when-errors This field is required
+              span.help.display-when-validation-errors = "Donation amount must be greater or equal than #{Money.from_amount(@view_model.minimum_contribution_amount, @view_model.currency).format(no_cents_if_whole: true)}"
+        .field
+          .notification.is-light
+            | Did you know that this donation is tax-deductible? Depending on your income, this contribution may only cost you 60-80% of your selected amount.
+          .field.is-grouped.is-centered
+            .control
+              - if @view_model.donation_frequencies.size == 1
+                span.input.is-static.has-text-weight-bold = @view_model.donation_frequencies.first[0]
+                = f.hidden_field :frequency, value: @view_model.donation_frequencies.first[1]
+              - else
+                .select = f.collection_select(:frequency, @view_model.donation_frequencies, :last, :first)
+            .control
+              span.input.is-static starting
+            .control data-accordion-panel-for="hide-when-show-date-is-triggered"
+              a.button.is-text data-accordion-trigger="show-date"
+                = icon_tag('fas fa-calendar')
+                span today
+            .control.is-expanded.is-hidden data-accordion-panel-for="show-date"
+                .select = f.select :start_at_month, Date::ABBR_MONTHNAMES[1..], selected: Date::ABBR_MONTHNAMES[Date.today.month]
+                .select = f.select :start_at_year, Date.today.year.. 4.years.from_now.year
+          p.help.is-hidden data-accordion-panel-for="show-date" Subscriptions are charged on the 15th of the month
+      .wizard-card-footer
+        a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
+
+    fieldset.wizard-card data-target='wizard.step'
+      .wizard-card-header
+        a.icon data-action="wizard#previous" &larr;
+        h3.wizard-card-title Payment
+        = render 'shared/wizard_nav', step: 3, of: 3
+
+      = render 'payment_method_form', payment_method_field: 'payment-method-id'

@@ -52,6 +52,7 @@ Rails.application.routes.draw do
 
   # Referral
   get 'profiles/:username' => 'profiles#show', as: :profiles, defaults: { format: :html }
+  post 'profiles/:username/contributions' => 'profile_contributions#create', as: :profile_contributions
 
   # Sessions and Authentication
   resource :sessions, only: %i[new show destroy]

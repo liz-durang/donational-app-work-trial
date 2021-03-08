@@ -14,6 +14,7 @@ module Donors
       string :house_name_or_number, strip: true
       string :postcode
       boolean :uk_gift_aid_accepted
+      string :referred_by_donor_id
     end
 
     def validate
@@ -24,7 +25,12 @@ module Donors
     def execute
       donor = Donor.create!(creatable_attributes)
 
-      Partners::AffiliateDonorWithPartner.run(donor: donor, partner: partner, campaign: campaign)
+      Partners::AffiliateDonorWithPartner.run(
+        donor: donor,
+        partner: partner,
+        campaign: campaign,
+        referred_by_donor_id: referred_by_donor_id
+      )
 
       donor
     end
@@ -50,7 +56,7 @@ module Donors
     end
 
     def creatable_attributes
-      inputs.except(:partner, :campaign)
+      inputs.except(:partner, :campaign, :referred_by_donor_id)
     end
   end
 end

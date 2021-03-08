@@ -1,0 +1,69 @@
+.wizard-card-content
+  .control
+    #card-element
+    #card-errors role="alert"
+  p.control.has-icons-left
+    input.input.StripeElement id="cardholder_name" type="text" placeholder="Cardholder name"
+    span.icon.is-left.is-small: i.fa.fa-user
+
+  - if @view_model.show_plaid?
+    .has-text-centered
+      br
+      p.is-3.is-italic -- OR --
+      br
+      = render 'shared/plaid_form', link_token: @view_model.link_token, token_field: 'payment_token', submission_field: 'payment-validated'
+.wizard-card-footer
+  a.button.is-primary.is-medium.is-fullwidth id="payment-next" href="#" Donate
+  a.is-hidden.plaid-success-target data-action="wizard#donate" id="payment-validated"
+
+
+javascript:
+  var stripe = Stripe("#{ENV.fetch('STRIPE_PUBLIC_KEY')}");
+  var elements = stripe.elements();
+  var style = {
+    base: {
+      fontSmoothing: 'antialiased',
+      fontSize: '16px',
+      '::placeholder': { color: '#C2C2C2' }
+    }
+  };
+
+  var card = elements.create('card', { style: style });
+  card.mount('#card-element');
+
+  card.addEventListener('change', function(event) {
+    var displayError = document.getElementById('card-errors');
+    if (event.error) {
+      displayError.textContent = event.error.message;
+    } else {
+      displayError.textContent = '';
+    }
+  });
+
+  var form = document.getElementById('payment-form');
+  var donateButton = document.getElementById('payment-next');
+  var validated = document.getElementById('payment-validated');
+
+  donateButton.addEventListener('click', function(event) {
+    event.preventDefault();
+
+    $.post('/get_setup_intent_client_secret',
+      function( data ) {
+        var clientSecret = data['client_secret'];
+        var paymentMethodData = {
+          card: card,
+          billing_details: { name: document.getElementById('cardholder_name').value }
+        }
+        stripe.confirmCardSetup(clientSecret, { payment_method: paymentMethodData }).then(function(result) {
+          if (result.error) {
+            var errorElement = document.getElementById('card-errors');
+            errorElement.textContent = result.error.message;
+            document.querySelector('#payment-form input[type=submit]').disabled = false;
+          } else {
+            document.getElementById("#{payment_method_field}").value = result.setupIntent.payment_method;
+            validated.click();
+          }
+        });
+      }
+    );
+  });

@@ -117,3 +117,7 @@ section.embossed.section
           br
           = form_with url: partner_donor_path(partner: @view_model.partner, donor: @view_model.donor), local: true, method: :delete, class: 'form' do |f|
             = f.submit class: %w(button is-primary), value: 'Delete this donor', data: { confirm: 'Delete this donor?' }
+          br
+          br
+          = form_with url: profiles_path(@view_model.donor.username), local: true, method: :get, class: 'form' do |f|
+            = f.submit class: %w(button is-primary), value: 'Visit public profile'

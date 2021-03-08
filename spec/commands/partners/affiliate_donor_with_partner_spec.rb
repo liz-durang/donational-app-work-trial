@@ -8,12 +8,25 @@ RSpec.describe Partners::AffiliateDonorWithPartner do
   let(:donor) { create(:donor) }
   let(:partner) { create(:partner) }
   let(:campaign) { create(:campaign) }
+  let(:referrer_donor) { create(:donor) }
+  let(:referred_by_donor_id) { referrer_donor.id }
 
   context 'when the donor is not affiliated with a partner and has never made a contribution' do
     it 'affiliates the donor with the partner' do
       expect { subject }.to change { PartnerAffiliation.count }.from(0).to(1)
 
       expect(Partners::GetPartnerForDonor.call(donor: donor)).to eq partner
+    end
+
+    context 'and referred by donor ID is provided' do
+      it 'affiliates the donor with the partner and the referrer donor' do
+        outcome = Partners::AffiliateDonorWithPartner.run(donor: donor, partner: partner, referred_by_donor_id: referred_by_donor_id)
+        expect(outcome).to be_success
+
+        affiliation = Partners::GetPartnerAffiliationByDonorAndPartner.call(donor: donor, partner: partner)
+        expect(affiliation.present?).to be true
+        expect(affiliation.referred_by_donor).to eq referrer_donor
+      end
     end
   end
 
@@ -42,5 +55,4 @@ RSpec.describe Partners::AffiliateDonorWithPartner do
       expect(Partners::GetPartnerForDonor.call(donor: donor)).to eq nil
     end
   end
-
 end

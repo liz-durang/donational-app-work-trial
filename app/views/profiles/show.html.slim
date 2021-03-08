@@ -1,138 +1,62 @@
-- cause_areas = @profile.cause_areas
-section.hero.is-dark
-  .hero-body
-    .container
-      h1.title
-        = @profile.name
-        | 's Portfolio of Giving
-      p
-        ' All charities in this portfolio have been
-        strong vetted by industry experts
-        ' , are
-        strong> transparent
-        ' about their financials, and rate amonst the
-        strong> most efficient
-        ' organizations for
-        strong> improving
-        ' and for
-        strong saving lives.
-section.hero.is-warning
-  .hero-body
-    .container
-      blockquote
-        p.subtitle
-          | &ldquo;
-          ' I pledge to support high impact charities, that are making a real difference to save and improve lives.
-          ' I make sure that my donations are to charities that align with my values, in cause areas that matter to me.
-          | &rdquo;
-      / .column.is-3.is-offset-1
-      /   .content
-      /     h3.subtitle
-      /       ' Support this portfolio
-      /     progress.progress.is-primary.is-marginless value="30" max="100" 30%
-      /     p
-      /       small
-      /         strong> 3 backers
-      /         ' have already shown their support for
-      /         = @profile.first_name
-      /         | 's values
-      /     p
-      /       ' Be one of
-      /       = @profile.first_name
-      /       ' 's top backers by donating towards the charities in this portfolio.
-      /     p.has-text-centered
-      /       a.button.is-primary.action.modal-button.is-fullwidth.is-medium data-target="payment"
-      /         ' Donate to
-      /         = @profile.first_name
-      /         ' 's portfolio
-      /       | or
-      /       br
-      /       a Build a portfolio with my values!
-- cause_areas.each do |cause_area|
-  section.section id=cause_area.id
-    .container
-      .columns
-        .column.is-6.has-text-left.content
-          h3.title.is-spaced = cause_area.title
-          p.subtitle = cause_area.description
+- content_for :hero do
+  section.hero.has-background
+    .hero-head
+      = render 'shared/nav'
+    .hero-body
+      .container
+        .columns
+          .column.is-6
+            h1.title.is-spaced
+              = @view_model.donor.name
+              | 's Portfolio of Giving
+            h2.subtitle
+              ' All charities in this portfolio have been
+              strong vetted by industry experts
+              ' , are
+              strong> transparent
+              ' about their financials, and rate amonst the
+              strong> most efficient
+              ' organizations for
+              strong> improving
+              ' and for
+              strong saving lives.
+section.section.embossed
+  .container
+    .columns
+      .column.is-6
+        .content
+          - @view_model.organizations.each_with_index do |organization, index|
+            .carousel-cell style='width: 100%; padding: 1px 1rem 4px;'
+              .card
+                header.card-header
+                  .card-header-icon
+                    span.icon
+                      i.fa.fa-book
+                  p.card-header-title = organization.name
+                .card-content id="organization_#{organization.id}"
+                  .content
+                    p = organization.why_you_should_care
+                    p
+                      - if organization.local_impact?
+                        span.tag
+                          => icon_tag('fa-street-view', size: 'medium')
+                          | Local Impact
+                      - if organization.global_impact?
+                        span.tag
+                          => icon_tag('fa-globe', size: 'medium')
+                          | Global Impact
+                      - if organization.immediate_impact?
+                        span.tag
+                          => icon_tag('fa-bolt', size: 'medium')
+                          | Immediate Impact
+                      - if organization.long_term_impact?
+                        span.tag
+                          => icon_tag('fa-flask', size: 'medium')
+                          | Research, policy and advocacy
 
-          p: small
-            = @profile.first_name
-            ' 's portfolio contains
-            => pluralize(cause_area.organizations.count, 'high impact charity')
-            | in this cause area
-        .column.is-6
-          div data-behavior="accordion"
-            - cause_area.organizations.each_with_index do |organization, index|
-              .carousel-cell style='width: 100%; padding: 1px 1rem 4px;'
-                .card
-                  header.card-header data-target="organization_#{organization.id}"
-                    .card-header-icon
-                      span.icon
-                        i.fa.fa-book
-                    p.card-header-title = organization.name
-                    a.card-header-icon
-                      span.icon
-                        i.fa.fa-angle-down
-                  .card-content id="organization_#{organization.id}" class=(index == 0 ? nil : 'is-hidden')
-                    .content
-                      p = organization.why_you_should_care
-                      p
-                        - if organization.local_impact?
-                          span.tag
-                            => icon_tag('fa-street-view', size: 'small')
-                            | Local Impact
-                        - if organization.global_impact?
-                          span.tag
-                            => icon_tag('fa-globe', size: 'small')
-                            | Global Impact
-                        - if organization.immediate_impact?
-                          span.tag
-                            => icon_tag('fa-bolt', size: 'small')
-                            | Immediate Impact
-                        - if organization.long_term_impact?
-                          span.tag
-                            => icon_tag('fa-flask', size: 'small')
-                            | Research, policy and advocacy
-section.section.has-text-centered
-  = render 'shared/contribution_form'
-section.hero.is-light
-  .hero-body
-    .container
-      p.subtitle Donational helps you find cause areas that you are passionate about, creating a portfolio of high impact charities
-
-/ section.hero
-/   .container
-/     h1.title Get involved
-/     .columns
-/       .column
-/         p Become a supporter
-/       .is-divider-vertical data-content="OR"
-/       .column.has-text-right
-/         p Create and share your own portfolio
-
-section.hero.is-dark
-  .hero-body
-    .container
-      p.title New to donational?
-      p.subtitle We'll help you setup a portfolio of charities that have been vetted by experts to have high impact.
-      .columns
-        .column
-          h3 1. Identify your values
-          p We help you identify which causes are important to you
-        .column
-          h3 2. Choose from expert recommended charities
-          p We recommend a portfolio of high impact, transparent and efficient charities that align with your values
-        .column
-          h3 3. Donate efficiently
-          p
-            ' Your monthly donation is distributed to your charities, making use of  smart features like donation pooling to
-            | ensure that charities spend more on making an impact, and less on fundraising and processing donations.
-        .column
-          h3 4. Encourage others
-          p
-            ' Boost your impact by asking others to make a contribution to your portfolio,
-            | or to be more deliberate in their own giving, by creating a portfolio of their own
+      .column.is-offset-1
+        = display_flash_messages
+        = render 'donation_box'
 
 section.hero.is-primary
   .hero-body
@@ -141,8 +65,8 @@ section.hero.is-primary
         .column.is-half
           p.title.is-spaced Want your own portfolio?
           p.subtitle
-            strong> = @profile.name
+            strong> = @view_model.donor.name
             ' created this portfolio to be more deliberate aligning one's giving with one's values.
             | Start a portfolio today to align your giving with causes that you care about.
         .column.is-half.has-text-centered
-          p: a.button.is-white.is-outlined.is-medium Start your own charity portfolio!
+          = link_to "Start your own charity portfolio!", onboarding_path, class: %w(button is-white is-outlined is-medium)

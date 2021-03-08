@@ -18,7 +18,7 @@
       .wizard-card-header
         span.icon: i.fas.fa-handshake
         h3.wizard-card-title Donate now
-        = render 'wizard_nav', step: 1, of: 5
+        = render 'shared/wizard_nav', step: 1, of: 5
       .wizard-card-content style="height: 330px; overflow-y:scroll;"
         .field
           - if @view_model.managed_portfolios.where(featured: true).empty?
@@ -63,7 +63,7 @@
       .wizard-card-header
         a.icon data-action="wizard#previous" &larr;
         h3.wizard-card-title About you
-        = render 'wizard_nav', step: 2, of: 5
+        = render 'shared/wizard_nav', step: 2, of: 5
       .wizard-card-content
         .field.is-horizontal
           .field-label.is-normal
@@ -98,7 +98,7 @@
       .wizard-card-header
         a.icon data-action="wizard#previous" &larr;
         h3.wizard-card-title Your donation
-        = render 'wizard_nav', step: 3, of: 5
+        = render 'shared/wizard_nav', step: 3, of: 5
       .wizard-card-content
         .field data-controller="radio-select"
           p.has-text-weight-bold = @view_model.contribution_amount_help_text
@@ -197,7 +197,7 @@
       .wizard-card-header
         a.icon data-action="wizard#previous" &larr;
         h3.wizard-card-title Payment
-        = render 'wizard_nav', step: 4, of: 5
+        = render 'shared/wizard_nav', step: 4, of: 5
 
       = render 'payment_method_form', payment_method_field: 'payment-method-id'
 
@@ -205,7 +205,7 @@
       .wizard-card-header
         a.icon data-action="wizard#previous" &larr;
         h3.wizard-card-title About you
-        = render 'wizard_nav', step: 5, of: 5
+        = render 'shared/wizard_nav', step: 5, of: 5
       .wizard-card-content
         = f.fields_for :donor_questions do |questions_form|
           = render @view_model.donor_questions, form: questions_form
