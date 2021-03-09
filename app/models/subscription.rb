@@ -67,7 +67,7 @@ class Subscription < ApplicationRecord
     elsif quarterly?
       today.next_quarter.at_beginning_of_quarter
     elsif annually?
-      Date.new(today.year + 1, start_at.month, start_at.day)
+      next_annually_contribution
     end
   end
 
@@ -83,5 +83,13 @@ class Subscription < ApplicationRecord
     end
 
     Date.new(year, month, 15)
+  end
+
+  def next_annually_contribution
+    if Date.new(Date.today.year, start_at.month, start_at.day) > Date.today
+      Date.new(Date.today.year, start_at.month, start_at.day)
+    else
+      Date.new(Date.today.year + 1, start_at.month, start_at.day)
+    end
   end
 end

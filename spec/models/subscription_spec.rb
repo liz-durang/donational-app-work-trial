@@ -102,10 +102,10 @@ RSpec.describe Subscription, type: :model do
 
       context 'and the frequency is annually' do
         let(:now) { Date.parse('2000-03-21') }
-        let(:quarterly_contribution) { build(:subscription, start_at: start_at, frequency: :annually) }
+        let(:annually_contribution) { build(:subscription, start_at: start_at, frequency: :annually) }
 
         it 'is the first day of next year' do
-          expect(quarterly_contribution.next_contribution_at).to eq Date.parse('2001-01-01')
+          expect(annually_contribution.next_contribution_at).to eq Date.parse('2001-01-01')
         end
       end
     end
