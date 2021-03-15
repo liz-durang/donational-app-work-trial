@@ -34,7 +34,7 @@
                       div.card.has-background-primary style="cursor: pointer;" id="portfolio-link-#{mp.id}"
                         div.card-content
                           .label
-                            .span.icon.is-hidden = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}", checked: true, data: { action: 'wizard#selectPortfolio' }
+                            .span.icon.is-hidden = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}", data: { action: 'wizard#selectPortfolio' }
                           p.title.is-4.has-text-light = mp.name
                           p.subtitle.is-6.has-text-light = pluralize(mp.size, 'charity')
                           div.content.has-text-light = mp.description

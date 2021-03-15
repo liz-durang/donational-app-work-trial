@@ -61,7 +61,7 @@ class CampaignContributionsController < ApplicationController
   def subscribe_donor_to_managed_portfolio!
     Portfolios::SelectPortfolio.run(
       donor: current_donor,
-      portfolio: Partners::GetManagedPortfolioById.call(id: managed_portfolio_id).portfolio
+      portfolio: managed_portfolio.portfolio
     )
   end
 
@@ -145,5 +145,9 @@ class CampaignContributionsController < ApplicationController
 
   def partner
     @partner ||= campaign.partner
+  end
+
+  def managed_portfolio
+    @managed_portfolio ||= Partners::GetManagedPortfolioById.call(id: managed_portfolio_id) || Partners::GetManagedPortfoliosForPartner.call(partner: partner).first
   end
 end
