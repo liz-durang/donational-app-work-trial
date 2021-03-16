@@ -82,7 +82,8 @@ class CampaignContributionsController < ApplicationController
       frequency: params[:campaign_contribution][:frequency],
       start_at: start_at,
       tips_cents: 0,
-      partner_contribution_percentage: params[:campaign_contribution][:partner_contribution_percentage].to_i
+      partner_contribution_percentage: params[:campaign_contribution][:partner_contribution_percentage].to_i,
+      trial_amount_cents: trial_amount_cents
     )
   end
 
@@ -115,6 +116,13 @@ class CampaignContributionsController < ApplicationController
     return nil if start_at_month.blank? || start_at_year.blank?
 
     Time.zone.local(start_at_year, start_at_month, 15, 12, 0)
+  end
+
+  def trial_amount_cents
+    fifteenth = Time.zone.local(Date.today.year, Date.today.month, 15, 12, 0)
+    months = (start_at.year * 12 + start_at.month) - (fifteenth.year * 12 + fifteenth.month)
+
+    months > 1 ? params[:campaign_contribution][:trial_amount_dollars].to_i * 100 : 0
   end
 
   def custom_question_responses

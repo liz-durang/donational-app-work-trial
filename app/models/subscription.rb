@@ -71,6 +71,32 @@ class Subscription < ApplicationRecord
     end
   end
 
+  def trial_active?
+    return false if start_at.to_date < Date.today
+
+    trial_deactivated_at.blank? && trial_amount_cents.present? && trial_amount_cents > 0
+  end
+
+  def trial_amount_dollars
+    trial_amount_cents / 100.0
+  end
+
+  def trial_future_contribution_scheduled?
+    return false if trial_next_contribution_at.nil?
+
+    trial_next_contribution_at >= Date.today
+  end
+
+  def trial_next_contribution_at
+    return nil unless trial_active?
+
+    if trial_start_at.to_date < Date.today
+      next_15th_of_the_month_after(Date.today)
+    else
+      next_15th_of_the_month_after(trial_start_at)
+    end
+  end
+
   private
 
   def next_15th_of_the_month_after(date)

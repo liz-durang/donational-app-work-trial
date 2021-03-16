@@ -3,47 +3,76 @@
     .columns
       .column
         .field
+          label.control
+            .label Donating to
+            .select
+              = f.collection_select :portfolio_id,
+                @view_model.selectable_portfolios,
+                :first,
+                :last,
+                selected: @view_model.subscription.portfolio_id
+    .columns
+      .column
+        .field
+          span.tag.is-dark Subscription
+    .columns
+      .column
+        .field
           label.label Donation amount
         .field.has-addons
           .control
             a.button.is-static = @view_model.currency
           .control
             = f.number_field :amount_dollars, class: 'input', value: cents_to_dollars(@view_model.subscription.amount_cents)
-      .column
-        .field
-          - unless subscription.started?
+      - unless subscription.started?
+        .column
+          .field
             label.control
               .label Starting on
               .control.has-icons-left
                   = icon_tag('fas fa-calendar')
                   = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 4.years.from_now.to_date.iso8601
+      .column
+        .field
+          label.control
+            .label Frequency
+            .select
+              = f.collection_select :frequency,
+                Subscription.frequency.options,
+                :last,
+                :first,
+                selected: @view_model.subscription.frequency
+    .br
 
-    .field
-      label.control
-        .label Frequency
-        .control.buttons
-          = f.collection_radio_buttons(:frequency, Subscription.frequency.options, :last, :first) do |b| \
-              b.radio_button(class: 'is-hidden') + b.label(class: 'button is-outlined') \
-            end
+    - if @view_model.subscription.trial_active?
+      .columns
+        .column
+          .field
+            span.tag.is-dark Trial
+      .columns
+        .column
+          .field
+            label.control
+              .label Donation Amount
+          .field.has-addons
+            .control
+              a.button.is-static = @view_model.currency
+            .control
+              = f.number_field :trial_amount_dollars, class: 'input', value: cents_to_dollars(@view_model.subscription.trial_amount_cents)
+        .column
+          .field
+            .label Active since
+          .field
+            span.tag = @view_model.subscription.trial_start_at.utc.to_date.to_formatted_s(:long_ordinal)
+        .column.cancel-link
+          .field
+            = link_to 'Cancel Trial Giving', contribution_path(id: subscription, trial: true), class: 'is-danger', method: :delete
 
-    - if @view_model.partner_affiliation
-      .field
-        label.control
-          .label Portfolio
 
-          .select
-            = f.collection_select :portfolio_id,
-              @view_model.selectable_portfolios,
-              :first,
-              :last,
-              selected: @view_model.subscription.portfolio_id
-
-    - else
-      = f.hidden_field :portfolio_id, value: @view_model.subscription.portfolio_id
-    .has-text-right
+    .has-text-left
       p = f.submit 'Update donation plan', class: %w(button is-primary)
   - if subscription.future_contribution_scheduled?
-    .has-text-right
+    .has-text-left
       a.modal-button data-target="ask-to-pause-modal" Cancel my upcoming donations
 
   #ask-to-pause-modal.modal

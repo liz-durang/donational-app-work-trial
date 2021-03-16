@@ -12,7 +12,7 @@ document.addEventListener('turbolinks:load', function() {
         const currentlyActive = $el.classList.contains('is-active');
 
         deactivateAllToggles();
-        hideAllPanels();
+        hidePanels($el.dataset.accordionTrigger);
 
         if (!currentlyActive) {
           activateToggle($el);
@@ -32,8 +32,12 @@ document.addEventListener('turbolinks:load', function() {
     el.classList.add('is-active');
   }
 
-  function hideAllPanels() {
-    $accordionPanels.forEach(function($el) {
+  function hidePanels(id) {
+    getAll('[data-accordion-panel-for="' + id + '"]').forEach(function($el) {
+      $el.classList.add('is-hidden');
+    });
+
+    getAll('[data-accordion-panel-for="hide-when-' + id + '-is-triggered"]').forEach(function($el) {
       $el.classList.add('is-hidden');
     });
   }

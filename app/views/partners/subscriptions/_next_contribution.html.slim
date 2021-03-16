@@ -6,5 +6,10 @@
     p = t subscription.frequency, scope: :next_contribution, \
         amount: Money.new(subscription.amount_cents, @view_model.partner.currency).format(no_cents_if_whole: false), \
         date: humanized_date(subscription.next_contribution_at)
+
+  - if subscription&.trial_active? && subscription&.trial_future_contribution_scheduled?
+    p = t :trial_next_contribution, \
+        amount: Money.new(subscription.trial_amount_cents, @view_model.currency).format(no_cents_if_whole: false), \
+        date: humanized_date(subscription.trial_next_contribution_at)
 - else
   p = "This donor has no future donations scheduled"

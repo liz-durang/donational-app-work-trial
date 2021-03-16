@@ -3,7 +3,7 @@ import { Controller } from "stimulus"
 export default class extends Controller {
   static targets = [ "step", "portfolioSelected", "donationAmount", "giftAidAmount",
     "giftAidField", "giftAidPostcode", "giftAidFieldset", "giftAidFieldsetVisible",
-    "paymentOptionPlaid", "paymentOptionCard"]
+    "paymentOptionPlaid", "paymentOptionCard", "feesDetails" ]
 
   initialize() {
     this.updateGiftAidFieldsVisibility();
@@ -54,6 +54,27 @@ export default class extends Controller {
       form.submit();
       return false;
     }
+  }
+
+  setFeeDetailsLabel() {
+    var amount = document.getElementsByName("campaign_contribution[amount_dollars]")[0].value
+    var frequency = document.getElementsByName("campaign_contribution[frequency]")[0].value
+
+    var numTimesPerYear = {
+      'annually': 1,
+      'once': 1,
+      'quarterly': 4,
+      'monthly': 12
+    }
+
+    var expectedPlaidFees = numTimesPerYear[frequency] * Math.min(5, 0.008 * amount);
+    var expectedCardFees = numTimesPerYear[frequency] * (0.3 + (0.022 * amount));
+
+    var label = "Stripe charges up to 4x higher fees for credit card donations. By using Plaid, you're donating "
+    label += `$${Math.round(expectedCardFees - expectedPlaidFees)} `
+    label += "more every year. Please use Plaid if you can (you can always change your payment method after signing up)."
+
+    this.feesDetailsTarget.innerText = label;
   }
 
   private

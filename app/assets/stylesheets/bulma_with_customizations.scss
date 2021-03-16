@@ -160,3 +160,38 @@ select.greyColor option:not(:first-child) {
   pointer-events: none;
   opacity: 0.6;
 }
+
+.is-light-yellow {
+  background-color: #FCF8E5;
+}
+
+.is-light-blue {
+  background-color: #EBFAFF;
+}
+
+.notification-title {
+  font-size: 17px;
+}
+
+.align-items {
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 40px;
+}
+
+.plaid-text {
+  font-size: 13px;
+}
+
+.checkmark svg {
+  color: #0DB4A0;
+}
+
+.credit-card-link {
+  color: #0C929F !important;
+  text-decoration: none !important;
+}
+
+.cursor-auto {
+  cursor: auto;
+}

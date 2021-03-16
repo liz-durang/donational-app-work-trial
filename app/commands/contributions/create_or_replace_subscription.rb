@@ -17,14 +17,18 @@ module Contributions
       time :start_at
       integer :partner_contribution_percentage, min: 0, default: 0
       boolean :migration, default: false
+      integer :trial_amount_cents, min: 0, default: 0
     end
 
     def execute
       Subscription.transaction do
         # ensure we don't force a new donation when donor updates their plan settings
         new_contribution = existing_subscriptions.empty?
+
         most_recent_last_scheduled_at = previous_plans_most_recent_scheduled_at
+        trial_most_recent_last_scheduled_at = previous_trials_most_recent_scheduled_at
         deactivate_existing_subscriptions!
+
         subscription = Subscription.create!(
           donor: donor,
           portfolio: portfolio,
@@ -35,7 +39,10 @@ module Contributions
           tips_cents: tips_cents,
           last_scheduled_at: frequency == :once ? nil : most_recent_last_scheduled_at,
           partner_contribution_percentage: partner_contribution_percentage,
-          amount_currency: partner.currency
+          amount_currency: partner.currency,
+          trial_amount_cents: trial_amount_cents,
+          trial_start_at: trial_amount_cents > 0 ? Time.zone.now : nil,
+          trial_last_scheduled_at: trial_most_recent_last_scheduled_at
         )
 
         Portfolios::SelectPortfolio.run(donor: donor, portfolio: portfolio)
@@ -44,9 +51,9 @@ module Contributions
 
         send_confirmation_email!(subscription)
         if new_contribution
-          TriggerSubscriptionCreatedWebhook.perform_async(subscription.id, partner.id)
+          TriggerSubscriptionWebhook.perform_async(:create, partner.id, subscription.id)
         else
-          TriggerSubscriptionUpdatedWebhook.perform_async(subscription.id, partner.id)
+          TriggerSubscriptionWebhook.perform_async(:update, partner.id, subscription.id)
         end
 
       end
@@ -65,8 +72,12 @@ module Contributions
       existing_subscriptions.maximum(:last_scheduled_at)
     end
 
+    def previous_trials_most_recent_scheduled_at
+      existing_subscriptions.maximum(:trial_last_scheduled_at)
+    end
+
     def deactivate_existing_subscriptions!
-      existing_subscriptions.update_all(deactivated_at: Time.zone.now)
+      existing_subscriptions.update_all(deactivated_at: Time.zone.now, trial_deactivated_at: Time.zone.now)
     end
 
     def send_confirmation_email!(subscription)

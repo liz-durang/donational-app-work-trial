@@ -99,7 +99,7 @@
         a.icon data-action="wizard#previous" &larr;
         h3.wizard-card-title Your donation
         = render 'shared/wizard_nav', step: 3, of: 5
-      .wizard-card-content
+      .wizard-card-content data-controller="date-field"
         .field data-controller="radio-select"
           p.has-text-weight-bold = @view_model.contribution_amount_help_text
           br
@@ -121,8 +121,11 @@
               span.help.display-when-errors This field is required
               span.help.display-when-validation-errors = "Donation amount must be greater or equal than #{Money.from_amount(@view_model.minimum_contribution_amount, @view_model.currency).format(no_cents_if_whole: true)}"
         .field
-          .notification.is-light
-            | Did you know that this donation is tax-deductible? Depending on your income, this contribution may only cost you 60-80% of your selected amount.
+          .notification.is-light-yellow
+            .notification-title
+              ' Did you know that this donation is
+              strong tax-deductible?
+            ' Depending on your income, this contribution may only cost you 60-80% of your selected amount.
           .field.is-grouped.is-centered
             .control
               - if @view_model.donation_frequencies.size == 1
@@ -137,9 +140,26 @@
                 = icon_tag('fas fa-calendar')
                 span today
             .control.is-expanded.is-hidden data-accordion-panel-for="show-date"
-                .select = f.select :start_at_month, Date::ABBR_MONTHNAMES[1..], selected: Date::ABBR_MONTHNAMES[Date.today.month]
-                .select = f.select :start_at_year, Date.today.year.. 4.years.from_now.year
+                .select data-action='change->date-field#hideOrShowPanel' = f.select :start_at_month, Date::ABBR_MONTHNAMES[1..], selected: Date::ABBR_MONTHNAMES[Date.today.month]
+                .select data-action='change->date-field#hideOrShowPanel' = f.select :start_at_year, Date.today.year.. 4.years.from_now.year
           p.help.is-hidden data-accordion-panel-for="show-date" Subscriptions are charged on the 15th of the month
+        .is-hidden data-target='date-field.panel'
+          .field.notification.is-light-blue data-controller="radio-select"
+            = f.label :pledge_start, class: %w(p has-text-weight-bold), data: { target: 'date-field.label' }
+            br
+            br
+            p.has-text-weight-bold Would you like to donate a small monthly amount in the meantime?
+            p Even a small amount can deworm an extra 200 children by the time you start your pledge!
+            br
+            .field.is-grouped.is-grouped-multiline
+              - [5, 10].each do |amount|
+                a.control.button.is-expanded href='#' data-target='radio-select.button' data-action='radio-select#select' data-radio-select-value=amount value=amount
+                  = Money.from_amount(amount.to_i, @view_model.currency).format(no_cents_if_whole: true)
+              .control.is-expanded
+                = f.number_field :trial_amount_dollars,
+                  class: %w(button cursor-auto),
+                  placeholder: 'Custom amount',
+                  data: { controller: 'integer-field', target: 'radio-select.output wizard.trialDonationAmount', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection keypress->integer-field#allowKeypressWhenInteger' }
         - if @view_model.supports_gift_aid?
           hr
           .columns.is-mobile

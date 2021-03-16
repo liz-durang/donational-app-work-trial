@@ -53,7 +53,8 @@ module Partners
         amount_cents: amount_cents,
         tips_cents: tips_cents,
         start_at: start_at,
-        partner_contribution_percentage: 0
+        partner_contribution_percentage: 0,
+        trial_amount_cents: trial_amount_cents
       )
     end
 
@@ -118,6 +119,14 @@ module Partners
 
     def amount_dollars
       params[:subscription][:amount_dollars].to_i
+    end
+
+    def trial_amount_cents
+      trial_amount_dollars * 100
+    end
+
+    def trial_amount_dollars
+      params[:subscription][:trial_amount_dollars].to_i
     end
 
     def payment_token

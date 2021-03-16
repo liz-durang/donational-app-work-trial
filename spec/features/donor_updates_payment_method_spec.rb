@@ -70,7 +70,7 @@ RSpec.describe 'Donors updates payment method', type: :feature do
 
       click_on 'Submit'
 
-      expect(page).to have_content('Select account', wait: 3)
+      expect(page).to have_content('Select account', wait: 5)
       find('label', text: 'Plaid Checking').click
 
       click_on 'Continue'

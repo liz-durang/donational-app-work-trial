@@ -19,7 +19,8 @@ RSpec.describe Contributions::CreateOrReplaceSubscription do
       amount_cents: 8000,
       tips_cents: 100,
       frequency: :annually,
-      start_at: Time.zone.parse('2000-01-01')
+      start_at: Time.zone.parse('2000-01-01'),
+      trial_amount_cents: 500
     }
   end
   let(:other_donor) { create(:donor) }
@@ -31,7 +32,7 @@ RSpec.describe Contributions::CreateOrReplaceSubscription do
     it 'creates a new active subscription' do
       Contributions::CreateOrReplaceSubscription.run(params)
       expect(Subscription.count).to eq(1)
-      expect(TriggerSubscriptionCreatedWebhook.jobs.size).to eq(1)
+      expect(TriggerSubscriptionWebhook.jobs.size).to eq(1)
 
       subscription = Contributions::GetActiveSubscription.call(donor: donor)
 
@@ -43,6 +44,8 @@ RSpec.describe Contributions::CreateOrReplaceSubscription do
       expect(subscription.last_scheduled_at).to eq nil
       expect(subscription.partner).to eq partner
       expect(subscription.partner_contribution_percentage).to eq 0
+      expect(subscription.trial_amount_cents).to eq 500
+      expect(subscription.trial_start_at.to_date).not_to be nil
     end
 
     context 'and there is no start date provided' do
@@ -58,7 +61,7 @@ RSpec.describe Contributions::CreateOrReplaceSubscription do
         Contributions::CreateOrReplaceSubscription.run(params_without_start_date)
         subscription = Contributions::GetActiveSubscription.call(donor: donor)
 
-        expect(TriggerSubscriptionCreatedWebhook.jobs.size).to eq(1)
+        expect(TriggerSubscriptionWebhook.jobs.size).to eq(1)
         expect(subscription.start_at).to eq Date.new(2010, 1, 1)
       end
 
@@ -66,6 +69,18 @@ RSpec.describe Contributions::CreateOrReplaceSubscription do
         expect(Portfolios::SelectPortfolio).to receive(:run).with(donor: donor, portfolio: portfolio)
 
         subject
+      end
+    end
+
+    context 'and there is no trial amount cents provided' do
+      let(:params_without_trial_amount_cents) { params.merge(trial_amount_cents: nil) }
+
+      it 'creates a new active recurring donation without trial' do
+        Contributions::CreateOrReplaceSubscription.run(params_without_trial_amount_cents)
+        subscription = Contributions::GetActiveSubscription.call(donor: donor)
+
+        expect(subscription.trial_amount_cents).to eq 0
+        expect(subscription.trial_start_at).to eq nil
       end
     end
   end
@@ -77,7 +92,10 @@ RSpec.describe Contributions::CreateOrReplaceSubscription do
         donor: donor,
         portfolio: some_other_portfolio,
         deactivated_at: nil,
-        last_scheduled_at: 1.day.ago
+        last_scheduled_at: 1.day.ago,
+        trial_amount_cents: 300,
+        trial_deactivated_at: nil,
+        trial_last_scheduled_at: 1.day.ago
       )
     end
 
@@ -91,6 +109,12 @@ RSpec.describe Contributions::CreateOrReplaceSubscription do
       expect(existing_subscription.reload).not_to be_active
     end
 
+    it 'deactivates the previous trial for the donor' do
+      expect { subject }.not_to(change { subscription_for_other_donor.active? })
+
+      expect(existing_subscription.reload.trial_active?).to be false
+    end
+
     it 'creates a new active subscription for the donor' do
       expect { subject }.to change { Subscription.count }.from(2).to(3)
 
@@ -99,8 +123,9 @@ RSpec.describe Contributions::CreateOrReplaceSubscription do
       expect(subscription.donor).to eq donor
       expect(subscription.amount_cents).to eq 8000
       expect(subscription.partner).to eq partner
-      expect(TriggerSubscriptionUpdatedWebhook.jobs.size).to eq(1)
+      expect(TriggerSubscriptionWebhook.jobs.size).to eq(1)
       expect(subscription.partner_contribution_percentage).to eq 0
+      expect(subscription.trial_amount_cents).to eq 500
     end
 
     it 'copies the last_scheduled_at date from the previous plan' do
@@ -108,6 +133,7 @@ RSpec.describe Contributions::CreateOrReplaceSubscription do
 
       subscription = Contributions::GetActiveSubscription.call(donor: donor)
       expect(subscription.last_scheduled_at).to eq existing_subscription.reload.last_scheduled_at
+      expect(subscription.trial_last_scheduled_at).to eq existing_subscription.reload.trial_last_scheduled_at
     end
 
     it "sets the portfolio to the donor's active portfolio" do

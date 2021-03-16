@@ -30,9 +30,6 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     fill_in_donation_info
 
-    click_on 'Next'
-    expect(page).to have_content('Your card number is incomplete.')
-
     card_token = stripe_helper.generate_card_token(last4: '9191', name: 'Donatello')
     page.execute_script("document.getElementById('payment_token').value = '#{card_token}';")
     page.execute_script("document.getElementById('payment-validated').click();")
@@ -256,6 +253,8 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     select 3.months.from_now.year
 
     select 'Monthly'
+
+    expect(page).to have_content('Your pledge starts in 3 months.')
 
     click_on 'Next'
   end

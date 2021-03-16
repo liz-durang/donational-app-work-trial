@@ -8,8 +8,15 @@ h4
   => t @subscription.frequency, scope: :next_contribution, \
     amount: Money.new(@subscription.amount_cents, @currency).format, \
     date: humanized_date(@subscription.next_contribution_at || @subscription.start_at)
-  ' On this date, we will charge your registered payment method.
-  ' Once the donation is processed, we will send you a tax-deductible email receipt for your records.
+
+- if @subscription.trial_future_contribution_scheduled?
+  h4
+    => t :trial_next_contribution, \
+      amount: Money.new(@subscription.trial_amount_cents, @currency).format, \
+      date: humanized_date(@subscription.trial_next_contribution_at)
+
+' On this date, we will charge your registered payment method.
+' Once the donation is processed, we will send you a tax-deductible email receipt for your records.
 
 table border="0" cellpadding="0" cellspacing="0" width="100%"
   tr.summary-item

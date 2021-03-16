@@ -10,6 +10,13 @@ RSpec.describe Contributions::ScheduleContributionsForPastDuePlans do
   let(:plans_needing_first_contribution) { [plan1] }
   let(:plans_needing_subscription) { [plan2, plan3] }
 
+  let(:trial1) { build(:subscription) }
+  let(:trial2) { build(:subscription) }
+  let(:trial3) { build(:subscription) }
+
+  let(:trials_needing_first_contribution) { [trial1] }
+  let(:trials_needing_subscription) { [trial2, trial3] }
+
   context 'when there are plans that are due to be scheduled' do
     before do
       expect(Contributions::GetPlansDueForFirstContribution)
@@ -31,6 +38,33 @@ RSpec.describe Contributions::ScheduleContributionsForPastDuePlans do
         expect(Contributions::ScheduleContributionForPlan)
           .to receive(:run)
           .with(subscription: plan3, scheduled_at: Time.zone.now)
+
+        Contributions::ScheduleContributionsForPastDuePlans.run
+      end
+    end
+  end
+
+  context 'when there are trials that are due to be scheduled' do
+    before do
+      expect(Contributions::GetTrialsDueForFirstContribution)
+        .to receive(:call)
+        .and_return(trials_needing_first_contribution)
+      expect(Contributions::GetTrialsDueSubscription)
+        .to receive(:call)
+        .and_return(trials_needing_subscription)
+    end
+
+    it 'schedules a contribution for each trial' do
+      freeze_time do
+        expect(Contributions::ScheduleContributionForTrial)
+          .to receive(:run)
+          .with(subscription: trial1, scheduled_at: Time.zone.now)
+        expect(Contributions::ScheduleContributionForTrial)
+          .to receive(:run)
+          .with(subscription: trial2, scheduled_at: Time.zone.now)
+        expect(Contributions::ScheduleContributionForTrial)
+          .to receive(:run)
+          .with(subscription: trial3, scheduled_at: Time.zone.now)
 
         Contributions::ScheduleContributionsForPastDuePlans.run
       end

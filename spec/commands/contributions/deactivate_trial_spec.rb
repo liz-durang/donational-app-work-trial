@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Contributions::DeactivateSubscription do
+RSpec.describe Contributions::DeactivateTrial do
   let(:donor) { create(:donor, email: 'user@example.com') }
 
   before do |example|
@@ -9,14 +9,14 @@ RSpec.describe Contributions::DeactivateSubscription do
 
   context 'when is cancelled' do
     let(:subscription) do
-      create(:subscription, donor: donor, deactivated_at: nil)
+      create(:subscription, donor: donor, trial_deactivated_at: nil)
     end
 
-    it 'deactivates subscription' do
-      command = Contributions::DeactivateSubscription.run(subscription: subscription)
+    it 'deactivates trial' do
+      command = Contributions::DeactivateTrial.run(subscription: subscription)
 
       expect(command).to be_success
-      expect(subscription.reload).not_to be_active
+      expect(subscription.reload.trial_active?).not_to be true
       expect(TriggerSubscriptionWebhook.jobs.size).to eq(1)
     end
   end

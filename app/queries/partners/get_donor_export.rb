@@ -28,6 +28,8 @@ module Partners
           'start_at AS donations_start_at',
           'subscriptions.created_at AS plan_updated_at',
           'subscriptions.deactivated_at AS plan_cancelled_at',
+          'subscriptions.trial_start_at AS trial_started_at',
+          'subscriptions.trial_deactivated_at AS trial_cancelled_at',
           'subscriptions.partner_contribution_percentage AS partner_contribution_percentage',
           *custom_donor_fields_for(partner)
         )

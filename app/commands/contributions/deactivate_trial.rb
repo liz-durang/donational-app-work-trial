@@ -1,16 +1,16 @@
 require Rails.root.join('lib','mutations','symbol_filter')
 
 module Contributions
-  class DeactivateSubscription < ApplicationCommand
+  class DeactivateTrial < ApplicationCommand
     required do
       model :subscription
     end
 
     def execute
-      subscription.update!(deactivated_at: Time.zone.now)
+      subscription.update!(trial_deactivated_at: Time.zone.now)
 
       send_confirmation_email!
-      TriggerSubscriptionWebhook.perform_async(:cancel, subscription.partner.id, subscription.id)
+      TriggerSubscriptionWebhook.perform_async(:cancel_trial, subscription.partner.id, subscription.id)
 
       nil
     end

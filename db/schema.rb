@@ -339,10 +339,15 @@ ActiveRecord::Schema.define(version: 2021_03_04_142125) do
     t.uuid "partner_id"
     t.integer "partner_contribution_percentage", default: 0
     t.string "amount_currency", default: "usd", null: false
+    t.datetime "trial_start_at"
+    t.datetime "trial_last_scheduled_at"
+    t.datetime "trial_deactivated_at"
+    t.integer "trial_amount_cents"
     t.index ["deactivated_at"], name: "index_subscriptions_on_deactivated_at"
     t.index ["donor_id"], name: "index_subscriptions_on_donor_id"
     t.index ["partner_id"], name: "index_subscriptions_on_partner_id"
     t.index ["portfolio_id"], name: "index_subscriptions_on_portfolio_id"
+    t.index ["trial_deactivated_at"], name: "index_subscriptions_on_trial_deactivated_at"
   end
 
   create_table "zapier_webhooks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

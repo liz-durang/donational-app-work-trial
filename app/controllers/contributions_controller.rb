@@ -53,9 +53,14 @@ class ContributionsController < ApplicationController
   end
 
   def destroy
-    Contributions::DeactivateSubscription.run(subscription: active_subscription)
+    if params[:trial]
+      Contributions::DeactivateTrial.run(subscription: active_trial)
+      flash[:success] = "We've cancelled your donation trial"
+    else
+      Contributions::DeactivateSubscription.run(subscription: active_subscription)
+      flash[:success] = "We've cancelled your donation plan"
+    end
 
-    flash[:success] = "We've cancelled your donation plan"
     redirect_to edit_accounts_path
   end
 
@@ -76,6 +81,10 @@ class ContributionsController < ApplicationController
 
   def active_portfolio
     @active_portfolio ||= Portfolios::GetActivePortfolio.call(donor: current_donor)
+  end
+
+  def active_trial
+    @active_trial ||= Contributions::GetActiveTrial.call(donor: current_donor)
   end
 
   def active_subscription
@@ -127,6 +136,14 @@ class ContributionsController < ApplicationController
 
   def amount_dollars
     params[:subscription][:amount_dollars].to_i
+  end
+
+  def trial_amount_cents
+    trial_amount_dollars * 100
+  end
+
+  def trial_amount_dollars
+    params[:subscription][:trial_amount_dollars].to_i
   end
 
   def payment_token
