@@ -72,7 +72,7 @@ class Subscription < ApplicationRecord
   end
 
   def trial_active?
-    return false if start_at.to_date < Date.today
+    return false if start_at.blank? || start_at.to_date < Date.today
 
     trial_deactivated_at.blank? && trial_amount_cents.present? && trial_amount_cents > 0
   end
