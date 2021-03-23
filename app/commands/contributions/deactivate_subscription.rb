@@ -10,7 +10,7 @@ module Contributions
       subscription.update!(deactivated_at: Time.zone.now)
 
       send_confirmation_email!
-      TriggerSubscriptionWebhook.perform_async(:cancel, subscription.partner.id, subscription.id)
+      TriggerSubscriptionWebhook.perform_async('cancel', subscription.partner.id, subscription.id)
 
       nil
     end

@@ -51,9 +51,9 @@ module Contributions
 
         send_confirmation_email!(subscription)
         if new_contribution
-          TriggerSubscriptionWebhook.perform_async(:create, partner.id, subscription.id)
+          TriggerSubscriptionWebhook.perform_async('create', partner.id, subscription.id)
         else
-          TriggerSubscriptionWebhook.perform_async(:update, partner.id, subscription.id)
+          TriggerSubscriptionWebhook.perform_async('update', partner.id, subscription.id)
         end
 
       end

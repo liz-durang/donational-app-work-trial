@@ -62,16 +62,16 @@ class TriggerSubscriptionWebhook < ApplicationJob
   private
 
   def create_or_update?(action)
-    action == :create || action == :update
+    action == 'create' || action == 'update'
   end
 
   def hook_type(action)
     case action
-    when :cancel, :cancel_trial
+    when 'cancel', 'cancel_trial'
       'cancel_recurring_contribution'
-    when :create
+    when 'create'
       'create_recurring_contribution'
-    when :update
+    when 'update'
       'update_recurring_contribution'
     end
   end
