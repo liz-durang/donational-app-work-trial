@@ -29,8 +29,9 @@ module Contributions
                   )
                 else
                   Payments::RefundPaymentIntent.run(
-                    metadata: metadata,
-                    payment_intent_id: payment_id
+                    account_id: payment_processor_account_id,
+                    payment_intent_id: payment_id,
+                    metadata: metadata
                   )
                 end
 
@@ -61,15 +62,15 @@ module Contributions
     end
 
     def payment_id
-      return nil unless contribution.receipt.present?
+      return nil if contribution.receipt.blank?
 
-      @payment_id = contribution.receipt["id"]
+      @payment_id = contribution.receipt['id']
     end
 
     def payment_type
-      return nil unless contribution.receipt.present?
+      return nil if contribution.receipt.blank?
 
-      @payment_type = contribution.receipt["object"]
+      @payment_type = contribution.receipt['object']
     end
 
     def payment_processor_account_id

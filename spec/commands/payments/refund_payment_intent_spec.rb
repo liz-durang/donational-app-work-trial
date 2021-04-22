@@ -20,6 +20,7 @@ RSpec.describe Payments::RefundPaymentIntent do
       cvc: '999'
     }
   end
+  let(:account_id) { 'test_acc_1' }
 
   before do
     Payments::CreateCustomer.run
@@ -59,7 +60,7 @@ RSpec.describe Payments::RefundPaymentIntent do
 
       it 'fails with errors' do
         stripe_error = Stripe::StripeError.new(error_message)
-        command = described_class.run(payment_intent_id: 'invalid ID')
+        command = described_class.run(payment_intent_id: 'invalid ID', account_id: account_id)
 
         expect(command).not_to be_success
         expect(command.errors.symbolic).to include(customer: :stripe_error)

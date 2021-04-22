@@ -27,14 +27,17 @@ module Payments
         { stripe_account: account_id }
       )
 
-      charge = Stripe::Charge.create({
-        source: token.id,
-        amount: donation_amount_cents + tips_cents,
-        application_fee: platform_fee_cents + tips_cents,
-        currency: currency,
-        expand: ['balance_transaction'],
-        metadata: metadata
-      }, stripe_account: account_id)
+      charge = Stripe::Charge.create(
+        {
+          source: token.id,
+          amount: donation_amount_cents + tips_cents,
+          application_fee: platform_fee_cents + tips_cents,
+          currency: currency,
+          expand: ['balance_transaction'],
+          metadata: metadata
+        },
+        stripe_account: account_id
+      )
 
       balance_transaction = charge[:balance_transaction]
       payment_processor_fees_cents = nil

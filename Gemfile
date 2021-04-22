@@ -5,8 +5,6 @@ source 'https://rubygems.org'
 # Set Ruby version
 ruby File.read('.ruby-version').strip
 
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
-
 # Base stack
 gem 'pg'
 gem 'puma', '~> 3.12'
@@ -101,7 +99,7 @@ group :test do
   gem 'capybara'
   gem 'capybara-selenium'
   gem 'selenium-webdriver', '~> 3.12.0'
-  gem 'stripe-ruby-mock', '~> 3.0.1', require: 'stripe_mock'
+  gem 'stripe-ruby-mock', github: 'donational-org/stripe-ruby-mock', branch: 'support-cloned-payment-methods'
   gem 'capybara-webmock'
   gem 'puffing-billy'
   gem 'factory_bot_rails'

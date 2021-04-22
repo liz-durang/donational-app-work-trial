@@ -15,18 +15,20 @@ module Payments
     end
 
     def execute
-      begin
-        Stripe.api_key = ENV.fetch('STRIPE_SECRET_KEY')
+      Stripe.api_key = ENV.fetch('STRIPE_SECRET_KEY')
 
-        Stripe::Refund.create({
+      Stripe::Refund.create(
+        {
           charge: charge_id,
+          refund_application_fee: true,
           metadata: metadata
-        }, stripe_account: account_id)
-      rescue Stripe::InvalidRequestError, Stripe::StripeError => e
-        add_error(:customer, :stripe_error, e.message)
+        },
+        stripe_account: account_id
+      )
+    rescue Stripe::InvalidRequestError, Stripe::StripeError => e
+      add_error(:customer, :stripe_error, e.message)
 
-        nil
-      end
+      nil
     end
   end
 end

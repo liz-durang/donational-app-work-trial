@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'stripe_mock'
 
-RSpec.describe Payments::ChargeCustomerBankAccount do
+RSpec.describe Payments::ChargeCustomerBankAccount, skip: true do
   around do |example|
     ClimateControl.modify(STRIPE_SECRET_KEY: 'sk_test_123') do
       example.run
