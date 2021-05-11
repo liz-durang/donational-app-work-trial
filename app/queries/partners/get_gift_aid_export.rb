@@ -9,7 +9,6 @@ module Partners
 
       @relation
         .where(created_at: donated_between)
-        .left_joins(:organizations)
         .left_joins(:donor)
         .where(partner: partner)
         .where(donors: { uk_gift_aid_accepted: true })
