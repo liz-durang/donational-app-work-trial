@@ -61,7 +61,7 @@ RSpec.describe 'Donors updates payment method', type: :feature do
     within_frame 'plaid-link-iframe-1' do
       click_on 'Continue'
 
-      expect(page).to have_content('Select your bank')
+      expect(page).to have_content('Select your bank', wait: 5)
       find_field('Search').send_keys('pnc')
       click_on 'PNC'
 
@@ -70,7 +70,7 @@ RSpec.describe 'Donors updates payment method', type: :feature do
 
       click_on 'Submit'
 
-      expect(page).to have_content('Select account', wait: 5)
+      expect(page).to have_content('Plaid Checking', wait: 5)
       find('label', text: 'Plaid Checking').click
 
       click_on 'Continue'
