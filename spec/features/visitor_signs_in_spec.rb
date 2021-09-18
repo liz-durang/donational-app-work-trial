@@ -2,13 +2,13 @@ require 'rails_helper'
 
 RSpec.describe 'Visitor signs in', type: :feature do
   context 'when there is a donor with matching email' do
-    before { create(:donor, first_name: 'Donny', last_name: 'Donator',  email: 'user@example.com') }
+    before { create(:donor, first_name: 'Donny', last_name: 'Donator', email: 'user@example.com') }
 
     scenario 'with valid credentials', js: true do
       create(:partner, :default)
       visit root_path
       expect(page).to have_content('Sign in')
-      sign_in_as!(email: 'user@example.com')
+      sign_in_as!(email: 'UsEr@exAmplE.com')
       visit root_path
       expect(page).to have_content('Donny Donator')
     end

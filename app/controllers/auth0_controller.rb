@@ -12,7 +12,7 @@ class Auth0Controller < ApplicationController
   end
 
   def matching_donor
-    @matching_donor ||= Donors::FindOrCreateDonorFromAuth.run!(request.env['omniauth.auth'])
+    @matching_donor ||= Donors::FindDonorFromAuth.run!(request.env['omniauth.auth'])
   end
 
   def failure
