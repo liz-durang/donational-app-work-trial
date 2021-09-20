@@ -11,6 +11,7 @@ module Partners
         .where(deactivated_at: nil)
         .left_joins(partner_affiliations: [:partner, :campaign])
         .where(partner_affiliations: { partner: partner })
+        .joins('LEFT OUTER JOIN payment_methods ON (payment_methods.donor_id = donors.id AND payment_methods.deactivated_at IS NULL)')
         .left_joins(subscriptions: { portfolio: [:managed_portfolio]})
         .where('subscriptions.created_at = (SELECT MAX(subscriptions.created_at) FROM subscriptions WHERE subscriptions.donor_id = donors.id)')
         .select(
@@ -31,6 +32,7 @@ module Partners
           'subscriptions.trial_start_at AS trial_started_at',
           'subscriptions.trial_deactivated_at AS trial_cancelled_at',
           'subscriptions.partner_contribution_percentage AS partner_contribution_percentage',
+          "replace(payment_methods.type, 'PaymentMethods::','') AS payment_method",
           *custom_donor_fields_for(partner)
         )
         .order('donors.created_at')
