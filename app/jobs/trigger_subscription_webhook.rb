@@ -20,7 +20,10 @@ class TriggerSubscriptionWebhook < ApplicationJob
       partner: partner
     )
 
-    response = conn.post() do |req|
+    payment_method = Payments::GetActivePaymentMethod.call(donor: subscription.donor)
+    payment_type = payment_method ? payment_method.payment_type : nil
+
+    response = conn.post do |req|
       body = {
         id: subscription.id,
         start_at: subscription.start_at.to_date,
@@ -39,7 +42,8 @@ class TriggerSubscriptionWebhook < ApplicationJob
           joined_at: subscription.donor.created_at,
           questions: affiliation.donor_responses.map { |r| [r.question.name, r.value] }.to_h,
           campaign: affiliation.campaign_title,
-          partner: affiliation.partner_name
+          partner: affiliation.partner_name,
+          payment_type: payment_type
         }
       }
 
@@ -62,7 +66,7 @@ class TriggerSubscriptionWebhook < ApplicationJob
   private
 
   def create_or_update?(action)
-    action == 'create' || action == 'update'
+    %w[create update].include?(action)
   end
 
   def hook_type(action)

@@ -20,9 +20,14 @@ class PaymentMethod < ApplicationRecord
   def retry_count_limit_reached?
     retry_count == 3
   end
+
+  def payment_type
+    type.demodulize
+  end
 end
 
 module PaymentMethods
   class Card < PaymentMethod; end
+
   class BankAccount < PaymentMethod; end
 end
