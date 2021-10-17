@@ -49,12 +49,10 @@ gem 'sentry-raven'
 gem 'analytics-ruby'
 gem 'appsignal'
 gem 'lograge'
+gem 'gem-licenses'
 
 # Commands
 gem 'mutations'
-
-# Multi-currency operations
-gem 'money-rails'
 
 # API
 gem 'rack-cors'
@@ -65,6 +63,7 @@ gem 'rspec_api_documentation'
 # Payments
 gem 'stripe'
 gem 'plaid'
+gem 'money-rails'
 
 # Search
 gem 'searchkick'
