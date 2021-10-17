@@ -3,7 +3,7 @@
   "scripts": {
     "postdeploy": "bin/rails db:schema:load db:seed"
   },
-  "stack": "heroku-18",
+  "stack": "heroku-20",
   "environments": {
     "test": {
       "env": {

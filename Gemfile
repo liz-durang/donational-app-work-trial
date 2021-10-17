@@ -15,6 +15,7 @@ gem 'bootsnap', require: false
 # Uploads
 gem 'active_storage-postgresql'
 gem 'image_processing'
+gem 'mini_magick'
 
 # Models
 gem 'enumerize', '~> 2.1'

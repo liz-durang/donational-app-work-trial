@@ -15,5 +15,6 @@
 #   inflect.acronym 'RESTful'
 # end
 ActiveSupport::Inflector.inflections(:en) do |inflect|
-  inflect.uncountable %w(onboarding)
-end
+    inflect.uncountable %w(onboarding)
+    inflect.acronym 'CSV'
+  end  
