@@ -12,7 +12,7 @@ class CampaignsController < ApplicationController
   end
 
   def show
-    not_found unless campaign
+    not_found and return unless campaign
 
     @view_model = OpenStruct.new(
       partner_name: partner.name,
@@ -107,7 +107,7 @@ class CampaignsController < ApplicationController
   end
 
   def donation_box
-    not_found unless campaign
+    not_found and return unless campaign
 
     @view_model = OpenStruct.new(
       partner_name: partner.name,

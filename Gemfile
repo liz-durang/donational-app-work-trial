@@ -7,20 +7,20 @@ ruby File.read('.ruby-version').strip
 
 # Base stack
 gem 'pg'
-gem 'puma', '~> 3.12'
-gem 'rails', '~> 5.2.0'
-gem 'redis', '~> 3.3.3'
+gem 'puma'
+gem 'rails', '~> 6.1.0'
+gem 'redis'
 gem 'bootsnap', require: false
 
 # Uploads
-gem 'active_storage-postgresql', github: 'lsylvester/active_storage-postgresql'
-gem 'mini_magick'
+gem 'active_storage-postgresql'
+gem 'image_processing'
 
 # Models
 gem 'enumerize', '~> 2.1'
 
 # Views
-gem 'commonmarker', '~> 0.17.9'
+gem 'commonmarker'
 gem 'premailer-rails'
 gem 'kaminari'
 
@@ -56,7 +56,7 @@ gem 'mutations'
 
 # API
 gem 'rack-cors'
-gem 'jbuilder', '~> 2.7.0'
+gem 'jbuilder'
 gem 'apitome'
 gem 'rspec_api_documentation'
 
@@ -98,11 +98,11 @@ group :test do
   gem 'capybara'
   gem 'capybara-selenium'
   gem 'selenium-webdriver', '~> 3.12.0'
-  gem 'stripe-ruby-mock', github: 'donational-org/stripe-ruby-mock', branch: 'support-cloned-payment-methods'
+  gem 'stripe-ruby-mock', github: 'donational-org/stripe-ruby-mock', branch: 'support-cloned-payment-methods', require: 'stripe_mock'
   gem 'capybara-webmock'
   gem 'puffing-billy'
   gem 'factory_bot_rails'
   gem 'faker'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 5.0.0'
   gem 'webmock'
 end

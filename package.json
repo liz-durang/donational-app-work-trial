@@ -1,12 +1,15 @@
 {
   "dependencies": {
-    "@rails/webpacker": "^5.4.3",
-    "activestorage": "^5.2.0",
+    "@rails/activestorage": "^6.1.0",
+    "@rails/webpacker": "5.4.3",
     "dotenv": "^6.0.0",
     "stimulus": "^2.0.0",
-    "underscore": "^1.9.1"
+    "underscore": "^1.9.1",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12"
   },
   "devDependencies": {
-    "webpack-dev-server": "^4.3.1"
+    "@webpack-cli/serve": "^1.6.0",
+    "webpack-dev-server": "^3"
   }
 }

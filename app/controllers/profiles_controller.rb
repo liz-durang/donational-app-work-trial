@@ -1,6 +1,6 @@
 class ProfilesController < ApplicationController
   def show
-    not_found unless donor
+    not_found and return unless donor
 
     @view_model = OpenStruct.new(
       donor: donor,
@@ -55,7 +55,7 @@ class ProfilesController < ApplicationController
   end
 
   def donation_frequencies
-    Subscription.frequency.options.select { |k,v| v.in? ['once', 'monthly'] }
+    Subscription.frequency.options.select { |_k, v| v.in? %w[once monthly] }
   end
 
   def partner_currency

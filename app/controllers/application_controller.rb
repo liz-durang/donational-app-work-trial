@@ -36,6 +36,6 @@ class ApplicationController < ActionController::Base
   end
 
   def not_found
-    raise ActionController::RoutingError.new('Not found')
+    render status: :not_found
   end
 end

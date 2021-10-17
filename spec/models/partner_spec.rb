@@ -35,9 +35,7 @@ RSpec.describe Partner, type: :model do
 
       expect(valid_partner).to be_valid
       expect(invalid_partner).not_to be_valid
-      expect(invalid_partner.errors.messages).to include(
-        currency: include('xyz is not a valid currency iso code')
-      )
+      expect(invalid_partner.errors.messages[:currency]).to include('xyz is not a valid currency iso code')
     end
   end
 
@@ -47,7 +45,7 @@ RSpec.describe Partner, type: :model do
         example.run
       end
     end
-    
+
     it 'supports Plaid if the currency is USD' do
       partner = build(:partner, currency: 'usd')
       expect(partner.supports_plaid?).to be true

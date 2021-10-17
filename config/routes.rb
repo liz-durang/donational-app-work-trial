@@ -59,23 +59,9 @@ Rails.application.routes.draw do
   get '/auth/oauth2/callback' => 'auth0#callback'
   get '/auth/failure' => 'auth0#failure'
 
-  # Administration
-  require 'sidekiq/web'
-  if Rails.env.production?
-    Sidekiq::Web.use Rack::Auth::Basic do |username, password|
-      ActiveSupport::SecurityUtils.secure_compare(::Digest::SHA256.hexdigest(username), ::Digest::SHA256.hexdigest(ENV['SIDEKIQ_USERNAME'])) &
-        ActiveSupport::SecurityUtils.secure_compare(::Digest::SHA256.hexdigest(password), ::Digest::SHA256.hexdigest(ENV['SIDEKIQ_PASSWORD']))
-    end
-  end
-  mount Sidekiq::Web, at: '/sidekiq'
-
-  get '/:campaign_slug' => 'campaigns#show', as: :campaigns, defaults: { format: :html }
-  post '/:campaign_slug/contributions' => 'campaign_contributions#create', as: :campaign_contributions
-  get '/:campaign_slug/donation-box' => 'campaigns#donation_box', as: :campaigns_donation_box, defaults: { format: :html }
-  post '/get_bank_token' => 'plaid_auth#get_bank_token'
-
-  # Stripe
+  # Payments
   post :get_setup_intent_client_secret, to: 'stripe#get_setup_intent_client_secret'
+  post :get_bank_token, to: 'plaid_auth#get_bank_token'
   post :webhook, to: 'stripe#webhook'
 
   # API
@@ -88,4 +74,20 @@ Rails.application.routes.draw do
       resources :hooks, only: %i[index create]
     end
   end
+
+  # Administration
+  require 'sidekiq/web'
+  if Rails.env.production?
+    Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+      ActiveSupport::SecurityUtils.secure_compare(::Digest::SHA256.hexdigest(username),
+                                                  ::Digest::SHA256.hexdigest(ENV['SIDEKIQ_USERNAME'])) &
+        ActiveSupport::SecurityUtils.secure_compare(::Digest::SHA256.hexdigest(password),
+                                                    ::Digest::SHA256.hexdigest(ENV['SIDEKIQ_PASSWORD']))
+    end
+  end
+  mount Sidekiq::Web, at: '/sidekiq'
+
+  get '/:campaign_slug' => 'campaigns#show', as: :campaigns, defaults: { format: :html }
+  post '/:campaign_slug/contributions' => 'campaign_contributions#create', as: :campaign_contributions
+  get '/:campaign_slug/donation-box' => 'campaigns#donation_box', as: :campaigns_donation_box, defaults: { format: :html }
 end

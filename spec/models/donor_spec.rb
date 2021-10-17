@@ -44,10 +44,10 @@ RSpec.describe Donor, type: :model do
       expect(valid_uk_donor).to be_valid
       expect(invalid_uk_donor).not_to be_valid
 
-      expect(invalid_uk_donor.errors.messages).to include(first_name: ["can't be blank"])
-      expect(invalid_uk_donor.errors.messages).to include(last_name: ["can't be blank"])
-      expect(invalid_uk_donor.errors.messages).to include(title: ["can't be blank"])
-      expect(invalid_uk_donor.errors.messages).to include(house_name_or_number: ["can't be blank"])
+      expect(invalid_uk_donor.errors.messages[:first_name]).to include("can't be blank")
+      expect(invalid_uk_donor.errors.messages[:last_name]).to include("can't be blank")
+      expect(invalid_uk_donor.errors.messages[:title]).to include("can't be blank")
+      expect(invalid_uk_donor.errors.messages[:house_name_or_number]).to include("can't be blank")
     end
 
     context 'when correct postocde was provided' do
@@ -68,7 +68,7 @@ RSpec.describe Donor, type: :model do
       it 'all should not be valid', :aggregate_failures do
         invalid_uk_donors.map do |invalid_uk_donor|
           expect(invalid_uk_donor).not_to(be_valid)
-          expect(invalid_uk_donor.errors.messages).to include(postcode: ["must include a space e.g. AA1 3DD"])
+          expect(invalid_uk_donor.errors.messages[:postcode]).to include("must include a space e.g. AA1 3DD")
         end
       end
     end

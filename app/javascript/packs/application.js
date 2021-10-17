@@ -8,28 +8,13 @@
 // layout file, like app/views/layouts/application.html.erb
 
 // StimulusJs
-import { Application } from "stimulus"
-import { definitionsFromContext } from "stimulus/webpack-helpers"
+import { Application } from "stimulus";
+import { definitionsFromContext } from "stimulus/webpack-helpers";
 
-const application = Application.start()
-const context = require.context("controllers", true, /.js$/)
-application.load(definitionsFromContext(context))
+require("@rails/activestorage").start();
 
-// ActiveStorage
-import * as ActiveStorage from "activestorage"
-ActiveStorage.start()
+const application = Application.start();
+const context = require.context("controllers", true, /.js$/);
+application.load(definitionsFromContext(context));
 
-// Polyfill for Element#closest
-if (!Element.prototype.matches)
-    Element.prototype.matches = Element.prototype.msMatchesSelector ||
-                                Element.prototype.webkitMatchesSelector;
-if (!Element.prototype.closest)
-    Element.prototype.closest = function(s) {
-        var el = this;
-        if (!document.documentElement.contains(el)) return null;
-        do {
-            if (el.matches(s)) return el;
-            el = el.parentElement || el.parentNode;
-        } while (el !== null && el.nodeType === 1);
-        return null;
-    };
+const images = require.context("../images", true);

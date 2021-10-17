@@ -47,7 +47,7 @@ class Donor < ApplicationRecord
   self.primary_key = 'id'
 
   def self.search_for(query, limit: 10)
-    self.search(query, limit: limit, misspellings: { prefix_length: 2 }, match: :word_start)
+    search(query, limit: limit, misspellings: { prefix_length: 2 }, match: :word_start)
   end
   has_many :selected_portfolios, -> { where(deactivated_at: nil) }
   has_many :portfolios, through: :selected_portfolios
@@ -58,7 +58,7 @@ class Donor < ApplicationRecord
   has_many :subscriptions
 
   with_options if: :uk_gift_aid_accepted do
-    validates :title, presence: true, length: { maximum: 4 }
+    validates :title, presence: true
     validates :first_name, presence: true, length: { maximum: 35 }
     validates :last_name, presence: true, length: { maximum: 35 }
     validates :house_name_or_number, presence: true # TODO: Change to street_address
