@@ -51,6 +51,7 @@ gem 'analytics-ruby'
 gem 'appsignal'
 gem 'lograge'
 gem 'gem-licenses'
+gem 'barnes'
 
 # Commands
 gem 'mutations'
