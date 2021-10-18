@@ -2,7 +2,7 @@ module Donations
   class CreateDonationsFromContributionIntoPortfolio < ApplicationCommand
     required do
       model :contribution
-      integer :donation_amount_cents, min: 100
+      integer :donation_amount_cents, min: 1
     end
 
     def execute
