@@ -5,16 +5,8 @@ module Contributions
     end
 
     def call
-      monthly_contributions_are_due? ? trials_due_contribution : @relation.none
-    end
+      return @relation.none unless date_after_fifteenth?
 
-    private
-
-    def monthly_contributions_are_due?
-      Time.zone.now.day >= 15
-    end
-
-    def trials_due_contribution
       end_of_last_month = Time.zone.now.last_month.at_end_of_month
 
       @relation
@@ -23,6 +15,12 @@ module Contributions
         .where(trial_start_at: Time.new(0)..end_of_last_month)
         .where(trial_last_scheduled_at: Time.new(0)..end_of_last_month)
         .where('start_at > ?', Time.zone.now)
+    end
+
+    private
+
+    def date_after_fifteenth?
+      Time.zone.now.day >= 15
     end
   end
 end

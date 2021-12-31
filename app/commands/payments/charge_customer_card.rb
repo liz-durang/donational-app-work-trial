@@ -54,6 +54,7 @@ module Payments
       nil
     end
 
+    # https://stripe.com/docs/payments/payment-methods/connect#cloning-payment-methods
     def single_use_payment_method_cloned_to_connected_account
       Stripe::PaymentMethod.create(
         {

@@ -74,6 +74,7 @@ RSpec.describe 'Donors updates payment method', type: :feature do
       find('label', text: 'Plaid Checking').click
 
       click_on 'Continue'
+      click_on 'Continue'
     end
   end
 

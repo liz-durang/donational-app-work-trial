@@ -37,7 +37,7 @@ module Contributions
 
       processed_at = mark_as_paid ? Time.zone.now : nil
 
-      contribution = Contribution.create!(
+      Contribution.create!(
         donor: donor,
         portfolio: portfolio,
         partner: partner,

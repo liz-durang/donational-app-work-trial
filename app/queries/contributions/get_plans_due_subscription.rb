@@ -5,18 +5,16 @@ module Contributions
     end
 
     def call
-      if monthly_contributions_are_due?
-        monthly_plans_due_contribution
-          .or(quarterly_plans_due_contribution
-            .or(annual_plans_due_contribution))
-      else
-        quarterly_plans_due_contribution.or(annual_plans_due_contribution)
-      end
+      return @relation.none unless date_after_fifteenth?
+
+      monthly_plans_due_contribution
+        .or(quarterly_plans_due_contribution)
+        .or(annual_plans_due_contribution)
     end
 
     private
 
-    def monthly_contributions_are_due?
+    def date_after_fifteenth?
       Time.zone.now.day >= 15
     end
 

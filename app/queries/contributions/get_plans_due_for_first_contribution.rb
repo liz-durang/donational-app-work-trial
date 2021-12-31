@@ -5,32 +5,30 @@ module Contributions
     end
 
     def call
-      if monthly_contributions_are_due?
-        monthly_plans_due_contribution
-          .or(non_monthly_plans_due_contribution)
+      if date_before_fifteenth?
+        one_time_contributions_only
       else
-        non_monthly_plans_due_contribution
+        all_first_time_contributions
       end
     end
 
     private
 
-    def monthly_contributions_are_due?
-      Time.zone.now.day >= 15
+    def date_before_fifteenth?
+      Time.zone.now.day < 15
     end
 
-    def monthly_plans_due_contribution
+    def one_time_contributions_only
       @relation
         .where(deactivated_at: nil)
-        .where(frequency: 'monthly')
+        .where(frequency: 'once')
         .where(start_at: Time.new(0)..Time.zone.now)
         .where(last_scheduled_at: nil)
     end
 
-    def non_monthly_plans_due_contribution
+    def all_first_time_contributions
       @relation
         .where(deactivated_at: nil)
-        .where.not(frequency: 'monthly')
         .where(start_at: Time.new(0)..Time.zone.now)
         .where(last_scheduled_at: nil)
     end
