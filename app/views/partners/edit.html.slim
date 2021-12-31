@@ -24,6 +24,14 @@ section.section
 section.embossed.section
   .container
     = display_flash_messages
+    - unless @view_model.partner.active? 
+      article.message.is-danger
+        .message-header
+          | This partner is not active
+          = icon_tag('fa-exclamation-triangle')
+        .message-body
+          | This partner has been deactivated. Please contact info@donational.org for more details
+
     .box style='background: #fafafa'
       = form_with model: @view_model.partner, url: @view_model.partner_path, local: true, method: :put, class: 'form' do |f|
         .columns.is-vcentered

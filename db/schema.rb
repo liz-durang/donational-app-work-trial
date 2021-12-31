@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_17_190731) do
+ActiveRecord::Schema.define(version: 2021_12_31_185403) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -261,6 +261,7 @@ ActiveRecord::Schema.define(version: 2021_10_17_190731) do
     t.text "receipt_tax_info"
     t.string "receipt_charity_name"
     t.decimal "donor_advised_fund_fee_percentage", default: "0.01"
+    t.datetime "deactivated_at"
   end
 
   create_table "payment_methods", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

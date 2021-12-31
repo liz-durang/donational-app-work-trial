@@ -36,6 +36,6 @@ class ApplicationController < ActionController::Base
   end
 
   def not_found
-    render status: :not_found
+    head :not_found
   end
 end

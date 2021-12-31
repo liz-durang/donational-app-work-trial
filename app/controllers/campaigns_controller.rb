@@ -13,6 +13,7 @@ class CampaignsController < ApplicationController
 
   def show
     not_found and return unless campaign
+    not_found and return unless partner.active?
 
     @view_model = OpenStruct.new(
       partner_name: partner.name,
@@ -107,42 +108,7 @@ class CampaignsController < ApplicationController
   end
 
   def donation_box
-    not_found and return unless campaign
-
-    @view_model = OpenStruct.new(
-      partner_name: partner.name,
-      partner_description: partner.description,
-      partner_website_url: partner.website_url,
-      partner_logo: partner.logo,
-      banner_image: campaign.banner_image,
-      campaign_title: campaign.title,
-      campaign_slug: campaign.slug,
-      campaign_description: campaign.description,
-      contribution_amount_help_text: campaign.contribution_amount_help_text,
-      donation_frequencies: campaign.allowable_donation_frequencies,
-      default_contribution_amounts: campaign.default_contribution_amounts,
-      minimum_contribution_amount: campaign.minimum_contribution_amount,
-      campaign_contributions_path: campaign_contributions_path(campaign.slug),
-      new_campaign_contribution: new_campaign_contribution,
-      managed_portfolios: managed_portfolios,
-      donor_questions: partner.donor_questions,
-      default_operating_costs_donation_percentages: partner.default_operating_costs_donation_percentages,
-      partner_operating_costs_text: partner.operating_costs_text,
-      partner_accepts_operating_costs_donations?: partner.accepts_operating_costs_donations?,
-      currency: partner_currency,
-      supports_gift_aid?: partner.supports_gift_aid?,
-      currency_code: campaign.partner.currency.downcase,
-      link_token: Payments::GeneratePlaidLinkToken.call(donor_id: generated_id),
-      donor_id: generated_id,
-      show_plaid?: partner.supports_plaid?
-    )
-
-    respond_to do |format|
-      format.js
-      format.html do
-        allow_iframe_embedding_on_partner_website!
-      end
-    end
+    show
   end
 
   private

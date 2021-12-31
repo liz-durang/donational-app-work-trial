@@ -99,6 +99,10 @@ class Partner < ApplicationRecord
     currency.downcase == 'usd'
   end
 
+  def active?
+    deactivated_at.nil?
+  end
+
   private
 
   def generate_api_key
