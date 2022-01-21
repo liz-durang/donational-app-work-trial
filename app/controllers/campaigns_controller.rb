@@ -16,10 +16,12 @@ class CampaignsController < ApplicationController
     not_found and return unless partner.active?
 
     @view_model = OpenStruct.new(
+      partner_id: partner.id,
       partner_name: partner.name,
       partner_description: partner.description,
       partner_website_url: partner.website_url,
       partner_logo: partner.logo,
+      partner_account_id: partner.payment_processor_account_id,
       footer_text: partner.receipt_first_paragraph,
       banner_image: campaign.banner_image,
       campaign_title: campaign.title,
@@ -41,7 +43,8 @@ class CampaignsController < ApplicationController
       currency_code: campaign.partner.currency.downcase,
       link_token: Payments::GeneratePlaidLinkToken.call(donor_id: generated_id),
       donor_id: generated_id,
-      show_plaid?: partner.supports_plaid?
+      show_plaid?: partner.supports_plaid?,
+      show_acss?: partner.supports_acss?
     )
 
     respond_to do |format|

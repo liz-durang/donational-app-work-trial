@@ -8,9 +8,15 @@ div data-accordion-panel-for='existing-card'
       button.button.is-fullwidth.align-items type='button' data-accordion-trigger='update-payment-details'
         .card-text Add a Credit/Debit Card
         .plaid-text.is-italic powered by Stripe
-      - if show_plaid
-        br
-        =< render 'payment_methods/bank_accounts/form'
+    - if show_plaid
+      br
+      =< render 'payment_methods/bank_accounts/plaid_form'
+    - elsif show_acss
+      br
+      - if @view_model.subscription
+        =< render 'payment_methods/acss_debits/acss_form'
+      - else
+        =< render 'payment_methods/acss_debits/acss_disabled_form'
   - else
     = render payment_method
 
@@ -19,9 +25,15 @@ div data-accordion-panel-for='existing-card'
       button.button.is-fullwidth.align-items type='button' data-accordion-trigger='update-payment-details'
         .card-text Add a Credit/Debit Card
         .plaid-text.is-italic powered by Stripe
-      - if show_plaid
-        br
-        =< render 'payment_methods/bank_accounts/form'
+    - if show_plaid
+      br
+      =< render 'payment_methods/bank_accounts/plaid_form'
+    - elsif show_acss
+      br
+      - if @view_model.subscription
+        =< render 'payment_methods/acss_debits/acss_form'
+      - else
+        =< render 'payment_methods/acss_debits/acss_disabled_form'
 
 .is-hidden data-accordion-panel-for='update-payment-details'
   br

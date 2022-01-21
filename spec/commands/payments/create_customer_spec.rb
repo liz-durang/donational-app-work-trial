@@ -8,7 +8,6 @@ RSpec.describe Payments::CreateCustomer do
     end
   end
 
-
   before { StripeMock.start }
   after { StripeMock.stop }
 

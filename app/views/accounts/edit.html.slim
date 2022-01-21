@@ -95,7 +95,7 @@ section.embossed.section
           p: span.far.fa-credit-card.fa-2x
           h3 Payment Information
         .column style='background: #fff;'
-          = render 'payment_methods/form', payment_method: @view_model.payment_method, show_plaid: @view_model.show_plaid?
+          = render 'payment_methods/form', payment_method: @view_model.payment_method, show_plaid: @view_model.show_plaid?, show_acss: @view_model.show_acss?
     .box style='background: #fafafa'
       .columns.is-vcentered
         .column.has-text-centered

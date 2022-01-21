@@ -212,15 +212,12 @@
                         span.help.display-when-errors Postcode must include a space e.g. AA1 3DD
       .wizard-card-footer
         a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
-
-    fieldset.wizard-card data-target='wizard.step'
+    fieldset#payment-step.wizard-card data-target='wizard.step'
       .wizard-card-header
         a.icon data-action="wizard#previous" &larr;
         h3.wizard-card-title Payment
         = render 'shared/wizard_nav', step: 4, of: 5
-
       = render 'payment_method_form', payment_method_field: 'payment-method-id'
-
     fieldset.wizard-card data-target='wizard.step'
       .wizard-card-header
         a.icon data-action="wizard#previous" &larr;

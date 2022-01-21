@@ -102,6 +102,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     click_on 'Donate'
     date_in_three_months_on_the_15th = next_15th_of_the_month_after(Date.today + 3.months)
+
     expect(page).to have_content("Your next donation of $200.00 is scheduled for #{date_in_three_months_on_the_15th.to_formatted_s(:long_ordinal)}")
 
     click_on 'View my portfolio'

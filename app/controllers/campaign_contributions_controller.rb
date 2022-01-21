@@ -69,7 +69,8 @@ class CampaignContributionsController < ApplicationController
     Payments::UpdatePaymentMethod.run(
       donor: current_donor,
       payment_token: payment_token,
-      payment_method_id: payment_method_id
+      payment_method_id: payment_method_id,
+      customer_id: customer_id
     )
   end
 
@@ -107,6 +108,10 @@ class CampaignContributionsController < ApplicationController
 
   def payment_token
     params[:campaign_contribution][:payment_token]
+  end
+
+  def customer_id
+    params[:customer_id]
   end
 
   def start_at

@@ -40,35 +40,6 @@ RSpec.describe Payments::ChargeCustomerCard do
     end
 
     context 'and the Stripe response is successful' do
-      before do
-        # To create a Stripe::PaymentIntent, we pass expand: ['charges.data.balance_transaction'] to obtain Stripe fee. Currently,
-        # stripe-ruby-mock gem does not allow to expand the balance transaction object, so payment_intent[:charges][:data][0][:balance_transaction]
-        # contains only the ID (i.e 'test_txn_1'). This makes ChargeCustomerCard L49 fail with error TypeError: no implicit conversion of Symbol into Integer.
-        # https://github.com/stripe-ruby-mock/stripe-ruby-mock/issues/109#issuecomment-275096253 found a workaround, which I adapted to expand balance_transaction.
-        allow(Stripe::PaymentIntent).to receive(:create).and_wrap_original do |original_method, *args|
-          payment_intent = original_method.call(*args)
-          options = args.first
-          expand = options.is_a?(Hash) && options[:expand] && options[:expand].include?('charges.data.balance_transaction')
-
-          next payment_intent unless expand
-
-          balance_transaction = payment_intent.charges.data.first.balance_transaction
-          payment_intent.charges.data.first.balance_transaction = {
-            id: balance_transaction,
-            fee_details: [
-              {
-                amount: 20,
-                currency: 'usd',
-                description: 'Stripe processing fees',
-                type: 'stripe_fee'
-              }
-            ]
-          }
-
-          payment_intent
-        end
-      end
-
       it "charges the donor's credit card" do
         command = Payments::ChargeCustomerCard.run(
           account_id: account_id,

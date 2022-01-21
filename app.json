@@ -34,7 +34,8 @@
       "options": {
         "version": "6.5.4"
       }
-    }
+    },
+    "sendgrid:starter"
   ],
   "buildpacks": [{ "url": "heroku/nodejs" }, { "url": "heroku/ruby" }]
 }

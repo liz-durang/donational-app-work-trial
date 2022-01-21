@@ -94,13 +94,19 @@ class Partner < ApplicationRecord
   end
 
   def supports_plaid?
-    return false unless ENV['PLAID_ENABLED']
+    return false unless ENV['PLAID_ENABLED'].presence == 'true'
 
     currency.downcase == 'usd'
   end
 
   def active?
     deactivated_at.nil?
+  end
+
+  def supports_acss?
+    return false unless ENV['ACSS_ENABLED'].presence == 'true'
+
+    /cad/i.match?(currency)
   end
 
   private

@@ -36,7 +36,7 @@ module Payments
           expand: ['balance_transaction'],
           metadata: metadata
         },
-        stripe_account: account_id
+        { stripe_account: account_id }
       )
 
       balance_transaction = charge[:balance_transaction]

@@ -1,0 +1,4 @@
+= form_with url: payment_methods_path, local: true, id: 'acss-form', method: 'post' do |f|
+  = f.hidden_field :payment_method_id, id: 'payment-method-id'
+  = render 'shared/acss_form', payment_method_field: 'payment-method-id', submission_field: 'acss-success-target'
+  = f.submit id: 'acss-success-target', class: 'is-hidden'

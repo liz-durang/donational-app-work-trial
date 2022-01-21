@@ -61,6 +61,7 @@ Rails.application.routes.draw do
 
   # Payments
   post :get_setup_intent_client_secret, to: 'stripe#get_setup_intent_client_secret'
+  post :get_acss_client_secret, to: 'stripe#get_acss_client_secret'
   post :get_bank_token, to: 'plaid_auth#get_bank_token'
   post :webhook, to: 'stripe#webhook'
 

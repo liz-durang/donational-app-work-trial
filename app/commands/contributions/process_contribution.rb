@@ -27,11 +27,14 @@ module Contributions
         contribution_id: contribution.id
       }
 
-      charge_command = if payment_method.is_a?(PaymentMethods::Card)
-                         Payments::ChargeCustomerCard
-                       else
-                         Payments::ChargeCustomerBankAccount
-                       end
+      charge_command =  case payment_method
+                        when PaymentMethods::Card
+                          Payments::ChargeCustomerCard
+                        when PaymentMethods::BankAccount
+                          Payments::ChargeCustomerBankAccount
+                        when PaymentMethods::AcssDebit
+                          Payments::ChargeCustomerAcssDebit
+                        end
 
       outcome = charge_command.run(
                   account_id: payment_processor_account_id,

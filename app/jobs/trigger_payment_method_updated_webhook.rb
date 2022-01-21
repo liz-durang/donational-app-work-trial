@@ -39,6 +39,6 @@ class TriggerPaymentMethodUpdatedWebhook < ApplicationJob
   private
 
   def ensure_partner_has_webhook(current_partner)
-      Hooks::GetZapierWebhookByType.call(partner: current_partner, hook_type: 'update_payment_method').present?
+    Hooks::GetZapierWebhookByType.call(partner: current_partner, hook_type: 'update_payment_method').present?
   end
 end

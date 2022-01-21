@@ -15,7 +15,7 @@ Instead of donating to whichever charity approaches you on the street or reaches
 1. align with their values
 2. make the greatest possible impact per each dollar donated
 
-We give users access to information, research and recommendations from industry-experts that help guide a donor to select effective charities that will have positive impact on causes that are important to the them.
+We give users access to information, research and recommendations from industry-experts that help guide a donor to select effective charities that will have positive impact on causes that are important to them.
 
 ### Give what you ought to
 

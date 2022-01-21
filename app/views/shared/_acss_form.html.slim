@@ -1,0 +1,32 @@
+.acss data-controller="acss"
+  .control.has-text-centered data-accordion-panel-for="hide-when-show-acss-is-triggered"
+    .control.has-icons-left
+      = icon_tag('fas fa-university')
+      button#link-button.button.is-fullwidth.align-items type='button' data-accordion-trigger="show-acss" data-action="acss#setUp"
+        .connect-text Connect your bank account
+        .plaid-text.is-italic powered by Stripe
+  #acss.control.is-hidden data-accordion-panel-for="show-acss"
+    .notification.is-light-yellow.mb-4 This will set up a pre-authorized debit to your bank account. You will be charged <em data-acss-target="acssInfo">every month on the 15th, starting this month</em>.
+    .field
+      label.label Account holder name
+      .field-body
+        .field
+          .control.has-icons-left
+            = icon_tag('fas fa-user')
+            input.input type="text" data-acss-target="accountHolder" value=("#{current_donor.first_name} #{current_donor.last_name}" if current_donor)
+    input name="customer_id" type="hidden" data-acss-target="customerId"
+    input type="hidden" value=(@view_model.partner_id) data-acss-target="partnerId"
+    input type="hidden" value=(payment_method_field) data-acss-target="paymentMethodField"
+    input type="hidden" value=(submission_field) data-acss-target="submissionField"
+    input type="hidden" value=(ENV.fetch('STRIPE_PUBLIC_KEY')) data-acss-target="stripeKey"
+    input type="hidden" value=(@view_model.partner_account_id) data-acss-target="stripeAccount"
+    - if current_donor && (subscription = @view_model.subscription)
+      input type="hidden" value=(current_donor.email) data-acss-target="email"
+      input type="hidden" value=(subscription.frequency) data-acss-target="frequency"
+      input type="hidden" value=(subscription.start_at.strftime("%b")) data-acss-target="startMonth"
+      input type="hidden" value=(subscription.start_at.year) data-acss-target="startYear"
+      input type="hidden" value=(subscription.trial_start_at) data-acss-target="trial"
+    a.button.is-primary.disabled.mb-4 data-acss-target="submit"
+      span.icon.is-small.is-hidden
+        i.fas.fa-check
+      span Set up pre-auth debit

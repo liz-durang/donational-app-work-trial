@@ -20,5 +20,10 @@ FactoryBot.define do
   factory :payment_method do
     donor
     last4 { '1234' }
+
+    trait :acss_debit do
+      type { 'PaymentMethods::AcssDebit' }
+      payment_processor_source_id { 'pm_1KEYLlLVTYFX0Htp1vL4L722' }
+    end
   end
 end

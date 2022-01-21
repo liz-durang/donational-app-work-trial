@@ -27,6 +27,21 @@ RSpec.describe 'Donors updates payment method', type: :feature do
     then_the_bank_account_details_should_be_present
   end
 
+  context 'when the partner is Canadian' do
+    let!(:partner) { create(:partner, :default, currency: 'cad') }
+
+    before do
+      create(:subscription, donor: donor, deactivated_at: nil)
+    end
+
+    # Skipping for now. See comment in when_the_donor_reveals_the_acss_button_and_submits_their_details
+    xit 'changing to ACSS', js: true do
+      given_a_signed_in_donor_wants_to_update_payment_method
+      when_the_donor_reveals_the_acss_button_and_submits_their_details
+      then_the_bank_account_details_should_be_present
+    end
+  end
+
   def given_a_signed_in_donor_wants_to_update_payment_method
     sign_in_as!(email: 'user@example.com')
     visit edit_accounts_path
@@ -46,12 +61,12 @@ RSpec.describe 'Donors updates payment method', type: :feature do
   end
 
   def then_credit_card_should_be_updated
-    expect(page).to have_content("Thanks, we've updated your payment information", wait: 5)
+    expect(page).to have_content("Thanks, we've updated your payment information", wait: 10)
     expect(page).to have_field(disabled: true, with: 'Donatello DonatorCard')
   end
 
   def then_the_bank_account_details_should_be_present
-    expect(page).to have_content("Thanks, we've updated your payment information", wait: 5)
+    expect(page).to have_content("Thanks, we've updated your payment information", wait: 10)
     expect(page).to have_field(disabled: true, with: 'STRIPE TEST BANK')
   end
 
@@ -72,9 +87,26 @@ RSpec.describe 'Donors updates payment method', type: :feature do
 
       expect(page).to have_content('Plaid Checking', wait: 5)
       find('label', text: 'Plaid Checking').click
+      click_on 'Continue'
 
+      expect(page).to have_content('Success', wait: 5)
       click_on 'Continue'
-      click_on 'Continue'
+    end
+  end
+
+  def when_the_donor_reveals_the_acss_button_and_submits_their_details
+    click_on 'Connect your bank account'
+    find('input[data-acss-target="accountHolder"]').set 'Real Donor Name'
+    find('a[data-acss-target="submit"]', wait: 5).click
+
+    sleep 10
+
+    # For some reason, the content of the iframe is not accessible via capybara. Even after sleeping.
+    #  - Could it be related to HTTPS vs HTTP content?
+    #  - When I tried Firefox instead of Chrome, it spit out some SSL errors. Not sure if it's related.
+    #  - Sometimes the iframe is not found, other times it is but it has no content -- Even when we wait inside a binding.pry
+    within_frame ('iframe') do
+      expect(page).to have_text('Agree', wait: 10)
     end
   end
 

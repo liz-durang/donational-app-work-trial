@@ -33,7 +33,9 @@ class AccountsController < ApplicationController
       currency: current_currency,
       supports_gift_aid?: partner.supports_gift_aid?,
       link_token: Payments::GeneratePlaidLinkToken.call(donor_id: current_donor.id),
-      show_plaid?: partner.supports_plaid?
+      show_plaid?: partner.supports_plaid?,
+      show_acss?: partner.supports_acss?,
+      partner_account_id: partner.payment_processor_account_id
     )
   end
 

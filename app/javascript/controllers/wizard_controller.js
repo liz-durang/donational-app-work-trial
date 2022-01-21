@@ -22,7 +22,6 @@ export default class extends Controller {
     if (this.hasGiftAidFieldsetVisibleTarget && this.giftAidFieldsetVisibleTarget.checked)
       this.validateGiftAidFields()
 
-
     if (this.valid) {
       this.showStep(this.index + 1)
       return false;

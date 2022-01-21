@@ -136,6 +136,51 @@ RSpec.describe Payments::UpdatePaymentMethod do
     end
   end
 
+  context 'when the customer id is given (in the ACSS flow)' do
+    let(:customer) { Stripe::Customer.create({}, { stripe_account: partner.payment_processor_account_id }) }
+    let(:stripe_payment_method) do
+      Stripe::PaymentMethod.create(
+        { type: 'acss_debit', acss_debit: bank_account_params, billing_details: billing_details_params },
+        { stripe_account: partner.payment_processor_account_id }
+      )
+    end
+    let(:payment_method) { Payments::GetActivePaymentMethod.call(donor: donor) }
+    let!(:partner) { create(:partner, :default) }
+
+    context "and the update to the customer's debit details succeeds" do
+      it 'updates the bank details for the existing customer' do
+        command = Payments::UpdatePaymentMethod.run(
+          donor: donor,
+          payment_method_id: stripe_payment_method[:id],
+          customer_id: customer[:id]
+        )
+
+        expect(command).to be_success
+        expect(payment_method).to be_a(PaymentMethods::AcssDebit)
+        expect(payment_method.address_zip_code).to eq('19702')
+        expect(payment_method.name).to eq('Donatello Donor')
+        expect(payment_method.payment_processor_source_id).to eq(stripe_payment_method[:id])
+        expect(TriggerPaymentMethodUpdatedWebhook.jobs.size).to eq(1)
+      end
+    end
+
+    context "and the update to the customer's credit card fails" do
+      it 'fails with the errors from the update command' do
+        stripe_error = Stripe::StripeError.new('Some error message')
+        StripeMock.prepare_error(stripe_error, :attach_payment_method)
+
+        command = Payments::UpdatePaymentMethod.run(
+          donor: donor,
+          payment_method_id: stripe_payment_method[:id],
+          customer_id: customer[:id]
+        )
+
+        expect(command).not_to be_success
+        expect(command.errors.symbolic).to include(customer: :payment_error)
+      end
+    end
+  end
+
   context 'when a payment token is not supplied' do
     let(:customer_id) { 'cus_123' }
     let(:payment_method_id) { '' }

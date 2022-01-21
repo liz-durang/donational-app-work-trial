@@ -1,0 +1,31 @@
+br
+  .control.has-text-centered data-accordion-panel-for="hide-when-show-card-is-triggered"
+    a.button.is-text.credit-card-link data-accordion-trigger="show-card" data-action='wizard#setFeeDetailsLabel'
+      span No, I'd rather donate by credit/debit card.
+  .control.is-hidden data-accordion-panel-for="show-card"
+    .control.has-icons-left
+      = icon_tag('fas fa-credit-card')
+      button#link-button.button.is-fullwidth.align-items type='button'
+        .card-text Credit/Debit Card
+        .checkmark = icon_tag('fas fa-check')
+    br
+    .control
+      #card-element
+      #card-errors role="alert"
+    p.control.has-icons-left
+      input.input.StripeElement id="cardholder_name" type="text" placeholder="Cardholder name"
+      span.icon.is-left.is-small: i.fa.fa-user
+    br
+    p.control
+      span.is-italic Credit card payments are handled securely by
+      span.is-italic
+       = link_to(" Stripe.", "https://stripe.com/", target: :_blank)
+    br
+    .field
+      .notification.is-light-yellow
+        .notification-title
+          strong Please consider connecting your bank account
+        = label_tag("fees_details", "", class: "p", data: { target: 'wizard.feesDetails' })
+        br
+        br
+        | Thanks!
