@@ -39,7 +39,8 @@ class Contribution < ApplicationRecord
     pending: 'pending',
     succeeded: 'succeeded',
     failed: 'failed',
-    refunded: 'refunded'
+    refunded: 'refunded',
+    disputed: 'disputed'
   }
 
   validates :external_reference_id, uniqueness: { scope: :partner }, allow_nil: true

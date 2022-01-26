@@ -47,10 +47,14 @@ class StripeController < ApplicationController
       else
         handle_payment_success(payment: event.data.object)
       end
+    when 'charge.dispute.created'
+      handle_dispute_created(event: event)
     when 'setup_intent.succeeded'
       handle_verification_success(setup_intent: event.data.object)
     when 'setup_intent.setup_failed'
       handle_verification_failed(setup_intent: event.data.object)
+    else
+      200
     end
 
     head response
@@ -118,5 +122,20 @@ class StripeController < ApplicationController
     end
 
     200
+  end
+
+  def handle_dispute_created(event:)
+    dispute = event.data.object
+    account_id = event.account
+    Rails.logger.info("Stripe webhook `charge.dispute.created`. Account: #{account_id}, charge: #{dispute[:charge]}")
+
+    charge = Payments::GetChargeFromDispute.call(account_id: account_id, charge_id: dispute[:charge])
+    return 400 unless charge.present?
+
+    contribution_id = charge[:metadata][:contribution_id]
+    return 400 unless contribution_id.present?
+
+    outcome = Contributions::DisputeContribution.run(contribution_id: contribution_id)
+    outcome.success? ? 200 : 400
   end
 end

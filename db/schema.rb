@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_31_185403) do
+ActiveRecord::Schema.define(version: 2022_01_26_092337) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -116,6 +116,7 @@ ActiveRecord::Schema.define(version: 2021_12_31_185403) do
     t.integer "donor_advised_fund_fees_cents"
     t.string "payment_status", default: "unprocessed"
     t.integer "amount_donated_after_fees_cents"
+    t.datetime "disputed_at"
     t.index ["donor_id"], name: "index_contributions_on_donor_id"
     t.index ["partner_id"], name: "index_contributions_on_partner_id"
     t.index ["portfolio_id"], name: "index_contributions_on_portfolio_id"
