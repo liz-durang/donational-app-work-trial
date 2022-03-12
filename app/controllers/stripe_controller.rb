@@ -65,7 +65,7 @@ class StripeController < ApplicationController
   def handle_payment_failed(payment:)
     contribution_id = payment[:metadata][:contribution_id]
 
-    return 400 unless contribution_id.present?
+    return 200 unless contribution_id.present?
 
     contribution = Contribution.find_by(id: contribution_id)
     errors = { error_code: payment[:failure_code], error_message: payment[:failure_message] }.to_json
@@ -78,7 +78,7 @@ class StripeController < ApplicationController
   def handle_payment_success(payment:)
     contribution_id = payment[:metadata][:contribution_id]
 
-    return 400 unless contribution_id.present?
+    return 200 unless contribution_id.present?
 
     contribution = Contribution.find_by(id: contribution_id)
 
