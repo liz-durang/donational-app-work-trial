@@ -24,6 +24,6 @@ module Donational
 
     config.active_job.queue_adapter = :sidekiq
     config.lograge.enabled = true
-    config.lograge.base_controller_class = ['ActionController::API', 'ActionController::Base']
+    # config.lograge.base_controller_class = ['ActionController::API', 'ActionController::Base']
   end
 end

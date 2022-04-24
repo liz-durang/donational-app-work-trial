@@ -57,10 +57,8 @@ gem 'sentry-raven'
 gem 'mutations'
 
 # API
-gem 'apitome'
 gem 'jbuilder'
 gem 'rack-cors'
-gem 'rspec_api_documentation'
 
 # Payments
 gem 'money-rails'

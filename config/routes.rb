@@ -3,7 +3,7 @@
 Rails.application.routes.draw do
   # Acquisition
   root 'pages#index'
-  %w[mission donate-with-confidence methodology faq api].each do |page_slug|
+  %w[mission donate-with-confidence methodology faq].each do |page_slug|
     get page_slug => 'pages#show', page: page_slug.underscore, format: :html
   end
 
@@ -64,17 +64,6 @@ Rails.application.routes.draw do
   post :get_acss_client_secret, to: 'stripe#get_acss_client_secret'
   post :get_bank_token, to: 'plaid_auth#get_bank_token'
   post :webhook, to: 'stripe#webhook'
-
-  # API
-  namespace :api do
-    namespace :v1, defaults: { format: :json } do
-      resources :donors, only: %i[create index show]
-      resources :organizations, only: %i[index show]
-      resources :contributions, only: :create
-      resources :portfolios, only: :index
-      resources :hooks, only: %i[index create]
-    end
-  end
 
   # Administration
   require 'sidekiq/web'

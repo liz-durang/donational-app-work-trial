@@ -122,7 +122,7 @@ class CampaignContributionsController < ApplicationController
 
     start_at_day = params[:campaign_contribution][:frequency] == 'once' ? Time.zone.today.day : 15
 
-    Time.zone.local(start_at_year, start_at_month, start_at_day, 0, 0)
+    Time.zone.local(start_at_year, start_at_month, start_at_day, 12, 0)
   end
 
   def trial_amount_cents
