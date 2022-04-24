@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'selenium/webdriver'
-require 'billy'
 
 Capybara.register_driver :headless_chrome do |app|
   capabilities = { chromeOptions: { args: %w[headless disable-gpu window-size=1440,900] } }
@@ -23,18 +22,4 @@ Capybara.register_driver :chrome do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome)
 end
 
-Capybara.register_driver :headless_selenium_chrome_billy do |app|
-  capabilities = { chromeOptions: { args: %w[headless disable-gpu window-size=1440,900 proxy-server=#{Billy.proxy.host}:#{Billy.proxy.port}] } }
-
-  chrome_binary_path = ENV.fetch('GOOGLE_CHROME_SHIM', nil)
-  capabilities[:chromeOptions][:binary] = chrome_binary_path if chrome_binary_path
-  capabilities[:chromeOptions][:w3c] = false
-
-  Capybara::Selenium::Driver.new(
-    app,
-    browser: :chrome,
-    desired_capabilities: Selenium::WebDriver::Remote::Capabilities.chrome(capabilities)
-  )
-end
-
-Capybara.javascript_driver = ENV['CI'] ? :headless_chrome : :selenium_chrome_billy
+Capybara.javascript_driver = ENV['CI'] ? :headless_chrome : :chrome

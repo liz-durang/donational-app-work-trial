@@ -34,6 +34,8 @@ class Subscription < ApplicationRecord
   delegate :email, to: :donor, prefix: true
 
   def active?
+    return false if !future_contribution_scheduled?
+    
     deactivated_at.blank?
   end
 
@@ -58,7 +60,11 @@ class Subscription < ApplicationRecord
 
     return start_at if start_at.to_date > today && !monthly?
 
-    if monthly?
+    if once?
+      return nil if last_scheduled_at && last_scheduled_at > start_at
+
+      start_at
+    elsif monthly?
       if start_at.to_date < today
         next_15th_of_the_month_after(today)
       else

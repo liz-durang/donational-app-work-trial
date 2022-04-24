@@ -135,7 +135,7 @@ RSpec.describe 'Partner uses donor console', type: :feature do
 
   def then_the_partner_updates_the_donation_plan
     fill_in 'subscription[amount_dollars]', with: '100'
-    find('[data-disable-with="Update donation plan"]').click
+    find('[data-disable-with="Change my donation"]').click
     date_in_one_month_on_the_15th = (Date.new(Date.today.year, Date.today.month, 15) + 1.month)
     expect(page).to have_content("Your next donation of $100.00 is scheduled for #{date_in_one_month_on_the_15th.to_formatted_s(:long_ordinal)}")
   end
@@ -160,7 +160,7 @@ RSpec.describe 'Partner uses donor console', type: :feature do
   def then_the_partner_starts_the_donation_plan_again
     fill_in 'subscription[amount_dollars]', with: '100'
     click_on 'Monthly'
-    find('[data-disable-with="Update donation plan"]').click
+    find('[data-disable-with="Change my donation"]').click
     date_in_one_month_on_the_15th = (Date.new(Date.today.year, Date.today.month, 15) + 1.month)
     expect(page).to have_content("Your next donation of $100.00 is scheduled for #{date_in_one_month_on_the_15th.to_formatted_s(:long_ordinal)}")
   end

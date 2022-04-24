@@ -111,12 +111,12 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     expect(find_field('donor_responses[city]').value).to eq 'London'
     find('[data-target="ask-to-pause-modal"]').click
     within('#ask-to-pause-modal') do
-      find('[value="Sounds great!"]').click
+      find('[value="Pause my donations for 3 months"]').click
     end
     expect(page).to have_content("Your next donation of $200.00 is scheduled for #{(date_in_three_months_on_the_15th + 3.months).to_formatted_s(:long_ordinal)}")
 
     select 'Other Portfolio'
-    click_on 'Update donation plan'
+    click_on 'Change my donation'
   end
 
   scenario 'as a new UK visitor', js: true do
@@ -154,7 +154,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     expect(find_field('donor_responses[city]').value).to eq 'London'
     find('[data-target="ask-to-pause-modal"]').click
     within('#ask-to-pause-modal') do
-      find('[value="Sounds great!"]').click
+      find('[value="Pause my donations for 3 months"]').click
     end
     expect(page).to have_content("Your next donation of £200.00 is scheduled for #{(date_in_three_months_on_the_15th + 3.months).to_formatted_s(:long_ordinal)}")
 

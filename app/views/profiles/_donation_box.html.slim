@@ -6,7 +6,7 @@
     .wizard-card-content
       p You are currently logged in
       p
-        => link_to 'Edit your account', edit_accounts_path
+        => link_to 'Edit your account', edit_accounts_path, target: "_top"
         ' or
         = sign_out_link
 - else

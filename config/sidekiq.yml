@@ -1,9 +1,9 @@
 schedule:
   ProcessScheduledContributions:
-    interval: '1h'
+    interval: "1h"
   SendContributionReminders:
-    interval: '4h'
+    interval: "4h"
   ProcessFailedContributions:
-    interval: '1h'
+    interval: "1h"
   ScheduleContributionsForPastDuePlans:
-    interval: '30m'
+    interval: "2m"

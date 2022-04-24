@@ -11,9 +11,6 @@ section.section
       li = link_to edit_allocations_path do
         = icon_tag('fa-balance-scale')
         | Portfolio Allocation
-      li = link_to new_contribution_path do
-        = icon_tag('fa-heart')
-        | Donate
       li.is-active: a
         = icon_tag('fa-cog')
         | Account settings
@@ -21,122 +18,101 @@ section.section
         = icon_tag('fa-clipboard')
         | Donation history
 
-
 section.embossed.section
-  .container
-    .new-line = display_flash_messages
-    br
-    .box style='background: #fafafa'
-      = form_with model: @view_model.donor, url: @view_model.accounts_path, local: true, method: :put do |f|
-        .columns.is-vcentered
-          .column.has-text-centered
-            p: span.far.fa-address-book.fa-2x
-            h3 Contact Information
-          .column style='background: #fff;'
-            .form
-              - if @view_model.supports_gift_aid?
-                .columns
-                  .column.is-3
-                    .field
-                      .label
-                        label.label Title
-                      .field-body
-                        .field
-                          .control
-                            = f.text_field :title, class: :input, placeholder: 'e.g. Mr or Ms'
-                  .column
-                    .field
-                      label.control
-                        = f.label :first_name, class: :label
-                        = f.text_field :first_name, class: :input
-                  .column
-                    .field
-                      label.control
-                        = f.label :last_name, class: :label
-                        = f.text_field :last_name, class: :input
-              .field
-                label.control
-                  = f.label :email, class: :label
-                  = f.email_field :email, class: :input
-              - if @view_model.supports_gift_aid?
-                .columns
-                  .column.is-3
-                    .field
-                      = f.label :uk_gift_aid_accepted, 'Allow Gift Aid', class: :label
-                      = f.check_box :uk_gift_aid_accepted
-                  .column
-                    p Yes - I am a UK taxpayer and would like to Gift Aid my donations now and in future. I understand I must pay enough income tax and/or capital gains tax each tax year to cover the amount of Gift Aid that all charities and community amateur sports clubs claim on my donations in that tax year, and I am responsible for paying any difference.
-                .columns
-                  .column
-                    .field
-                      .label.is-normal
-                        label.label House name or number
-                      .field-body
-                        .field
-                          .control.has-icons-left
-                            = icon_tag('fas fa-home')
-                            = f.text_field :house_name_or_number, class: :input
-                            span.help.display-when-errors This field is required
-                  .column
-                    .field
-                      .label.is-normal
-                        label.label Postcode
-                      .field-body
-                        .field
-                          .control.has-icons-left
-                            = icon_tag('fas fa-home')
-                            = f.text_field :postcode, class: :input, placeholder: 'please include a space'
-                            span.help.display-when-errors Postcode must include a space e.g. AA1 3DD
-              p.has-text-right
-                = f.submit "Save", class: %w(button is-primary)
-    .box style='background: #fafafa'
-      .columns.is-vcentered
-        .column.has-text-centered
-          p: span.far.fa-credit-card.fa-2x
-          h3 Payment Information
-        .column style='background: #fff;'
-          = render 'payment_methods/form', payment_method: @view_model.payment_method, show_plaid: @view_model.show_plaid?, show_acss: @view_model.show_acss?
-    .box style='background: #fafafa'
-      .columns.is-vcentered
-        .column.has-text-centered
-          p: span.far.fa-calendar.fa-2x
-          h3 Your donation plan
+  .columns.is-centered
+    .column.is-6
+      = display_flash_messages
+      .box.section style='border: 2px solid #fef'
+          h2.title Your donation plan
           br
-        .column style='background: #fff;'
           = render 'subscriptions/next_contribution',
             first_contribution: @view_model.first_contribution,
             subscription: @view_model.subscription
           hr
-          - if @view_model.subscription
+          - if @view_model.subscription && @view_model.subscription.active?
             = render @view_model.subscription
           - else
             .content.has-text-centered
               p = link_to new_contribution_path, class: 'button is-primary' do
                 | Donate now
-    - if @view_model.partner_affiliation.present?
-      .box style='background: #fafafa'
-        .columns.is-vcentered
-          .column.has-text-centered
-            p: span.far.fa-address-book.fa-2x
-            h3 About you
-            br
-          .column style='background: #fff;'
-            = form_for :donor_responses, url: @view_model.accounts_path, local: true, method: :put do |f|
-              - @view_model.donor_responses.each do |donor_response|
-                .field
-                  = f.label donor_response.question.name do
-                    .label = donor_response.question.title
-                    - if donor_response.question.type == 'select'
-                      .select = f.collection_select donor_response.question.name, donor_response.question.options.zip(donor_response.question.options), :first, :last,
-                                selected: donor_response.value
-                    - elsif donor_response.question.type == 'checkbox'
-                      - if donor_response.value == "1"
-                        = f.check_box donor_response.question.name, checked: true
-                      - else
-                        = f.check_box donor_response.question.name
-                    - elsif donor_response.question.type == 'statictext'
+      .box.section
+        h2.title Payment Information
+        = render 'payment_methods/form', payment_method: @view_model.payment_method, show_plaid: @view_model.show_plaid?, show_acss: @view_model.show_acss?
+      .box.section
+        h2.title Contact Information
+        = form_with model: @view_model.donor, url: @view_model.accounts_path, local: true, method: :put do |f|
+          .form
+            - if @view_model.supports_gift_aid?
+              .field
+                .label
+                  label.label Title
+                .field-body
+                  .field
+                    .control
+                      = f.text_field :title, class: :input, placeholder: 'e.g. Mr or Ms'
+            .field
+                label.control
+                = f.label :first_name, class: :label
+                = f.text_field :first_name, class: :input
+
+            .field
+                label.control
+                = f.label :last_name, class: :label
+                = f.text_field :last_name, class: :input
+            .field
+              label.control
+                = f.label :email, class: :label
+                = f.email_field :email, class: :input
+            - if @view_model.supports_gift_aid?
+              .columns
+                .column.is-3
+                  .field
+                    = f.label :uk_gift_aid_accepted, 'Allow Gift Aid', class: :label
+                    = f.check_box :uk_gift_aid_accepted
+                .column
+                  p Yes - I am a UK taxpayer and would like to Gift Aid my donations now and in future. I understand I must pay enough income tax and/or capital gains tax each tax year to cover the amount of Gift Aid that all charities and community amateur sports clubs claim on my donations in that tax year, and I am responsible for paying any difference.
+              .columns
+                .column
+                  .field
+                    .label.is-normal
+                      label.label House name or number
+                    .field-body
+                      .field
+                        .control.has-icons-left
+                          = icon_tag('fas fa-home')
+                          = f.text_field :house_name_or_number, class: :input
+                          span.help.display-when-errors This field is required
+                .column
+                  .field
+                    .label.is-normal
+                      label.label Postcode
+                    .field-body
+                      .field
+                        .control.has-icons-left
+                          = icon_tag('fas fa-home')
+                          = f.text_field :postcode, class: :input, placeholder: 'please include a space'
+                          span.help.display-when-errors Postcode must include a space e.g. AA1 3DD
+            p.has-text-right
+              = f.submit "Save", class: %w(button is-primary)
+      - if @view_model.partner_affiliation.present?
+        .box.section
+          h2.title About you
+          = form_for :donor_responses, url: @view_model.accounts_path, local: true, method: :put do |f|
+            - @view_model.donor_responses.each do |donor_response|
+              .field
+                = f.label donor_response.question.name do
+                  .label = donor_response.question.title
+                  - if donor_response.question.type == 'select'
+                    .select = f.collection_select donor_response.question.name, donor_response.question.options.zip(donor_response.question.options), :first, :last,
+                              selected: donor_response.value
+                  - elsif donor_response.question.type == 'checkbox'
+                    - if donor_response.value == "1"
+                      = f.check_box donor_response.question.name, checked: true
                     - else
-                      = f.text_field donor_response.question.name, class: :input,
-                        value: donor_response.value
-              p.has-text-right
-                = f.submit "Save", class: %w(button is-primary), data: { action: 'donor_question#validateRequiredFields' }
+                      = f.check_box donor_response.question.name
+                  - elsif donor_response.question.type == 'statictext'
+                  - else
+                    = f.text_field donor_response.question.name, class: :input,
+                      value: donor_response.value
+            p.has-text-right
+              = f.submit "Save", class: %w(button is-primary), data: { action: 'donor_question#validateRequiredFields' }

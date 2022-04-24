@@ -25,9 +25,3 @@ class PaymentMethod < ApplicationRecord
     type.demodulize
   end
 end
-
-module PaymentMethods
-  class Card < PaymentMethod; end
-  class BankAccount < PaymentMethod; end
-  class AcssDebit < PaymentMethod; end
-end

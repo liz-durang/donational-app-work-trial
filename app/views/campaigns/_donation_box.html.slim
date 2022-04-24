@@ -6,7 +6,7 @@
     .wizard-card-content
       p You are currently logged in
       p
-        => link_to 'Edit your account', edit_accounts_path
+        => link_to 'Edit your account', edit_accounts_path, target: "_top"
         ' or
         = sign_out_link
 - else
@@ -31,7 +31,7 @@
                 .control.column.is-full
                   label for="portfolio-#{mp.id}"
                     level.is-mobile data-action="wizard#selectPortfolio"
-                      div.card.has-background-primary style="cursor: pointer;" id="portfolio-link-#{mp.id}"
+                      div.card style="cursor: pointer;" id="portfolio-link-#{mp.id}"
                         div.card-content
                           .label
                             .span.icon.is-hidden = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}", data: { action: 'wizard#selectPortfolio' }

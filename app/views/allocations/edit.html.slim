@@ -11,9 +11,6 @@ section.section
       li = link_to edit_allocations_path do
         = icon_tag('fa-balance-scale')
         | Portfolio Allocation
-      li = link_to new_contribution_path do
-        = icon_tag('fa-heart')
-        | Donate
       li = link_to edit_accounts_path do
         = icon_tag('fa-cog')
         | Account settings
@@ -22,14 +19,17 @@ section.section
         | Donation history
 
 section.embossed.section
-  .container.has-text-centered
-    p.content
-      ' Your donations are automatically distributed to the
-      strong => pluralize(@view_model.allocations.count, 'charity')
-      | in your portfolio
+  .columns.is-centered
+    .column.is-6
+      .container.has-text-centered
+        p.content
+          ' Your donations are automatically distributed to the
+          strong => pluralize(@view_model.allocations.count, 'charity')
+          | in your portfolio
 
-    - if @view_model.managed_portfolio?
-      p.content
-        ' Your portfolio is managed by
-        strong => @view_model.portfolio_manager_name
-    = render "editable_allocations_table"
+        - if @view_model.managed_portfolio?
+          p.content
+            ' Your portfolio is managed by
+            strong => @view_model.portfolio_manager_name
+
+      section.section = render "editable_allocations_table"

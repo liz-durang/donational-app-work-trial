@@ -12,23 +12,19 @@ class ContributionsController < ApplicationController
   end
 
   def new
-    if active_subscription.present?
-      redirect_to edit_accounts_path
-    else
-      @view_model = OpenStruct.new(
-        target_amount_cents: target_amount_cents,
-        subscription: new_subscription,
-        active_payment_method?: payment_method.present?,
-        payment_method: payment_method || current_donor.payment_methods.new,
-        partner_affiliation: partner_affiliation,
-        partner_affiliation?: partner_affiliation.present?,
-        selectable_portfolios: selectable_portfolios,
-        currency_code: current_currency.iso_code,
-        amount_cents: new_subscription.amount_cents,
-        tips_options: tips_options,
-        show_plaid?: partner.supports_plaid?
-      )
-    end
+    @view_model = OpenStruct.new(
+      target_amount_cents: target_amount_cents,
+      subscription: new_subscription,
+      active_payment_method?: payment_method.present?,
+      payment_method: payment_method || current_donor.payment_methods.new,
+      partner_affiliation: partner_affiliation,
+      partner_affiliation?: partner_affiliation.present?,
+      selectable_portfolios: selectable_portfolios,
+      currency_code: current_currency.iso_code,
+      amount_cents: new_subscription.amount_cents,
+      tips_options: tips_options,
+      show_plaid?: partner.supports_plaid?
+    )
   end
 
   def create

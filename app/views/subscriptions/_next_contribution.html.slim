@@ -1,4 +1,4 @@
-- if subscription&.start_at&.to_date&.today?
+- if subscription&.start_at&.to_date&.today? && !subscription.once?
   p = t :first_contribution_message, amount: Money.new(subscription.amount_cents, @view_model.currency).format(no_cents_if_whole: false)
 
 - if subscription&.future_contribution_scheduled?

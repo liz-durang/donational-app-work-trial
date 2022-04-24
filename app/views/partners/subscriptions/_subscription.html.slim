@@ -73,7 +73,7 @@
             = link_to 'Cancel Trial Giving', contribution_path(id: subscription, trial: true), class: 'is-danger', method: :delete
 
     .has-text-left
-      p = f.submit 'Update donation plan', class: %w(button is-primary)
+      p = f.submit 'Change my donation', class: %w(button is-primary)
   - if @view_model.active && subscription.future_contribution_scheduled?
     .has-text-left
       a.modal-button data-target="ask-to-pause-modal" Cancel my upcoming donations

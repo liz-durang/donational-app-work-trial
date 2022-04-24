@@ -24,14 +24,13 @@
             a.button.is-static = @view_model.currency
           .control
             = f.number_field :amount_dollars, class: 'input', value: cents_to_dollars(@view_model.subscription.amount_cents)
-      - unless subscription.started?
-        .column
-          .field
-            label.control
-              .label Starting on
-              .control.has-icons-left
-                  = icon_tag('fas fa-calendar')
-                  = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 4.years.from_now.to_date.iso8601
+      .column
+        .field
+          label.control
+            .label Starting on
+            .control.has-icons-left
+                = icon_tag('fas fa-calendar')
+                = f.date_field :start_at, class: :input, min: Date.today.iso8601, max: 4.years.from_now.to_date.iso8601
       .column
         .field
           label.control
@@ -70,7 +69,7 @@
 
 
     .has-text-left
-      p = f.submit 'Update donation plan', class: %w(button is-primary)
+      p = f.submit 'Change my donation', class: %w(button is-primary)
   - if subscription.future_contribution_scheduled?
     .has-text-left
       a.modal-button data-target="ask-to-pause-modal" Cancel my upcoming donations
@@ -89,6 +88,6 @@
             = f2.hidden_field :start_at, class: :input, value: 3.months.from_now.to_date.iso8601
           - else
             = f2.hidden_field :start_at, class: :input, value: @view_model.subscription.start_at + 3.months
-          p = f2.submit 'Sounds great!', class: %w(button is-primary), id: 'pause_btn'
-        br
-        p = link_to 'No, I still want to cancel', contribution_path(id: subscription), class: 'is-danger', method: :delete
+          p = f2.submit 'Pause my donations for 3 months', class: %w(button is-primary), id: 'pause_btn'
+
+        p = link_to 'No, I want to cancel', contribution_path(id: subscription), class: 'is-danger', method: :delete
