@@ -9,7 +9,7 @@ ruby File.read('.ruby-version').strip
 gem 'bootsnap', require: false
 gem 'pg'
 gem 'puma'
-gem 'rails', '~> 6.1.0'
+gem 'rails', '~> 7.0.0'
 gem 'redis'
 
 # Uploads
@@ -32,11 +32,13 @@ gem 'sidekiq-scheduler'
 # Authentication
 gem 'omniauth'
 gem 'omniauth-auth0'
+gem 'omniauth-rails_csrf_protection'
 
 # Assets
 gem 'jquery-rails'
 gem 'sassc-rails'
 gem 'slim-rails'
+gem 'sprockets-rails'
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 gem 'webpacker'
@@ -86,9 +88,6 @@ group :development do
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
-  gem 'spring'
-  gem 'spring-commands-rspec'
-  gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'web-console', '>= 3.3.0'
 end
 

@@ -55,7 +55,8 @@ Rails.application.routes.draw do
   post 'profiles/:username/contributions' => 'profile_contributions#create', as: :profile_contributions
 
   # Sessions and Authentication
-  resource :sessions, only: %i[new show destroy]
+  resource :sessions, only: %i[new destroy]
+  get '/login' => 'sessions#new', as: :login
   get '/auth/oauth2/callback' => 'auth0#callback'
   get '/auth/failure' => 'auth0#failure'
 
@@ -70,14 +71,15 @@ Rails.application.routes.draw do
   if Rails.env.production?
     Sidekiq::Web.use Rack::Auth::Basic do |username, password|
       ActiveSupport::SecurityUtils.secure_compare(::Digest::SHA256.hexdigest(username),
-                                                  ::Digest::SHA256.hexdigest(ENV['SIDEKIQ_USERNAME'])) &
+                                                  ::Digest::SHA256.hexdigest(ENV.fetch('SIDEKIQ_USERNAME', nil))) &
         ActiveSupport::SecurityUtils.secure_compare(::Digest::SHA256.hexdigest(password),
-                                                    ::Digest::SHA256.hexdigest(ENV['SIDEKIQ_PASSWORD']))
+                                                    ::Digest::SHA256.hexdigest(ENV.fetch('SIDEKIQ_PASSWORD', nil)))
     end
   end
   mount Sidekiq::Web, at: '/sidekiq'
 
   get '/:campaign_slug' => 'campaigns#show', as: :campaigns, defaults: { format: :html }
   post '/:campaign_slug/contributions' => 'campaign_contributions#create', as: :campaign_contributions
-  get '/:campaign_slug/donation-box' => 'campaigns#donation_box', as: :campaigns_donation_box, defaults: { format: :html }
+  get '/:campaign_slug/donation-box' => 'campaigns#donation_box', as: :campaigns_donation_box,
+      defaults: { format: :html }
 end

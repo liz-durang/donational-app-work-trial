@@ -1,0 +1,14 @@
+- content_for :hero do
+  section.hero
+    .hero-head
+      = render 'shared/nav'
+    .hero-body
+      .container
+        = display_flash_messages
+
+section.section
+    .columns.is-centered
+        .column.is-narrow
+            h1.title.is-2.is-spaced Donational
+            p.subtitle We’ll help you donate with confidence
+            = sign_in_link css_class: 'button is-primary is-medium'

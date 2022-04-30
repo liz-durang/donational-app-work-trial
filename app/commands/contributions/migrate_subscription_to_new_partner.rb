@@ -15,7 +15,8 @@ module Contributions
         amount_cents: subscription.amount_cents,
         tips_cents: subscription.tips_cents,
         partner_contribution_percentage: subscription.partner_contribution_percentage,
-        migration: true)
+        migration: true
+      )
       nil
     end
 

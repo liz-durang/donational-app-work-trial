@@ -1,12 +1,7 @@
 class SessionsController < ApplicationController
   skip_forgery_protection only: [:destroy]
 
-  def new
-    log_out! if logged_in?
-    redirect_to '/auth/auth0'
-  end
-
-  def show; end
+  def new; end
 
   def destroy
     log_out!

@@ -3,6 +3,7 @@ require:
   - rubocop-rails
 
 AllCops:
+  NewCops: enable
   Exclude:
     - db/schema.rb
     - db/migrate/*
@@ -10,11 +11,11 @@ AllCops:
     - vendor/**/*
     - node_modules/**/*
 
-Style/Documentation:
-  Enabled: false
-
-Metrics/LineLength:
+Layout/LineLength:
   Max: 120
 
 Metrics/BlockLength:
-  ExcludedMethods: [describe] # excludes RSpec.describe
+  Exclude:
+    - spec/**/*
+    - config/**/*
+    - lib/tasks/**/*.rake

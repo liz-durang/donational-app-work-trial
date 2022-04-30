@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_26_092337) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_04_24_211012) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -21,7 +20,7 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
     t.string "record_type", null: false
     t.uuid "record_id", null: false
     t.bigint "blob_id", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -32,8 +31,8 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
     t.string "content_type"
     t.text "metadata"
     t.bigint "byte_size", null: false
-    t.string "checksum", null: false
-    t.datetime "created_at", null: false
+    t.string "checksum"
+    t.datetime "created_at", precision: nil, null: false
     t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
@@ -54,9 +53,9 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
     t.uuid "portfolio_id"
     t.string "organization_ein"
     t.integer "percentage"
-    t.datetime "deactivated_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "deactivated_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["organization_ein"], name: "index_allocations_on_organization_ein"
     t.index ["portfolio_id"], name: "index_active_allocations_on_subscription_id", where: "(deactivated_at IS NULL)"
     t.index ["portfolio_id"], name: "index_allocations_on_portfolio_id"
@@ -69,8 +68,8 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
     t.string "slug"
     t.integer "target_amount_cents"
     t.string "default_contribution_amounts", array: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "contribution_amount_help_text"
     t.boolean "allow_one_time_contributions", default: true, null: false
     t.integer "minimum_contribution_amount", default: 10
@@ -88,8 +87,8 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
     t.integer "immigration_and_refugees"
     t.integer "education"
     t.integer "economic_development"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "criminal_justice"
     t.index ["donor_id"], name: "index_cause_area_relevances_on_donor_id"
   end
@@ -98,15 +97,15 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
     t.uuid "portfolio_id"
     t.integer "amount_cents"
     t.json "receipt"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "scheduled_at"
-    t.datetime "processed_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "scheduled_at", precision: nil
+    t.datetime "processed_at", precision: nil
     t.integer "tips_cents", default: 0
     t.uuid "donor_id"
-    t.datetime "failed_at"
+    t.datetime "failed_at", precision: nil
     t.integer "payment_processor_fees_cents"
-    t.datetime "refunded_at"
+    t.datetime "refunded_at", precision: nil
     t.string "external_reference_id"
     t.uuid "partner_id"
     t.integer "partner_contribution_percentage", default: 0
@@ -116,7 +115,7 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
     t.integer "donor_advised_fund_fees_cents"
     t.string "payment_status", default: "unprocessed"
     t.integer "amount_donated_after_fees_cents"
-    t.datetime "disputed_at"
+    t.datetime "disputed_at", precision: nil
     t.index ["donor_id"], name: "index_contributions_on_donor_id"
     t.index ["partner_id"], name: "index_contributions_on_partner_id"
     t.index ["portfolio_id"], name: "index_contributions_on_portfolio_id"
@@ -129,8 +128,8 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
     t.uuid "contribution_id", null: false
     t.uuid "grant_id"
     t.integer "amount_cents"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["allocation_id"], name: "index_donations_on_allocation_id"
     t.index ["contribution_id"], name: "index_donations_on_contribution_id"
     t.index ["grant_id"], name: "index_donations_on_grant_id"
@@ -142,8 +141,8 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
     t.string "first_name"
     t.string "last_name"
     t.string "email"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.decimal "donation_rate"
     t.integer "annual_income_cents"
     t.boolean "donated_prior_year"
@@ -164,7 +163,7 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
     t.string "house_name_or_number"
     t.string "postcode"
     t.boolean "uk_gift_aid_accepted", default: false, null: false
-    t.datetime "deactivated_at"
+    t.datetime "deactivated_at", precision: nil
     t.index ["username"], name: "index_donors_on_username", unique: true
   end
 
@@ -179,11 +178,11 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
     t.string "organization_ein"
     t.integer "amount_cents"
     t.json "receipt"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "scheduled_at"
-    t.datetime "processed_at"
-    t.datetime "voided_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "scheduled_at", precision: nil
+    t.datetime "processed_at", precision: nil
+    t.datetime "voided_at", precision: nil
     t.index ["organization_ein"], name: "index_grants_on_organization_ein"
   end
 
@@ -192,9 +191,9 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
     t.uuid "portfolio_id"
     t.string "name"
     t.text "description"
-    t.datetime "hidden_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "hidden_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "display_order"
     t.boolean "featured"
     t.index ["partner_id"], name: "index_managed_portfolios_on_partner_id"
@@ -204,14 +203,14 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
   create_table "organizations", id: false, force: :cascade do |t|
     t.string "ein", null: false
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "local_impact"
     t.boolean "global_impact"
     t.boolean "immediate_impact"
     t.boolean "long_term_impact"
     t.string "cause_area"
-    t.datetime "deactivated_at"
+    t.datetime "deactivated_at", precision: nil
     t.text "mission"
     t.text "context"
     t.text "impact"
@@ -232,8 +231,8 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
     t.uuid "partner_id"
     t.uuid "campaign_id"
     t.jsonb "custom_donor_info"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.uuid "referred_by_donor_id"
     t.index ["campaign_id"], name: "index_partner_affiliations_on_campaign_id"
     t.index ["donor_id"], name: "index_partner_affiliations_on_donor_id"
@@ -247,8 +246,8 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
     t.text "description"
     t.decimal "platform_fee_percentage", default: "0.0"
     t.string "primary_branding_color"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.jsonb "donor_questions_schema"
     t.string "payment_processor_account_id"
     t.string "api_key"
@@ -262,7 +261,7 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
     t.text "receipt_tax_info"
     t.string "receipt_charity_name"
     t.decimal "donor_advised_fund_fee_percentage", default: "0.01"
-    t.datetime "deactivated_at"
+    t.datetime "deactivated_at", precision: nil
   end
 
   create_table "payment_methods", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -270,7 +269,7 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
     t.string "payment_processor_customer_id"
     t.string "name"
     t.string "last4"
-    t.datetime "deactivated_at"
+    t.datetime "deactivated_at", precision: nil
     t.string "address_zip_code"
     t.integer "retry_count", default: 0
     t.string "type", default: "PaymentMethods::Card"
@@ -282,9 +281,9 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
 
   create_table "portfolios", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "creator_id"
-    t.datetime "deactivated_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "deactivated_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["creator_id"], name: "index_active_subscriptions_on_donor_id", where: "(deactivated_at IS NULL)"
     t.index ["creator_id"], name: "index_portfolios_on_creator_id"
   end
@@ -325,9 +324,9 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
   create_table "selected_portfolios", force: :cascade do |t|
     t.uuid "donor_id"
     t.uuid "portfolio_id"
-    t.datetime "deactivated_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "deactivated_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["deactivated_at"], name: "index_selected_portfolios_on_deactivated_at"
     t.index ["donor_id"], name: "index_selected_portfolios_on_donor_id"
     t.index ["portfolio_id"], name: "index_selected_portfolios_on_portfolio_id"
@@ -336,21 +335,21 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
   create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "donor_id"
     t.uuid "portfolio_id"
-    t.datetime "start_at", null: false
-    t.datetime "deactivated_at"
+    t.datetime "start_at", precision: nil, null: false
+    t.datetime "deactivated_at", precision: nil
     t.string "frequency"
     t.integer "amount_cents"
     t.integer "tips_cents", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "last_reminded_at"
-    t.datetime "last_scheduled_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "last_reminded_at", precision: nil
+    t.datetime "last_scheduled_at", precision: nil
     t.uuid "partner_id"
     t.integer "partner_contribution_percentage", default: 0
     t.string "amount_currency", default: "usd", null: false
-    t.datetime "trial_start_at"
-    t.datetime "trial_last_scheduled_at"
-    t.datetime "trial_deactivated_at"
+    t.datetime "trial_start_at", precision: nil
+    t.datetime "trial_last_scheduled_at", precision: nil
+    t.datetime "trial_deactivated_at", precision: nil
     t.integer "trial_amount_cents"
     t.index ["deactivated_at"], name: "index_subscriptions_on_deactivated_at"
     t.index ["donor_id"], name: "index_subscriptions_on_donor_id"
@@ -363,8 +362,8 @@ ActiveRecord::Schema.define(version: 2022_01_26_092337) do
     t.string "hook_url"
     t.string "hook_type"
     t.uuid "partner_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["partner_id"], name: "index_zapier_webhooks_on_partner_id"
   end
 

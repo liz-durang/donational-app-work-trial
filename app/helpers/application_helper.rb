@@ -2,11 +2,11 @@ require 'commonmarker'
 
 module ApplicationHelper
   def sign_in_button
-    link_to 'Sign in', new_sessions_path, class: 'button is-outlined'
+    link_to 'Sign in', '/auth/auth0', method: :post, class: 'button is-outlined'
   end
 
   def sign_in_link(css_class: nil)
-    link_to 'Sign in', new_sessions_path, class: css_class
+    link_to 'Sign in', '/auth/auth0', method: :post, class: css_class
   end
 
   def sign_out_link(css_class: nil)

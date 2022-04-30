@@ -47,15 +47,10 @@ module Contributions
 
         Portfolios::SelectPortfolio.run(donor: donor, portfolio: portfolio)
 
-        return if migration
-
-        send_confirmation_email!(subscription)
-        if new_contribution
-          TriggerSubscriptionWebhook.perform_async('create', partner.id, subscription.id)
-        else
-          TriggerSubscriptionWebhook.perform_async('update', partner.id, subscription.id)
+        unless migration
+          send_confirmation_email!(subscription)
+          TriggerSubscriptionWebhook.perform_async(new_contribution ? 'create' : 'update', partner.id, subscription.id)
         end
-
       end
 
       nil

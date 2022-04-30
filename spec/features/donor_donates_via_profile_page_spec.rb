@@ -23,6 +23,7 @@ RSpec.describe "Donor makes a donation from a donors's profile page", type: :fea
     fill_in_donation_info
     
     find('.credit-card-link').click
+
     click_on 'Donate'
 
     expect(page).to have_content('Your card number is incomplete.')
