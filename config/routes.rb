@@ -3,8 +3,9 @@
 Rails.application.routes.draw do
   # Acquisition
   root 'pages#index'
-  %w[mission donate-with-confidence methodology faq].each do |page_slug|
-    get page_slug => 'pages#show', page: page_slug.underscore, format: :html
+
+  %w[mission donate-with-confidence methodology faq privacy-policy terms acceptable-use].each do |slug|
+    get slug => 'pages#show', page: slug.underscore, format: :html
   end
 
   resources :organizations, path: 'charities', only: :index
