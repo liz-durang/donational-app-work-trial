@@ -39,7 +39,7 @@ RSpec.describe 'Partner embeds iframe', type: :feature do
         body: "<html><body><script id='load_widget' src='#{widget_js_url}'></script></body></html>"
       )
 
-    visit "http://1fortheworld.org/"
+    visit 'http://1fortheworld.org/'
   end
 
   def campaign_page_iframe_should_be_rendered
@@ -50,7 +50,7 @@ RSpec.describe 'Partner embeds iframe', type: :feature do
       expect(page).to have_content('Donational')
       expect(page).to have_content('One for the World')
       expect(page).to have_content('The Wharton School')
-      expect(page).to have_content('Donate now')
+      expect(page).to have_content('Take the pledge')
       expect(page).to have_content('Donation frequency')
     end
   end
@@ -60,7 +60,7 @@ RSpec.describe 'Partner embeds iframe', type: :feature do
 
     iframe = all('iframe')[0]
     within_frame iframe do
-      expect(page).to have_content('Donate now')
+      expect(page).to have_content('Take the pledge')
       expect(page).to have_content('Donation frequency')
       expect(page).to have_content('We use smart and secure online payments to ensure that your donations are simple, secure, and avoid fees.')
       expect(page).to have_content('Next')
@@ -80,7 +80,7 @@ RSpec.describe 'Partner embeds iframe', type: :feature do
             name: 'school',
             title: 'What organization/school are you affiliated with?',
             type: 'select',
-            options: ['Harvard', 'Wharton', 'Other'],
+            options: %w[Harvard Wharton Other],
             required: true
           },
           {
