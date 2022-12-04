@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@rails/activestorage": "^6.1.0",
+    "@rails/activestorage": "^7.0.4",
     "@rails/webpacker": "5.4.3",
     "dotenv": "^6.0.0",
     "stimulus": "^2.0.0",

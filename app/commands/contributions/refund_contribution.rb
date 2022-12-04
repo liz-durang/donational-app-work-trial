@@ -53,7 +53,8 @@ module Contributions
 
     def refund_failed!(errors:)
       # Track error
-      Appsignal.set_error(RefundChargeError.new(errors), contribution_id: contribution.id)
+      Sentry.capture_exception(RefundChargeError.new(errors), extra: { contribution_id: contribution.id })
+
       contribution.update(receipt: errors, failed_at: Time.zone.now)
     end
 

@@ -49,18 +49,15 @@ end
 
 # Monitoring
 gem 'analytics-ruby'
-gem 'appsignal'
 gem 'barnes'
 gem 'gem-licenses'
 gem 'lograge'
-gem 'sentry-raven'
+gem 'sentry-rails'
+gem 'sentry-ruby'
+gem "sentry-sidekiq"
 
 # Commands
 gem 'mutations'
-
-# API
-gem 'jbuilder'
-gem 'rack-cors'
 
 # Payments
 gem 'money-rails'
@@ -68,8 +65,8 @@ gem 'plaid', '~> 12.0'
 gem 'stripe'
 
 # Search
-gem 'elasticsearch', '~> 6.0'
-gem 'searchkick', '~> 4.0'
+gem 'searchkick'
+gem 'elasticsearch'
 
 # External Integrations
 gem 'faraday'

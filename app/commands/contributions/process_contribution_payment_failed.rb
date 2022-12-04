@@ -13,7 +13,7 @@ module Contributions
 
     def execute
       # Track error
-      Appsignal.set_error(ChargeCustomerError.new(errors), contribution_id: contribution.id)
+      Sentry.capture_exception(ChargeCustomerError.new(errors), extra: { contribution_id: contribution.id })
 
       # Update Contribution
       contribution.update(
