@@ -76,12 +76,12 @@ RSpec.describe 'Donors updates payment method', type: :feature do
     within_frame 'plaid-link-iframe-1' do
       click_on 'Continue'
 
-      expect(page).to have_content('Select your bank', wait: 5)
-      find_field('Search').send_keys('chime')
+      expect(page).to have_content('Select your institution', wait: 5)
+      find_field('Search Institutions').send_keys('chime')
       click_on 'Chime'
 
-      fill_in 'username', with: 'user_good'
-      fill_in 'password', with: 'pass_good'
+      fill_in 'Username', with: 'user_good'
+      fill_in 'Password', with: 'pass_good'
 
       click_on 'Submit'
 
@@ -98,8 +98,6 @@ RSpec.describe 'Donors updates payment method', type: :feature do
     click_on 'Connect your bank account'
     find('input[data-acss-target="accountHolder"]').set 'Real Donor Name'
     find('a[data-acss-target="submit"]', wait: 5).click
-
-    sleep 10
 
     # For some reason, the content of the iframe is not accessible via capybara. Even after sleeping.
     #  - Could it be related to HTTPS vs HTTP content?
