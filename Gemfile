@@ -13,7 +13,7 @@ gem 'rails', '~> 7.0.0'
 gem 'redis'
 
 # Uploads
-gem 'active_storage-postgresql'
+gem 'aws-sdk-s3', require: false
 gem 'image_processing'
 gem 'mini_magick'
 
@@ -27,7 +27,7 @@ gem 'premailer-rails'
 
 # Jobs
 gem 'sidekiq'
-gem 'sidekiq-scheduler'
+gem 'sidekiq-scheduler', github: 'sidekiq-scheduler/sidekiq-scheduler'
 
 # Authentication
 gem 'omniauth'
@@ -54,7 +54,7 @@ gem 'gem-licenses'
 gem 'lograge'
 gem 'sentry-rails'
 gem 'sentry-ruby'
-gem "sentry-sidekiq"
+gem 'sentry-sidekiq'
 
 # Commands
 gem 'mutations'
@@ -65,8 +65,8 @@ gem 'plaid', '~> 12.0'
 gem 'stripe'
 
 # Search
-gem 'searchkick'
 gem 'elasticsearch'
+gem 'searchkick'
 
 # External Integrations
 gem 'faraday'
