@@ -67,6 +67,13 @@ Rails.application.routes.draw do
   post :get_bank_token, to: 'plaid_auth#get_bank_token'
   post :webhook, to: 'stripe#webhook'
 
+  # API
+  namespace :api do
+    namespace :v1, defaults: { format: :json } do
+      resources :hooks, only: %i[index create]
+    end
+  end
+
   # Administration
   require 'sidekiq/web'
   if Rails.env.production?
