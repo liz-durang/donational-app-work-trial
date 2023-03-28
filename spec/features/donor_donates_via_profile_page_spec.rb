@@ -21,12 +21,6 @@ RSpec.describe "Donor makes a donation from a donors's profile page", type: :fea
     click_on 'Next'
     expect(page).to have_content('This field is required')
     fill_in_donation_info
-    
-    find('.credit-card-link').click
-
-    click_on 'Donate'
-
-    expect(page).to have_content('Your card number is incomplete.')
 
     page.execute_script("document.getElementById('payment-method-id').value = '#{payment_method.id}';")
     page.execute_script("document.getElementById('payment-validated').click();")

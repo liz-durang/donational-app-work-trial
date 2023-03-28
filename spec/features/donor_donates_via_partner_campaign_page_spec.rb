@@ -19,14 +19,9 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     expect(page).not_to have_content('Managed Portfolio that has been hidden')
     find("#portfolio-link-#{ManagedPortfolio.find_by(name: 'Top Picks').id}").click
-    click_on 'Next'
-
-    expect(page).to have_content('This field is required')
+    find("a.icon.right-arrow").click
 
     submit_donor_info
-
-    click_on 'Next'
-    expect(page).to have_content('This field is required')
 
     fill_in_donation_info
 
@@ -60,6 +55,8 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     expect(page).not_to have_content('Managed Portfolio that has been hidden')
     find("#portfolio-link-#{ManagedPortfolio.find_by(name: 'Top Picks').id}").click
 
+    find("a.icon.right-arrow").click
+
     submit_donor_info
     fill_in_donation_info
 
@@ -86,6 +83,8 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     expect(page).not_to have_content('Managed Portfolio that has been hidden')
     find("#portfolio-link-#{ManagedPortfolio.find_by(name: 'Top Picks').id}").click
+
+    find("a.icon.right-arrow").click
 
     submit_donor_info
 
@@ -126,6 +125,8 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     expect(page).not_to have_content('Managed Portfolio that has been hidden')
     find("#portfolio-link-#{ManagedPortfolio.find_by(name: 'Top Picks').id}").click
+
+    find("a.icon.right-arrow").click
 
     submit_donor_info
 
@@ -242,7 +243,8 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     fill_in 'campaign_contribution[last_name]', with: 'Yamey'
     fill_in 'campaign_contribution[email]', with: "ian+#{RSpec.configuration.seed}@donational.org"
 
-    click_on 'Next'
+
+    find("a.icon.right-arrow", wait: 3).click
   end
 
   def fill_in_donation_info
@@ -257,6 +259,6 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     expect(page).to have_content('Your pledge starts in 3 months.')
 
-    click_on 'Next'
+    find("a.icon.right-arrow", wait: 3).click
   end
 end

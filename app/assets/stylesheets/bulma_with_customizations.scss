@@ -55,6 +55,10 @@ section {
     border-top: 1px solid #eee;
   }
 
+  &.campaign {
+    padding: 0;
+  }
+
   &.is-medium {
     padding-top: 2rem;
     padding-bottom: 2rem;
@@ -69,6 +73,15 @@ section {
   th,
   td {
     vertical-align: middle;
+  }
+}
+
+.box.campaign {
+  box-shadow: none;
+  margin-left: 42px;
+
+  & .content h2 {
+    color: #7929e4 !important;
   }
 }
 
@@ -105,6 +118,47 @@ h6,
 .column.is-4.search-result {
   margin: 10px 0;
   width: 32%;
+}
+
+.column.no-padding {
+  padding-right: 2px;
+  padding-left: 0px;
+
+  &.image {
+    margin-top: -96px;
+  }
+
+  &.donation-box {
+    margin-right: 12px;
+    height: 100vh;
+    min-height: 772px;
+
+    & #payment-form.form {
+      height: 100vh;
+    }
+  }
+
+  & p.has-text-centered.help.footer {
+    background-color: white;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+    color: #4a4a4a;
+    padding: 1rem;
+    margin-top: 0;
+  }
+}
+
+.column.partner-box {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  margin: 28px;
+  height: 264px;
+  margin-top: 120px;
+
+  & h1 {
+    & img {
+      width: unset;
+    }
+  } 
 }
 
 .results {
@@ -165,11 +219,11 @@ select.greyColor option:not(:first-child) {
 }
 
 .is-light-yellow {
-  background-color: #FCF8E5;
+  background-color: #fcf8e5;
 }
 
 .is-light-blue {
-  background-color: #EBFAFF;
+  background-color: #ebfaff;
 }
 
 .notification-title {
@@ -187,11 +241,11 @@ select.greyColor option:not(:first-child) {
 }
 
 .checkmark svg {
-  color: #0DB4A0;
+  color: #0db4a0;
 }
 
 .credit-card-link {
-  color: #0C929F !important;
+  color: #0c929f !important;
   text-decoration: none !important;
 }
 

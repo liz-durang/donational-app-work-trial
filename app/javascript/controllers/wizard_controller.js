@@ -9,6 +9,7 @@ export default class extends Controller {
     this.updateGiftAidFieldsVisibility();
     this.updateGiftAidAmount();
     this.showStep(0)
+    this.markFirstAsDefault();
   }
 
   next(event) {
@@ -42,7 +43,12 @@ export default class extends Controller {
 
   selectPortfolio(event) {
     this.portfolioSelectedTarget.value = true.toString();
-    this.next(event)
+  }
+
+  markFirstAsDefault() {
+    var radioButtons = document.getElementsByName('campaign_contribution[managed_portfolio_id]');
+    radioButtons.item(0).checked = true;
+    this.portfolioSelectedTarget.value = true.toString();
   }
 
   donate(event) {

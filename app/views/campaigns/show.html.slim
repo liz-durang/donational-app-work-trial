@@ -1,29 +1,30 @@
 - content_for :hero do
   section.hero.has-background
-    .hero-background
-      - if @view_model.banner_image.attached? && @view_model.banner_image.variable?
-        - banner_image_url = rails_representation_url(@view_model.banner_image.variant(resize: '1024x768'))
-        figure style="background-image: url(#{banner_image_url})"
-
     .hero-head
       = render 'shared/nav'
-    .hero-body
-      .container
-        .columns
-          .column.is-6
-            h1.title.is-spaced
-              - if @view_model.partner_logo.attached? && @view_model.partner_logo.variable?
-                = image_tag @view_model.partner_logo.variant(resize: '400x200'),
-                  data: { target: 'file.preview' },
-                  alt: @view_model.partner
-              - else
-                = @view_model.partner_name
-            h2.subtitle = @view_model.partner_description
-section.section.embossed
-  .container
+  
+section.section.campaign
     .columns
-      .column.is-6
-        .box
+      .column.is-8.no-padding.image
+        section.hero.has-background
+          .hero-background
+            - if @view_model.banner_image.attached? && @view_model.banner_image.variable?
+              - banner_image_url = rails_representation_url(@view_model.banner_image.variant(resize: '960x480'))
+              figure style="background-image: url(#{banner_image_url})"
+
+          .hero-body
+            .container
+              .columns
+                .column.is-6.partner-box
+                  h1.title
+                    - if @view_model.partner_logo.attached? && @view_model.partner_logo.variable?
+                      = image_tag @view_model.partner_logo.variant(resize: '132x41'),
+                        data: { target: 'file.preview' },
+                        alt: @view_model.partner
+                    - else
+                      = @view_model.partner_name
+                  h2.subtitle.campaign = @view_model.partner_description
+        .box.campaign
           .content = markdown_to_html @view_model.campaign_description
           javascript:
             var links = document.links;
@@ -32,7 +33,7 @@ section.section.embossed
                 links[i].target = '_blank';
               }
             }
-      .column.is-offset-1
+      .column.no-padding.donation-box
         = display_flash_messages
         = render 'donation_box'
-        p.has-text-centered.help = @view_model.footer_text
+        p.has-text-centered.help.footer = @view_model.footer_text

@@ -2,7 +2,7 @@
   position: relative;
 
   .hero-body h1.title, .hero-body h2.subtitle {
-    background: rgba(255,255,255,0.8);
+    background: none;
     padding: 1rem;
   }
 
@@ -16,6 +16,40 @@
   .navbar-burger {
     border: none;
   }
+
+  .navbar {
+    box-shadow: 0px 4px 16px;
+    opacity: 0.8;
+    height: 96px;
+    background-color: white;
+    z-index: 10;
+  }
+
+  .navbar-menu .navbar-end .navbar-sign-in {
+    margin: auto;
+    transition: color 0.2s ease-in-out,background 0.2s ease-in-out;
+    border-radius: 8px;
+    color: #7929E4;
+    height: 40px;
+    width: 116px;
+    border: 1px solid #7929E4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 24px;
+  
+    &:hover {
+      background-color: rgba(0,0,0,0.1);
+    }
+  }
+
+  .navbar-icon {
+    margin-top: 36px;
+  }
+
 }
 
 .hero.has-gradient-background {

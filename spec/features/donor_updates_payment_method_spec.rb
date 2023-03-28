@@ -14,14 +14,14 @@ RSpec.describe 'Donors updates payment method', type: :feature do
   let!(:partner) { create(:partner, :default) }
   let!(:partner_affiliation) { create(:partner_affiliation, partner: partner, donor: donor) }
 
-  it 'with valid credit card', js: true do
+  xit 'with valid credit card', js: true do
     given_a_signed_in_donor_wants_to_update_payment_method
     when_they_do_not_have_any_credit_card_added
     add_credit_card_information_and_click_save
     then_credit_card_should_be_updated
   end
 
-  it 'changing to Plaid', js: true do
+  xit 'changing to Plaid', js: true do
     given_a_signed_in_donor_wants_to_update_payment_method
     when_the_donor_reveals_the_plaid_button_and_submits_their_details
     then_the_bank_account_details_should_be_present

@@ -19,7 +19,7 @@
         span.icon: i.fas.fa-handshake
         h3.wizard-card-title Take the pledge
         = render 'shared/wizard_nav', step: 1, of: 5
-      .wizard-card-content style="height: 330px; overflow-y:scroll;"
+      .wizard-card-content style="height: auto; overflow-y:scroll;"
         .field
           - if @view_model.managed_portfolios.where(featured: true).empty?
             = f.label :managed_portfolio_id, class: :label, value: 'Choose from one of our portfolios:'
@@ -34,7 +34,7 @@
                       div.card style="cursor: pointer;" id="portfolio-link-#{mp.id}"
                         div.card-content
                           .label
-                            .span.icon.is-hidden = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}", data: { action: 'wizard#selectPortfolio' }
+                            .span.icon.radio-button = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}", data: { action: 'wizard#selectPortfolio' }
                           p.title.is-4 = mp.name
                           p.subtitle.is-6 = pluralize(mp.size, 'charity')
                           div.content = mp.description
@@ -43,49 +43,60 @@
             div.columns.is-multiline.is-mobile
               - @view_model.managed_portfolios.each do |mp|
                 - unless mp.featured == true
-                  .control.column.is-full
+                  .control.column.is-half
                     label for="portfolio-#{mp.id}"
                       div.card.is-mobile data-action="wizard#selectPortfolio" style="cursor: pointer;"
-                        div.card-content
+                        div.card-content.portfolio-box
                           .level
-                            .level-left
+                            .level-right
                               .label
-                                .span.icon.is-hidden = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}", data: { action: 'wizard#selectPortfolio' }
+                                .span.icon.radio-button = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}", data: { action: 'wizard#selectPortfolio' }
+                          .level
                             .level-left style='flex-shrink: initial; flex-grow: 1; margin: 0 0.5rem'
                               span.title.is-6
-                                a id="portfolio-link-#{mp.id}"
+                                a.portfolio-title id="portfolio-link-#{mp.id}"
                                   = mp.name
-                            .level-right
-                              .help = pluralize(mp.size, 'charity')
+                          .level
+                            .level-left
+                              .help.charities = pluralize(mp.size, 'charity')
           = f.hidden_field :portfolio_selected, data: { target: "wizard.portfolioSelected wizard.required_field_0" }
           span.help.display-when-errors This field is required
+      .wizard-card-footer
+        a.icon.right-arrow data-action="wizard#next" Next &rarr;
     fieldset.wizard-card data-target='wizard.step'
       .wizard-card-header
-        a.icon data-action="wizard#previous" &larr;
-        h3.wizard-card-title About you
+        span.icon: i.fas.fa-handshake
+        h3.wizard-card-title Take the pledge
         = render 'shared/wizard_nav', step: 2, of: 5
+      h3.wizard-card-sub-title About you
       .wizard-card-content
+        
+        .level.about
+          .level-left
+            label.field-title First name *
         .field.is-horizontal
-          .field-label.is-normal
-            label.label First name
           .field-body
             .field
               .control.has-icons-left
                 = icon_tag('fas fa-user')
                 = f.text_field :first_name, class: :input, data: { target: 'wizard.required_field_1' }
                 span.help.display-when-errors This field is required
+        
+        .level.about
+          .level-left
+            label.field-title Last name *
         .field.is-horizontal
-          .field-label.is-normal
-            label.label Last name
           .field-body
             .field
               .control.has-icons-left
                 = icon_tag('fas fa-user')
                 = f.text_field :last_name, class: :input, data: { target: 'wizard.required_field_1' }
                 span.help.display-when-errors This field is required
+        
+        .level.about
+          .level-left
+            label.field-title Email *
         .field.is-horizontal
-          .field-label.is-normal
-            label.label Email
           .field-body
             .field
               .control.has-icons-left
@@ -93,12 +104,14 @@
                 = f.email_field :email, class: :input, data: { target: 'wizard.required_field_1' }
                 span.help.display-when-errors This field is required
       .wizard-card-footer
-        a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
+        a.icon.left-arrow data-action="wizard#previous" &larr; Previous
+        a.icon.right-arrow data-action="wizard#next" Next &rarr;
     fieldset.wizard-card data-target='wizard.step'
       .wizard-card-header
-        a.icon data-action="wizard#previous" &larr;
-        h3.wizard-card-title Your donation
+        span.icon: i.fas.fa-handshake
+        h3.wizard-card-title Take the pledge
         = render 'shared/wizard_nav', step: 3, of: 5
+      h3.wizard-card-sub-title Your donation
       .wizard-card-content data-controller="date-field"
         .field data-controller="radio-select"
           p.has-text-weight-bold = @view_model.contribution_amount_help_text
@@ -211,20 +224,23 @@
                         = f.text_field :postcode, class: :input, placeholder: 'please include a space', data: { target: 'wizard.giftAidPostcode' }
                         span.help.display-when-errors Postcode must include a space e.g. AA1 3DD
       .wizard-card-footer
-        a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#next" Next &rarr;
+        a.icon.left-arrow data-action="wizard#previous" &larr; Previous
+        a.icon.right-arrow data-action="wizard#next" Next &rarr;    
     fieldset#payment-step.wizard-card data-target='wizard.step'
       .wizard-card-header
-        a.icon data-action="wizard#previous" &larr;
-        h3.wizard-card-title Payment
+        span.icon: i.fas.fa-handshake
+        h3.wizard-card-title Take the pledge
         = render 'shared/wizard_nav', step: 4, of: 5
+      h3.wizard-card-sub-title Payment
       = render 'payment_method_form', payment_method_field: 'payment-method-id'
     fieldset.wizard-card data-target='wizard.step'
       .wizard-card-header
-        a.icon data-action="wizard#previous" &larr;
-        h3.wizard-card-title About you
+        span.icon: i.fas.fa-handshake
+        h3.wizard-card-title Take the pledge
         = render 'shared/wizard_nav', step: 5, of: 5
+      h3.wizard-card-sub-title About you
       .wizard-card-content
         = f.fields_for :donor_questions do |questions_form|
           = render @view_model.donor_questions, form: questions_form
       .wizard-card-footer
-        a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#donate" Donate
+        a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#donate" style="border-radius: 8px;" Donate 

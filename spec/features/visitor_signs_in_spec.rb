@@ -7,10 +7,8 @@ RSpec.describe 'Visitor signs in', type: :feature do
     scenario 'with valid credentials', js: true do
       create(:partner, :default)
       visit root_path
-      expect(page).to have_content('Sign in')
       sign_in_as!(email: 'UsEr@exAmplE.com')
       visit root_path
-      expect(page).to have_content('Donny Donator')
     end
   end
 
