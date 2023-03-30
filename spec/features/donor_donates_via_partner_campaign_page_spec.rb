@@ -259,6 +259,9 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
 
     expect(page).to have_content('Your pledge starts in 3 months.')
 
-    find("a.icon.right-arrow", wait: 3).click
+    page.driver.browser.manage.window.resize_to(1600,900)
+    expect(page).to have_content('Next')
+    
+    find("#Next-button").click
   end
 end
