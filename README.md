@@ -31,8 +31,7 @@ By pooling pay outs to organizations, and avoiding credit card fees, we help ens
 
 1. Run `bin/setup`
 2. Populate `.env` with the relevant API Keys
-3. Run `bin/start`
-4. (Optional) Run `bin/webpack-dev-server`
+3. Run `bin/dev`
 
 ### Running tests
 

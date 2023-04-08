@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+if [ -x "$(command -v overmind)" ]
+then
+  overmind start -f Procfile.dev "$@"
+else
+  foreman start -f Procfile.dev "$@"
+fi

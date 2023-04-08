@@ -1,0 +1,3 @@
+web: bin/rails server -p 3000
+workers: bundle exec sidekiq -q default -q mailers -q searchkick
+javascript: bin/webpack-dev-server

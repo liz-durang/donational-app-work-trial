@@ -90,7 +90,6 @@ end
 
 group :test do
   gem 'capybara'
-  gem 'capybara-webmock'
   gem 'climate_control'
   gem 'database_cleaner'
   gem 'factory_bot_rails'
@@ -99,6 +98,6 @@ group :test do
   gem 'selenium-webdriver'
   gem 'stripe-ruby-mock', github: 'donational-org/stripe-ruby-mock', branch: 'support-cloned-payment-methods',
                           require: 'stripe_mock'
-  gem 'webdrivers'
+  gem 'webdrivers', '~> 5.2'
   gem 'webmock'
 end

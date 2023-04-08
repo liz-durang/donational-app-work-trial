@@ -66,7 +66,7 @@ RSpec.configure do |config|
   #   - http://rspec.info/blog/2012/06/rspecs-new-expectation-syntax/
   #   - http://www.teaisaweso.me/blog/2013/05/27/rspecs-new-message-expectation-syntax/
   #   - http://rspec.info/blog/2014/05/notable-changes-in-rspec-3/#zero-monkey-patching-mode
-  #config.disable_monkey_patching!
+  # config.disable_monkey_patching!
 
   # Many RSpec users commonly either run the entire suite or an individual
   # file, and it's useful to allow more verbose output when running an
@@ -105,13 +105,6 @@ RSpec.configure do |config|
   # end
 
   config.before(:suite) do
-    Capybara::Webmock.start
-  end
-
-  config.after(:suite) do
-    Capybara::Webmock.stop
-  end
-  config.before(:suite) do
     # reindex models
     SearchableOrganization.reindex
 
@@ -125,7 +118,7 @@ RSpec.configure do |config|
     end
   end
 
-  config.before(:each) do
+  config.before do
     Sidekiq::Worker.clear_all
 
     # To create a Stripe::PaymentIntent, we pass expand: ['charges.data.balance_transaction'] to obtain Stripe fee. Currently,
