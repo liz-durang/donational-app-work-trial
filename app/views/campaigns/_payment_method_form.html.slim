@@ -1,24 +1,34 @@
-.wizard-card-content
-  - if @view_model.show_plaid?
+- if @view_model.show_plaid?
+  .wizard-card-content
     .field
-      = label_tag("payment_method", "Choose a payment method:", class: "label")
-      = render 'shared/plaid_form', link_token: @view_model.link_token, token_field: 'payment_token', submission_field: 'payment-validated'
-      = render 'shared/alternative_card_form'
-  - elsif @view_model.show_acss?
+        = label_tag("payment_method", "Choose a payment method:", class: "label")
+        = render 'shared/plaid_form', link_token: @view_model.link_token, token_field: 'payment_token', submission_field: 'payment-validated'
+        = render 'shared/alternative_card_form'
+  .wizard-card-footer
+    a.icon.left-arrow data-action="wizard#previous" &larr; Previous
+    a.icon.right-arrow.is-hidden id="payment-next" data-target='wizard.paymentOptionCard' href="#" Next &rarr;
+    a.is-hidden.plaid-success-target data-action="wizard#next" id="payment-validated"
+- elsif @view_model.show_acss?
+  .wizard-card-content
     .field
-      = render 'shared/acss_form', payment_method_field: 'payment-method-id', submission_field: 'payment-validated'
-      = render 'shared/alternative_card_form'
-  - else
+        = render 'shared/acss_form', payment_method_field: 'payment-method-id', submission_field: 'payment-validated'
+        = render 'shared/alternative_card_form'
+  .wizard-card-footer
+    a.icon.left-arrow data-action="wizard#previous" &larr; Previous
+    a.icon.right-arrow.is-hidden id="payment-next" data-target='wizard.paymentOptionCard' href="#" Next &rarr;
+    a.is-hidden.plaid-success-target data-action="wizard#next" id="payment-validated"
+- else
+  .wizard-card-content
     .control
       #card-element
       #card-errors role="alert"
     p.control.has-icons-left
       input.input.StripeElement id="cardholder_name" type="text" placeholder="Cardholder name"
       span.icon.is-left.is-small: i.fa.fa-user
-.wizard-card-footer
-  a.icon.left-arrow data-action="wizard#previous" &larr; Previous
-  a.icon.right-arrow data-action="wizard#next" Next &rarr;
-  a.is-hidden.plaid-success-target data-action="wizard#next" id="payment-validated"
+  .wizard-card-footer
+    a.icon.left-arrow data-action="wizard#previous" &larr; Previous
+    a.icon.right-arrow id="payment-next" href="#" Next &rarr;
+    a.is-hidden.plaid-success-target data-action="wizard#next" id="payment-validated"
 
 
 javascript:

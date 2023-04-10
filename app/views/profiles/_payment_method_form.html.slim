@@ -36,7 +36,6 @@
   a.button.is-primary.is-medium.is-fullwidth id="payment-next" href="#" Donate
   a.is-hidden.plaid-success-target data-action="wizard#donate" id="payment-validated"
 
-
 javascript:
   var stripe = Stripe("#{ENV.fetch('STRIPE_PUBLIC_KEY')}");
   var elements = stripe.elements();
@@ -78,7 +77,6 @@ javascript:
           if (result.error) {
             var errorElement = document.getElementById('card-errors');
             errorElement.textContent = result.error.message;
-            document.querySelector('#payment-form input[type=submit]').disabled = false;
           } else {
             document.getElementById("#{payment_method_field}").value = result.setupIntent.payment_method;
             validated.click();

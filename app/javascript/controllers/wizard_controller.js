@@ -153,13 +153,7 @@ export default class extends Controller {
     this.data.valid = value
   }
 
-  showPlaidPayment() {
-    this.paymentOptionPlaidTarget.classList.toggle('is-hidden', false)
-    this.paymentOptionCardTarget.classList.toggle('is-hidden', true)
-  }
-
   showCardPayment() {
-    this.paymentOptionPlaidTarget.classList.toggle('is-hidden', true)
     this.paymentOptionCardTarget.classList.toggle('is-hidden', false)
   }
 }

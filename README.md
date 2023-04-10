@@ -27,22 +27,29 @@ By pooling pay outs to organizations, and avoiding credit card fees, we help ens
 
 # Developers
 
-### Running the app (for the first time)
+### Setting up the app for the first time
 
 1. Run `bin/setup`
 2. Populate `.env` with the relevant API Keys
-3. Run `bin/dev`
+
+### Running the app
+
+Run `bin/dev`
+
+This will run all of the services defined in Procfile.dev (eg webserver, background jobs, and webpack-dev-server) using `overmind`
+
+When debugging (eg using byebug or `binding.pry`) you can run `overmind connect web` from a terminal to access your breakpoint. To detach from the tmux session, use `<ctrl + b> + c`
 
 ### Running tests
 
-1. Run `bin/test`
+Run `bin/test`
 
 ## Code guidelines
 
-1. *Do* follow bbatsov's [ruby style guide](https://github.com/bbatsov/ruby-style-guide) and [rails style guide](https://github.com/bbatsov/rails-style-guide)
-2. *Do* use soft-delete on models (eg `Portfolio#deactivated_at`)
-	- Since we deal with financial transactions, we need a clean audit trail
-3. *Avoid* interacting directly with Models from a Controller (use a **Command** or **Query** object instead)
-4. *Do* use **Command** objects whenever you want to mutate data (you can find them in `app/commands`)
-	- We make use of the [`mutations gem`](https://github.com/cypriss/mutations) to help sanitize and validate input before executing the command
-5. *Do* use **Query** objects for retrieving data (you can find them in `app/queries`)
+1. _Do_ follow bbatsov's [ruby style guide](https://github.com/bbatsov/ruby-style-guide) and [rails style guide](https://github.com/bbatsov/rails-style-guide)
+2. _Do_ use soft-delete on models (eg `Portfolio#deactivated_at`)
+   - Since we deal with financial transactions, we need a clean audit trail
+3. _Avoid_ interacting directly with Models from a Controller (use a **Command** or **Query** object instead)
+4. _Do_ use **Command** objects whenever you want to mutate data (you can find them in `app/commands`)
+   - We make use of the [`mutations gem`](https://github.com/cypriss/mutations) to help sanitize and validate input before executing the command
+5. _Do_ use **Query** objects for retrieving data (you can find them in `app/queries`)
