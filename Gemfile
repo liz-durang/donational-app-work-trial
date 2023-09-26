@@ -98,6 +98,5 @@ group :test do
   gem 'selenium-webdriver'
   gem 'stripe-ruby-mock', github: 'donational-org/stripe-ruby-mock', branch: 'support-cloned-payment-methods',
                           require: 'stripe_mock'
-  gem 'webdrivers', '~> 5.2'
   gem 'webmock'
 end
