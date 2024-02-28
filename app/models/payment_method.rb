@@ -12,7 +12,7 @@
 #  retry_count                   :integer          default(0)
 #  type                          :string           default("PaymentMethods::Card")
 #  institution                   :string
-#
+#  payment_processor_source_id   :string
 
 class PaymentMethod < ApplicationRecord
   belongs_to :donor

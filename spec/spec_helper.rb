@@ -148,4 +148,14 @@ RSpec.configure do |config|
       payment_intent
     end
   end
+
+  # Run tests that do not mock Stripe responses (and which use Stripe's live test server) by using `rspec -t live` flag.
+  # This stops StripeMock from mocking http calls, and runs specs that have a 'live: true' flag.
+  # https://github.com/donational-org/stripe-ruby-mock#live-testing
+  if config.filter_manager.inclusions.rules.include?(:live)
+    StripeMock.toggle_live(true)
+    puts "Running **live** tests against Stripe test server..."
+  else
+    config.filter_run_excluding :live
+  end
 end

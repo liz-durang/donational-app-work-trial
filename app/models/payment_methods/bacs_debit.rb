@@ -1,11 +1,11 @@
 module PaymentMethods
-  class Card < PaymentMethod
+  class BacsDebit < PaymentMethod
     def self.payment_processor_payment_method_type_code
-      :card
+      :bacs_debit
     end
 
     def self.human_readable_name
-      'Card'
+      'Direct Debit'
     end
   end
 end

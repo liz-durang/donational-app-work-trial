@@ -17,13 +17,21 @@
 #
 
 FactoryBot.define do
-  factory :payment_method do
+  factory :payment_method, class: 'PaymentMethods::Card' do
     donor
     last4 { '1234' }
+    type { 'PaymentMethods::Card' }
 
-    trait :acss_debit do
+    factory :acss_debit_payment_method, class: 'PaymentMethods::AcssDebit' do
       type { 'PaymentMethods::AcssDebit' }
-      payment_processor_source_id { 'pm_1KEYLlLVTYFX0Htp1vL4L722' }
+    end
+
+    factory :us_bank_account_payment_method, class: 'PaymentMethods::BankAccount' do
+      type { 'PaymentMethods::BankAccount' }
+    end
+
+    factory :bacs_debit_payment_method, class: 'PaymentMethods::BacsDebit' do
+      type { 'PaymentMethods::BacsDebit' }
     end
   end
 end

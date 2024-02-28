@@ -183,7 +183,7 @@ RSpec.describe 'POST webhook', type: :request do
     context 'when the payment method is found' do
       let(:payment_method_id) { payment_method.payment_processor_source_id }
       let(:payment_method) do
-        create(:payment_method, :acss_debit, payment_processor_source_id: 'pm_1KEYLlLVTYFX0Htp1vL4L722')
+        create(:acss_debit_payment_method, payment_processor_source_id: 'pm_1KEYLlLVTYFX0Htp1vL4L722')
       end
       let!(:partner) { create(:partner, :default) }
 
@@ -231,69 +231,71 @@ RSpec.describe 'POST webhook', type: :request do
     end
     let(:setup_intent) do
       {
-        'id': 'seti_1KEYLbLVTYFX0HtpreRhfh0q',
-        'object': 'setup_intent',
-        'application': nil,
-        'cancellation_reason': nil,
-        'client_secret': 'seti_1KErxRLVTYFX0HtpRXB6lAR4_secret_KuhM8kUrpSo5ukBGrM88J2ByyrKWVUn',
-        'created': 1641460109,
-        'customer': 'cus_KuN5JMXAs5rOM8',
-        'description': nil,
-        'last_setup_error': {
-          'code': 'payment_method_microdeposit_verification_attempts_exceeded',
-          'doc_url': 'https://stripe.com/docs/error-codes/payment-method-microdeposit-verification-attempts-exceeded',
-          'message': 'You have exceeded the number of allowed verification attempts.',
-          'payment_method': {
-            'id': payment_method_id,
-            'object': 'payment_method',
-            'acss_debit': {
-              'bank_name': 'STRIPE TEST BANK',
-              'fingerprint': 'DEVrZYsxRxNXrufb',
-              'institution_number': '000', 'last4': '2227', 'transit_number': '11000'
+        id: 'seti_1KEYLbLVTYFX0HtpreRhfh0q',
+        object: 'setup_intent',
+        application: nil,
+        cancellation_reason: nil,
+        client_secret: 'seti_1KErxRLVTYFX0HtpRXB6lAR4_secret_KuhM8kUrpSo5ukBGrM88J2ByyrKWVUn',
+        created: 1_641_460_109,
+        customer: 'cus_KuN5JMXAs5rOM8',
+        description: nil,
+        last_setup_error: {
+          code: 'payment_method_microdeposit_verification_attempts_exceeded',
+          doc_url: 'https://stripe.com/docs/error-codes/payment-method-microdeposit-verification-attempts-exceeded',
+          message: 'You have exceeded the number of allowed verification attempts.',
+          payment_method: {
+            id: payment_method_payment_processor_source_id,
+            object: 'payment_method',
+            acss_debit: {
+              bank_name: 'STRIPE TEST BANK',
+              fingerprint: 'DEVrZYsxRxNXrufb',
+              institution_number: '000', last4: '2227', transit_number: '11000'
             },
-            'billing_details': {},
-            'created': 1641460230,
-            'customer': nil,
-            'livemode': false,
-            'metadata': {},
-            'type': 'acss_debit'
+            billing_details: {},
+            created: 1_641_460_230,
+            customer: nil,
+            livemode: false,
+            metadata: {},
+            type: 'acss_debit'
           },
-          'type': 'invalid_request_error'
+          type: 'invalid_request_error'
         },
-        'latest_attempt': 'setatt_1KEYLoLVTYFX0HtpwX5UO9B4',
-        'livemode': false,
-        'mandate': 'mandate_1KEYLoLVTYFX0HtpC9w3dUiB',
-        'metadata': {},
-        'next_action': nil,
-        'on_behalf_of': nil,
-        'payment_method': nil,
-        'payment_method_options': {
-          'acss_debit': {
-            'currency': 'cad',
-            'mandate_options': {
-              'interval_description': 'on the 15th of every month, starting Jan 2022',
-              'payment_schedule': 'interval',
-              'transaction_type': 'personal'
+        latest_attempt: 'setatt_1KEYLoLVTYFX0HtpwX5UO9B4',
+        livemode: false,
+        mandate: 'mandate_1KEYLoLVTYFX0HtpC9w3dUiB',
+        metadata: {},
+        next_action: nil,
+        on_behalf_of: nil,
+        payment_method: nil,
+        payment_method_options: {
+          acss_debit: {
+            currency: 'cad',
+            mandate_options: {
+              interval_description: 'on the 15th of every month, starting Jan 2022',
+              payment_schedule: 'interval',
+              transaction_type: 'personal'
             },
-          'verification_method': 'automatic'
+            verification_method: 'automatic'
           }
         },
-        'payment_method_types': ['acss_debit'],
-        'single_use_mandate': nil,
-        'status': 'requires_payment_method',
-        'usage': 'off_session'
+        payment_method_types: ['acss_debit'],
+        single_use_mandate: nil,
+        status: 'requires_payment_method',
+        usage: 'off_session'
       }
     end
-    let(:payment_method_id) { payment_method.payment_processor_source_id }
-    let!(:payment_method) { create(:payment_method, :acss_debit) }
+    let(:payment_method_payment_processor_source_id) { 'pm_1KEYLlLVTYFX0Htp1vL4L722' }
+    let!(:payment_method) do
+      create(:acss_debit_payment_method, payment_processor_source_id: payment_method_payment_processor_source_id)
+    end
 
     it 'destroys the corresponding payment method' do
-      expect {
+      expect do
         post webhook_path, params: params.to_json, headers: headers
-      }.to change { PaymentMethod.count }.by(-1)
+      end.to change { PaymentMethod.count }.by(-1)
 
       expect(response).to have_http_status(:success)
-      expect(PaymentMethod.find_by(id: payment_method_id)).to be_nil
+      expect(PaymentMethod.find_by(payment_processor_source_id: payment_method_payment_processor_source_id)).to be_nil
     end
   end
 

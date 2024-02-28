@@ -23,6 +23,19 @@
         { "url": "https://github.com/heroku/heroku-buildpack-google-chrome" },
         { "url": "heroku/ruby" }
       ]
+    },
+    "review": {
+      "addons": [
+        "bucketeer:hobbyist",
+        "heroku-postgresql",
+        "heroku-redis",
+        {
+          "plan": "bonsai:hobby",
+          "options": {
+            "version": "6.5.4"
+          }
+        }
+      ]
     }
   },
   "formation": {},
@@ -34,8 +47,7 @@
       "options": {
         "version": "6.5.4"
       }
-    },
-    "sendgrid:starter"
+    }
   ],
   "buildpacks": [{ "url": "heroku/nodejs" }, { "url": "heroku/ruby" }]
 }

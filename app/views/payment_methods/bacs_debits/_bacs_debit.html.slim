@@ -1,0 +1,18 @@
+- if defined?(summary)
+  span
+    ' Bank Account:
+    => masked_card_number(last4: bacs_debit.last4)
+- else
+  .form.columns
+    .column
+      .field
+        .label Bank
+        p.control.has-icons-left
+          input.input disabled=true value=bacs_debit.institution
+          span.icon.is-left.is-small: i.fa.fa-user
+    .column
+      .field
+        .label Account number
+        p.control.has-icons-left
+          input.input disabled=true value=masked_card_number(last4: bacs_debit.last4)
+          span.icon.is-left.is-small: i.fa.fa-house
