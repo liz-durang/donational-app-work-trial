@@ -154,8 +154,14 @@ RSpec.configure do |config|
   # https://github.com/donational-org/stripe-ruby-mock#live-testing
   if config.filter_manager.inclusions.rules.include?(:live)
     StripeMock.toggle_live(true)
-    puts "Running **live** tests against Stripe test server..."
+    puts 'Running **live** tests against Stripe test server...'
   else
     config.filter_run_excluding :live
+  end
+end
+
+RSpec::Matchers.define :appear_before do |later_content|
+  match do |earlier_content|
+    page.body.index(earlier_content) < page.body.index(later_content)
   end
 end
