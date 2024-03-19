@@ -10,19 +10,19 @@ RSpec.describe 'POST webhook', type: :request do
   describe 'charge.succeeded' do
     let(:params) do
       {
-        'id': 'evt_3KMvkvLVTYFX0Htp1OiLZ5PR',
-        'object': 'event',
-        'api_version': '2020-08-27',
-        'created': 1643381334,
-        'type': 'charge.succeeded',
-        'data': {
-          'object': charge
+        id: 'evt_3KMvkvLVTYFX0Htp1OiLZ5PR',
+        object: 'event',
+        api_version: '2020-08-27',
+        created: 1_643_381_334,
+        type: 'charge.succeeded',
+        data: {
+          object: charge
         },
-        'request': {
-          'id': 'req_mCiBc0ky419ObA',
-          'idempotency_key': '2b86b1b1-ccb0-4c09-a183-b22c1da8dfbd'
+        request: {
+          id: 'req_mCiBc0ky419ObA',
+          idempotency_key: '2b86b1b1-ccb0-4c09-a183-b22c1da8dfbd'
         },
-        'account': account_id
+        account: account_id
       }
     end
     let(:charge) do
@@ -30,7 +30,7 @@ RSpec.describe 'POST webhook', type: :request do
         'id' => charge_id,
         'object' => 'charge',
         'amount' => 1000,
-        'created' => 1643379468,
+        'created' => 1_643_379_468,
         'currency' => 'usd',
         'livemode' => false,
         'metadata' => {
@@ -53,7 +53,7 @@ RSpec.describe 'POST webhook', type: :request do
       it 'processes the contribution payment' do
         expect(Contributions::ProcessContributionPaymentSucceeded)
           .to receive(:run)
-          .with(contribution: contribution, receipt: charge.to_json)
+          .with(contribution:, receipt: charge.to_json)
           .and_return(double(success?: true))
 
         post webhook_path, params: params.to_json, headers: headers
@@ -62,13 +62,28 @@ RSpec.describe 'POST webhook', type: :request do
       end
     end
 
-    context 'when payment method type is acss debit' do
+    context 'when payment method type is ACSS debit' do
       let(:payment_method_type) { 'acss_debit' }
 
       it 'processes the contribution payment' do
-        expect(Contributions::ProcessContributionAcssPaymentSucceeded)
+        expect(Contributions::ProcessContributionAcssOrBacsPaymentSucceeded)
           .to receive(:run)
-          .with(charge: instance_of(Stripe::Charge), account_id: account_id)
+          .with(charge: instance_of(Stripe::Charge), account_id:)
+          .and_return(double(success?: true))
+
+        post webhook_path, params: params.to_json, headers: headers
+
+        expect(response.status).to eq(200)
+      end
+    end
+
+    context 'when payment method type is BACS debit' do
+      let(:payment_method_type) { 'bacs_debit' }
+
+      it 'processes the contribution payment' do
+        expect(Contributions::ProcessContributionAcssOrBacsPaymentSucceeded)
+          .to receive(:run)
+          .with(charge: instance_of(Stripe::Charge), account_id:)
           .and_return(double(success?: true))
 
         post webhook_path, params: params.to_json, headers: headers
@@ -81,19 +96,19 @@ RSpec.describe 'POST webhook', type: :request do
   describe 'charge.failed' do
     let(:params) do
       {
-        'id': 'evt_3KMvzkLVTYFX0Htp1DLTEDLk',
-        'object': 'event',
-        'api_version': '2020-08-27',
-        'created': 1643382252,
-        'type': 'charge.failed',
-        'data': {
-          'object': charge
+        id: 'evt_3KMvzkLVTYFX0Htp1DLTEDLk',
+        object: 'event',
+        api_version: '2020-08-27',
+        created: 1_643_382_252,
+        type: 'charge.failed',
+        data: {
+          object: charge
         },
-        'request': {
-          'id': 'req_tKUkw9b0Do9oTw',
-          'idempotency_key': '7b2397ff-f8b0-4685-b5e9-64098f0d4287'
+        request: {
+          id: 'req_tKUkw9b0Do9oTw',
+          idempotency_key: '7b2397ff-f8b0-4685-b5e9-64098f0d4287'
         },
-        'account': account_id
+        account: account_id
       }
     end
     let(:charge) do
@@ -101,10 +116,10 @@ RSpec.describe 'POST webhook', type: :request do
         'id' => charge_id,
         'object' => 'charge',
         'amount' => 1000,
-        'created' => 1643379468,
+        'created' => 1_643_379_468,
         'currency' => 'usd',
-        'failure_code': 'card_declined',
-        'failure_message': 'Your card was declined.',
+        failure_code: 'card_declined',
+        failure_message: 'Your card was declined.',
         'livemode' => false,
         'metadata' => {
           'contribution_id' => contribution.id
@@ -121,7 +136,7 @@ RSpec.describe 'POST webhook', type: :request do
     it 'processes the contribution payment' do
       expect(Contributions::ProcessContributionPaymentFailed)
         .to receive(:run)
-        .with(contribution: contribution, errors: instance_of(String))
+        .with(contribution:, errors: instance_of(String))
         .and_return(double(success?: true))
 
       post webhook_path, params: params.to_json, headers: headers
@@ -133,52 +148,51 @@ RSpec.describe 'POST webhook', type: :request do
   describe 'setup_intent.succeeded' do
     let(:params) do
       {
-        'id': 'evt_1CiPtv2eZvKYlo2CcUZsDcO6',
-        'object': 'event',
-        'api_version': '2018-05-21',
-        'created': 1530291411,
-        'type': 'setup_intent.succeeded',
-        'data': {
-          'object': setup_intent
+        id: 'evt_1CiPtv2eZvKYlo2CcUZsDcO6',
+        object: 'event',
+        api_version: '2018-05-21',
+        created: 1_530_291_411,
+        type: 'setup_intent.succeeded',
+        data: {
+          object: setup_intent
         }
       }
     end
     let(:setup_intent) do
       {
-        'id': 'seti_1KEYLbLVTYFX0HtpreRhfh0q',
-        'object': 'setup_intent',
-        'application': nil,
-        'cancellation_reason': nil,
-        'client_secret': 'seti_1KEYLbLVTYFX0HtpreRhfh0q_secret_KuN5sdtp69hze8nG9gimeZGco3ZV6I1',
-        'created': 1641384727,
-        'customer': 'cus_KuN5JMXAs5rOM8',
-        'description': nil,
-        'last_setup_error': nil,
-        'latest_attempt': 'setatt_1KEYLoLVTYFX0HtpwX5UO9B4',
-        'livemode': false,
-        'mandate': 'mandate_1KEYLoLVTYFX0HtpC9w3dUiB',
-        'metadata': {},
-        'next_action': nil,
-        'on_behalf_of': nil,
-        'payment_method': payment_method_id,
-        'payment_method_options': {
-          'acss_debit': {
-            'currency': 'cad',
-            'mandate_options': {
-              'interval_description': 'on the 15th of every month, starting Jan 2022',
-              'payment_schedule': 'interval',
-              'transaction_type': 'personal'
+        id: 'seti_1KEYLbLVTYFX0HtpreRhfh0q',
+        object: 'setup_intent',
+        application: nil,
+        cancellation_reason: nil,
+        client_secret: 'seti_1KEYLbLVTYFX0HtpreRhfh0q_secret_KuN5sdtp69hze8nG9gimeZGco3ZV6I1',
+        created: 1_641_384_727,
+        customer: 'cus_KuN5JMXAs5rOM8',
+        description: nil,
+        last_setup_error: nil,
+        latest_attempt: 'setatt_1KEYLoLVTYFX0HtpwX5UO9B4',
+        livemode: false,
+        mandate: 'mandate_1KEYLoLVTYFX0HtpC9w3dUiB',
+        metadata: {},
+        next_action: nil,
+        on_behalf_of: nil,
+        payment_method: payment_method_id,
+        payment_method_options: {
+          acss_debit: {
+            currency: 'cad',
+            mandate_options: {
+              interval_description: 'on the 15th of every month, starting Jan 2022',
+              payment_schedule: 'interval',
+              transaction_type: 'personal'
             },
-          'verification_method': 'automatic'
+            verification_method: 'automatic'
           }
         },
-        'payment_method_types': ['acss_debit'],
-        'single_use_mandate': nil,
-        'status': 'succeeded',
-        'usage': 'off_session'
+        payment_method_types: ['acss_debit'],
+        single_use_mandate: nil,
+        status: 'succeeded',
+        usage: 'off_session'
       }
     end
-
 
     context 'when the payment method is found' do
       let(:payment_method_id) { payment_method.payment_processor_source_id }
@@ -219,13 +233,13 @@ RSpec.describe 'POST webhook', type: :request do
   describe 'setup_intent.setup_failed' do
     let(:params) do
       {
-        'id': 'evt_1CiPtv2eZvKYlo2CcUZsDcO6',
-        'object': 'event',
-        'api_version': '2018-05-21',
-        'created': 1530291411,
-        'type': 'setup_intent.setup_failed',
-        'data': {
-          'object': setup_intent
+        id: 'evt_1CiPtv2eZvKYlo2CcUZsDcO6',
+        object: 'event',
+        api_version: '2018-05-21',
+        created: 1_530_291_411,
+        type: 'setup_intent.setup_failed',
+        data: {
+          object: setup_intent
         }
       }
     end
@@ -302,21 +316,21 @@ RSpec.describe 'POST webhook', type: :request do
   describe 'charge.dispute.created' do
     let(:params) do
       {
-        'id': 'evt_3KMwCiLVTYFX0Htp0fUUtr5K',
-        'object': 'event',
-        'api_version': '2020-08-27',
-        'created': 1643379468,
-        'type': 'charge.dispute.created',
-        'data': {
-          'object': dispute
+        id: 'evt_3KMwCiLVTYFX0Htp0fUUtr5K',
+        object: 'event',
+        api_version: '2020-08-27',
+        created: 1_643_379_468,
+        type: 'charge.dispute.created',
+        data: {
+          object: dispute
         },
-        'livemode': false,
-        'pending_webhooks': 2,
-        'request': {
-            'id': 'req_eXdYwODhq7dU3g',
-            'idempotency_key': 'aff63da6-55e5-4b34-b14d-dae658060fef'
+        livemode: false,
+        pending_webhooks: 2,
+        request: {
+          id: 'req_eXdYwODhq7dU3g',
+          idempotency_key: 'aff63da6-55e5-4b34-b14d-dae658060fef'
         },
-        'account': account_id
+        account: account_id
       }
     end
     let(:dispute) do
@@ -327,11 +341,11 @@ RSpec.describe 'POST webhook', type: :request do
         'balance_transaction' => nil,
         'balance_transactions' => [],
         'charge' => charge_id,
-        'created' => 1643379468,
+        'created' => 1_643_379_468,
         'currency' => 'usd',
         'evidence' => {},
         'evidence_details' => {
-          'due_by' => 1644191999,
+          'due_by' => 1_644_191_999,
           'has_evidence' => false,
           'past_due' => false,
           'submission_count' => 0
@@ -348,10 +362,10 @@ RSpec.describe 'POST webhook', type: :request do
       customer = Stripe::Customer.create({}, stripe_account: account_id)
       Stripe::Charge.create(
         {
-          customer: customer,
+          customer:,
           amount: 1000,
           currency: 'usd',
-          metadata: { contribution_id: contribution_id }
+          metadata: { contribution_id: }
         },
         { stripe_account: account_id }
       )
@@ -366,12 +380,12 @@ RSpec.describe 'POST webhook', type: :request do
     it 'marks contribution as disputed' do
       expect(Payments::GetChargeFromDispute)
         .to receive(:call)
-        .with(account_id: account_id, charge_id: charge_id)
+        .with(account_id:, charge_id:)
         .and_return(charge)
 
       expect(Contributions::DisputeContribution)
         .to receive(:run)
-        .with(contribution_id: contribution_id)
+        .with(contribution_id:)
         .and_return(double(success?: true))
 
       post webhook_path, params: params.to_json, headers: headers

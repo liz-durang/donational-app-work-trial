@@ -43,7 +43,7 @@ RSpec.describe Payments::ConnectedAccount::ChargeCustomer do
 
     let(:account_id) { 'test_acc_1' }
     let(:currency) { 'usd' }
-    let(:donation_amount_cents) { 100 }
+    let(:donation_amount_cents) { 10_000 }
     let(:customer) do
       Stripe::Customer.create({}, { stripe_account: account_id })
     end
@@ -97,6 +97,7 @@ RSpec.describe Payments::ConnectedAccount::ChargeCustomer do
             )
 
             expect(subject).to be_success
+            expect(subject.result.payment_processor_fees_cents).to eq(20)
           end
         end
 
@@ -144,6 +145,7 @@ RSpec.describe Payments::ConnectedAccount::ChargeCustomer do
             )
 
             expect(subject).to be_success
+            expect(subject.result.payment_processor_fees_cents).to eq(20)
           end
         end
       end
@@ -206,13 +208,14 @@ RSpec.describe Payments::ConnectedAccount::ChargeCustomer do
               )
 
               expect(subject).to be_success
+              expect(subject.result.payment_processor_fees_cents).to eq(140)
             end
 
             context 'but the currency is invalid' do
               it 'fails with errors' do
                 result = Payments::ConnectedAccount::ChargeCustomer.run(
                   account_id:,
-                  currency: 'usd',
+                  currency: 'gbp',
                   donation_amount_cents:,
                   metadata:,
                   payment_method:,
@@ -237,28 +240,73 @@ RSpec.describe Payments::ConnectedAccount::ChargeCustomer do
       end
 
       context 'when the account ID, currency, donation amount and payment method are supplied' do
-        context 'and the Stripe response is successful' do
-          it { is_expected.to be_success }
-
-          it 'uses the correct payment method type in the API call' do
-            expect(Stripe::PaymentIntent).to receive(:create).with(
-              {
-                amount: donation_amount_cents + tips_cents,
-                application_fee_amount: platform_fee_cents + tips_cents,
-                confirm: true,
-                currency:,
-                expand: ['charges.data.balance_transaction'],
-                metadata:,
-                payment_method: payment_method.payment_processor_source_id,
-                customer: payment_method.payment_processor_customer_id,
-                payment_method_types: ['bacs_debit'],
-                off_session: true,
-                mandate: nil
-              },
-              stripe_account: account_id
+        context 'and the mandate cannot be found' do
+          it 'fails with errors' do
+            result = Payments::ConnectedAccount::ChargeCustomer.run(
+              account_id:,
+              currency:,
+              donation_amount_cents:,
+              payment_method:,
+              tips_cents: 23,
+              platform_fee_cents: 2
             )
 
-            expect(subject).to be_success
+            expect(result).not_to be_success
+            expect(result.errors.symbolic).to include(customer: :stripe_error)
+            expect(result.errors.message['customer']).to eq('Stripe mandate not found')
+          end
+        end
+
+        context 'and the mandate is present' do
+          before do
+            allow(Stripe::SetupIntent).to receive(:list).with(
+              { customer: customer.id, payment_method: stripe_payment_method[:id] },
+              { stripe_account: account_id }
+            ).and_return(
+              double(data: [double(mandate: 'mandate_123')])
+            )
+          end
+
+          context 'and the Stripe response is successful' do
+            it { is_expected.to be_success }
+
+            it 'uses the correct payment method type and provides a mandate id in the API call' do
+              expect(Stripe::PaymentIntent).to receive(:create).with(
+                {
+                  amount: donation_amount_cents + tips_cents,
+                  application_fee_amount: platform_fee_cents + tips_cents,
+                  confirm: true,
+                  currency:,
+                  expand: ['charges.data.balance_transaction'],
+                  metadata:,
+                  payment_method: payment_method.payment_processor_source_id,
+                  customer: payment_method.payment_processor_customer_id,
+                  payment_method_types: ['bacs_debit'],
+                  off_session: true,
+                  mandate: 'mandate_123'
+                },
+                stripe_account: account_id
+              )
+
+              expect(subject).to be_success
+            end
+
+            context 'but the currency is invalid' do
+              it 'fails with errors' do
+                result = Payments::ConnectedAccount::ChargeCustomer.run(
+                  account_id:,
+                  currency: 'cad',
+                  donation_amount_cents:,
+                  metadata:,
+                  payment_method:,
+                  tips_cents: 23,
+                  platform_fee_cents: 2
+                )
+
+                expect(result).not_to be_success
+                expect(result.errors.symbolic).to include(customer: :payment_error)
+              end
+            end
           end
         end
       end

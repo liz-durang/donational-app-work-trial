@@ -2,7 +2,7 @@ module Payments
   # For charging payment methods that are located on connected Stripe accounts.
   module ConnectedAccount
     class ChargeCustomer < ApplicationCommand
-      include AcssDebitSupport
+      include AcssAndBacsDebitSupport
 
       required do
         string :account_id, empty: false
@@ -22,7 +22,7 @@ module Payments
       end
 
       def validate
-        validate_acss_currency!
+        validate_currency!
       end
 
       def execute
@@ -51,7 +51,7 @@ module Payments
             customer: payment_method.payment_processor_customer_id,
             payment_method_types: [payment_method_type],
             off_session: true,
-            mandate: acss_mandate_id
+            mandate: mandate_id
           },
           stripe_account: account_id
         )
@@ -62,7 +62,8 @@ module Payments
       end
 
       def payment_processor_fees_cents
-        return acss_estimate_payment_processor_fees_cents if payment_method_type == 'acss_debit'
+        return estimate_payment_processor_fees_cents if %w[acss_debit bacs_debit].include?(payment_method_type)
+
         return nil unless balance_transaction.present?
 
         balance_transaction[:fee_details].detect { |fee| fee[:type] == 'stripe_fee' }[:amount]

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Contributions
-  class ProcessContributionAcssPaymentSucceeded < ApplicationCommand
+  class ProcessContributionAcssOrBacsPaymentSucceeded < ApplicationCommand
     required do
       model :charge, class: Stripe::Charge
       string :account_id
@@ -38,10 +38,10 @@ module Contributions
       # Update payment processor fee in contribution
       fee = balance_transaction[:fee_details].detect { |f| f[:type] == 'stripe_fee' }
       payment_processor_fees_cents = fee[:amount]
-      contribution.update(payment_processor_fees_cents: payment_processor_fees_cents)
+      contribution.update(payment_processor_fees_cents:)
 
       # We can now calculate the total fees
-      payment_fees = Contributions::CalculatePaymentFees.call(contribution: contribution)
+      payment_fees = Contributions::CalculatePaymentFees.call(contribution:)
       contribution.update(
         donor_advised_fund_fees_cents: payment_fees.donor_advised_fund_fees_cents,
         amount_donated_after_fees_cents: payment_fees.amount_donated_after_fees_cents
@@ -52,13 +52,13 @@ module Contributions
 
     def balance_transaction
       @balance_transaction ||= begin
-        Rails.logger.info("ACSS debit charge. Will fetch balance transaction #{charge.balance_transaction} for account #{account_id}")
+        Rails.logger.info("ACSS or BACS debit charge. Will fetch balance transaction #{charge.balance_transaction} for account #{account_id}")
         Stripe::BalanceTransaction.retrieve(charge.balance_transaction, { stripe_account: account_id })
       end
     end
 
     def process_contribution_payment_succeedeed
-      Contributions::ProcessContributionPaymentSucceeded.run(contribution: contribution, receipt: charge.to_json)
+      Contributions::ProcessContributionPaymentSucceeded.run(contribution:, receipt: charge.to_json)
     end
   end
 end

@@ -42,8 +42,8 @@ class StripeController < ApplicationController
     when 'charge.failed'
       handle_payment_failed(payment: event.data.object)
     when 'charge.succeeded'
-      if event.data.object.payment_method_details.type == 'acss_debit'
-        handle_acss_payment_success(event: event)
+      if event.data.object.payment_method_details.type.in? ['acss_debit', 'bacs_debit']
+        handle_acss_or_bacs_payment_success(event: event)
       else
         handle_payment_success(payment: event.data.object)
       end
@@ -87,10 +87,10 @@ class StripeController < ApplicationController
     outcome.success? ? 200 : 400
   end
 
-  def handle_acss_payment_success(event:)
+  def handle_acss_or_bacs_payment_success(event:)
     charge = event.data.object
     account_id = event.account
-    outcome = Contributions::ProcessContributionAcssPaymentSucceeded.run(charge: charge, account_id: account_id)
+    outcome = Contributions::ProcessContributionAcssOrBacsPaymentSucceeded.run(charge: charge, account_id: account_id)
     outcome.success? ? 200 : 400
   end
 

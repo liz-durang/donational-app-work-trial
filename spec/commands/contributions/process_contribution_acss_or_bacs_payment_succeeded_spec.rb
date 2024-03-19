@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Contributions::ProcessContributionAcssPaymentSucceeded do
+RSpec.describe Contributions::ProcessContributionAcssOrBacsPaymentSucceeded do
   include ActiveSupport::Testing::TimeHelpers
 
   before do |_example|
@@ -13,6 +13,7 @@ RSpec.describe Contributions::ProcessContributionAcssPaymentSucceeded do
 
     StripeMock.start
   end
+
   after { StripeMock.stop }
 
   context 'when the charge is successful' do
@@ -24,8 +25,8 @@ RSpec.describe Contributions::ProcessContributionAcssPaymentSucceeded do
     let(:contribution) do
       create(
         :contribution,
-        donor: donor,
-        portfolio: portfolio,
+        donor:,
+        portfolio:,
         amount_cents: 1_000,
         processed_at: 1.day.ago,
         amount_currency: currency
@@ -33,18 +34,17 @@ RSpec.describe Contributions::ProcessContributionAcssPaymentSucceeded do
     end
 
     let(:org_1) { create(:organization, ein: 'org1') }
-    let(:allocation_1) { build(:allocation, portfolio: portfolio, organization: org_1, percentage: 60) }
-    let(:payment_method) { build(:payment_method, :acss_debit, payment_processor_customer_id: 'cus_123') }
+    let(:allocation_1) { build(:allocation, portfolio:, organization: org_1, percentage: 60) }
     let(:charge) do
-      customer = Stripe::Customer.create({}, stripe_account: stripe_account)
+      customer = Stripe::Customer.create({}, stripe_account:)
       Stripe::Charge.create(
         {
-          customer: customer,
+          customer:,
           amount: contribution.amount_cents,
           currency: contribution.amount_currency,
           metadata: { contribution_id: contribution.id }
         },
-        stripe_account: stripe_account
+        stripe_account:
       )
     end
 
@@ -55,16 +55,16 @@ RSpec.describe Contributions::ProcessContributionAcssPaymentSucceeded do
     end
 
     it 'updates contribution fees' do
-      expect { described_class.run(charge: charge, account_id: stripe_account) }
+      expect { described_class.run(charge:, account_id: stripe_account) }
         .to change { contribution.reload.payment_processor_fees_cents }
     end
 
-    it "calls regular payment suceedeed handler" do
+    it 'calls regular payment suceedeed handler' do
       expect(Contributions::ProcessContributionPaymentSucceeded)
         .to receive(:run)
-        .with(contribution: contribution, receipt: charge.to_json)
+        .with(contribution:, receipt: charge.to_json)
 
-      command = described_class.run(charge: charge, account_id: stripe_account)
+      command = described_class.run(charge:, account_id: stripe_account)
 
       expect(command).to be_success
     end
