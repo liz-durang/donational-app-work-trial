@@ -97,6 +97,8 @@ RSpec.describe Payments::ConnectedAccount::ChargeCustomer do
             )
 
             expect(subject).to be_success
+            expect(subject.result.receipt.amount).to eq(10_023) # donation_amount_cents + tips_cents
+            expect(subject.result.receipt.application_fee_amount).to eq(25) # platform_fee_cents + tips_cents
             expect(subject.result.payment_processor_fees_cents).to eq(20)
           end
         end
@@ -145,6 +147,8 @@ RSpec.describe Payments::ConnectedAccount::ChargeCustomer do
             )
 
             expect(subject).to be_success
+            expect(subject.result.receipt.amount).to eq(10_023) # donation_amount_cents + tips_cents
+            expect(subject.result.receipt.application_fee_amount).to eq(25) # platform_fee_cents + tips_cents
             expect(subject.result.payment_processor_fees_cents).to eq(20)
           end
         end
@@ -208,6 +212,8 @@ RSpec.describe Payments::ConnectedAccount::ChargeCustomer do
               )
 
               expect(subject).to be_success
+              expect(subject.result.receipt.amount).to eq(10_023) # donation_amount_cents + tips_cents
+              expect(subject.result.receipt.application_fee_amount).to eq(25) # platform_fee_cents + tips_cents
               expect(subject.result.payment_processor_fees_cents).to eq(140)
             end
 
@@ -289,6 +295,9 @@ RSpec.describe Payments::ConnectedAccount::ChargeCustomer do
               )
 
               expect(subject).to be_success
+              expect(subject.result.receipt.amount).to eq(10_023) # donation_amount_cents + tips_cents
+              expect(subject.result.receipt.application_fee_amount).to eq(25) # platform_fee_cents + tips_cents
+              expect(subject.result.payment_processor_fees_cents).to eq(120)
             end
 
             context 'but the currency is invalid' do

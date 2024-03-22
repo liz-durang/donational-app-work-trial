@@ -153,6 +153,7 @@ RSpec.configure do |config|
   # This stops StripeMock from mocking http calls, and runs specs that have a 'live: true' flag.
   # https://github.com/donational-org/stripe-ruby-mock#live-testing
   if config.filter_manager.inclusions.rules.include?(:live)
+    raise 'The API key provided is not a test API key. Please use a test API key.' if Stripe.api_key.exclude?('test')
     StripeMock.toggle_live(true)
     puts 'Running **live** tests against Stripe test server...'
   else

@@ -9,6 +9,7 @@ RSpec.describe Payments::RefundCharge do
   end
 
   let(:stripe_helper) { StripeMock.create_test_helper }
+
   before { StripeMock.start }
   after { StripeMock.stop }
 
@@ -31,7 +32,8 @@ RSpec.describe Payments::RefundCharge do
       it 'refunds the charge' do
         command = described_class.run(
           charge_id: charge.id,
-          account_id: account_id
+          account_id:,
+          application_fee_amount_cents: 100
         )
 
         expect(command).to be_success
@@ -39,13 +41,14 @@ RSpec.describe Payments::RefundCharge do
     end
 
     context 'and the charge ID is invalid' do
-      let(:error_message) { "No such charge: invalid ID" }
+      let(:error_message) { 'No such charge: invalid ID' }
 
       it 'fails with errors' do
         stripe_error = Stripe::StripeError.new(error_message)
         command = described_class.run(
           charge_id: 'invalid ID',
-          account_id: account_id
+          account_id:,
+          application_fee_amount_cents: 100
         )
 
         expect(command).not_to be_success
@@ -54,23 +57,26 @@ RSpec.describe Payments::RefundCharge do
     end
   end
 
-  context 'when the charge ID and account ID are not supplied' do
+  context 'when the charge ID and account ID and application fee amount are not supplied' do
     let(:charge_id) { '' }
     let(:account_id) { '' }
+    let(:application_fee_amount_cents) { nil }
 
     it 'fails with errors' do
       command = described_class.run(
-        charge_id: charge_id,
-        account_id: account_id
+        charge_id:,
+        account_id:,
+        application_fee_amount_cents:
       )
 
       expect(command).not_to be_success
       expect(command.errors.symbolic).to include(charge_id: :empty)
       expect(command.errors.symbolic).to include(account_id: :empty)
+      expect(command.errors.symbolic).to include(application_fee_amount_cents: :nils)
     end
   end
 
-  def with_modified_env(options, &block)
-    ClimateControl.modify(options, &block)
+  def with_modified_env(options, &)
+    ClimateControl.modify(options, &)
   end
 end

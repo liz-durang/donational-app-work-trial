@@ -59,6 +59,11 @@ RSpec.describe Payments::PlatformAccount::ChargeCustomerUsBankAccount do
     context 'when account ID, currency, donation amount and payment method are supplied' do
       context 'and the Stripe response is successful' do
         it { is_expected.to be_success }
+
+        it 'has the correct amount and application_fee_amount' do
+          expect(subject.result.receipt.amount).to eq(123) # donation_amount_cents + tips_cents
+          expect(subject.result.receipt.application_fee_amount).to eq(25) # platform_fee_cents + tips_cents
+        end
       end
 
       context 'and the Stripe response is unsuccessful' do
@@ -110,12 +115,14 @@ RSpec.describe Payments::PlatformAccount::ChargeCustomerUsBankAccount do
                                                                                        account_id:)
         expect(first_charge_result).to be_success
         expect(first_charge.status).to eq('succeeded')
+        expect(first_charge.application_fee_amount).to eq(25) # platform_fee_cents + tips_cents
         expect(first_charge.refresh.metadata[:contribution_id]).to eq('345')
 
         second_charge_result, second_charge = make_test_payment_using_stripe_test_server(charge_params:,
                                                                                          account_id:)
         expect(second_charge_result).to be_success
         expect(second_charge.status).to eq('succeeded')
+        expect(second_charge.application_fee_amount).to eq(25) # platform_fee_cents + tips_cents
 
         # Ensure that we tested different charges each time
         expect(first_charge.id).not_to eq(second_charge.id)

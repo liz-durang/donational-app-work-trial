@@ -30,7 +30,7 @@ module Payments
           {
             source: token.id,
             amount: donation_amount_cents + tips_cents,
-            application_fee: platform_fee_cents + tips_cents,
+            application_fee_amount: platform_fee_cents + tips_cents,
             currency:,
             expand: ['balance_transaction'],
             metadata:

@@ -25,13 +25,15 @@ module Contributions
                   Payments::RefundCharge.run(
                     account_id: payment_processor_account_id,
                     charge_id: payment_id,
-                    metadata: metadata
+                    metadata:,
+                    application_fee_amount_cents: payment_application_fee_amount
                   )
                 else
                   Payments::RefundPaymentIntent.run(
                     account_id: payment_processor_account_id,
                     payment_intent_id: payment_id,
-                    metadata: metadata
+                    metadata:,
+                    application_fee_amount_cents: payment_application_fee_amount
                   )
                 end
 
@@ -48,7 +50,7 @@ module Contributions
     end
 
     def delete_donations!
-      Donations::DeleteDonationsForContribution.run(contribution: contribution)
+      Donations::DeleteDonationsForContribution.run(contribution:)
     end
 
     def refund_failed!(errors:)
@@ -75,7 +77,13 @@ module Contributions
     end
 
     def payment_processor_account_id
-      @payment_processor_account_id = Payments::GetPaymentProcessorAccountId.call(donor: donor)
+      @payment_processor_account_id = Payments::GetPaymentProcessorAccountId.call(donor:)
+    end
+
+    def payment_application_fee_amount
+      return nil if contribution.receipt.blank?
+
+      @payment_application_fee_amount = contribution.receipt['application_fee_amount']
     end
   end
 end

@@ -13,10 +13,11 @@ RSpec.describe Contributions::RefundContribution do
     let(:contribution) do
       create(
         :contribution,
-        donor: donor,
+        donor:,
         receipt: {
-          "id" => "126534162",
-          "object" => "charge"
+          'id' => '126534162',
+          'object' => 'charge',
+          'application_fee_amount' => 100
         }
       )
     end
@@ -32,7 +33,7 @@ RSpec.describe Contributions::RefundContribution do
       before do
         allow(Payments::GetPaymentProcessorAccountId)
           .to receive(:call)
-          .with(donor: donor)
+          .with(donor:)
           .and_return('acc_123')
       end
 
@@ -40,14 +41,15 @@ RSpec.describe Contributions::RefundContribution do
         expect(Payments::RefundCharge).to receive(:run).with(
           account_id: 'acc_123',
           charge_id: '126534162',
-          metadata: metadata
+          metadata:,
+          application_fee_amount_cents: 100
         ).and_return(double(success?: true))
 
         expect(Donations::DeleteDonationsForContribution).to receive(:run).with(
-          contribution: contribution
+          contribution:
         ).and_return(double(success?: true))
 
-        command = described_class.run(contribution: contribution)
+        command = described_class.run(contribution:)
 
         expect(command).to be_success
         expect(contribution.refunded_at.present?)
@@ -59,7 +61,7 @@ RSpec.describe Contributions::RefundContribution do
       before do
         allow(Payments::GetPaymentProcessorAccountId)
           .to receive(:call)
-          .with(donor: donor)
+          .with(donor:)
           .and_return('acc_123')
 
         allow(Payments::RefundCharge)
@@ -67,12 +69,13 @@ RSpec.describe Contributions::RefundContribution do
           .with(
             account_id: 'acc_123',
             charge_id: '126534162',
-            metadata: metadata
+            metadata:,
+            application_fee_amount_cents: 100
           ).and_return(double(success?: false, errors: { some: 'error' }))
       end
 
       it 'does not refund the contribution' do
-        command = described_class.run(contribution: contribution)
+        command = described_class.run(contribution:)
 
         expect(command).not_to be_success
         expect(!contribution.refunded_at.present?)

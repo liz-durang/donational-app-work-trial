@@ -5,6 +5,7 @@ module Payments
     required do
       string :account_id, empty: false
       string :payment_intent_id, empty: false
+      integer :application_fee_amount_cents, empty: false
     end
 
     optional do
@@ -19,8 +20,8 @@ module Payments
 
       Stripe::Refund.create(
         {
-          metadata: metadata,
-          refund_application_fee: true,
+          metadata:,
+          refund_application_fee: application_fee_amount_cents.positive?,
           payment_intent: payment_intent_id
         },
         stripe_account: account_id

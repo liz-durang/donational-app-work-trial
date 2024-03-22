@@ -61,6 +61,11 @@ RSpec.describe Payments::PlatformAccount::ChargeCustomerCard do
 
       context 'and the Stripe response is successful' do
         it { is_expected.to be_success }
+
+        it 'has the correct amount and application_fee_amount' do
+          expect(subject.result.receipt.amount).to eq(123) # donation_amount_cents + tips_cents
+          expect(subject.result.receipt.application_fee_amount).to eq(25) # platform_fee_cents + tips_cents
+        end
       end
 
       context 'and the Stripe response is unsuccessful' do
@@ -127,12 +132,14 @@ RSpec.describe Payments::PlatformAccount::ChargeCustomerCard do
                                                                                                account_id:)
         expect(first_charge_result).to be_success
         expect(first_payment_intent.status).to eq('succeeded')
+        expect(first_payment_intent.application_fee_amount).to eq(25) # platform_fee_cents + tips_cents
         expect(first_payment_intent.refresh.metadata[:contribution_id]).to eq('345')
 
         second_charge_result, second_payment_intent = make_test_payment_using_stripe_test_server(charge_params:,
                                                                                                  account_id:)
         expect(second_charge_result).to be_success
         expect(second_payment_intent.status).to eq('succeeded')
+        expect(second_payment_intent.application_fee_amount).to eq(25) # platform_fee_cents + tips_cents
 
         # Ensure that we tested different payment intents each time
         expect(first_payment_intent.id).not_to eq(second_payment_intent.id)
