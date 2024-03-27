@@ -34,7 +34,7 @@ module Payments
         payment_method_type = case outcome.result[:payment_source_type]
                               when 'card'
                                 PaymentMethods::Card
-                              when 'bank_account'
+                              when 'bank_account', 'us_bank_account'
                                 PaymentMethods::BankAccount
                               when 'acss_debit'
                                 PaymentMethods::AcssDebit
