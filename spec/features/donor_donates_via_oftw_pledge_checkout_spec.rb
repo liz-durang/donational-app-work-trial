@@ -80,7 +80,7 @@ RSpec.describe 'Donor makes a pledge from the OFTW pledge checkout', type: :feat
       end
       let!(:donor_with_same_email_address) { create(:donor, email: stripe_customer.email) }
 
-      xit 'can create a subscription' do
+      it 'can create a subscription' do
         # Using the 'review_x' urls in the test environment because using subdomains in the test environment
         # proved too difficult.
         visit review_take_the_pledge_path
@@ -98,7 +98,7 @@ RSpec.describe 'Donor makes a pledge from the OFTW pledge checkout', type: :feat
         expect(page).to have_content "Unpopular Picks for #{us_partner.name}"
         expect("Top Picks for #{us_partner.name}").to appear_before("Unpopular Picks for #{us_partner.name}")
         expect(page).not_to have_content 'Managed Portfolio that has been hidden'
-        expect(page).not_to have_content 'Managed Portfolio that has not been featured'
+        expect(page).to have_content 'Managed Portfolio that has not been featured'
         click_next
         expect(page).to have_content 'Step 1'
         expect(page).to have_content 'Please choose a nonprofit by clicking on a card below'
@@ -124,7 +124,7 @@ RSpec.describe 'Donor makes a pledge from the OFTW pledge checkout', type: :feat
 
         fill_in 'Enter your estimated future annual income', with: 10_000
         click_on '1%'
-        expect(page).to have_content 'Your donation will be £8.33/month'
+        expect(page).to have_content 'Your donation will be £8/month'
         click_next
         expect(page).to have_content 'Step 2'
         expect(page).to have_content "The minimum monthly donation is £#{SubscriptionsController::DEFAULT_MINIMUM_CONTRIBUTION}"
@@ -233,7 +233,7 @@ RSpec.describe 'Donor makes a pledge from the OFTW pledge checkout', type: :feat
         check 'Yes, sign me up for SMS updates'
 
         find('.button', text: 'Continue to summary').click
-        expect(page).to have_content("I pledge 3% of my income to Unpopular Picks for #{uk_partner.name} for One for the World to end extreme poverty.")
+        expect(page).to have_content('I pledge 3% of my income to fight extreme poverty.')
         expect(page).to have_content('£25/month')
         expect(page).to have_content("#{I18n.l(Time.zone.today, format: '%B')} 15, #{Time.zone.today.year + 1}")
         expect(page).not_to have_content('Trial')
@@ -243,7 +243,7 @@ RSpec.describe 'Donor makes a pledge from the OFTW pledge checkout', type: :feat
         end.to change { Donor.count }.by(0).and change { Subscription.count }.by(0)
 
         expect(page).to have_content('Step 4 of 5')
-        expect(page).to have_content('This email address has already been taken')
+        expect(page).to have_content('This email address has already been used')
         fill_in('Email', with: 'my_personal_email@example.com')
         # Without `sleep`s, the telephone field JS makes this test somewhat flakey with regards to successfully populating
         # the hidden phone_number field in interaction with Capybara, but it works fine in the
@@ -261,7 +261,7 @@ RSpec.describe 'Donor makes a pledge from the OFTW pledge checkout', type: :feat
         check 'Yes, sign me up for email updates'
         check 'Yes, sign me up for SMS updates'
         find('.button', text: 'Continue to summary').click
-        expect(page).to have_content("I pledge 3% of my income to Unpopular Picks for #{uk_partner.name} for One for the World to end extreme poverty.")
+        expect(page).to have_content('I pledge 3% of my income to fight extreme poverty.')
         expect(page).to have_content('£25/month')
         expect(page).to have_content("#{I18n.l(Time.zone.today, format: '%B')} 15, #{Time.zone.today.year + 1}")
         expect(page).not_to have_content('Trial')
@@ -350,7 +350,7 @@ RSpec.describe 'Donor makes a pledge from the OFTW pledge checkout', type: :feat
 
         before { freeze_time }
 
-        xit 'can set a trial subscription' do
+        it 'can set a trial subscription' do
           visit review_take_the_pledge_path
           select 'USD', from: 'pledge_form_partner_id'
           find("[data-radio-select-value='#{popular_us_portfolio.id}']").click
@@ -406,8 +406,8 @@ RSpec.describe 'Donor makes a pledge from the OFTW pledge checkout', type: :feat
           end
 
           find('.button', text: 'Continue to summary').click
-          expect(page).to have_content("I pledge 5% of my income to Top Picks for #{us_partner.name} for One for the World to end extreme poverty.")
-          expect(page).to have_content('$41.67/month')
+          expect(page).to have_content('I pledge 5% of my income to fight extreme poverty.')
+          expect(page).to have_content('$42/month')
           expect(page).to have_content("#{I18n.l(Time.zone.today, format: '%B')} 15, #{Time.zone.today.year + 1}")
           expect(page).to have_content('Trial amount')
           expect(page).to have_content('$123/month')
@@ -460,7 +460,7 @@ RSpec.describe 'Donor makes a pledge from the OFTW pledge checkout', type: :feat
             portfolio: popular_us_portfolio.portfolio,
             partner: us_partner,
             frequency: 'monthly',
-            amount_cents: 4167,
+            amount_cents: 4200,
             amount_currency: 'usd',
             tips_cents: 0,
             partner_contribution_percentage: 0,
@@ -471,179 +471,179 @@ RSpec.describe 'Donor makes a pledge from the OFTW pledge checkout', type: :feat
           )
         end
       end
+    end
 
-      context 'when pledging from a specific campaign' do
-        let(:stripe_payment_method_type) { 'acss_debit' }
-        let(:popular_canada_portfolio) { ManagedPortfolio.find_by(name: "Top Picks for #{can_partner.name}") }
-        let(:stripe_metadata) do
-          {
-            'estimated_future_annual_income' => '10000',
-            'house_name_or_number' => '',
-            'managed_portfolio_id' => popular_canada_portfolio.id,
-            'partner_id' => can_partner.id,
-            'payment_method_id' => 'acss_debit',
-            'pledge_percentage' => '5',
-            'postcode' => '',
-            'start_at_month' => '',
-            'start_at_year' => '',
-            'start_pledge_in_future' => 0,
-            'title' => '',
-            'trial_amount_dollars' => '',
-            'uk_gift_aid_accepted' => 0
-          }
-        end
-        # Using a campaign linked to the UK partner in order to test that the resulting associations to partner are
-        # determined by the user's choice of currency and not by the campaign's association to a partner.
-        let(:uk_campaign) do
-          Campaigns::CreateCampaign.run(
-            partner: uk_partner,
-            slug: 'cam-uni',
-            minimum_contribution_amount: 40,
-            title: 'Cambridge',
-            contribution_amount_help_text: 'The average Cambridge University graduate donates £12,345.67 a year.',
-            default_contribution_amounts: [40, 41, 42], # Not used in flow, but required by CreateCampaign command
-            allow_one_time_contributions: true
-          )
-          Partners::GetCampaignBySlug.call(slug: 'cam-uni')
-        end
+    context 'when pledging from a specific campaign' do
+      let(:stripe_payment_method_type) { 'acss_debit' }
+      let(:popular_canada_portfolio) { ManagedPortfolio.find_by(name: "Top Picks for #{can_partner.name}") }
+      let(:stripe_metadata) do
+        {
+          'estimated_future_annual_income' => '10000',
+          'house_name_or_number' => '',
+          'managed_portfolio_id' => popular_canada_portfolio.id,
+          'partner_id' => can_partner.id,
+          'payment_method_id' => 'acss_debit',
+          'pledge_percentage' => '5',
+          'postcode' => '',
+          'start_at_month' => '',
+          'start_at_year' => '',
+          'start_pledge_in_future' => 0,
+          'title' => '',
+          'trial_amount_dollars' => '',
+          'uk_gift_aid_accepted' => 0
+        }
+      end
+      # Using a campaign linked to the UK partner in order to test that the resulting associations to partner are
+      # determined by the user's choice of currency and not by the campaign's association to a partner.
+      let(:uk_campaign) do
+        Campaigns::CreateCampaign.run(
+          partner: uk_partner,
+          slug: 'cam-uni',
+          minimum_contribution_amount: 40,
+          title: 'Cambridge',
+          contribution_amount_help_text: 'The average Cambridge University graduate donates £12,345.67 a year.',
+          default_contribution_amounts: [40, 41, 42], # Not used in flow, but required by CreateCampaign command
+          allow_one_time_contributions: true
+        )
+        Partners::GetCampaignBySlug.call(slug: 'cam-uni')
+      end
 
-        before { freeze_time }
+      before { freeze_time }
 
-        xit 'alters the flow per campaign' do
-          visit review_campaign_take_the_pledge_path(campaign_slug: uk_campaign.slug)
+      it 'alters the flow per campaign' do
+        visit review_campaign_take_the_pledge_path(campaign_slug: uk_campaign.slug)
 
-          select 'CAD', from: 'pledge_form_partner_id'
-          find("[data-radio-select-value='#{popular_canada_portfolio.id}']").click
-          click_next
-          # Test that the contribution_amount_help_text is set by the campaign and is not the defualt.
-          expect(page).to have_content('The average Cambridge University graduate donates £12,345.67 a year.')
-          fill_in 'Enter your estimated future annual income', with: 10_000
-          click_on '3%'
-          # Test that the minimum_contribution_amount is set by the campaign and is not the defualt ($10).
-          click_next
-          expect(page).to have_content('Step 2 of 5')
-          expect(page).to have_content('The minimum monthly donation is $40')
-          click_on '5%'
-          click_next
+        select 'CAD', from: 'pledge_form_partner_id'
+        find("[data-radio-select-value='#{popular_canada_portfolio.id}']").click
+        click_next
+        # Test that the contribution_amount_help_text is set by the campaign and is not the default.
+        expect(page).to have_content('The average Cambridge University graduate donates £12,345.67 a year.')
+        fill_in 'Enter your estimated future annual income', with: 10_000
+        click_on '3%'
+        # Test that the minimum_contribution_amount is set by the campaign and is not the default ($20).
+        click_next
+        expect(page).to have_content('Step 2 of 5')
+        expect(page).to have_content('The minimum monthly donation is $40')
+        click_on '5%'
+        click_next
 
-          # Test that bank payment is pre-selected
-          expect(find('.is-active')).to have_content 'Direct Debit'
+        # Test that bank payment is pre-selected
+        expect(find('.is-active')).to have_content 'Direct Debit'
 
-          # One important thing this expectation verifies is that the correct form inputs from the first several
-          # steps of the form are passed along to Stripe as 'metadata' to be parsed after the Stripe checkout completes.
-          expect(Stripe::Checkout::Session).to receive(:create).with(
-            { mode: 'setup',
-              success_url: review_campaign_take_the_pledge_url(host: capybara_host, stripe_session_id: '{CHECKOUT_SESSION_ID}',
-                                                               partner_id: can_partner.id, campaign_slug: uk_campaign.slug).gsub('%7B', '{').gsub('%7D', '}'),
-              cancel_url: review_campaign_take_the_pledge_url(host: capybara_host, campaign_slug: uk_campaign.slug),
-              customer_creation: 'always',
+        # One important thing this expectation verifies is that the correct form inputs from the first several
+        # steps of the form are passed along to Stripe as 'metadata' to be parsed after the Stripe checkout completes.
+        expect(Stripe::Checkout::Session).to receive(:create).with(
+          { mode: 'setup',
+            success_url: review_campaign_take_the_pledge_url(host: capybara_host, stripe_session_id: '{CHECKOUT_SESSION_ID}',
+                                                             partner_id: can_partner.id, campaign_slug: uk_campaign.slug).gsub('%7B', '{').gsub('%7D', '}'),
+            cancel_url: review_campaign_take_the_pledge_url(host: capybara_host, campaign_slug: uk_campaign.slug),
+            customer_creation: 'always',
+            currency: 'cad',
+            payment_method_options: { acss_debit: {
               currency: 'cad',
-              payment_method_options: { acss_debit: {
-                currency: 'cad',
-                mandate_options: {
-                  payment_schedule: 'interval',
-                  interval_description: 'on the 15th of every month',
-                  transaction_type: 'personal'
-                }
-              } },
-              payment_method_types: ['acss_debit'],
-              metadata: stripe_metadata }, { stripe_account: can_partner.payment_processor_account_id }
-          ).and_return(stripe_checkout_session)
+              mandate_options: {
+                payment_schedule: 'interval',
+                interval_description: 'on the 15th of every month',
+                transaction_type: 'personal'
+              }
+            } },
+            payment_method_types: ['acss_debit'],
+            metadata: stripe_metadata }, { stripe_account: can_partner.payment_processor_account_id }
+        ).and_return(stripe_checkout_session)
 
-          click_next
+        click_next
 
-          sleep 3 # Allow time for the redirect to take place
+        sleep 3 # Allow time for the redirect to take place
 
-          # Expect the user to automatically be redirected to Stripe.
-          expect(page.current_url).to eq(stripe_checkout_session.url)
+        # Expect the user to automatically be redirected to Stripe.
+        expect(page.current_url).to eq(stripe_checkout_session.url)
 
-          visit review_campaign_take_the_pledge_path(stripe_session_id: stripe_checkout_session.id,
-                                                     partner_id: can_partner.id, campaign_slug: uk_campaign.slug)
+        visit review_campaign_take_the_pledge_path(stripe_session_id: stripe_checkout_session.id,
+                                                   partner_id: can_partner.id, campaign_slug: uk_campaign.slug)
 
-          # Without `sleep`s, the telephone field JS makes this test somewhat flakey with regards to successfully populating
-          # the hidden phone_number field in interaction with Capybara, but it works fine in the
-          # browser when operated by a human.
-          sleep 1
-          find('.iti__flag-container').click # Test whether we store the correct country code.
-          find('.iti__country-name', text: 'Afghanistan').click # Afghan country code is 93.
-          fill_in('Mobile phone', with: '070 123 4567')
-          sleep 1
+        # Without `sleep`s, the telephone field JS makes this test somewhat flakey with regards to successfully populating
+        # the hidden phone_number field in interaction with Capybara, but it works fine in the
+        # browser when operated by a human.
+        sleep 1
+        find('.iti__flag-container').click # Test whether we store the correct country code.
+        find('.iti__country-name', text: 'Afghanistan').click # Afghan country code is 93.
+        fill_in('Mobile phone', with: '070 123 4567')
+        sleep 1
 
-          # Test that we don't ask the unnecessary question of chapter affiliation (inferred from campaign)
-          expect(page).not_to have_content('Enter your chapter name')
-          within('#givewell_familiar') do
-            find('.button', text: 'No').click
-          end
-
-          find('.button', text: 'Continue to summary').click
-          expect(page).to have_content("I pledge 5% of my income to Top Picks for #{can_partner.name} for One for the World to end extreme poverty.")
-          expect(page).to have_content('$41.67/month')
-          expect(page).to have_content("#{I18n.l(next_fifteenth, format: '%B')} 15, #{next_fifteenth.year}")
-          expect(page).not_to have_content('Trial amount')
-
-          expect do
-            find('.button', text: 'Submit my pledge').click
-          end.to change { Donor.count }.by(1).and change { Subscription.count }.by(1)
-
-          expect(page.current_url).to eq(thank_you_url)
-
-          donor = Donor.find_by(
-            contribution_frequency: 'monthly',
-            uk_gift_aid_accepted: false,
-            first_name: 'Robert',
-            last_name: 'Doe',
-            email: 'stripe_mock@example.com',
-            title: '',
-            house_name_or_number: '',
-            postcode: '',
-            annual_income_cents: 1_000_000
-          )
-
-          # Test that the resulting associations to partner are determined by the choice of
-          # currency and not by the campaign's association to a partner.
-          expect(Partners::GetPartnerForDonor.call(donor:)).to eq(can_partner)
-          expect(Portfolios::GetActivePortfolio.call(donor:)).to eq(popular_canada_portfolio.portfolio)
-          expect(Payments::GetActivePaymentMethod.call(donor:)).to have_attributes(
-            donor:,
-            payment_processor_customer_id: stripe_customer.id,
-            type: PaymentMethods::AcssDebit.to_s,
-            last4: '3456',
-            name: 'John Dolton', # Default provided by Stripe Ruby Mock
-            institution: 'Test Bank',
-            address_zip_code: '10000', # Default provided by Stripe Ruby Mock
-            payment_processor_source_id: stripe_payment_method.id
-          )
-          partner_affiliation = Partners::GetPartnerAffiliationByDonor.call(donor:)
-          expect(partner_affiliation.campaign).to eq(uk_campaign)
-          # Test that of the list of chapters (which is a hidden dropdown in the case of
-          # the campaign-specific flow), the chapter with a name similar to the name of the campaign is
-          # automatically selected and stored against the custom donor information (and that we store the slug rather
-          # than the title of the campaign)
-          expect(partner_affiliation.custom_donor_info).to include({ 'chapter' => uk_campaign.slug,
-                                                                     'comms_email' => '0',
-                                                                     'comms_phone' => '0',
-                                                                     'birthday_month' => '',
-                                                                     'birthday_day' => '',
-                                                                     'phone_number' => '+93701234567',
-                                                                     'givewell_comms' => '1',
-                                                                     'OFTW_discretion' => '1',
-                                                                     'nonprofit_comms' => '1',
-                                                                     'givewell_familiar' => 'false' })
-          expect(Subscription.last).to have_attributes(
-            start_at: Time.zone.now,
-            portfolio: popular_canada_portfolio.portfolio,
-            partner: can_partner,
-            frequency: 'monthly',
-            amount_cents: 4167,
-            amount_currency: 'cad',
-            tips_cents: 0,
-            partner_contribution_percentage: 0,
-            trial_start_at: nil,
-            trial_last_scheduled_at: nil,
-            trial_deactivated_at: nil,
-            trial_amount_cents: 0
-          )
+        # Test that we don't ask the unnecessary question of chapter affiliation (inferred from campaign)
+        expect(page).not_to have_content('Enter your chapter name')
+        within('#givewell_familiar') do
+          find('.button', text: 'No').click
         end
+
+        find('.button', text: 'Continue to summary').click
+        expect(page).to have_content('I pledge 5% of my income to fight extreme poverty.')
+        expect(page).to have_content('$42/month')
+        expect(page).to have_content("#{I18n.l(next_fifteenth, format: '%B')} 15, #{next_fifteenth.year}")
+        expect(page).not_to have_content('Trial amount')
+
+        expect do
+          find('.button', text: 'Submit my pledge').click
+        end.to change { Donor.count }.by(1).and change { Subscription.count }.by(1)
+
+        expect(page.current_url).to eq(thank_you_url)
+
+        donor = Donor.find_by(
+          contribution_frequency: 'monthly',
+          uk_gift_aid_accepted: false,
+          first_name: 'Robert',
+          last_name: 'Doe',
+          email: 'stripe_mock@example.com',
+          title: '',
+          house_name_or_number: '',
+          postcode: '',
+          annual_income_cents: 1_000_000
+        )
+
+        # Test that the resulting associations to partner are determined by the choice of
+        # currency and not by the campaign's association to a partner.
+        expect(Partners::GetPartnerForDonor.call(donor:)).to eq(can_partner)
+        expect(Portfolios::GetActivePortfolio.call(donor:)).to eq(popular_canada_portfolio.portfolio)
+        expect(Payments::GetActivePaymentMethod.call(donor:)).to have_attributes(
+          donor:,
+          payment_processor_customer_id: stripe_customer.id,
+          type: PaymentMethods::AcssDebit.to_s,
+          last4: '3456',
+          name: 'John Dolton', # Default provided by Stripe Ruby Mock
+          institution: 'Test Bank',
+          address_zip_code: '10000', # Default provided by Stripe Ruby Mock
+          payment_processor_source_id: stripe_payment_method.id
+        )
+        partner_affiliation = Partners::GetPartnerAffiliationByDonor.call(donor:)
+        expect(partner_affiliation.campaign).to eq(uk_campaign)
+        # Test that of the list of chapters (which is a hidden dropdown in the case of
+        # the campaign-specific flow), the chapter with a name similar to the name of the campaign is
+        # automatically selected and stored against the custom donor information (and that we store the slug rather
+        # than the title of the campaign)
+        expect(partner_affiliation.custom_donor_info).to include({ 'chapter' => uk_campaign.slug,
+                                                                   'comms_email' => '0',
+                                                                   'comms_phone' => '0',
+                                                                   'birthday_month' => '',
+                                                                   'birthday_day' => '',
+                                                                   'phone_number' => '+93701234567',
+                                                                   'givewell_comms' => '1',
+                                                                   'OFTW_discretion' => '1',
+                                                                   'nonprofit_comms' => '1',
+                                                                   'givewell_familiar' => 'false' })
+        expect(Subscription.last).to have_attributes(
+          start_at: Time.zone.now,
+          portfolio: popular_canada_portfolio.portfolio,
+          partner: can_partner,
+          frequency: 'monthly',
+          amount_cents: 4200,
+          amount_currency: 'cad',
+          tips_cents: 0,
+          partner_contribution_percentage: 0,
+          trial_start_at: nil,
+          trial_last_scheduled_at: nil,
+          trial_deactivated_at: nil,
+          trial_amount_cents: 0
+        )
       end
     end
 
@@ -706,7 +706,8 @@ RSpec.describe 'Donor makes a pledge from the OFTW pledge checkout', type: :feat
         },
         operating_costs_text: 'For every $1 donated to One for the World, we raise $12 for effective charities. Please select here if you are happy for some of your donations to go to One for the World.',
         operating_costs_organization: one_for_the_world_operating_costs_charity,
-        payment_processor_account_id: 'acc_123'
+        payment_processor_account_id: 'acc_123',
+        uses_one_for_the_world_checkout: true
       )
 
       create_managed_portfolios_for_partner!(partner)

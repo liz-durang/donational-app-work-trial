@@ -11,7 +11,7 @@
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  display_order :integer
-#  featured      :boolean
+#  featured      :boolean          not null
 #
 
 class ManagedPortfolio < ApplicationRecord

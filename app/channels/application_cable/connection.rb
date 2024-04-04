@@ -16,7 +16,7 @@ module ApplicationCable
     def session
       cookies
         .encrypted[Rails.application.config.session_options[:key]]
-        .with_indifferent_access
+        &.with_indifferent_access
     end
 
     def find_verified_donor

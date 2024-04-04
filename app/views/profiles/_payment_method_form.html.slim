@@ -34,7 +34,7 @@
       span.icon.is-left.is-small: i.fa.fa-user
 .wizard-card-footer
   a.button.is-primary.is-medium.is-fullwidth id="payment-next" href="#" Donate
-  a.is-hidden.plaid-success-target data-action="wizard#donate" id="payment-validated"
+  a.is-hidden.plaid-success-target data-action="donational-wizard#donate" id="payment-validated"
 
 javascript:
   var stripe = Stripe("#{ENV.fetch('STRIPE_PUBLIC_KEY')}");

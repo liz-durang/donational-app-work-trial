@@ -351,7 +351,6 @@ RSpec.describe Payments::ConnectedAccount::ChargeCustomer do
         end
 
         it "can debit the donor's account more than once" do
-          # TODO: ensure this test fails if I hard-code the incorrect payment method types into the call to create a payment intent
           expect(it_can_debit_the_donors_account_more_than_once(charge_params:,
                                                                 account_id:)).to be(true)
         end

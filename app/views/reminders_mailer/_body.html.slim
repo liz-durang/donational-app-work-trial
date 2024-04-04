@@ -41,7 +41,7 @@ table border="0" cellpadding="0" cellspacing="0" width="100%"
 h3 Charities in your Portfolio
 h4 Your donation will be distributed to the charities in your portfolio.
 table border="0" cellpadding="0" cellspacing="0" width="100%"
-  - @subscription.portfolio.active_allocations.each do |allocation|
+  - @subscription.portfolio.active_allocations.includes([:organization]).each do |allocation|
     tr.summary-item
       td colspan="2"
         = allocation.organization_name
@@ -51,5 +51,5 @@ p
   ' To update your preferences, donation frequency or payment method,
   = link_to 'Log in to your Donational account', edit_accounts_url
 
-h4 How it works?
+h4 How it works
 = render 'shared/how_it_works'

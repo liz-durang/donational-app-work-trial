@@ -3,6 +3,8 @@
     "@rails/activestorage": "^7.0.4",
     "@rails/webpacker": "5.4.3",
     "dotenv": "^6.0.0",
+    "intl-tel-input": "^18.2.1",
+    "lodash": "^4.17.21",
     "stimulus": "^2.0.0",
     "underscore": "^1.9.1",
     "webpack": "^4.46.0",

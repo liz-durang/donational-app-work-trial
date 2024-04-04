@@ -1,0 +1,12 @@
+.notice.columns.is-mobile
+  .column
+    = image_tag(image_url('circle-check.svg'))
+  p.column.small.pl-0
+    | We'll notify you by email before your first donation is submitted.
+.notice.columns.is-mobile
+  .column
+    = image_tag(image_url('circle-check.svg'))
+  p.column.small.pl-0
+    span = "You will be able to modify your Pledge at any time by logging in to "
+    span = link_to "Donational", (Rails.env.staging? || Rails.env.test? ? "https://www.donational.org" : root_url(host: request.domain)), target: "_blank"
+    span = " with the email you provide us."

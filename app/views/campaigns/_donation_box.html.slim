@@ -1,5 +1,5 @@
 - if logged_in?
-  fieldset.wizard-card data-target='wizard.step'
+  fieldset.wizard-card data-target='donational-wizard.step'
     .wizard-card-header
       span.icon: i.fas.fa-lock
       h3.wizard-card-title Take the pledge
@@ -10,15 +10,15 @@
         ' or
         = sign_out_link
 - else
-  = form_with model: @view_model.new_campaign_contribution, data: { controller: 'wizard' }, local: true, id: 'payment-form', method: :post, class: 'form' do |f|
+  = form_with model: @view_model.new_campaign_contribution, data: { controller: 'donational-wizard' }, local: true, id: 'payment-form', method: :post, class: 'form' do |f|
     = f.hidden_field :payment_token, id: 'payment_token'
     = f.hidden_field :payment_method_id, id: 'payment-method-id'
     = f.hidden_field :donor_id, value: @view_model.donor_id
-    fieldset.wizard-card data-target='wizard.step'
+    fieldset.wizard-card data-target='donational-wizard.step'
       .wizard-card-header
         span.icon: i.fas.fa-handshake
         h3.wizard-card-title Take the pledge
-        = render 'shared/wizard_nav', step: 1, of: 5
+        = render 'shared/donational_wizard_nav', step: 1, of: 5
       .wizard-card-content style="height: auto; overflow-y:scroll;"
         .field
           - if @view_model.managed_portfolios.where(featured: true).empty?
@@ -30,11 +30,11 @@
               - @view_model.managed_portfolios.where(featured: true).each do |mp|
                 .control.column.is-full
                   label for="portfolio-#{mp.id}"
-                    level.is-mobile data-action="wizard#selectPortfolio"
+                    level.is-mobile data-action="donational-wizard#selectPortfolio"
                       div.card style="cursor: pointer;" id="portfolio-link-#{mp.id}"
                         div.card-content
                           .label
-                            .span.icon.radio-button = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}", data: { action: 'wizard#selectPortfolio' }
+                            .span.icon.radio-button = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}", data: { action: 'donational-wizard#selectPortfolio' }
                           p.title.is-4 = mp.name
                           p.subtitle.is-6 = pluralize(mp.size, 'charity')
                           div.content = mp.description
@@ -45,12 +45,12 @@
                 - unless mp.featured == true
                   .control.column.is-half
                     label for="portfolio-#{mp.id}"
-                      div.card.is-mobile data-action="wizard#selectPortfolio" style="cursor: pointer;"
+                      div.card.is-mobile data-action="donational-wizard#selectPortfolio" style="cursor: pointer;"
                         div.card-content.portfolio-box
                           .level
                             .level-right
                               .label
-                                .span.icon.radio-button = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}", data: { action: 'wizard#selectPortfolio' }
+                                .span.icon.radio-button = f.radio_button :managed_portfolio_id, mp.id, id: "portfolio-#{mp.id}", data: { action: 'donational-wizard#selectPortfolio' }
                           .level
                             .level-left style='flex-shrink: initial; flex-grow: 1; margin: 0 0.5rem'
                               span.title.is-6
@@ -59,18 +59,18 @@
                           .level
                             .level-left
                               .help.charities = pluralize(mp.size, 'charity')
-          = f.hidden_field :portfolio_selected, data: { target: "wizard.portfolioSelected wizard.required_field_0" }
+          = f.hidden_field :portfolio_selected, data: { target: "donational-wizard.portfolioSelected donational-wizard.required_field_0" }
           span.help.display-when-errors This field is required
       .wizard-card-footer
-        a.icon.right-arrow data-action="wizard#next" Next &rarr;
-    fieldset.wizard-card data-target='wizard.step'
+        a.icon.right-arrow data-action="donational-wizard#next" Next &rarr;
+    fieldset.wizard-card data-target='donational-wizard.step'
       .wizard-card-header
         span.icon: i.fas.fa-handshake
         h3.wizard-card-title Take the pledge
-        = render 'shared/wizard_nav', step: 2, of: 5
+        = render 'shared/donational_wizard_nav', step: 2, of: 5
       h3.wizard-card-sub-title About you
       .wizard-card-content
-        
+
         .level.about
           .level-left
             label.field-title First name *
@@ -79,9 +79,9 @@
             .field
               .control.has-icons-left
                 = icon_tag('fas fa-user')
-                = f.text_field :first_name, class: :input, data: { target: 'wizard.required_field_1' }
+                = f.text_field :first_name, class: :input, data: { target: 'donational-wizard.required_field_1' }
                 span.help.display-when-errors This field is required
-        
+
         .level.about
           .level-left
             label.field-title Last name *
@@ -90,9 +90,9 @@
             .field
               .control.has-icons-left
                 = icon_tag('fas fa-user')
-                = f.text_field :last_name, class: :input, data: { target: 'wizard.required_field_1' }
+                = f.text_field :last_name, class: :input, data: { target: 'donational-wizard.required_field_1' }
                 span.help.display-when-errors This field is required
-        
+
         .level.about
           .level-left
             label.field-title Email *
@@ -101,16 +101,16 @@
             .field
               .control.has-icons-left
                 = icon_tag('fas fa-envelope')
-                = f.email_field :email, class: :input, data: { target: 'wizard.required_field_1' }
+                = f.email_field :email, class: :input, data: { target: 'donational-wizard.required_field_1' }
                 span.help.display-when-errors This field is required
       .wizard-card-footer
-        a.icon.left-arrow data-action="wizard#previous" &larr; Previous
-        a.icon.right-arrow data-action="wizard#next" Next &rarr;
-    fieldset.wizard-card data-target='wizard.step'
+        a.icon.left-arrow data-action="donational-wizard#previous" &larr; Previous
+        a.icon.right-arrow data-action="donational-wizard#next" Next &rarr;
+    fieldset.wizard-card data-target='donational-wizard.step'
       .wizard-card-header
         span.icon: i.fas.fa-handshake
         h3.wizard-card-title Take the pledge
-        = render 'shared/wizard_nav', step: 3, of: 5
+        = render 'shared/donational_wizard_nav', step: 3, of: 5
       h3.wizard-card-sub-title Your donation
       .wizard-card-content data-controller="date-field"
         .field data-controller="radio-select"
@@ -118,7 +118,7 @@
           br
           .field.is-grouped.is-grouped-multiline
             - @view_model.default_contribution_amounts.each do |amount|
-              a.control.button.is-expanded href='#' data-target='radio-select.button' data-action='radio-select#select wizard#updateGiftAidAmount' data-radio-select-value=amount value=amount
+              a.control.button.is-expanded href='#' data-target='radio-select.button' data-action='radio-select#select donational-wizard#updateGiftAidAmount' data-radio-select-value=amount value=amount
                 = Money.from_amount(amount.to_i, @view_model.currency).format(no_cents_if_whole: true)
           .field.has-addons
             .control
@@ -128,8 +128,8 @@
                 class: %w(input is-medium),
                 placeholder: 'Your donation amount',
                 data: { controller: 'integer-field',
-                        target: 'radio-select.output wizard.required_field_2 wizard.donationAmount',
-                        action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection keypress->integer-field#allowKeypressWhenInteger input->wizard#updateGiftAidAmount',
+                        target: 'radio-select.output donational-wizard.required_field_2 donational-wizard.donationAmount',
+                        action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection keypress->integer-field#allowKeypressWhenInteger input->donational-wizard#updateGiftAidAmount',
                         'minimum-donation-amount' => @view_model.minimum_contribution_amount }
               span.help.display-when-errors This field is required
               span.help.display-when-validation-errors = "Donation amount must be greater or equal than #{Money.from_amount(@view_model.minimum_contribution_amount, @view_model.currency).format(no_cents_if_whole: true)}"
@@ -172,7 +172,7 @@
                 = f.number_field :trial_amount_dollars,
                   class: %w(button cursor-auto),
                   placeholder: 'Custom amount',
-                  data: { controller: 'integer-field', target: 'radio-select.output wizard.trialDonationAmount', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection keypress->integer-field#allowKeypressWhenInteger' }
+                  data: { controller: 'integer-field', target: 'radio-select.output donational-wizard.trialDonationAmount', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection keypress->integer-field#allowKeypressWhenInteger' }
         - if @view_model.supports_gift_aid?
           hr
           .columns.is-mobile
@@ -181,17 +181,17 @@
             .column
               .has-text-justified
                 ' If you are a UK taxpayer your donation could be worth
-                span.has-text-weight-bold data-target='wizard.giftAidAmount'
+                span.has-text-weight-bold data-target='donational-wizard.giftAidAmount'
                   ' £0.00
                 | at no extra cost to you.
           section.section
             .columns.is-mobile
               .column.is-1
                 .field
-                  = f.check_box :uk_gift_aid_accepted, { id: 'gift_aid_checkbox', data: { target: 'wizard.giftAidFieldsetVisible', action: 'input->wizard#updateGiftAidFieldsVisibility' } }
+                  = f.check_box :uk_gift_aid_accepted, { id: 'gift_aid_checkbox', data: { target: 'donational-wizard.giftAidFieldsetVisible', action: 'input->donational-wizard#updateGiftAidFieldsVisibility' } }
               .column
                 p Yes - I am a UK taxpayer and would like to Gift Aid my donations now and in future. I understand I must pay enough income tax and/or capital gains tax each tax year to cover the amount of Gift Aid that all charities and community amateur sports clubs claim on my donations in that tax year, and I am responsible for paying any difference.
-          fieldset data-target='wizard.giftAidFieldset'
+          fieldset data-target='donational-wizard.giftAidFieldset'
             h4.subtitle We need these details to claim Gift Aid on your donation:
             .field
               .label.is-normal
@@ -200,7 +200,7 @@
                 .field
                   .control.has-icons-left
                     = icon_tag('fas fa-home')
-                    = f.text_field :house_name_or_number, class: :input, data: { target: 'wizard.giftAidField' }
+                    = f.text_field :house_name_or_number, class: :input, data: { target: 'donational-wizard.giftAidField' }
                     span.help.display-when-errors This field is required
             .columns
               .column
@@ -211,7 +211,7 @@
                     .field
                       .control.has-icons-left
                         = icon_tag('fas fa-user')
-                        = f.text_field :title, class: :input, placeholder: 'e.g. Mr or Ms', data: { target: 'wizard.giftAidField' }
+                        = f.text_field :title, class: :input, placeholder: 'e.g. Mr or Ms', data: { target: 'donational-wizard.giftAidField' }
                         span.help.display-when-errors This field is required
               .column
                 .field
@@ -221,26 +221,26 @@
                     .field
                       .control.has-icons-left
                         = icon_tag('fas fa-home')
-                        = f.text_field :postcode, class: :input, placeholder: 'please include a space', data: { target: 'wizard.giftAidPostcode' }
+                        = f.text_field :postcode, class: :input, placeholder: 'please include a space', data: { target: 'donational-wizard.giftAidPostcode' }
                         span.help.display-when-errors Postcode must include a space e.g. AA1 3DD
       .wizard-card-footer
-        a.icon.left-arrow data-action="wizard#previous" &larr; Previous
-        a.icon.right-arrow id="Next-button" data-action="wizard#next" Next &rarr; 
-    fieldset#payment-step.wizard-card data-target='wizard.step'
+        a.icon.left-arrow data-action="donational-wizard#previous" &larr; Previous
+        a.icon.right-arrow id="Next-button" data-action="donational-wizard#next" Next &rarr;
+    fieldset#payment-step.wizard-card data-target='donational-wizard.step'
       .wizard-card-header
         span.icon: i.fas.fa-handshake
         h3.wizard-card-title Take the pledge
-        = render 'shared/wizard_nav', step: 4, of: 5
+        = render 'shared/donational_wizard_nav', step: 4, of: 5
       h3.wizard-card-sub-title Payment
       = render 'payment_method_form', payment_method_field: 'payment-method-id'
-    fieldset.wizard-card data-target='wizard.step'
+    fieldset.wizard-card data-target='donational-wizard.step'
       .wizard-card-header
         span.icon: i.fas.fa-handshake
         h3.wizard-card-title Take the pledge
-        = render 'shared/wizard_nav', step: 5, of: 5
+        = render 'shared/donational_wizard_nav', step: 5, of: 5
       h3.wizard-card-sub-title About you
       .wizard-card-content
         = f.fields_for :donor_questions do |questions_form|
           = render @view_model.donor_questions, form: questions_form
       .wizard-card-footer
-        a.button.is-primary.is-medium.is-fullwidth href='#' data-action="wizard#donate" style="border-radius: 8px;" Donate 
+        a.button.is-primary.is-medium.is-fullwidth href='#' data-action="donational-wizard#donate" style="border-radius: 8px;" Donate

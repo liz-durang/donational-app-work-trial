@@ -19,7 +19,7 @@ module Portfolios
         find_or_create_organizations
         deactivate_existing_allocations
         add_organizations_to_portfolio
-        update_managed_portoflio
+        update_managed_portfolio
       end
 
       nil
@@ -51,11 +51,11 @@ module Portfolios
       )
     end
 
-    def update_managed_portoflio
+    def update_managed_portfolio
       managed_portfolio.update!(
         name: title,
-        description: description,
-        featured: featured,
+        description:,
+        featured: featured || false,
         hidden_at: archived ? Time.zone.now : nil
       )
       managed_portfolio.image.attach(image) if image.present?

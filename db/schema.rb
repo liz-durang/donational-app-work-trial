@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_24_211012) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_27_124159) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -195,7 +195,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_24_211012) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "display_order"
-    t.boolean "featured"
+    t.boolean "featured", default: false, null: false
     t.index ["partner_id"], name: "index_managed_portfolios_on_partner_id"
     t.index ["portfolio_id"], name: "index_managed_portfolios_on_portfolio_id"
   end
@@ -262,6 +262,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_24_211012) do
     t.string "receipt_charity_name"
     t.decimal "donor_advised_fund_fee_percentage", default: "0.01"
     t.datetime "deactivated_at", precision: nil
+    t.boolean "uses_one_for_the_world_checkout", default: false, null: false
   end
 
   create_table "payment_methods", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

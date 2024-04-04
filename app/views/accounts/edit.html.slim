@@ -115,4 +115,4 @@ section.embossed.section
                     = f.text_field donor_response.question.name, class: :input,
                       value: donor_response.value
             p.has-text-right
-              = f.submit "Save", class: %w(button is-primary), data: { action: 'donor_question#validateRequiredFields' }
+              = f.submit "Save", class: %w(button is-primary), data: { action: 'donor_question#validateFields' }

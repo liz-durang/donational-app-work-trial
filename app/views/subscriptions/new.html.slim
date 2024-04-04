@@ -1,0 +1,264 @@
+= form_with model: @view_model.pledge_form, data: { controller: 'oftw-wizard', 'oftw-wizard-target': 'form', 'oftw-wizard-portfolio-id-to-name-mapping-value': @view_model.portfolio_id_to_name_mapping, 'oftw-wizard-currency-to-payment-processor-account-id-mapping-value': @view_model.currency_to_payment_processor_account_id_mapping, 'oftw-wizard-stripe-api-key-value': ENV.fetch('STRIPE_PUBLIC_KEY'), 'oftw-wizard-after-return-from-successful-stripe-checkout-value': @after_return_from_successful_stripe_checkout, 'oftw-wizard-minimum-contribution-amount-value': @view_model.minimum_contribution_amount, 'oftw-wizard-campaign-slug-value': @view_model.campaign&.slug, 'oftw-wizard-campaign-currency-value': @view_model.campaign&.partner&.currency }, id: 'pledge-form', url: (Rails.env.staging? ? review_create_pledge_path : create_pledge_path ) do |f|
+  .columns.is-desktop.m-0.main
+    // TODO: Make sure that the background image loads quickly enough that it doesn't look rubbish.
+    .column.is-half-desktop.left-page
+      #scrim
+        = image_tag(image_url('OFTW-Secondary-Logo-RGB-White-4k.png'), class: 'oftw-logo mt-3 is-block')
+        .heading-container.mt-5.is-hidden-touch
+          h1
+            | Take the 1% Pledge to end extreme poverty.
+          p.mt-5.is-size-5
+            | Choose from our entire portfolio of highly effective Nonprofit Partners
+    .column.is-half-desktop.right-page-container
+      .progress-bar.columns.is-mobile
+        - 5.times do
+          .column.blue data-oftw-wizard-target='progressBarColumn'
+      .right-page
+        fieldset data-oftw-wizard-target='step'
+          p.small = "Step 1 of 5"
+          h2.mb-3
+            | Choose your Nonprofit Partners
+          .fieldset
+            .field
+              .control.has-text-right
+                .select
+                  = f.select :partner_id, @view_model.currencies, {}, data: { 'oftw-wizard-target': 'currencySelect required_field_0', action: 'oftw-wizard#currencySelected' }
+            .field.columns.is-multiline.is-mobile data-controller="radio-select"
+              span.help.display-when-errors.column.error-badge.small
+                .head Error
+                div
+                  | Please choose a nonprofit by clicking on a card below
+              - @view_model.portfolios_by_partner.each do |partner_currency, managed_portfolios|
+                .fieldset.column.is-full data-oftw-wizard-target="#{partner_currency.upcase}PartnerPortfolios"
+                  - managed_portfolios.each.with_index do |portfolio, index|
+                      = render 'portfolio', portfolio: portfolio, count: managed_portfolios.count
+
+              = f.hidden_field :managed_portfolio_id, data: { 'radio-select-target': 'output', 'oftw-wizard-target': 'required_field_0 managedPortfolioHiddenInput' }
+        fieldset.is-hidden data-oftw-wizard-target='step'
+          p.small = "Step 2 of 5"
+          h2
+            | Calculate your Pledge
+          .field
+            = f.label :estimated_future_annual_income, "Enter your estimated future annual income", class: "label has-text-weight-normal"
+
+            .control.has-icons-left
+              = f.text_field :estimated_future_annual_income, class: "input", data: { 'oftw-wizard-target': 'required_field_1 estimatedFutureIncome', action: 'oftw-wizard#updateDonationEstimate keypress->integer-field#allowKeypressWhenInteger', controller: 'integer-field' }
+              span.icon.is-left#currency data-oftw-wizard-target="estimatedFutureIncomeCurrency"
+              span.help.display-when-errors Please enter an estimate of your future annual income.
+            p.help.has-text-grey = @view_model.contribution_amount_help_text
+            .notice.columns.is-mobile.mt-1
+              .column data-oftw-wizard-target='wrongCurrencyNotice' $
+              p.column.small.pl-0.wrong-currency-text
+                span = "Wrong payment currency? "
+                span = link_to "Return", url_for
+                span = " to the first step."
+          .fieldset
+            .field data-controller="radio-select"
+              = f.label :pledge_percentage, "What percentage of your income would you like to pledge?", class: "label has-text-weight-normal"
+              span.help.display-when-errors.mb-2 Please select a percentage
+              .columns.is-mobile
+                - {"1": "1%", "3": "3%", "5": "5%"}.each do |key, name|
+                  .column
+                    a.control.button href='#' data-radio-select-target='button' data-radio-select-value=key data-action='radio-select#select oftw-wizard#updateDonationEstimate'
+                      = name
+              = f.hidden_field :pledge_percentage, data: { 'radio-select-target': 'output', 'oftw-wizard-target': 'required_field_1 pledgePercentage' }
+          .fieldset data-controller="conditional-field"
+            .field.columns.is-mobile.checkbox-columns
+              .control.column.checkbox-width
+                = f.check_box :start_pledge_in_future, data: { 'oftw-wizard-target': 'futurePledgeStart', 'conditional-field-target': 'independent', 'action': 'conditional-field#update oftw-wizard#updatePledgeStartSummary' }
+              = f.label :start_pledge_in_future, class: "label column small has-text-grey has-text-weight-light" do
+                | Start my pledge in the future
+            / TODO: Refactor to use f.date_select
+            .fieldset.mb-3 data-conditional-field-target='hideable'
+              .columns.is-mobile
+                .column.is-half
+                  = f.label :start_at_month, "Month", class: "label small has-text-weight-normal has-text-grey"
+                  .control
+                    .select.is-fullwidth
+                      = f.select :start_at_month, @view_model.months, {}, data: { 'conditional-field-target': 'dependent', 'oftw-wizard-target': 'pledgeStartMonth', action: 'oftw-wizard#updatePledgeStartSummary' }
+                  span.help.display-when-errors Please select a date in the future
+                .column.is-half
+                  .field
+                    = f.label :start_at_month, "Year", class: "label small has-text-weight-normal has-text-grey"
+                    .control
+                      .select.is-fullwidth
+                        = f.select :start_at_year, @view_model.years, {}, data: { 'conditional-field-target': 'dependent', 'oftw-wizard-target': 'pledgeStartYear', action: 'oftw-wizard#updatePledgeStartSummary' }
+              .field
+                = f.label :trial_amount_dollars, "Would you like to donate a small monthly amount in the meantime?", class: "label has-text-weight-normal"
+                p.mb-2.small Even a small amount can provide Vitamin A supplements to an extra 200 people by the time you start your pledge!
+                .columns.is-mobile data-controller="radio-select"
+                  - [5, 10].each do |amount|
+                    .column
+                      a.control.button.is-expanded href='#' data-target-radio-select='button' data-action='radio-select#select' data-radio-select-value=amount value=amount
+                        span data-oftw-wizard-target="trialDonationAmountCurrency"
+                        span.pl-1 = amount
+                  .column
+                    .control.has-icons-left
+                      = f.text_field :trial_amount_dollars,
+                        class: %w(button cursor-auto),
+                        placeholder: 'Custom',
+                        data: { controller: 'integer-field', 'radio-select-target': 'output', 'oftw-wizard-target': 'trialDonationAmount', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection keypress->integer-field#allowKeypressWhenInteger' }
+                      span.icon.is-left#currency data-oftw-wizard-target="trialDonationAmountCurrency"
+          .field
+            p.is-size-3.is-hidden#donation-estimate data-oftw-wizard-target='donationEstimate'
+              | Your pledge will be [tbc]/month
+            span.help.display-when-errors data-oftw-wizard-target='minimumContributionAmountError' The minimum monthly donation is $10
+          = render 'assurances'
+          .fieldset data-controller="conditional-field" data-oftw-wizard-target="giftAidFieldset"
+            label.label.has-text-weight-normal Gift Aid
+            = image_tag('Gift_Aid_UK_Logo.svg', class: 'gift-aid-logo mb-2 mt-2')
+            .field.columns.is-mobile.checkbox-columns
+              .control.column.checkbox-width
+                = f.check_box :uk_gift_aid_accepted, data: { 'conditional-field-target': 'independent', 'action': 'conditional-field#update', 'oftw-wizard-target': 'giftAid' }
+              = f.label :uk_gift_aid_accepted, class: "label column small has-text-grey has-text-weight-light" do
+                | Yes, I am a UK taxpayer and would like to Gift Aid my donations, to contribute 25% more at no extra cost (I understand I must pay enough tax each year to cover the amount of Gift Aid that all charities claim on my donations in that year, and am responsible for paying the difference).
+            .fieldset.mb-3 data-conditional-field-target='hideable'
+              .field
+                = f.label :title, "Title", class: "label has-text-weight-normal"
+                .dropdown data-controller="filterable-dropdown"
+                  .dropdown-trigger
+                    .control.has-icons-right
+                      = f.text_field :title, class: "input", data: { 'oftw-wizard-target': 'required_field_1 giftAidTitle', 'filterable-dropdown-target': 'input', action: "keyup->filterable-dropdown#filter focus->filterable-dropdown#hideErrorMessage click->filterable-dropdown#toggleMenu" }
+                      span.chevron-down.icon.is-right data-action="click->filterable-dropdown#toggleMenu click->filterable-dropdown#hideErrorMessage"
+                        = image_tag(image_url('chevron-down.svg'))
+                      span.help.display-when-errors data-filterable-dropdown-target='errorMessage' Please enter your title
+                  .dropdown-menu data-filterable-dropdown-target="menu" role="menu"
+                    .dropdown-content
+                      - @view_model.titles.each do |title|
+                          a.dropdown-item href="#" data-filterable-dropdown-target="item" data-action="filterable-dropdown#select"
+                            = title
+              .field
+                = f.label :house_name_or_number, "House name/number", class: "label has-text-weight-normal"
+                .control
+                  = f.text_field :house_name_or_number, class: "input", data: { 'oftw-wizard-target': 'required_field_1 giftAidHouseNumber' }
+                  span.help.display-when-errors Please enter your house name or number
+              .field
+                = f.label :postcode, "Post code", class: "label has-text-weight-normal"
+                .control
+                  = f.text_field :postcode, class: "input", data: { 'oftw-wizard-target': 'required_field_1 giftAidPostcode' }
+                  span.help.display-when-errors Please enter a valid UK postcode, including a space, e.g. AA1 2BB
+
+        fieldset.is-hidden data-oftw-wizard-target='step'
+          p.small = "Step 3 of 5"
+          h2
+            | Connect your payment method
+          .notice.columns.is-mobile data-oftw-wizard-target="promptToUseBankAccount"
+            .column
+              = image_tag(image_url('heart.svg'))
+            p.column.small.pl-0
+              | Using your bank account instead of a card gives about 3% more funding to your nonprofits. Thank you!
+          .field.columns.is-multiline.is-mobile data-controller="radio-select" data-oftw-wizard-target="paymentOptions"
+              span.help.display-when-errors.column.error-badge.small
+                .head Error
+                div
+                  | Please choose a payment method by clicking on a card below
+              - @view_model.payment_method_options.each do |partner_currency, payment_methods|
+                .fieldset.column.is-full data-oftw-wizard-target="#{partner_currency.upcase}PartnerPaymentOptions"
+                  - payment_methods.each do |method|
+                      = render 'payment_method', method: method
+              = f.hidden_field :payment_method_id, data: { 'radio-select-target': 'output', 'oftw-wizard-target': 'required_field_2 paymentMethodHiddenInput' }
+        fieldset.is-hidden data-oftw-wizard-target='step'
+          p.small = "Step 4 of 5"
+          = display_flash_messages
+          h2
+            | Personal details
+          .columns
+            .column.is-half
+              .field
+                = f.label :first_name, class: "label small has-text-grey has-text-weight-normal"
+                .control
+                  = f.text_field :first_name, class: "input", data: { 'oftw-wizard-target': 'required_field_3 firstName' }
+                  span.help.display-when-errors Please enter your first name
+            .column.is-half
+              .field
+                = f.label :last_name, class: "label small has-text-grey has-text-weight-normal"
+                .control
+                  = f.text_field :last_name, class: "input", data: { 'oftw-wizard-target': 'required_field_3 lastName' }
+                  span.help.display-when-errors Please enter your last name
+          - if @view_model.donor_questions.any?
+            .columns
+              .column
+                .field
+                  = f.label :email, class: "label small has-text-grey has-text-weight-normal"
+                  .control
+                    = f.text_field :email, class: "input", data: { 'oftw-wizard-target': 'required_field_3 email_field_3 emailAddress' }
+                    span.help.display-when-errors Please enter a valid email address
+                  p.help.has-text-grey We suggest using a non-university email for access after graduation.
+              - if find_question('phone_number')
+                .column.is-half data-controller='telephone-field' data-telephone-field-currency-code-value= @view_model.currency_code
+                  = render 'donor_question', donor_question: @view_model.donor_questions.delete(find_question('phone_number')), form: f, step_number: '3', data: { 'valid': true, 'oftw-wizard-target': 'telephone_field_3', 'telephone-field-target': 'input', 'action': 'keyup->telephone-field#onChange change->telephone-field#onChange' }
+                  // As this hidden field comes after the visible field, its value overwrites the visible field's value when the form is submitted.
+                  = f.hidden_field :phone_number, data: { 'telephone-field-target': 'hiddenInput' }
+                  - if Rails.env.staging?
+                    p.help.has-text-grey NB For UX reviewers, this question (and all later qs on this page) is created by the Partner in their account, not by the code.
+            = render 'donor_question', donor_question: @view_model.donor_questions.delete(find_question('GDPR_static_text')), form: f, step_number: '3'
+            = render 'donor_question', donor_question: @view_model.donor_questions.delete(find_question('comms_email')), form: f, step_number: '3', info_text: @view_model.comms_info_text
+            = render 'donor_question', donor_question: @view_model.donor_questions.delete(find_question('comms_phone')), form: f, step_number: '3', info_text: [@view_model.comms_info_text, @view_model.comms_sms_info].join(" ")
+            div.mt-4.mb-4
+              = render 'donor_question', donor_question: @view_model.donor_questions.delete(find_question('birthday')), form: f, step_number: '3'
+            - if find_question('chapter') && @view_model.campaign.present?
+              - @view_model.donor_questions.delete(find_question('chapter'))
+              = f.hidden_field :chapter, value: @view_model.campaign.slug
+            - elsif find_question('chapter')
+              .fieldset data-controller="conditional-field" data-conditional-field-trigger-value="true"
+                .field id="associated_with_chapter" data-controller="radio-select"
+                  = f.label :associated_with_chapter, "Are you associated with a One for the World Chapter?", class: "label small has-text-grey has-text-weight-normal"
+                  span.help.display-when-errors.mb-2 This field is required
+                  .columns.is-mobile
+                    - {"true": "Yes", "false": "No"}.each do |key, value|
+                      .column
+                        a.control.button href='#' data-radio-select-target='button' data-radio-select-value=key data-action='radio-select#select conditional-field#update'
+                          = value
+                  = f.hidden_field :associated_with_chapter, data: { 'radio-select-target': 'output', 'conditional-field-target': 'independent', 'oftw-wizard-target': 'required_field_3' }
+                = render 'donor_question', donor_question: @view_model.donor_questions.delete(find_question('chapter')), form: f, step_number: '3', conditional_hideable: true
+            - @view_model.donor_questions.each do |question|
+              = render 'donor_question', donor_question: question, form: f, step_number: '3'
+        fieldset.is-hidden data-oftw-wizard-target='step'
+          h2
+            | Pledge Review
+          h3.is-size-4.mb-6 data-oftw-wizard-target='summary'
+            | I pledge [X]% of my income to fight extreme poverty.
+          p.summary-element.columns data-oftw-wizard-target="portfolioSummary"
+            span.column.is-one-third Nonprofit Partners
+            span.column.result
+          p.summary-element.columns data-oftw-wizard-target="amountSummary"
+            span.column.is-one-third Amount
+            span.column.result
+          p.summary-element.columns data-oftw-wizard-target="startDateSummary"
+            span.column.is-one-third Start date
+            / The below is a default updated by JS in the case the user specifies a future start date.
+            span.column.result = @view_model.next_fifteenth.strftime("%B %d, %Y")
+          - if @view_model.pledge_form.trial_amount_dollars.to_i.positive?
+            p.summary-element.columns data-oftw-wizard-target="trialAmountSummary"
+              span.column.is-one-third Trial amount
+              span.column.result = "#{Money.from_amount(@view_model.pledge_form.trial_amount_dollars.to_i, @view_model.currency).format(no_cents_if_whole: true)}/month"
+            p.summary-element.columns data-oftw-wizard-target="trialStartDateSummary"
+              span.column.is-one-third Trial start date
+              span.column.result = @view_model.next_fifteenth.strftime("%B %d, %Y")
+          .mt-6
+            = render 'assurances'
+
+        = f.hidden_field :campaign_id, value: @view_model.campaign&.id
+        = f.hidden_field :partner_id, value: partner&.id
+        = f.hidden_field :payment_processor_customer_id
+        = f.hidden_field :payment_processor_payment_method_type
+        = f.hidden_field :stripe_session_id
+        = f.hidden_field :amount_cents, data: { 'oftw-wizard-target': 'amountCents' }
+
+        .is-hidden-desktop.mt-5.security
+          = image_tag(image_url('lock.svg'), class: "pr-2")
+          p.small
+            | Your donation is secured with 256-bit encryption
+    .navigation.columns.is-desktop
+      .is-hidden-touch.security.column
+        = image_tag(image_url('lock.svg'), class: "pr-2")
+        p.small
+          | Your donation is secured with 256-bit encryption
+      .column
+        .columns.is-mobile
+          .column
+            a.button.is-hidden data-action="oftw-wizard#previous" data-oftw-wizard-target="previous"
+              | Back
+          .column
+            a.button#progress data-action="oftw-wizard#next" data-oftw-wizard-target="progress"
+              | Next &rarr;

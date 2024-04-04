@@ -1,0 +1,4 @@
+/ TODO: Start request to Stripe when payment method is selected, before user actually clicks 'next' button, so request can be done in advance and save them time
+.card.mb-3 style="cursor: pointer;" data-radio-select-target='button' data-radio-select-value="#{method.payment_processor_payment_method_type_code}" data-action='click->radio-select#select'
+  .card-content
+    p = method.human_readable_name

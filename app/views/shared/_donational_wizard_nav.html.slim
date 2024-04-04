@@ -1,0 +1,11 @@
+nav.wizard-card-nav
+  - of.times do |i|
+    - if i < (step - 1)
+      .icon
+        i.fas.fa-circle
+    - elsif i == (step - 1)
+      .icon.is-active
+        i.fas.fa-circle
+    - else
+      .icon
+        i.far.fa-circle

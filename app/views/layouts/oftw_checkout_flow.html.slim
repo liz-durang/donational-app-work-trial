@@ -1,0 +1,16 @@
+doctype html
+html
+  head
+    title Take the pledge — One for the World
+    = csrf_meta_tags
+    = action_cable_meta_tag
+    meta name='viewport' content='width=device-width, initial-scale=1'
+    meta charset='utf-8'
+    = favicon_pack_tag "1ftwfavicon.png"
+    = stylesheet_link_tag 'take_the_pledge', media: 'all', 'data-turbolinks-track': 'reload'
+    script src="https://js.stripe.com/v3/"
+    = javascript_pack_tag 'application'
+    / NB This head omits the request to segment analytics because that was especially slow to load.
+
+  body.take_the_pledge
+    = yield

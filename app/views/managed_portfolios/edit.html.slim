@@ -42,7 +42,7 @@ section.embossed.section
                   = f.label :description, class: :label
                   = f.text_area :description, class: :input, value: @view_model.managed_portfolio.description
               = render 'shared/image_upload_field',
-                  attachment: @view_model.managed_portfolio.image,
+                  attachment: @view_model.image,
                   field: :image,
                   thumbnail_preview_size: '400x200',
                   form: f

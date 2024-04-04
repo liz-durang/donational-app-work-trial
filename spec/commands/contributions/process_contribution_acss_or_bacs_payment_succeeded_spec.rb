@@ -59,7 +59,7 @@ RSpec.describe Contributions::ProcessContributionAcssOrBacsPaymentSucceeded do
         .to change { contribution.reload.payment_processor_fees_cents }
     end
 
-    it 'calls regular payment suceedeed handler' do
+    it 'calls regular payment suceeded handler' do
       expect(Contributions::ProcessContributionPaymentSucceeded)
         .to receive(:run)
         .with(contribution:, receipt: charge.to_json)

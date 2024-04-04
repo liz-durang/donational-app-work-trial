@@ -8,12 +8,13 @@ class CampaignsController < ApplicationController
   layout 'embeddable', only: :donation_box
 
   def index
-    @view_model = OpenStruct.new(partner: partner)
+    @view_model = OpenStruct.new(partner:)
   end
 
   def show
-    not_found and return unless campaign
-    not_found and return unless partner.active?
+    not_found and return unless campaign.present? && partner.active?
+
+    redirect_to redirect_url, allow_other_host: true if partner.uses_one_for_the_world_checkout?
 
     @view_model = OpenStruct.new(
       partner_id: partner.id,
@@ -32,8 +33,8 @@ class CampaignsController < ApplicationController
       default_contribution_amounts: campaign.default_contribution_amounts,
       minimum_contribution_amount: campaign.minimum_contribution_amount,
       campaign_contributions_path: campaign_contributions_path(campaign.slug),
-      new_campaign_contribution: new_campaign_contribution,
-      managed_portfolios: managed_portfolios,
+      new_campaign_contribution:,
+      managed_portfolios:,
       donor_questions: partner.donor_questions,
       default_operating_costs_donation_percentages: partner.default_operating_costs_donation_percentages,
       partner_operating_costs_text: partner.operating_costs_text,
@@ -57,7 +58,7 @@ class CampaignsController < ApplicationController
 
   def new
     @view_model = OpenStruct.new(
-      partner: partner,
+      partner:,
       campaign: Campaign.new,
       currency: partner_currency
     )
@@ -65,10 +66,10 @@ class CampaignsController < ApplicationController
 
   def edit
     @view_model = OpenStruct.new(
-      partner: partner,
+      partner:,
       campaign: campaign_by_id,
       banner_image: campaign_by_id.banner_image,
-      default_contribution_amounts: campaign_by_id.default_contribution_amounts.join(', '),
+      default_contribution_amounts: campaign_by_id.default_contribution_amounts&.join(', ') || [],
       minimum_contribution_amount: campaign_by_id.minimum_contribution_amount,
       currency: partner_currency
     )
@@ -76,12 +77,12 @@ class CampaignsController < ApplicationController
 
   def create
     command = Campaigns::CreateCampaign.run(
-      partner: partner,
+      partner:,
       title: params[:title],
       description: params[:description],
       slug: params[:slug],
       banner_image: params[:banner_image],
-      default_contribution_amounts: default_contribution_amounts,
+      default_contribution_amounts:,
       minimum_contribution_amount: params[:minimum_contribution_amount],
       contribution_amount_help_text: params[:contribution_amount_help_text].presence,
       allow_one_time_contributions: params[:allow_one_time_contributions]
@@ -99,7 +100,7 @@ class CampaignsController < ApplicationController
       description: params[:description],
       slug: params[:slug],
       banner_image: params[:banner_image],
-      default_contribution_amounts: default_contribution_amounts,
+      default_contribution_amounts:,
       minimum_contribution_amount: params[:minimum_contribution_amount],
       contribution_amount_help_text: params[:contribution_amount_help_text].presence,
       allow_one_time_contributions: params[:allow_one_time_contributions]
@@ -116,11 +117,19 @@ class CampaignsController < ApplicationController
 
   private
 
-  def ensure_donor_has_permission!
-    unless current_donor.partners.exists?(id: partner.id)
-      flash[:error] = "Sorry, you don't have permission to create a campaign for this partner"
-      redirect_to edit_partner_path(partner)
+  def redirect_url
+    if Rails.env.staging? || Rails.env.test?
+      review_campaign_take_the_pledge_url(campaign_slug: params[:campaign_slug])
+    else
+      campaign_take_the_pledge_url(campaign_slug: params[:campaign_slug], subdomain: '1fortheworld')
     end
+  end
+
+  def ensure_donor_has_permission!
+    return if current_donor.partners.exists?(id: partner.id)
+
+    flash[:error] = "Sorry, you don't have permission to create a campaign for this partner"
+    redirect_to edit_partner_path(partner)
   end
 
   def allow_iframe_embedding_on_partner_website!
@@ -159,11 +168,11 @@ class CampaignsController < ApplicationController
   end
 
   def default_contribution_amounts
-    params[:default_contribution_amounts].split(',').map(&:to_i)
+    params[:default_contribution_amounts]&.split(',')&.map(&:to_i) || []
   end
 
   def managed_portfolios
-    Partners::GetManagedPortfoliosForPartner.call(partner: partner)
+    Partners::GetManagedPortfoliosForPartner.call(partner:)
   end
 
   def generated_id

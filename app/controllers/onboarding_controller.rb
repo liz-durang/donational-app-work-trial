@@ -1,7 +1,7 @@
 class OnboardingController < ApplicationController
   before_action :ensure_current_donor!, only: :show
 
-  layout 'minimal'
+  layout 'onboarding'
 
   def show; end
 

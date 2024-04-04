@@ -1,6 +1,6 @@
 br
   .control.has-text-centered data-accordion-panel-for="hide-when-show-card-is-triggered"
-    a.button.is-text.credit-card-link data-accordion-trigger="show-card" data-action='wizard#setFeeDetailsLabel wizard#showCardPayment'
+    a.button.is-text.credit-card-link data-accordion-trigger="show-card" data-action='donational-wizard#setFeeDetailsLabel donational-wizard#showCardPayment'
       | No, I'd rather donate by credit/debit card.
   .control.is-hidden data-accordion-panel-for="show-card"
     .control.has-icons-left
@@ -25,7 +25,7 @@ br
       .notification.is-light-yellow
         .notification-title
           strong Please consider connecting your bank account
-        = label_tag("fees_details", "", class: "p", data: { target: 'wizard.feesDetails' })
+        = label_tag("fees_details", "", class: "p", data: { target: 'donational-wizard.feesDetails' })
         br
         br
         | Thanks!

@@ -1,0 +1,18 @@
+.control.pb-3
+  level.is-mobile
+    .card.portfolio-card style="cursor: pointer;" data-oftw-wizard-target='portolio-option' data-radio-select-target='button' data-radio-select-value="#{portfolio.id}" data-action='click->radio-select#select'
+      .card-content
+        .media
+          .media-left
+            figure.image
+              - if portfolio.image&.attached?
+                = image_tag(portfolio.image)
+              - else
+                = image_tag(image_url('oftw-circle.png'))
+          .media-content
+            p.title.is-5 = portfolio.name.truncate(100)
+            p.subtitle.small
+              = [portfolio.description&.truncate(200), "(#{pluralize(portfolio.size, 'total charity')})"].join(" ")
+      - if portfolio.display_order == 0 && count >= 2
+        p.most-popular.has-text-weight-medium
+          | Most popular

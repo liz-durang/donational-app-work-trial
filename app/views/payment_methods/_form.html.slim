@@ -18,6 +18,9 @@ div data-accordion-panel-for='existing-card'
       - else
         =< render 'payment_methods/acss_debits/acss_disabled_form'
   - else
+    / TODO: Add a way for donors to update their payment method to a UK bank account.
+    / When we added bank accounts, Plaid was the only way to do it. Stripe has since built a similar feature.
+    / There may be some useful code to copy in https://github.com/donational-org/donational-app/pull/447
     = render payment_method
 
     .control.has-icons-left

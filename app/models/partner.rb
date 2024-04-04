@@ -87,6 +87,14 @@ class Partner < ApplicationRecord
       @options = options || []
       @required = required || false
     end
+
+    def binary_select?
+      type == 'select' && options.sort == %w[Yes No].sort
+    end
+
+    def dropdown?
+      type == 'select' && !binary_select?
+    end
   end
 
   def supports_gift_aid?

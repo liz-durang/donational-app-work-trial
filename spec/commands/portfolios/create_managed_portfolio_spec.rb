@@ -8,17 +8,18 @@ RSpec.describe Portfolios::CreateManagedPortfolio do
 
   context 'when there are no existing portfolios for the partner' do
     it 'creates a new active portfolio' do
-      expect {
+      expect do
         Portfolios::CreateManagedPortfolio.run(
-          partner: partner,
-          donor: donor,
-          title: "Title",
-          description: "Description"
+          partner:,
+          donor:,
+          title: 'Title',
+          description: 'Description'
         )
-      }.to change { ManagedPortfolio.count }.from(0).to(1)
+      end.to change { ManagedPortfolio.count }.from(0).to(1)
 
       managed_portfolio = partner.managed_portfolios.last
       expect(managed_portfolio.portfolio).to be_active
+      expect(managed_portfolio.featured).to be(false)
     end
   end
 end

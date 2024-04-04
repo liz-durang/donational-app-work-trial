@@ -19,6 +19,10 @@
 #  partner_id                      :uuid
 #  partner_contribution_percentage :integer          default(0)
 #  amount_currency                 :string           default("usd"), not null
+#  trial_start_at                  :datetime
+#  trial_last_scheduled_at         :datetime
+#  trial_deactivated_at            :datetime
+#  trial_amount_cents              :integer
 #
 
 class Subscription < ApplicationRecord

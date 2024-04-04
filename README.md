@@ -32,17 +32,30 @@ By pooling pay outs to organizations, and avoiding credit card fees, we help ens
 1. Run `bin/setup`
 2. Populate `.env` with the relevant API Keys
 
+Install ImageMagick or GraphicsMagick.
+
 ### Running the app
 
-Run `bin/dev`
+First, ensure you have a Redis server running, and an Opensearch server. On MacOS this probably means running `redis-server` and `brew services start opensearch` if you installed Opensearch with Homebrew.
 
-This will run all of the services defined in Procfile.dev (eg webserver, background jobs, and webpack-dev-server) using `overmind`
+Then, run `bin/dev`. This will run all of the services defined in Procfile.dev (eg webserver, background jobs, and webpack-dev-server) using `overmind`.
+
+Requires the correct Node version.
 
 When debugging (eg using byebug or `binding.pry`) you can run `overmind connect web` from a terminal to access your breakpoint. To detach from the tmux session, use `<ctrl + b> + c`
+
+#### Subdomains
+
+New checkout flow is going to be hosted on a subdomain something like `1fortheworld.donational.org`. For local development, to access such pages, navigate to something like `1fortheworld.<anything you like>.localhost:3000/take-the-pledge`
 
 ### Running tests
 
 Run `bin/test`
+
+If you see problems related to the asset pipeline, try precompiling assets for the test environment (while using the correct Node version):
+```
+RAILS_ENV=test rails assets:precompile
+```
 
 ## Code guidelines
 

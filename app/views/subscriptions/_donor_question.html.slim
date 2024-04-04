@@ -1,0 +1,60 @@
+
+- if donor_question.blank?
+- elsif donor_question.type == 'checkbox'
+  .field.columns.is-mobile.checkbox-columns data-conditional-field-target="#{'hideable' if local_assigns[:conditional_hideable]}"
+    .control.column.checkbox-width
+      = form.check_box donor_question.name, data: { 'oftw-wizard-target': "#{"required_field_#{step_number}" if donor_question.required}" }.merge(local_assigns[:data].to_h) { |key, partial, local_assign| [partial, local_assign].join(" ") }, checked: donor_question.name.in?(@view_model.boxes_checked_by_default)
+    = form.label donor_question.name, class: "label column small has-text-grey has-text-weight-light" do
+      = donor_question.title.html_safe
+      - if local_assigns[:info_text]
+        div.tooltip
+          = image_tag(image_url('info-circle.svg'), class: 'info-circle')
+          div.tooltiptext = local_assigns[:info_text]
+      - if donor_question.required
+        span.help.display-when-errors Please acknowledge the above
+- elsif donor_question.binary_select?
+  .field id=donor_question.name data-controller="radio-select" data-conditional-field-target="#{'hideable' if local_assigns[:conditional_hideable]}"
+    = form.label donor_question.name, donor_question.title.html_safe, class: "label small has-text-weight-normal has-text-grey"
+    span.help.display-when-errors.mb-2 This field is required
+    .columns.is-mobile
+      - {"true": "Yes", "false": "No"}.each do |key, value|
+        .column
+          a.control.button href='#' data-radio-select-target='button' data-action='radio-select#select' data-radio-select-value=key
+            = value
+    = form.hidden_field donor_question.name, data: { 'radio-select-target': 'output', 'oftw-wizard-target': "#{"required_field_#{step_number}" if donor_question.required}" }.merge(local_assigns[:data].to_h) { |key, partial, local_assign| [partial, local_assign].join(" ") }
+- elsif donor_question.type == 'statictext'
+  .field
+    .label = donor_question.title
+- else
+  .field data-conditional-field-target="#{'hideable' if local_assigns[:conditional_hideable]}"
+    = form.label donor_question.name, donor_question.title.html_safe, class: "label small has-text-weight-normal has-text-grey"
+    - if donor_question.dropdown?
+      .dropdown data-controller="filterable-dropdown"
+        .dropdown-trigger
+          .control.has-icons-right
+            / Since the chapter dropdown question is only displayed when the answer to 'are you associated with a
+            / chapter' is yes, and validations skip over un-displayed fields, we can add a requirement validation
+            / on the chapter field, overwriting donor_question.required
+            = form.text_field donor_question.name, class: "input", data: { 'filterable-dropdown-target': 'input', 'conditional-field-target': 'dependent', action: "keyup->filterable-dropdown#filter focus->filterable-dropdown#hideErrorMessage click->filterable-dropdown#toggleMenu", 'oftw-wizard-target': "#{"required_field_#{step_number}" if donor_question.required}" }.merge(local_assigns[:data].to_h) { |key, partial, local_assign| [partial, local_assign].join(" ") }
+            span.chevron-down.icon.is-right data-action="click->filterable-dropdown#toggleMenu"
+              = image_tag(image_url('chevron-down.svg'))
+            span.help.display-when-errors data-filterable-dropdown-target='errorMessage'
+              = donor_question.name == 'chapter' ? "Please enter your chapter" : "This field is required"
+        .dropdown-menu data-filterable-dropdown-target="menu" role="menu"
+          .dropdown-content
+            - donor_question.options.each do |option|
+              a.dropdown-item href="#" data-filterable-dropdown-target="item" data-action="filterable-dropdown#select"
+                = option
+    - elsif donor_question.type == 'date'
+      .control
+        .select
+          = form.date_select donor_question.name, class: "input", data: { 'oftw-wizard-target': "#{"required_field_#{step_number}" if donor_question.required}" }.merge(local_assigns[:data].to_h) { |key, partial, local_assign| [partial, local_assign].join(" ") }, prompt: true, discard_year: (donor_question.name == 'birthday')
+        span.help.display-when-errors This field is required
+    - elsif donor_question.name == 'phone_number'
+      .control
+        = form.telephone_field donor_question.name, class: "input", data: { 'oftw-wizard-target': "#{"required_field_#{step_number}" if donor_question.required}" }.merge(local_assigns[:data].to_h) { |key, partial, local_assign| [partial, local_assign].join(" ") }
+        span.help.display-when-errors This field is required
+    - else
+      .control
+        = form.text_field donor_question.name, class: "input", data: { 'oftw-wizard-target': "#{"required_field_#{step_number}" if donor_question.required}" }.merge(local_assigns[:data].to_h) { |key, partial, local_assign| [partial, local_assign].join(" ") }
+        span.help.display-when-errors This field is required

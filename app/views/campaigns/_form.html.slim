@@ -14,37 +14,42 @@
   .control
     = f.text_area :description, class: :textarea, rows: 10, value: @view_model.campaign.description
 .columns
-  .column.is-6
-    .field
-      .label Default contribution amounts
-      .control
-        = f.text_field :default_contribution_amounts, class: :input, placeholder: 'i.e. 10, 20, 50, 100', value: @view_model.default_contribution_amounts
-      p.help Please, enter values separated by comma.
+  - unless @view_model.partner.uses_one_for_the_world_checkout?
+    .column.is-6
+      .field
+        .label Default contribution amounts
+        .control
+          = f.text_field :default_contribution_amounts, class: :input, placeholder: 'i.e. 10, 20, 50, 100', value: @view_model.default_contribution_amounts
+        p.help Please, enter values separated by comma.
   .column.is-6
     .field
       .label Minimum contribution amount
       .control
         = f.number_field :minimum_contribution_amount, class: :input, value: @view_model.minimum_contribution_amount
+      - if @view_model.partner.uses_one_for_the_world_checkout?
+        p.help = "The minimum contribution amount will be whichever is higher of the above value and #{SubscriptionsController::DEFAULT_MINIMUM_CONTRIBUTION}."
 .columns
-  .column.is-6
+  .column.is-12
     label.field
       .label Donation hint text
       .control
         = f.text_field :contribution_amount_help_text, class: :input, placeholder: "e.g. Our average donor gives #{Money.from_amount(100, @view_model.currency).format(no_cents_if_whole: true)} monthly (1% of their income)", value: @view_model.campaign.contribution_amount_help_text
       p.help Use this to educate donors about suggested amounts
-  .column.is-6
-    label.field
-      .label Allow one-time donations
-      .control
-        = f.check_box :allow_one_time_contributions, class: :checkbox, checked: @view_model.campaign.allow_one_time_contributions
-      p.help Uncheck this if you only want to allow recurring donations
-.columns
-  .column
-    = render 'shared/image_upload_field',
-        attachment: @view_model.campaign.banner_image,
-        field: :banner_image,
-        thumbnail_preview_size: '400x200',
-        form: f
+  - unless @view_model.partner.uses_one_for_the_world_checkout?
+    .column.is-12
+      label.field
+        .label Allow one-time donations
+        .control
+          = f.check_box :allow_one_time_contributions, class: :checkbox, checked: @view_model.campaign.allow_one_time_contributions
+        p.help Uncheck this if you only want to allow recurring donations
+- unless @view_model.partner.uses_one_for_the_world_checkout?
+  .columns
+    .column
+      = render 'shared/image_upload_field',
+          attachment: @view_model.campaign.banner_image,
+          field: :banner_image,
+          thumbnail_preview_size: '400x200',
+          form: f
 .field.has-text-centered.content
   .control.has-text-centered
     = f.submit class: %w(button is-primary is-medium)

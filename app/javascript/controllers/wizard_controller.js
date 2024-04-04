@@ -1,27 +1,15 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-  static targets = [ "step", "portfolioSelected", "donationAmount", "giftAidAmount",
-    "giftAidField", "giftAidPostcode", "giftAidFieldset", "giftAidFieldsetVisible",
-    "paymentOptionPlaid", "paymentOptionCard", "feesDetails" ]
+  static targets = ["step"]
 
   initialize() {
-    this.updateGiftAidFieldsVisibility();
-    this.updateGiftAidAmount();
-    this.showStep(0)
-    this.markFirstAsDefault();
+    this.showStep(0);
   }
 
   next(event) {
     event.preventDefault();
-    this.validateRequiredFields()
-
-    // Donation step
-    if (this.valid && this.index == 2)
-      this.validateMinimumDonationAmount()
-
-    if (this.hasGiftAidFieldsetVisibleTarget && this.giftAidFieldsetVisibleTarget.checked)
-      this.validateGiftAidFields()
+    this.validateFields();
 
     if (this.valid) {
       this.showStep(this.index + 1)
@@ -35,53 +23,6 @@ export default class extends Controller {
     return false;
   }
 
-  goto(event) {
-    event.preventDefault();
-    this.showStep(parseInt(event.currentTarget.dataset.wizardStep))
-    return false;
-  }
-
-  selectPortfolio(event) {
-    this.portfolioSelectedTarget.value = true.toString();
-  }
-
-  markFirstAsDefault() {
-    var radioButtons = document.getElementsByName('campaign_contribution[managed_portfolio_id]');
-    radioButtons.item(0).checked = true;
-    this.portfolioSelectedTarget.value = true.toString();
-  }
-
-  donate(event) {
-    event.preventDefault();
-    var form = document.getElementById('payment-form');
-    this.validateRequiredFields()
-    if (this.valid) {
-      form.submit();
-      return false;
-    }
-  }
-
-  setFeeDetailsLabel() {
-    var amount = document.getElementsByName("campaign_contribution[amount_dollars]")[0].value
-    var frequency = document.getElementsByName("campaign_contribution[frequency]")[0].value
-
-    var numTimesPerYear = {
-      'annually': 1,
-      'once': 1,
-      'quarterly': 4,
-      'monthly': 12
-    }
-
-    var expectedPlaidFees = numTimesPerYear[frequency] * Math.min(5, 0.008 * amount);
-    var expectedCardFees = numTimesPerYear[frequency] * (0.3 + (0.022 * amount));
-
-    var label = "Stripe charges up to 4x higher fees for credit card donations. By using Plaid, you're donating "
-    label += `$${Math.round(expectedCardFees - expectedPlaidFees)} `
-    label += "more every year. Please use Plaid if you can (you can always change your payment method after signing up)."
-
-    this.feesDetailsTarget.innerText = label;
-  }
-
   private
 
   showStep(index) {
@@ -91,58 +32,88 @@ export default class extends Controller {
     })
   }
 
+  validateFields() {
+    // All these functions should be called so that validation messages are displayed (this does not happen if you only use &&)
+    let [requiredValid, telephonesValid, emailsValid, customsValid] = [this.validateRequiredFields(), this.validateTelephoneFields(), this.validateEmailAddressFields(), this.customValidations()];
+
+    this.valid = requiredValid && telephonesValid && emailsValid && customsValid
+  }
+
+  // Overwrite this function in subclasses to add custom validations.
+  customValidations() {
+    return true;
+  }
+
   validateRequiredFields() {
     let anyEmpty = false
     let required_field = "required_field_" + this.index;
     this.targets.findAll(required_field).forEach((element) => {
-      if (element.tagName === "INPUT") {
-        let isEmpty = element.value === ""
+      // This logic will break if we have any conditionally required type[hidden] inputs (radio-select-controller uses hidden inputs).
+      if (this.isElementHidden(element) && this.isElementRequiredConditionally(element)) {
+        element.parentElement.parentElement.classList.remove("field-with-errors")
+        anyEmpty = anyEmpty || false
+      } else if (element.type === "checkbox") {
+        let isChecked = element.checked
+        element.parentElement.parentElement.classList.toggle("field-with-errors", !isChecked)
+        anyEmpty = anyEmpty || !isChecked
+      } else if (element.tagName === "INPUT") {
+        let isEmpty = element.value === "" || element.value === "undefined"
         element.classList.toggle("is-danger", isEmpty)
         element.parentElement.classList.toggle("field-with-errors", isEmpty)
         anyEmpty = anyEmpty || isEmpty
       } else if (element.tagName === "SELECT") {
-        let isEmpty = element[element.selectedIndex].value === ""
+        let isEmpty = element.selectedIndex === -1 || element[element.selectedIndex].value === "" || element[element.selectedIndex].value === undefined
         element.parentElement.classList.toggle("is-danger", isEmpty)
         element.parentElement.classList.toggle("field-with-errors", isEmpty)
         anyEmpty = anyEmpty || isEmpty
       }
     })
-    this.valid = !anyEmpty
+
+    return !anyEmpty
   }
 
-  validateMinimumDonationAmount() {
-    let donationAmount = parseInt(this.donationAmountTarget.value)
-    let minimumDonationAmount = parseInt(this.donationAmountTarget.dataset.minimumDonationAmount)
-    let isValid = donationAmount >= minimumDonationAmount
-    this.donationAmountTarget.classList.toggle("is-danger", !isValid)
-    this.donationAmountTarget.parentElement.classList.toggle("field-with-validation-errors", !isValid)
-    this.valid = this.valid && isValid
-  }
-
-  validateGiftAidFields() {
-    this.giftAidFieldTargets.forEach((element) => {
-      let isEmpty = element.value === ""
-      element.classList.toggle("is-danger", isEmpty)
-      element.parentElement.classList.toggle("field-with-errors", isEmpty)
-      this.valid = this.valid && !isEmpty
+  validateEmailAddressFields() {
+    let anyInvalid = false
+    let email_field = "email_field_" + this.index;
+    this.targets.findAll(email_field).forEach((element) => {
+      let isValid = element.value.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
+      element.classList.toggle("is-danger", !isValid)
+      element.parentElement.classList.toggle("field-with-errors", !isValid)
+      anyInvalid = anyInvalid || !isValid
     })
-
-    let postcodeRegex = /^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? [0-9][A-Za-z]{2}|[Gg][Ii][Rr] 0[Aa]{2})$/
-    let element = this.giftAidPostcodeTarget
-    let isInvalid = !postcodeRegex.test(element.value)
-    element.classList.toggle("is-danger", isInvalid)
-    element.parentElement.classList.toggle("field-with-errors", isInvalid)
-    this.valid = this.valid && !isInvalid
+    return !anyInvalid
   }
 
-  updateGiftAidAmount() {
-    if(this.hasGiftAidFieldsetVisibleTarget)
-      this.giftAidAmountTarget.innerText = '£' + this.donationAmountTarget.value * 1.25 + ' ';
+  validateTelephoneFields() {
+    let anyInvalid = false
+    let telephone_field = "telephone_field_" + this.index;
+    this.targets.findAll(telephone_field).forEach((element) => {
+      let isValid = element.dataset.valid === "true" // Validation is handled by telephone field controller
+      anyInvalid = anyInvalid || !isValid
+    })
+    return !anyInvalid
   }
 
-  updateGiftAidFieldsVisibility() {
-    if(this.hasGiftAidFieldsetVisibleTarget)
-      this.giftAidFieldsetTarget.classList.toggle('is-hidden', !this.giftAidFieldsetVisibleTarget.checked);
+  isElementHidden(el) {
+    // To check this, we check the display property of the element and all its ancestors
+    while (el) {
+      if (window.getComputedStyle(el).display === 'none') {
+        return true;
+      }
+      el = el.parentElement;
+    }
+    return false;
+  }
+
+  isElementRequiredConditionally(el) {
+    // To check this, we check whether any ancestors are a 'hideable' target from conditional-field-controller
+    while (el) {
+      if (el.dataset.conditionalFieldTarget === 'hideable') {
+        return true;
+      }
+      el = el.parentElement;
+    }
+    return false;
   }
 
   get valid() {
@@ -151,9 +122,5 @@ export default class extends Controller {
 
   set valid(value) {
     this.data.valid = value
-  }
-
-  showCardPayment() {
-    this.paymentOptionCardTarget.classList.toggle('is-hidden', false)
   }
 }

@@ -7,7 +7,7 @@ module Partners
     def call(slug:)
       return nil if slug.blank?
 
-      @relation.find_by(slug: slug)
+      @relation.find_by(slug:)
     end
   end
 end

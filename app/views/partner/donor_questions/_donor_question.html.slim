@@ -2,27 +2,27 @@
   = form.label donor_question.name do
     - if donor_question.type == 'select'
       - if donor_question.required
-        .label 
+        .label
           = donor_question.title
           sup *
-        .select = form.collection_select donor_question.name, donor_question.options.zip(donor_question.options), :first, :last, { include_blank: true }, { "data-target" => "wizard.required_field_4" }
+        .select = form.collection_select donor_question.name, donor_question.options.zip(donor_question.options), :first, :last, { include_blank: true }, { "data-target" => "donational-wizard.required_field_4" }
         span.help.is-danger.display-when-errors This field is required
       - else
         .label = donor_question.title
         .select = form.collection_select donor_question.name, donor_question.options.zip(donor_question.options), :first, :last, include_blank: true
     - elsif donor_question.type == 'checkbox'
       label.label
-        = form.check_box donor_question.name, data: { target: "wizard.required_field_4" }
+        = form.check_box donor_question.name, data: { target: "donational-wizard.required_field_4" }
         span style = "padding-left: 5px;"
           = donor_question.title
     - elsif donor_question.type == 'statictext'
       .label = donor_question.title
     - else
       - if donor_question.required
-        .label 
+        .label
           = donor_question.title
           sup *
-        = form.text_field donor_question.name, class: :input, data: { target: "wizard.required_field_4" }
+        = form.text_field donor_question.name, class: :input, data: { target: "donational-wizard.required_field_4" }
         span.help.is-danger.display-when-errors This field is required
       - else
         .label = donor_question.title

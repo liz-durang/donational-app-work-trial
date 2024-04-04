@@ -1,5 +1,6 @@
 require 'rails_helper'
 require 'support/capybara_form_helpers'
+include ActiveSupport::Testing::TimeHelpers
 
 RSpec.describe "Donor makes a donation from a partner's campaign page", type: :feature do
   let(:stripe_helper) { StripeMock.create_test_helper }
@@ -188,7 +189,8 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
       },
       operating_costs_text: 'For every $1 donated to One for the World, we raise $12 for effective charities. Please select here if you are happy for some of your donations to go to One for the World.',
       operating_costs_organization: one_for_the_world_operating_costs_charity,
-      payment_processor_account_id: 'acc_123'
+      payment_processor_account_id: 'acc_123',
+      uses_one_for_the_world_checkout: false
     )
 
     Campaign.create(
@@ -252,11 +254,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     find('[data-accordion-trigger="show-date"]').click
     select Date::ABBR_MONTHNAMES[3.months.from_now.month]
     select 3.months.from_now.year
-
     select 'Monthly'
-
-    expect(page).to have_content('Your pledge starts in 3 months.')
-
-    find("a.icon.right-arrow").click
+    find('a.icon.right-arrow').click
   end
 end

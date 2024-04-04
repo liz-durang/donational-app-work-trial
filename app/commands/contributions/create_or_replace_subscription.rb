@@ -79,6 +79,8 @@ module Contributions
       payment_method = Payments::GetActivePaymentMethod.call(donor: subscription.donor)
       partner = Partners::GetPartnerForDonor.call(donor: subscription.donor)
 
+      return if Rails.env.staging?
+
       ConfirmationsMailer.send_confirmation(
         subscription: subscription,
         payment_method: payment_method,

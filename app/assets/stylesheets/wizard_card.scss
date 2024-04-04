@@ -29,6 +29,7 @@
     margin-left: auto;
     font-size: 0.5rem;
     .icon {
+      color: #8600ed;
       width: 16px;
     }
     .is-active {
@@ -71,7 +72,7 @@
   }
 
   .level.about {
-    margin-bottom: unset; 
+    margin-bottom: unset;
     margin-bottom: 4px;
   }
 
@@ -84,7 +85,7 @@
     text-align: left;
   }
 
-  a.icon {
+  .icon {
     &.left-arrow {
       display: unset;
       font-family: Lora;

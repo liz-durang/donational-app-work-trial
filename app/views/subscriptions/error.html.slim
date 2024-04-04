@@ -1,0 +1,9 @@
+- raise 'Error page accessed in wrong environment' unless Rails.env.staging? || Rails.env.development?
+<h1>Error page for debugging review app</h1>
+<p>
+<p>Please make a record of this data and the URL, so we can diagnose the issue</p>
+<p>
+<p>Method: #{@method}</p>
+<p>Params: #{@params.to_h.to_s}</p>
+<p>Errors: #{@errors.to_s}</p>
+

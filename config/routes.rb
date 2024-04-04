@@ -8,6 +8,20 @@ Rails.application.routes.draw do
     get slug => 'pages#show', page: slug.underscore, format: :html
   end
 
+  constraints subdomain: '1fortheworld' do
+    get '/take-the-pledge' => 'subscriptions#new'
+    post '/take-the-pledge' => 'subscriptions#create', as: :create_pledge
+    get '/:campaign_slug/take-the-pledge' => 'subscriptions#new', as: :campaign_take_the_pledge
+    post '/create-checkout-session' => 'subscriptions#create_stripe_checkout_session'
+  end
+
+  if Rails.env.staging? || Rails.env.test?
+    get '/take-the-pledge' => 'subscriptions#new', as: :review_take_the_pledge
+    post '/take-the-pledge' => 'subscriptions#create', as: :review_create_pledge
+    get '/:campaign_slug/take-the-pledge' => 'subscriptions#new', as: :review_campaign_take_the_pledge
+    post '/create-checkout-session' => 'subscriptions#create_stripe_checkout_session'
+  end
+
   resources :organizations, path: 'charities', only: :index
 
   mount ActionCable.server => '/cable'

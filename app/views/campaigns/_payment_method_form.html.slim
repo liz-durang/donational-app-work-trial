@@ -5,18 +5,18 @@
         = render 'shared/plaid_form', link_token: @view_model.link_token, token_field: 'payment_token', submission_field: 'payment-validated'
         = render 'shared/alternative_card_form'
   .wizard-card-footer
-    a.icon.left-arrow data-action="wizard#previous" &larr; Previous
-    a.icon.right-arrow.is-hidden id="payment-next" data-target='wizard.paymentOptionCard' href="#" Next &rarr;
-    a.is-hidden.plaid-success-target data-action="wizard#next" id="payment-validated"
+    a.icon.left-arrow data-action="donational-wizard#previous" &larr; Previous
+    a.icon.right-arrow.is-hidden id="payment-next" data-target='donational-wizard.paymentOptionCard' href="#" Next &rarr;
+    a.is-hidden.plaid-success-target data-action="donational-wizard#next" id="payment-validated"
 - elsif @view_model.show_acss?
   .wizard-card-content
     .field
         = render 'shared/acss_form', payment_method_field: 'payment-method-id', submission_field: 'payment-validated'
         = render 'shared/alternative_card_form'
   .wizard-card-footer
-    a.icon.left-arrow data-action="wizard#previous" &larr; Previous
-    a.icon.right-arrow.is-hidden id="payment-next" data-target='wizard.paymentOptionCard' href="#" Next &rarr;
-    a.is-hidden.plaid-success-target data-action="wizard#next" id="payment-validated"
+    a.icon.left-arrow data-action="donational-wizard#previous" &larr; Previous
+    a.icon.right-arrow.is-hidden id="payment-next" data-target='donational-wizard.paymentOptionCard' href="#" Next &rarr;
+    a.is-hidden.plaid-success-target data-action="donational-wizard#next" id="payment-validated"
 - else
   .wizard-card-content
     .control
@@ -26,9 +26,9 @@
       input.input.StripeElement id="cardholder_name" type="text" placeholder="Cardholder name"
       span.icon.is-left.is-small: i.fa.fa-user
   .wizard-card-footer
-    a.icon.left-arrow data-action="wizard#previous" &larr; Previous
+    a.icon.left-arrow data-action="donational-wizard#previous" &larr; Previous
     a.icon.right-arrow id="payment-next" href="#" Next &rarr;
-    a.is-hidden.plaid-success-target data-action="wizard#next" id="payment-validated"
+    a.is-hidden.plaid-success-target data-action="donational-wizard#next" id="payment-validated"
 
 
 javascript:
