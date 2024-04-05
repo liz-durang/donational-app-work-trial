@@ -1,5 +1,5 @@
 class SubscriptionsController < ApplicationController
-  helper_method :find_question, :partner
+  helper_method :find_question, :partner, :show_chapter_question?
   layout 'oftw_checkout_flow'
   before_action :set_up_view_model, only: %i[new]
 
@@ -7,6 +7,7 @@ class SubscriptionsController < ApplicationController
   DEFAULT_CONTRIBUTION_AMOUNT_HELP_TEXT = 'The average person living in a high-income country like the US, Canada, UK, or Australia usually gives a small percentage of their income each year. The average American gives 2.6%.'.freeze
   COMMS_INFO_TEXT = 'One for the World would occasionally like to send you information about our charities, your impact and other initiatives. If you are happy to receive this information, please indicate here.'.freeze
   COMMS_SMS_INFO = 'By selecting this box, you agree to receive donor engagement texts from One For The World. Message frequency varies. Message and data rates may apply. Reply STOP to unsubscribe at any time.'.freeze
+  COUNTRY_LEVEL_CAMPAIGN_SLUGS = %w[oftw oftw-uk oftw-aus oftw-canada].freeze
 
   def new
     if params[:campaign_slug].present? && (campaign.nil? || !campaign.partner.active? || !campaign.partner.uses_one_for_the_world_checkout?)
@@ -235,12 +236,19 @@ class SubscriptionsController < ApplicationController
     public_send(url_method_name, url_params)
   end
 
-  def donor_questions
-    @donor_questions ||= partner&.donor_questions || []
+  def show_chapter_question?
+    # In general, we save users time by skipping the chapter question if the answer can be inferred from the campaign.
+    # For campaigns attached to entire countries, we should retain the chapter question.
+
+    find_question('chapter') && @view_model.campaign.present? && COUNTRY_LEVEL_CAMPAIGN_SLUGS.exclude?(@view_model.campaign.slug)
   end
 
   def find_question(name)
     @view_model.donor_questions.find { |q| q.name == name }
+  end
+
+  def donor_questions
+    @donor_questions ||= partner&.donor_questions || []
   end
 
   def minimum_contribution_amount

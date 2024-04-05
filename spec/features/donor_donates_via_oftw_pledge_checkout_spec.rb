@@ -473,7 +473,7 @@ RSpec.describe 'Donor makes a pledge from the OFTW pledge checkout', type: :feat
       end
     end
 
-    context 'when pledging from a specific campaign' do
+    context 'when pledging from a campaign' do
       let(:stripe_payment_method_type) { 'acss_debit' }
       let(:popular_canada_portfolio) { ManagedPortfolio.find_by(name: "Top Picks for #{can_partner.name}") }
       let(:stripe_metadata) do

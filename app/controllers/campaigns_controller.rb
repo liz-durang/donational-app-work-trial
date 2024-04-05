@@ -14,7 +14,12 @@ class CampaignsController < ApplicationController
   def show
     not_found and return unless campaign.present? && partner.active?
 
-    redirect_to redirect_url, allow_other_host: true if partner.uses_one_for_the_world_checkout?
+    # Temporarily maintain the donation-box embedding route until such time as the 1fortheworld.org site updates its
+    # /take-the-pledge page.
+    if (partner.uses_one_for_the_world_checkout? && SubscriptionsController::COUNTRY_LEVEL_CAMPAIGN_SLUGS.exclude?(campaign.slug)) || campaign.slug == 'test-abcdefg'
+      redirect_to redirect_url,
+                  allow_other_host: true
+    end
 
     @view_model = OpenStruct.new(
       partner_id: partner.id,

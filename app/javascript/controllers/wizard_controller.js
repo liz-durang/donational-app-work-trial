@@ -36,6 +36,9 @@ export default class extends Controller {
     // All these functions should be called so that validation messages are displayed (this does not happen if you only use &&)
     let [requiredValid, telephonesValid, emailsValid, customsValid] = [this.validateRequiredFields(), this.validateTelephoneFields(), this.validateEmailAddressFields(), this.customValidations()];
 
+    console.log(39)
+    console.log(requiredValid, telephonesValid, emailsValid, customsValid)
+
     this.valid = requiredValid && telephonesValid && emailsValid && customsValid
   }
 
@@ -55,16 +58,19 @@ export default class extends Controller {
       } else if (element.type === "checkbox") {
         let isChecked = element.checked
         element.parentElement.parentElement.classList.toggle("field-with-errors", !isChecked)
+        console.log(element.name, 61, isChecked)
         anyEmpty = anyEmpty || !isChecked
       } else if (element.tagName === "INPUT") {
         let isEmpty = element.value === "" || element.value === "undefined"
         element.classList.toggle("is-danger", isEmpty)
         element.parentElement.classList.toggle("field-with-errors", isEmpty)
+        console.log(element.name, 66, isEmpty)
         anyEmpty = anyEmpty || isEmpty
       } else if (element.tagName === "SELECT") {
         let isEmpty = element.selectedIndex === -1 || element[element.selectedIndex].value === "" || element[element.selectedIndex].value === undefined
         element.parentElement.classList.toggle("is-danger", isEmpty)
         element.parentElement.classList.toggle("field-with-errors", isEmpty)
+        console.log(element.name, 66, isEmpty)
         anyEmpty = anyEmpty || isEmpty
       }
     })

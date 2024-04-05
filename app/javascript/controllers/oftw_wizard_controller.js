@@ -248,6 +248,9 @@ export default class extends WizardController {
     const postCodeValid = this.validatePostCodeField();
     const donationAmountValid = this.validateDonationAmount();
 
+    console.log(251)
+    console.log(pledgeStartValid, postCodeValid, donationAmountValid)
+
     return pledgeStartValid && postCodeValid && donationAmountValid
   }
 

@@ -196,7 +196,7 @@
             = render 'donor_question', donor_question: @view_model.donor_questions.delete(find_question('comms_phone')), form: f, step_number: '3', info_text: [@view_model.comms_info_text, @view_model.comms_sms_info].join(" ")
             div.mt-4.mb-4
               = render 'donor_question', donor_question: @view_model.donor_questions.delete(find_question('birthday')), form: f, step_number: '3'
-            - if find_question('chapter') && @view_model.campaign.present?
+            - if show_chapter_question?
               - @view_model.donor_questions.delete(find_question('chapter'))
               = f.hidden_field :chapter, value: @view_model.campaign.slug
             - elsif find_question('chapter')
