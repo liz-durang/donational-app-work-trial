@@ -24,7 +24,7 @@
   .field
     = f.label donor_question.name do
       .label
-        = donor_question.title
+        = donor_question.title.html_safe
         - if donor_question.required
           sup *
       - if donor_question.type == 'select'

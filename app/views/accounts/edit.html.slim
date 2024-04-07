@@ -101,7 +101,7 @@ section.embossed.section
             - @view_model.donor_responses.each do |donor_response|
               .field
                 = f.label donor_response.question.name do
-                  .label = donor_response.question.title
+                  .label = donor_response.question.title.html_safe
                   - if donor_response.question.type == 'select'
                     .select = f.collection_select donor_response.question.name, donor_response.question.options.zip(donor_response.question.options), :first, :last,
                               selected: donor_response.value

@@ -513,9 +513,12 @@ RSpec.describe 'Donor makes a pledge from the OFTW pledge checkout', type: :feat
       it 'alters the flow per campaign' do
         visit review_campaign_take_the_pledge_path(campaign_slug: uk_campaign.slug)
 
+        expect(find_by_id('pledge_form_partner_id').value).to eq uk_campaign.partner_id
+
         select 'CAD', from: 'pledge_form_partner_id'
         find("[data-radio-select-value='#{popular_canada_portfolio.id}']").click
         click_next
+
         # Test that the contribution_amount_help_text is set by the campaign and is not the default.
         expect(page).to have_content('The average Cambridge University graduate donates £12,345.67 a year.')
         fill_in 'Enter your estimated future annual income', with: 10_000

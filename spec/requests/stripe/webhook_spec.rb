@@ -194,6 +194,21 @@ RSpec.describe 'POST webhook', type: :request do
       }
     end
 
+    context 'when the payment method type is not acss_debit' do
+      let(:payment_method_id) { payment_method.payment_processor_source_id }
+      let(:payment_method) do
+        create(:bacs_debit_payment_method, payment_processor_source_id: 'pm_1KEYLlLVTYFX0Htp1vL4L722')
+      end
+
+      it 'does not perform any updates and returns a successful response' do
+        expect(Payments::UpdateCustomerAcssDebitDetails).not_to receive(:run)
+
+        post webhook_path, params: params.to_json, headers: headers
+
+        expect(response).to have_http_status(:success)
+      end
+    end
+
     context 'when the payment method is found' do
       let(:payment_method_id) { payment_method.payment_processor_source_id }
       let(:payment_method) do

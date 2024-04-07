@@ -148,7 +148,7 @@ module Partners
       validated << 'Last Name' if params[:last_name].blank?
       @partner.donor_questions.each do |question|
         if question.required
-          validated << question.title if params[question.name].blank?
+          validated << question.title.html_safe if params[question.name].blank?
         end
       end
       validated

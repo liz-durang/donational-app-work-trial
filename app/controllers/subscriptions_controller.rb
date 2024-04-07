@@ -1,3 +1,4 @@
+# For One for the World pledges only
 class SubscriptionsController < ApplicationController
   helper_method :find_question, :partner, :show_chapter_question?
   layout 'oftw_checkout_flow'

@@ -14,6 +14,7 @@ describe 'GET campaigns/:slug', type: :request do
           get campaigns_path(campaign.slug)
 
           expect(response).to have_http_status(:success)
+          expect(response).not_to redirect_to(review_campaign_take_the_pledge_url(campaign_slug: campaign.slug))
         end
       end
 

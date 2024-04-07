@@ -24,7 +24,7 @@
     = form.hidden_field donor_question.name, data: { 'radio-select-target': 'output', 'oftw-wizard-target': "#{"required_field_#{step_number}" if donor_question.required}" }.merge(local_assigns[:data].to_h) { |key, partial, local_assign| [partial, local_assign].join(" ") }
 - elsif donor_question.type == 'statictext'
   .field
-    .label = donor_question.title
+    .label = donor_question.title.html_safe
 - else
   .field data-conditional-field-target="#{'hideable' if local_assigns[:conditional_hideable]}"
     = form.label donor_question.name, donor_question.title.html_safe, class: "label small has-text-weight-normal has-text-grey"

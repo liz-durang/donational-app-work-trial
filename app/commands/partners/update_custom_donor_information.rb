@@ -39,7 +39,7 @@ module Partners
       responses.each do |question, response|
         donor_question = partner.donor_questions&.select { |q| question == q.name }&.first
         if donor_question&.required && response.blank?
-          add_error(question.to_sym, :required_question, "#{donor_question.title} is required.")
+          add_error(question.to_sym, :required_question, "#{donor_question.title.html_safe} is required.")
         end
       end
     end

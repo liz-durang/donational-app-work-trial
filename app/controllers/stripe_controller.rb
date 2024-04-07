@@ -34,28 +34,28 @@ class StripeController < ApplicationController
     begin
       event = Stripe::Event.construct_from(JSON.parse(payload, symbolize_names: true))
     rescue JSON::ParserError => e
-      head 400
+      head :bad_request
       return
     end
 
     response = case event.type
-    when 'charge.failed'
-      handle_payment_failed(payment: event.data.object)
-    when 'charge.succeeded'
-      if event.data.object.payment_method_details.type.in? ['acss_debit', 'bacs_debit']
-        handle_acss_or_bacs_payment_success(event: event)
-      else
-        handle_payment_success(payment: event.data.object)
-      end
-    when 'charge.dispute.created'
-      handle_dispute_created(event: event)
-    when 'setup_intent.succeeded'
-      handle_verification_success(setup_intent: event.data.object)
-    when 'setup_intent.setup_failed'
-      handle_verification_failed(setup_intent: event.data.object)
-    else
-      200
-    end
+               when 'charge.failed'
+                 handle_payment_failed(payment: event.data.object)
+               when 'charge.succeeded'
+                 if event.data.object.payment_method_details.type.in? %w[acss_debit bacs_debit]
+                   handle_acss_or_bacs_payment_success(event:)
+                 else
+                   handle_payment_success(payment: event.data.object)
+                 end
+               when 'charge.dispute.created'
+                 handle_dispute_created(event:)
+               when 'setup_intent.succeeded'
+                 handle_verification_success(setup_intent: event.data.object)
+               when 'setup_intent.setup_failed'
+                 handle_verification_failed(setup_intent: event.data.object)
+               else
+                 200
+               end
 
     head response
   end
@@ -97,6 +97,7 @@ class StripeController < ApplicationController
   def handle_verification_success(setup_intent:)
     payment_method = Payments::GetPaymentMethodBySourceId.call(source_id: setup_intent[:payment_method])
     return 400 unless payment_method.present?
+    return 200 unless payment_method.type == 'PaymentMethods::AcssDebit'
 
     partner_account_id = Payments::GetPaymentProcessorAccountId.call(donor: payment_method.donor)
     outcome = Payments::UpdateCustomerAcssDebitDetails.run(
