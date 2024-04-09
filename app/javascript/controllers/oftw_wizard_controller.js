@@ -21,7 +21,7 @@ export default class extends WizardController {
     "managedPortfolioHiddenInput", "minimumContributionAmountError",
     "paymentMethodHiddenInput", "paymentOptions", "pledgePercentage", "pledgeStartMonth", "pledgeStartYear",
     "portfolioOption", "portfolioSummary", "previous", "progress", "progressBarColumn", "promptToUseBankAccount",
-    "startDateSummary", "summary", "trialDonationAmount", "trialDonationAmountCurrency", "trialAmountSummary", "trialStartDateSummary",
+    "startDateSummary", "summary", "trialDonationAmount", "trialDonationAmountCurrency",
     "wrongCurrencyNotice"]
   static values = {
     campaignSlug: String,

@@ -97,7 +97,7 @@
                       = f.text_field :trial_amount_dollars,
                         class: %w(button cursor-auto),
                         placeholder: 'Custom',
-                        data: { controller: 'integer-field', 'radio-select-target': 'output', 'oftw-wizard-target': 'trialDonationAmount', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection keypress->integer-field#allowKeypressWhenInteger' }
+                        data: { controller: 'integer-field', 'conditional-field-target': 'dependent', 'radio-select-target': 'output', 'oftw-wizard-target': 'trialDonationAmount', action: 'keypress->radio-select#clearSelection change->radio-select#clearSelection keypress->integer-field#allowKeypressWhenInteger' }
                       span.icon.is-left#currency data-oftw-wizard-target="trialDonationAmountCurrency"
           .field
             p.is-size-3.is-hidden#donation-estimate data-oftw-wizard-target='donationEstimate'
@@ -229,10 +229,10 @@
             / The below is a default updated by JS in the case the user specifies a future start date.
             span.column.result = @view_model.next_fifteenth.strftime("%B %d, %Y")
           - if @view_model.pledge_form.trial_amount_dollars.to_i.positive?
-            p.summary-element.columns data-oftw-wizard-target="trialAmountSummary"
+            p.summary-element.columns
               span.column.is-one-third Trial amount
-              span.column.result = "#{Money.from_amount(@view_model.pledge_form.trial_amount_dollars.to_i, @view_model.currency).format(no_cents_if_whole: true)}/month"
-            p.summary-element.columns data-oftw-wizard-target="trialStartDateSummary"
+              span.column.result = "#{Money.from_amount(@view_model.pledge_form.trial_amount_dollars.to_i, @view_model.currency_code).format(no_cents_if_whole: true)}/month"
+            p.summary-element.columns
               span.column.is-one-third Trial start date
               span.column.result = @view_model.next_fifteenth.strftime("%B %d, %Y")
           .mt-6

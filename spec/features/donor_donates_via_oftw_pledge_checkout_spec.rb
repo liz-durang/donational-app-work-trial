@@ -146,6 +146,15 @@ RSpec.describe 'Donor makes a pledge from the OFTW pledge checkout', type: :feat
         expect(page).to have_content 'Step 2'
         expect(page).to have_content 'Please select a date in the future'
         select Time.zone.today.year + 1, from: 'pledge_form_start_at_year'
+        fill_in('pledge_form_trial_amount_dollars', with: '123')
+        uncheck 'Start my pledge in the future'
+        check 'Start my pledge in the future'
+        expect(find_field('pledge_form_start_at_month').value).to eq ''
+        expect(find_field('pledge_form_start_at_year').value).to eq ''
+        expect(find_field('pledge_form_trial_amount_dollars').value).to eq ''
+
+        select I18n.l(Time.zone.today, format: '%B'), from: 'pledge_form_start_at_month'
+        select Time.zone.today.year + 1, from: 'pledge_form_start_at_year'
 
         expect(page).not_to have_content 'Post code'
         check 'Yes, I am a UK taxpayer'
