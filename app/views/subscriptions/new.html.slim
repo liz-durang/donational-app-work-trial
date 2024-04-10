@@ -118,7 +118,7 @@
                 .dropdown data-controller="filterable-dropdown"
                   .dropdown-trigger
                     .control.has-icons-right
-                      = f.text_field :title, class: "input", data: { 'oftw-wizard-target': 'required_field_1 giftAidTitle', 'filterable-dropdown-target': 'input', action: "keyup->filterable-dropdown#filter focus->filterable-dropdown#hideErrorMessage click->filterable-dropdown#toggleMenu" }
+                      = f.text_field :title, class: "input", data: { 'oftw-wizard-target': 'required_field_1 giftAidTitle', 'filterable-dropdown-target': 'input', action: "keyup->filterable-dropdown#filter focus->filterable-dropdown#hideErrorMessage click->filterable-dropdown#toggleMenu", 'conditional-field-target': 'dependent' }
                       span.chevron-down.icon.is-right data-action="click->filterable-dropdown#toggleMenu click->filterable-dropdown#hideErrorMessage"
                         = image_tag(image_url('chevron-down.svg'))
                       span.help.display-when-errors data-filterable-dropdown-target='errorMessage' Please enter your title
@@ -130,12 +130,12 @@
               .field
                 = f.label :house_name_or_number, "House name/number", class: "label has-text-weight-normal"
                 .control
-                  = f.text_field :house_name_or_number, class: "input", data: { 'oftw-wizard-target': 'required_field_1 giftAidHouseNumber' }
+                  = f.text_field :house_name_or_number, class: "input", data: { 'oftw-wizard-target': 'required_field_1 giftAidHouseNumber', 'conditional-field-target': 'dependent' }
                   span.help.display-when-errors Please enter your house name or number
               .field
                 = f.label :postcode, "Post code", class: "label has-text-weight-normal"
                 .control
-                  = f.text_field :postcode, class: "input", data: { 'oftw-wizard-target': 'required_field_1 giftAidPostcode' }
+                  = f.text_field :postcode, class: "input", data: { 'oftw-wizard-target': 'required_field_1 giftAidPostcode', 'conditional-field-target': 'dependent' }
                   span.help.display-when-errors Please enter a valid UK postcode, including a space, e.g. AA1 2BB
 
         fieldset.is-hidden data-oftw-wizard-target='step'

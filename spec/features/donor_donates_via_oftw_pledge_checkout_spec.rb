@@ -168,6 +168,18 @@ RSpec.describe 'Donor makes a pledge from the OFTW pledge checkout', type: :feat
         fill_in 'Title', with: 'Sir'
         fill_in 'House name/number', with: 'Lake View'
         fill_in 'Post code', with: 'N10 2JS'
+
+        uncheck 'Yes, I am a UK taxpayer'
+        check 'Yes, I am a UK taxpayer'
+
+        expect(find_field('Title').value).to eq ''
+        expect(find_field('House name/number').value).to eq ''
+        expect(find_field('Post code').value).to eq ''
+
+        fill_in 'Title', with: 'Sir'
+        fill_in 'House name/number', with: 'Lake View'
+        fill_in 'Post code', with: 'N10 2JS'
+
         click_next
         expect(page).to have_content 'Step 3'
 
