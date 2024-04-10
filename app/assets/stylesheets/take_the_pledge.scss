@@ -435,6 +435,20 @@ body.take_the_pledge {
     position: relative;
     display: inline-block;
 
+    &.dotted-underline {
+      text-decoration: underline dotted 1px;
+    }
+
+    &.photograph-tooltip {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+
+      .tooltiptext {
+        margin-left: -100px; // Position so it's not off the screen
+      }
+    }
+
     .info-circle {
       height: 14px;
       margin-left: 0.5rem;
