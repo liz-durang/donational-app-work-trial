@@ -12,9 +12,11 @@
         .select = form.collection_select donor_question.name, donor_question.options.zip(donor_question.options), :first, :last, include_blank: true
     - elsif donor_question.type == 'checkbox'
       label.label
-        = form.check_box donor_question.name, data: { target: "donational-wizard.required_field_4" }
+        = form.check_box donor_question.name, data: { "donational-wizard-target": "#{"required_field_4" if donor_question.required}" }
         span style = "padding-left: 5px;"
           = donor_question.title.html_safe
+          sup *
+        span.help.is-danger.display-when-errors This field is required
     - elsif donor_question.type == 'statictext'
       .label = donor_question.title.html_safe
     - else
@@ -22,7 +24,7 @@
         .label
           = donor_question.title.html_safe
           sup *
-        = form.text_field donor_question.name, class: :input, data: { target: "donational-wizard.required_field_4" }
+        = form.text_field donor_question.name, class: :input, data: { "donational-wizard-target": "required_field_4" }
         span.help.is-danger.display-when-errors This field is required
       - else
         .label = donor_question.title.html_safe
