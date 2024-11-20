@@ -14,7 +14,7 @@
 # The percentage of a donor's contribution that is to be distributed to an organization per cycle
 class Allocation < ApplicationRecord
   belongs_to :portfolio
-  has_one :donor, through: :portfolio
+  has_one :donor, through: :portfolio, source: :creator
   belongs_to :organization, foreign_key: 'organization_ein'
   has_many :donations
 

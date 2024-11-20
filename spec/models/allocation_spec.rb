@@ -14,6 +14,22 @@
 require 'rails_helper'
 
 RSpec.describe Allocation, type: :model do
+  describe "associations" do
+    it { is_expected.to belong_to(:portfolio) }
+    it { is_expected.to have_one(:donor).through(:portfolio) }
+    it { is_expected.to belong_to(:organization).with_foreign_key('organization_ein') }
+    it { is_expected.to have_many(:donations) }
+  end
+
+  describe "scopes" do
+    describe ".active" do
+      it "calls Portfolios::GetActiveAllocations" do
+        expect(Portfolios::GetActiveAllocations).to receive(:call)
+        described_class.active
+      end
+    end
+  end
+
   describe '#active?' do
     context 'when it has a deactivated_at timestamp' do
       it 'is false' do

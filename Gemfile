@@ -76,6 +76,7 @@ group :development, :test do
   gem 'byebug', platform: :mri
   gem 'dotenv-rails'
   gem 'pry'
+  gem 'simplecov'
 end
 
 group :development do
@@ -99,4 +100,5 @@ group :test do
   gem 'stripe-ruby-mock', github: 'donational-org/stripe-ruby-mock', branch: 'support-cloned-payment-methods',
                           require: 'stripe_mock'
   gem 'webmock'
+  gem 'shoulda-matchers'
 end

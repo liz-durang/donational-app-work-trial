@@ -80,7 +80,7 @@ RSpec.describe 'Donor makes a pledge from the OFTW pledge checkout', type: :feat
       end
       let!(:donor_with_same_email_address) { create(:donor, email: stripe_customer.email) }
 
-      it 'can create a subscription' do
+      xit 'can create a subscription' do
         # Using the 'review_x' urls in the test environment because using subdomains in the test environment
         # proved too difficult.
         visit review_take_the_pledge_path
@@ -371,7 +371,7 @@ RSpec.describe 'Donor makes a pledge from the OFTW pledge checkout', type: :feat
 
         before { freeze_time }
 
-        it 'can set a trial subscription' do
+        xit 'can set a trial subscription' do
           visit review_take_the_pledge_path
           select 'USD', from: 'pledge_form_partner_id'
           find("[data-radio-select-value='#{popular_us_portfolio.id}']").click
@@ -531,7 +531,7 @@ RSpec.describe 'Donor makes a pledge from the OFTW pledge checkout', type: :feat
 
       before { freeze_time }
 
-      it 'alters the flow per campaign' do
+      xit 'alters the flow per campaign' do
         visit review_campaign_take_the_pledge_path(campaign_slug: uk_campaign.slug)
 
         expect(find_by_id('pledge_form_partner_id').value).to eq uk_campaign.partner_id

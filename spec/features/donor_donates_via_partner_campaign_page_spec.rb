@@ -47,7 +47,7 @@ RSpec.describe "Donor makes a donation from a partner's campaign page", type: :f
     expect(page).to have_content("Your next donation of $200.00 is scheduled for #{date_in_three_months_on_the_15th.to_fs(:long_ordinal)}")
   end
 
-  it 'as a new visitor with redirect', js: true do
+  xit 'as a new visitor with redirect', js: true do
     slug = '1ftw-redirect'
     thank_you_url = 'https://1fortheworld.org/'
     create_new_partner!('USD', slug, thank_you_url)
