@@ -371,8 +371,7 @@ class SubscriptionsController < ApplicationController
 
   def next_fifteenth
     if Time.zone.today.day > 15
-      Time.zone.local(Time.zone.today.year, Time.zone.today.month + 1,
-                      15)
+      1.month.from_now.at_beginning_of_month + 15.days
     elsif Time.zone.today.day < 15
       Time.zone.local(Time.zone.today.year, Time.zone.today.month, 15)
     elsif Time.zone.today.day == 15
