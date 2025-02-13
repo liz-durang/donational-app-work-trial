@@ -55,6 +55,7 @@ class AllocationsController < ApplicationController
     else
       @allocations = params[:allocations].values.map { |a| Allocation.new(a) }
       flash[:error] = outcome.errors.message_list.join('\n')
+      edit_view_model
       render :edit
     end
   end
@@ -62,11 +63,7 @@ class AllocationsController < ApplicationController
   def edit
     Analytics::TrackEvent.run(user_id: current_donor.id, event: 'Viewed allocations')
 
-    @view_model = OpenStruct.new(
-      allocations: Portfolios::GetActiveAllocations.call(portfolio: active_portfolio),
-      managed_portfolio?: managed_portfolio?,
-      portfolio_manager_name: portfolio_manager.try(:name)
-    )
+    edit_view_model
   end
 
   private
@@ -105,5 +102,13 @@ class AllocationsController < ApplicationController
 
   def active_subscription
     Contributions::GetActiveSubscription.call(donor: current_donor)
+  end
+
+  def edit_view_model
+    @view_model = OpenStruct.new(
+      allocations: Portfolios::GetActiveAllocations.call(portfolio: active_portfolio),
+      managed_portfolio?: managed_portfolio?,
+      portfolio_manager_name: portfolio_manager.try(:name)
+    )
   end
 end

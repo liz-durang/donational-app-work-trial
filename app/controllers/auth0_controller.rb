@@ -1,6 +1,5 @@
 class Auth0Controller < ApplicationController
   def callback
-
     if matching_donor
       log_out! if logged_in?
       log_in! matching_donor
