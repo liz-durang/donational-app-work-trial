@@ -101,4 +101,5 @@ group :test do
                           require: 'stripe_mock'
   gem 'webmock'
   gem 'shoulda-matchers'
+  gem 'rails-controller-testing'
 end

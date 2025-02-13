@@ -35,7 +35,7 @@ WebMock.allow_net_connect!(net_http_connect_on_start: true)
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-# Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 # Checks for pending migration and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -75,6 +75,10 @@ RSpec.configure do |config|
       Bullet.perform_out_of_channel_notifications if Bullet.notification?
       Bullet.end_request
     end
+  end
+
+  config.before(:each, type: :request) do
+    allow_any_instance_of(ActionController::Base).to receive(:verify_authenticity_token).and_return(true)
   end
 end
 

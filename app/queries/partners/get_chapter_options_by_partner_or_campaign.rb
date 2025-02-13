@@ -40,6 +40,7 @@ module Partners
 
       # Some donor_questions_schemas chapter lists include the option 'Other', which I'd like to rename
       list[list.index('Other')] = 'Other (please type in your chapter)'
+      list
     end
 
     def name_match?(campaign, chapter)
