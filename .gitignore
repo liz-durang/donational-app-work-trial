@@ -37,3 +37,4 @@ yarn-debug.log*
 Brewfile.lock.json
 
 /coverage/*
+/public/assets/*

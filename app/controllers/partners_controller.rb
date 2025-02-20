@@ -60,7 +60,7 @@ class PartnersController < ApplicationController
   end
 
   def stripe_connect_url
-    "https://connect.stripe.com/oauth/authorize?response_type=code&client_id=" + ENV.fetch('STRIPE_CLIENT_ID') + "&scope=read_write&state=" + partner.id
+    "https://connect.stripe.com/oauth/authorize?response_type=code&client_id=" + ENV.fetch('STRIPE_CLIENT_ID', '') + "&scope=read_write&state=" + partner.id
   end
 
   def update_partner!
