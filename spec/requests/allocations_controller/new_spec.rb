@@ -22,7 +22,6 @@ RSpec.describe 'GET /allocations/new', type: :request do
     expect(response.body).to include('Search for a charity')
     expect(response.body).to include('Choose one of our vetted high-impact charities')
     expect(response.body).to include('Donational recommends these high impact charities. Add one to your portfolio!')
-
     organizations.each do |organization|
       expect(response.body).to include(organization.name)
       expect(response.body).to include(organization.ein)

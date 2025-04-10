@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_27_124159) do
+ActiveRecord::Schema[7.0].define(version: 2025_03_12_043116) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -276,6 +276,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_27_124159) do
     t.string "type", default: "PaymentMethods::Card"
     t.string "institution"
     t.string "payment_processor_source_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["deactivated_at"], name: "index_payment_methods_on_deactivated_at"
     t.index ["donor_id"], name: "index_payment_methods_on_donor_id"
   end

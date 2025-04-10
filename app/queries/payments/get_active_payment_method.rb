@@ -8,6 +8,7 @@ module Payments
       donor
         .payment_methods
         .where(deactivated_at: nil)
+        .order(created_at: :asc)
         .first
     end
   end

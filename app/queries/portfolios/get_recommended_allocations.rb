@@ -18,6 +18,8 @@ module Portfolios
           percentage: balanced_allocation_size + (i < remainder ? 1 : 0)
         )
       end
+    rescue ZeroDivisionError
+      []
     end
   end
 end
