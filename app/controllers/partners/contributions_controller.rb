@@ -3,6 +3,7 @@ module Partners
     include Secured
     include ClientSideAnalytics
     before_action :ensure_donor_has_permission!
+    before_action :payment_method
 
     def create
       pipeline = Flow.new
