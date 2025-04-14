@@ -9,7 +9,7 @@ ruby File.read('.ruby-version').strip
 gem 'bootsnap', require: false
 gem 'pg'
 gem 'puma'
-gem 'rails', '~> 7.0.0'
+gem 'rails', '~> 7.1'
 gem 'redis'
 
 # Uploads
@@ -96,7 +96,7 @@ group :test do
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'rails-controller-testing'
-  gem 'rspec-rails', '~> 5.0.0'
+  gem 'rspec-rails', '~> 6.0.0'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'
   gem 'stripe-ruby-mock', github: 'donational-org/stripe-ruby-mock', branch: 'support-cloned-payment-methods',
