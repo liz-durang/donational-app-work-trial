@@ -95,4 +95,5 @@ class PartnersController < ApplicationController
 
     Partners::UpdateCustomDonorQuestions.run(partner: partner, donor_questions: questions)
   end
+  
 end
