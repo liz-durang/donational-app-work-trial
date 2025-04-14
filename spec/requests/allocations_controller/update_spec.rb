@@ -6,10 +6,12 @@ RSpec.describe 'PUT /allocations', type: :request do
 
   let(:donor) { create(:donor) }
   let(:portfolio) { create(:portfolio, creator: donor) }
-  let(:allocations) { create_list(:allocation, 3, portfolio: portfolio) }
+  let(:allocations) { create_list(:allocation, 3, portfolio:) }
   let(:valid_params) do
     {
-      allocations: Hash[allocations.map.with_index { |a,i| [i, { organization_ein: a.organization_ein, percentage: a.percentage }] }].deep_symbolize_keys
+      allocations: allocations.map.with_index do |a, i|
+        [i, { organization_ein: a.organization_ein, percentage: a.percentage }]
+      end.to_h.deep_symbolize_keys
     }
   end
 
@@ -38,8 +40,8 @@ RSpec.describe 'PUT /allocations', type: :request do
 
     it 'renders the edit template with an error message' do
       put '/allocations', params: valid_params
-      expect(response).to render_template(:edit)
       expect(CGI.unescapeHTML(response.body)).to include('Error message')
+      expect(response).to render_template(:edit)
     end
   end
 end

@@ -8,22 +8,28 @@ class AllocationsController < ApplicationController
     )
   end
 
+  def edit
+    Analytics::TrackEvent.run(user_id: current_donor.id, event: 'Viewed allocations')
+
+    edit_view_model
+  end
+
   def create
     pipeline = Flow.new
-    pipeline.chain {
+    pipeline.chain do
       Organizations::FindOrCreateDonorSuggestedCharity.run(
         ein: params[:organization][:ein],
         name: params[:organization][:name],
         suggested_by: current_donor
       )
-    }
+    end
     pipeline.chain { convert_managed_portfolio_into_custom_portfolio! } if managed_portfolio?
-    pipeline.chain {
+    pipeline.chain do
       Portfolios::AddOrganizationAndRebalancePortfolio.run(
         portfolio: active_portfolio,
         organization: Organizations::GetOrganizationByEin.call(ein: params[:organization][:ein])
       )
-    }
+    end
     outcome = pipeline.run
 
     organization = Organizations::GetOrganizationByEin.call(ein: params[:organization][:ein])
@@ -40,12 +46,12 @@ class AllocationsController < ApplicationController
   def update
     pipeline = Flow.new
     pipeline.chain { convert_managed_portfolio_into_custom_portfolio! } if managed_portfolio?
-    pipeline.chain {
+    pipeline.chain do
       Portfolios::UpdateAllocations.run(
         portfolio: active_portfolio,
         allocations: params[:allocations].values
       )
-    }
+    end
 
     outcome = pipeline.run
 
@@ -53,17 +59,13 @@ class AllocationsController < ApplicationController
       flash[:success] = 'Allocations saved!'
       redirect_to edit_allocations_path
     else
-      @allocations = params[:allocations].values.map { |a| Allocation.new(a) }
+      @allocations = params[:allocations].values.map do |a|
+        Allocation.new(organization_ein: a[:organization_ein], percentage: a[:percentage])
+      end
       flash[:error] = outcome.errors.message_list.join('\n')
       edit_view_model
       render :edit
     end
-  end
-
-  def edit
-    Analytics::TrackEvent.run(user_id: current_donor.id, event: 'Viewed allocations')
-
-    edit_view_model
   end
 
   private
@@ -75,7 +77,7 @@ class AllocationsController < ApplicationController
     if cmd.success?
       Portfolios::UpdateAllocations.run!(
         portfolio: active_portfolio,
-        allocations: managed_portfolio_allocations.as_json(only: [:organization_ein, :percentage])
+        allocations: managed_portfolio_allocations.as_json(only: %i[organization_ein percentage])
       )
 
       active_subscription.update!(portfolio: active_portfolio) if active_subscription
