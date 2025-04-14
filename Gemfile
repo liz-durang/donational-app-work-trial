@@ -71,9 +71,6 @@ gem 'searchkick'
 # External Integrations
 gem 'faraday'
 
-# Dependabot upgrades
-gem 'nokogiri', '>= 1.18.4'
-
 group :development, :test do
   gem 'bullet'
   gem 'byebug', platform: :mri

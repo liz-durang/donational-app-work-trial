@@ -550,7 +550,6 @@ DEPENDENCIES
   mini_magick
   money-rails
   mutations
-  nokogiri (>= 1.18.4)
   omniauth
   omniauth-auth0
   omniauth-rails_csrf_protection
