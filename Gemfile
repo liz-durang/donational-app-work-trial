@@ -71,6 +71,9 @@ gem 'searchkick'
 # External Integrations
 gem 'faraday'
 
+# Dependabot upgrades
+gem 'nokogiri', '>= 1.18.4'
+
 group :development, :test do
   gem 'bullet'
   gem 'byebug', platform: :mri
@@ -95,11 +98,11 @@ group :test do
   gem 'database_cleaner'
   gem 'factory_bot_rails'
   gem 'faker'
+  gem 'rails-controller-testing'
   gem 'rspec-rails', '~> 5.0.0'
   gem 'selenium-webdriver'
+  gem 'shoulda-matchers'
   gem 'stripe-ruby-mock', github: 'donational-org/stripe-ruby-mock', branch: 'support-cloned-payment-methods',
                           require: 'stripe_mock'
   gem 'webmock'
-  gem 'shoulda-matchers'
-  gem 'rails-controller-testing'
 end

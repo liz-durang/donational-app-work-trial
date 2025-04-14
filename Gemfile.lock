@@ -261,7 +261,7 @@ GEM
     method_source (1.0.0)
     mini_magick (4.11.0)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.4)
+    mini_portile2 (2.8.8)
     minitest (5.16.3)
     monetize (1.12.0)
       money (~> 6.12)
@@ -287,7 +287,7 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     nio4r (2.5.8)
-    nokogiri (1.15.4)
+    nokogiri (1.18.7)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     oauth2 (2.0.9)
@@ -333,8 +333,8 @@ GEM
     puma (6.0.0)
       nio4r (~> 2.0)
     raabro (1.4.0)
-    racc (1.7.1)
-    rack (2.2.8)
+    racc (1.8.1)
+    rack (2.2.13)
     rack-protection (3.0.4)
       rack
     rack-proxy (0.7.4)
@@ -550,6 +550,7 @@ DEPENDENCIES
   mini_magick
   money-rails
   mutations
+  nokogiri (>= 1.18.4)
   omniauth
   omniauth-auth0
   omniauth-rails_csrf_protection
