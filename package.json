@@ -3,6 +3,7 @@
     "@rails/activestorage": "^7.0.4",
     "@rails/webpacker": "5.4.3",
     "dotenv": "^6.0.0",
+    "elliptic": "6.6.1",
     "intl-tel-input": "^18.2.1",
     "lodash": "^4.17.21",
     "stimulus": "^2.0.0",
@@ -14,6 +15,9 @@
   "devDependencies": {
     "@webpack-cli/serve": "^1.6.0",
     "webpack-dev-server": "^3"
+  },
+  "resolutions": {
+    "elliptic": "6.6.1"
   },
   "engines": {
     "node": "14.x"
