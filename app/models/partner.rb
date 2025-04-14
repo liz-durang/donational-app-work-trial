@@ -43,7 +43,7 @@ class Partner < ApplicationRecord
              foreign_key: :operating_costs_organization_ein
 
   validates :currency, inclusion: { in: Money::Currency,
-                                    message: '%{value} is not a valid currency iso code' }
+                                    message: '%<value>s is not a valid currency iso code' }
 
   before_create :generate_api_key
 

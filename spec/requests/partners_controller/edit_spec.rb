@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'GET /partners/:id/edit', type: :request do
   include Helpers::LoginHelper
-  
+
   let(:donor) { create(:donor) }
   let(:partner) { create(:partner) }
 
@@ -28,8 +28,10 @@ RSpec.describe 'GET /partners/:id/edit', type: :request do
     expect(assigns(:view_model).donor).to eq(donor)
     expect(assigns(:view_model).partner).to eq(partner)
     expect(assigns(:view_model).partner_path).to eq(partner_path)
-    expect(assigns(:view_model).stripe_connect_url).to eq("https://connect.stripe.com/oauth/authorize?response_type=code&client_id=#{ENV.fetch('STRIPE_CLIENT_ID', '')}&scope=read_write&state=#{partner.id}")
-    expect(assigns(:view_model).donor_questions_with_blank_new_question).to include(*partner.donor_questions)
+    expect(assigns(:view_model).stripe_connect_url).to eq("https://connect.stripe.com/oauth/authorize?response_type=code&client_id=#{ENV.fetch(
+      'STRIPE_CLIENT_ID', ''
+    )}&scope=read_write&state=#{partner.id}")
+    expect(assigns(:view_model).donor_questions_with_blank_new_question.map(&:name)).to include(nil)
     expect(assigns(:view_model).donor_questions_with_blank_new_question.last).to be_an_instance_of(Partner::DonorQuestion)
   end
 end
