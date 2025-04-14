@@ -157,9 +157,9 @@ class SubscriptionsController < ApplicationController
 
   def managed_portfolios_by_partner
     @managed_portfolios_by_partner ||= ManagedPortfolio
-                                       .includes(%i[portfolio partner])
+                                       .includes(:portfolio, :partner)
                                        .with_attached_image
-                                       .where(partners: oftw_partners, hidden_at: nil)
+                                       .where(partner_id: oftw_partners.pluck(:id), hidden_at: nil)
                                        .order(display_order: :asc)
                                        .group_by { |mp| mp.partner.currency }
   end
