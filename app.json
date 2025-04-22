@@ -15,6 +15,7 @@
         "DEFAULT_HOST": "localhost"
       },
       "scripts": {
+        "test-setup": "gem update --system 3.4.10",
         "test": "bin/test"
       },
       "buildpacks": [
