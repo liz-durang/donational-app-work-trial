@@ -71,6 +71,8 @@ gem 'searchkick'
 # External Integrations
 gem 'faraday'
 
+gem 'nokogiri', '1.15.4' # Downgraded, Upgraded version requires rubygems version >= 3.3.22 and Heroku doesn't handle it.
+
 group :development, :test do
   gem 'bullet'
   gem 'byebug', platform: :mri
