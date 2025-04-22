@@ -38,3 +38,5 @@ Brewfile.lock.json
 
 /coverage/*
 /public/assets/*
+
+*.dump*

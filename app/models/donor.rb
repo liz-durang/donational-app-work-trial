@@ -37,25 +37,26 @@ class Donor < ApplicationRecord
 
   def search_data
     {
-      email: email,
-      name: name,
+      email:,
+      name:,
       partner_id: Partners::GetPartnerForDonor.call(donor: self).id,
-      deactivated_at: deactivated_at
+      deactivated_at:
     }
   end
 
   self.primary_key = 'id'
 
   def self.search_for(query, limit: 10)
-    search(query, limit: limit, misspellings: { prefix_length: 2 }, match: :word_start)
+    search(query, limit:, misspellings: { prefix_length: 2 }, match: :word_start)
   end
-  has_many :selected_portfolios, -> { where(deactivated_at: nil) }
+  has_many :selected_portfolios, -> { where(deactivated_at: nil) }, dependent: :destroy
   has_many :portfolios, through: :selected_portfolios
-  has_many :payment_methods
+  has_many :payment_methods, dependent: :destroy
   # Partner administrator
   has_and_belongs_to_many :partners
-  has_many :partner_affiliations
-  has_many :subscriptions
+  has_many :partner_affiliations, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
+  has_many :contributions, dependent: :destroy
 
   with_options if: :uk_gift_aid_accepted do
     validates :title, presence: true

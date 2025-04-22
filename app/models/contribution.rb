@@ -31,7 +31,7 @@ class Contribution < ApplicationRecord
   belongs_to :portfolio
   belongs_to :donor
   belongs_to :partner
-  has_many :donations
+  has_many :donations, dependent: :destroy
   has_many :organizations, through: :donations
 
   enum payment_status: {
