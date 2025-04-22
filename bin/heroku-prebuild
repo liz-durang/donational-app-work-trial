@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# This script runs before the build process on Heroku
+echo "-----> Running heroku-prebuild hook"
+echo "-----> Updating RubyGems to fix nokogiri compatibility issues"
+gem update --system 3.4.10
+echo "-----> RubyGems updated to version $(gem --version)"
