@@ -13,6 +13,17 @@ namespace :donor do
       donor = Donor.find_by(id: row['Donor ID'])
       next unless donor
 
+      # Check if donor has contributions
+      contributions_not_processed = donor.contributions.where(processed_at: nil).sum(:amount_cents)
+      if contributions_not_processed.positive?
+        puts "#{row['Donor ID']} has unprocessed contributions #{contributions_not_processed / 100.0}"
+      end
+
+      contributed = donor.contributions.where.not(processed_at: nil).sum(:amount_cents)
+      if contributed.positive?
+        puts "#{row['Donor ID']} contributed #{contributed / 100.0}"
+        next
+      end
       _selected_porfolios = SelectedPortfolio.where(donor:).destroy_all
       donor.partners = []
       donor.destroy
