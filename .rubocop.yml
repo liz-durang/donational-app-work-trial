@@ -19,3 +19,14 @@ Metrics/BlockLength:
     - spec/**/*
     - config/**/*
     - lib/tasks/**/*.rake
+
+RSpec/MultipleExpectations:
+  Enabled: true
+  Max: 5
+
+RSpec/ExampleLength:
+  Max: 10
+
+RSpec/MessageSpies:
+  Enabled: false
+

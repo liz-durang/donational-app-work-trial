@@ -40,3 +40,4 @@ Brewfile.lock.json
 /public/assets/*
 
 *.dump*
+/.app
