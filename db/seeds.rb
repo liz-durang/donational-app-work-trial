@@ -448,9 +448,9 @@ puts "\n--- Full Database Seed Process Finished ---"
 # --- In Heroku Rails Console ---
 
 # 1. Define your admin user's details
-admin_email = ""
-admin_first_name = ""
-admin_last_name = ""
+admin_email = "rasool@1fortheworld.org"
+admin_first_name = "Rasool"
+admin_last_name = "S"
 
 # 2. Find or Create the Admin Donor record
 # Using find_or_create_by! to avoid duplicates and ensure it's created if missing.
