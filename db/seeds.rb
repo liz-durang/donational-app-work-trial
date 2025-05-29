@@ -244,3 +244,98 @@ Partners::GetOftwPartners.call.each do |partner|
     featured: true
   )
 end
+
+puts "\nCreating test donors and subscriptions..."
+
+# Get partners and portfolios
+us_partner = Partner.find_by(name: 'Seeded/test OFTW US')
+uk_partner = Partner.find_by(name: 'Seeded/test OFTW UK')
+us_portfolio = ManagedPortfolio.find_by(partner: us_partner, name: 'Random Picks').portfolio
+uk_portfolio = ManagedPortfolio.find_by(partner: uk_partner, name: 'Random Picks').portfolio
+
+# Create test donors
+test_donor1 = Donor.create!(
+  first_name: "Test",
+  last_name: "Donor1",
+  email: "test1@example.com"
+)
+
+test_donor2 = Donor.create!(
+  first_name: "Test",
+  last_name: "Donor2",
+  email: "test2@example.com"
+)
+
+# Create partner affiliations
+Partners::AffiliateDonorWithPartner.run(donor: test_donor1, partner: us_partner)
+Partners::AffiliateDonorWithPartner.run(donor: test_donor2, partner: uk_partner)
+
+# Create payment methods
+puts "Creating payment methods..."
+Payments::UpdatePaymentMethod.run(
+  donor: test_donor1,
+  payment_method_id: "pm_card_visa", # Test card ID
+  is_checkout_session: true,
+  processor_payment_method: OpenStruct.new(
+    type: "card",
+    billing_details: { name: "Test Donor1", address: { postal_code: "12345" } },
+    card: { brand: "visa", last4: "4242" }
+  ),
+  customer_id: "cus_test1"
+)
+
+Payments::UpdatePaymentMethod.run(
+  donor: test_donor2,
+  payment_method_id: "pm_card_visa", # Test card ID
+  is_checkout_session: true,
+  processor_payment_method: OpenStruct.new(
+    type: "card",
+    billing_details: { name: "Test Donor2", address: { postal_code: "12345" } },
+    card: { brand: "visa", last4: "4242" }
+  ),
+  customer_id: "cus_test2"
+)
+
+# Create subscriptions using service
+puts "Creating subscriptions..."
+Contributions::CreateOrReplaceSubscription.run(
+  donor: test_donor1,
+  portfolio: us_portfolio,
+  partner: us_partner,
+  frequency: :monthly,
+  amount_cents: 1000,
+  start_at: 1.day.from_now,
+  tips_cents: 0
+)
+
+Contributions::CreateOrReplaceSubscription.run(
+  donor: test_donor2,
+  portfolio: uk_portfolio,
+  partner: uk_partner,
+  frequency: :monthly,
+  amount_cents: 2000,
+  start_at: 1.day.from_now,
+  tips_cents: 0
+)
+
+# Schedule contributions
+puts "Scheduling contributions..."
+Contributions::ScheduleContribution.run(
+  donor: test_donor1,
+  portfolio: us_portfolio,
+  partner: us_partner,
+  amount_cents: 1000,
+  scheduled_at: 1.day.from_now,
+  tips_cents: 0
+)
+
+Contributions::ScheduleContribution.run(
+  donor: test_donor2,
+  portfolio: uk_portfolio,
+  partner: uk_partner,
+  amount_cents: 2000,
+  scheduled_at: 1.day.from_now,
+  tips_cents: 0
+)
+
+puts "Test data created successfully!"
