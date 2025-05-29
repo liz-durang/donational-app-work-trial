@@ -2,6 +2,9 @@
 # with its default values. The data can then be loaded with the
 # rails db:seed command (or created alongside the database with db:setup).
 
+# First clear the database
+ActiveRecord::Base.connection.tables.each { |t| ActiveRecord::Base.connection.execute("TRUNCATE #{t} CASCADE") unless ['schema_migrations', 'ar_internal_metadata'].include?(t) }
+
 one_for_the_world_charity = Organization.find_or_create_by(name: 'OFTW Operating Costs', ein: '84-2124550')
 one_for_the_world_uk_charity = Organization.find_or_create_by(name: 'OFTW UK Operating Costs', ein: '11-1111111')
 
@@ -250,6 +253,12 @@ puts "\nCreating test donors and subscriptions..."
 # Get partners and portfolios
 us_partner = Partner.find_by(name: 'Seeded/test OFTW US')
 uk_partner = Partner.find_by(name: 'Seeded/test OFTW UK')
+
+# Verify partners exist
+puts "US Partner: #{us_partner.inspect}"
+puts "UK Partner: #{uk_partner.inspect}"
+
+# Get portfolios
 us_portfolio = ManagedPortfolio.find_by(partner: us_partner, name: 'Random Picks').portfolio
 uk_portfolio = ManagedPortfolio.find_by(partner: uk_partner, name: 'Random Picks').portfolio
 
@@ -274,7 +283,7 @@ Partners::AffiliateDonorWithPartner.run(donor: test_donor2, partner: uk_partner)
 puts "Creating payment methods..."
 Payments::UpdatePaymentMethod.run(
   donor: test_donor1,
-  payment_method_id: "pm_card_visa", # Test card ID
+  payment_method_id: "pm_card_visa",
   is_checkout_session: true,
   processor_payment_method: OpenStruct.new(
     type: "card",
@@ -286,7 +295,7 @@ Payments::UpdatePaymentMethod.run(
 
 Payments::UpdatePaymentMethod.run(
   donor: test_donor2,
-  payment_method_id: "pm_card_visa", # Test card ID
+  payment_method_id: "pm_card_visa",
   is_checkout_session: true,
   processor_payment_method: OpenStruct.new(
     type: "card",
@@ -296,7 +305,7 @@ Payments::UpdatePaymentMethod.run(
   customer_id: "cus_test2"
 )
 
-# Create subscriptions using service
+# Create subscriptions
 puts "Creating subscriptions..."
 Contributions::CreateOrReplaceSubscription.run(
   donor: test_donor1,
@@ -315,26 +324,6 @@ Contributions::CreateOrReplaceSubscription.run(
   frequency: :monthly,
   amount_cents: 2000,
   start_at: 1.day.from_now,
-  tips_cents: 0
-)
-
-# Schedule contributions
-puts "Scheduling contributions..."
-Contributions::ScheduleContribution.run(
-  donor: test_donor1,
-  portfolio: us_portfolio,
-  partner: us_partner,
-  amount_cents: 1000,
-  scheduled_at: 1.day.from_now,
-  tips_cents: 0
-)
-
-Contributions::ScheduleContribution.run(
-  donor: test_donor2,
-  portfolio: uk_portfolio,
-  partner: uk_partner,
-  amount_cents: 2000,
-  scheduled_at: 1.day.from_now,
   tips_cents: 0
 )
 
