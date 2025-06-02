@@ -30,10 +30,10 @@ module Partners
     private
 
     def ensure_donor_has_permission!
-      unless current_donor.partners.exists?(id: partner.id)
-        flash[:error] = "Sorry, you don't have permission to modify this contribution."
-        redirect_to edit_partner_donor_path(partner, donor)
-      end
+      return if current_donor.partners.exists?(id: partner.id)
+
+      flash[:error] = "Sorry, you don't have permission to modify this contribution."
+      redirect_to edit_partner_donor_path(partner, donor)
     end
 
     def tips_options
@@ -47,15 +47,15 @@ module Partners
 
     def update_subscription!
       Contributions::CreateOrReplaceSubscription.run(
-        donor: donor,
+        donor:,
         portfolio: Portfolio.find(portfolio_id),
-        partner: partner,
-        frequency: frequency,
-        amount_cents: amount_cents,
-        tips_cents: tips_cents,
-        start_at: start_at,
+        partner:,
+        frequency:,
+        amount_cents:,
+        tips_cents:,
+        start_at:,
         partner_contribution_percentage: 0,
-        trial_amount_cents: trial_amount_cents
+        trial_amount_cents:
       )
     end
 
@@ -64,23 +64,23 @@ module Partners
     end
 
     def payment_method
-      @payment_method = Payments::GetActivePaymentMethod.call(donor: donor)
+      @payment_method = Payments::GetActivePaymentMethod.call(donor:)
     end
 
     def active_portfolio
-      @active_portfolio ||= Portfolios::GetActivePortfolio.call(donor: donor)
+      @active_portfolio ||= Portfolios::GetActivePortfolio.call(donor:)
     end
 
     def active_subscription
-      @active_subscription ||= Contributions::GetActiveSubscription.call(donor: donor)
+      @active_subscription ||= Contributions::GetActiveSubscription.call(donor:)
     end
 
     def partner_affiliation
-      @partner_affiliation ||= Partners::GetPartnerAffiliationByDonor.call(donor: donor)
+      @partner_affiliation ||= Partners::GetPartnerAffiliationByDonor.call(donor:)
     end
 
     def partner
-      @partner ||= Partners::GetPartnerForDonor.call(donor: donor)
+      @partner ||= Partners::GetPartnerForDonor.call(donor:)
     end
 
     def managed_portfolio?
@@ -90,13 +90,16 @@ module Partners
     def selectable_portfolios
       portfolios = []
       portfolios << [active_portfolio.id, 'My personalized portfolio'] if active_portfolio && !managed_portfolio?
-      portfolios += Partners::GetManagedPortfoliosForPartner.call(partner: partner).pluck(:portfolio_id, :name) if partner
+      if partner
+        portfolios += Partners::GetManagedPortfoliosForPartner.call(partner:).pluck(:portfolio_id,
+                                                                                    :name)
+      end
       portfolios
     end
 
     def new_subscription
       Subscription.new(
-        donor: donor,
+        donor:,
         amount_cents: target_amount_cents,
         portfolio: active_portfolio,
         frequency: donor.contribution_frequency
@@ -105,7 +108,7 @@ module Partners
 
     def target_amount_cents
       Contributions::GetTargetContributionAmountCents.call(
-        donor: donor,
+        donor:,
         frequency: active_subscription.try(:frequency) || donor.contribution_frequency
       )
     end

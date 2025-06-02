@@ -24,7 +24,7 @@ module Api
         command = Hooks::CreateOrUpdateWebhook.run(
           hook_url: params[:hook_url],
           hook_type: params[:hook_type],
-          partner_id: current_partner.id
+          partner_id: current_partner.id # NOTE: There is nothing that points to this current_partner. So hooks_controller is probably not used.
         )
 
         @webhook = command.result if command.success?

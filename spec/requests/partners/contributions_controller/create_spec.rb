@@ -6,7 +6,7 @@ RSpec.describe 'POST /partners/:partner_id/contributions', type: :request do
   let(:donor) { create(:donor) }
   let(:partner) { create(:partner) }
   let(:portfolio) { create(:portfolio, creator: donor) }
-  let(:payment_method) { create(:payment_method, donor: donor) }
+  let(:payment_method) { create(:payment_method, donor:) }
   let(:contribution_params) do
     {
       id: donor.id,
@@ -26,27 +26,44 @@ RSpec.describe 'POST /partners/:partner_id/contributions', type: :request do
     allow_any_instance_of(ApplicationController).to receive(:current_donor).and_return(donor)
     allow(Partners::GetPartnerById).to receive(:call).with(id: partner.id).and_return(partner)
     allow(Donors::GetDonorById).to receive(:call).with(id: donor.id).and_return(donor)
-    allow(Partners::GetPartnerForDonor).to receive(:call).with(donor: donor).and_return(partner)
-    allow(Payments::GetActivePaymentMethod).to receive(:call).with(donor: donor).and_return(payment_method)
+    allow(Partners::GetPartnerForDonor).to receive(:call).with(donor:).and_return(partner)
+    allow(Payments::GetActivePaymentMethod).to receive(:call).with(donor:).and_return(payment_method)
   end
 
   context 'when the donor has permission' do
     let(:confirmations_mailer) { double(ConfirmationsMailer) }
+
     before do
       allow(donor.partners).to receive(:exists?).with(id: partner.id).and_return(true)
       allow(ConfirmationsMailer).to receive(:send_confirmation).and_return(confirmations_mailer)
       allow(confirmations_mailer).to receive(:deliver_now)
     end
 
-    it 'sends an email to the donor' do
-      expect(ConfirmationsMailer).to receive(:send_confirmation)
-      post partner_contributions_path(partner_id: partner.id), params: contribution_params
+    context 'when subscription creation succeeds' do
+      it 'sends an email to the donor' do
+        expect(ConfirmationsMailer).to receive(:send_confirmation)
+        post partner_contributions_path(partner_id: partner.id), params: contribution_params
+      end
+
+      it 'creates a contribution and redirects to the edit partner donor path' do
+        post partner_contributions_path(partner_id: partner.id), params: contribution_params
+        expect(response).to redirect_to(edit_partner_donor_path(partner, donor))
+        expect(flash[:success]).to eq("We've updated your donation plan")
+      end
     end
 
-    it 'creates a contribution and redirects to the edit partner donor path' do
-      post partner_contributions_path(partner_id: partner.id), params: contribution_params
-      expect(response).to redirect_to(edit_partner_donor_path(partner, donor))
-      expect(flash[:success]).to eq("We've updated your donation plan")
+    context 'when subscription creation fails' do
+      include Helpers::CommandHelper
+
+      before do
+        allow_any_instance_of(Flow).to receive(:run).and_return(failure_outcome)
+      end
+
+      it 'redirects to the edit partner donor path with error message' do
+        post partner_contributions_path(partner_id: partner.id), params: contribution_params
+        expect(response).to redirect_to(edit_partner_donor_path(partner, donor))
+        expect(flash[:alert]).to eq('Error message')
+      end
     end
   end
 
