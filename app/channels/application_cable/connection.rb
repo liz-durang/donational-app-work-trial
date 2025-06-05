@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationCable
   class Connection < ActionCable::Connection::Base
     identified_by :current_donor
@@ -20,7 +22,10 @@ module ApplicationCable
     end
 
     def find_verified_donor
-      Donors::GetDonorById.call(id: session[:donor_id])
+      donor_id = session&.[](:donor_id)
+      return nil unless donor_id.present?
+
+      Donors::GetDonorById.call(id: donor_id)
     end
   end
 end
