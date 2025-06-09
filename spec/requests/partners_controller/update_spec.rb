@@ -41,6 +41,41 @@ RSpec.describe 'PUT /partners/:id', type: :request do
     allow(donor).to receive(:partners).and_return(Partner.where(id: partner.id))
   end
 
+  context 'when the donor does not have permission' do
+    let(:other_partner) { create(:partner) }
+    let(:partner_params_for_other_partner) do
+      {
+        partner: {
+          name: 'Updated Partner Name'
+        }
+      }
+    end
+
+    before do
+      # This call to partner in the main before block will set @partner to the original partner
+      # We need to ensure that when the controller action calls partner, it gets other_partner
+      allow_any_instance_of(PartnersController).to receive(:partner).and_return(other_partner)
+      # And the current_donor has no association to 'other_partner'
+      allow(donor).to receive(:partners).and_return(Partner.none) # or Partner.where(id: partner.id) if partner is different from other_partner
+    end
+
+    it 'redirects to the edit partner path of the accessed partner' do
+      put partner_path(other_partner), params: partner_params_for_other_partner
+      expect(response).to redirect_to(edit_partner_path(other_partner))
+    end
+
+    it 'sets a flash error message' do
+      put partner_path(other_partner), params: partner_params_for_other_partner
+      expect(flash[:error]).to eq("Sorry, you don't have permission to update this partner account")
+    end
+
+    it 'does not call UpdatePartner or UpdateCustomDonorQuestions' do
+      expect(Partners::UpdatePartner).not_to receive(:run)
+      expect(Partners::UpdateCustomDonorQuestions).not_to receive(:run)
+      put partner_path(other_partner), params: partner_params_for_other_partner
+    end
+  end
+
   context 'when the update is successful' do
     before do
       allow(Partners::UpdatePartner).to receive(:run).and_return(successful_outcome)

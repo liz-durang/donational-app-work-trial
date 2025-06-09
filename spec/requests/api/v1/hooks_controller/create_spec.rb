@@ -28,7 +28,8 @@ RSpec.describe 'POST /api/v1/hooks', type: :request do
 
     context 'when the request is invalid' do
       before do
-        allow(Hooks::CreateOrUpdateWebhook).to receive(:run).and_return(double(success?: false, errors: double(message_list: ['Error message'])))
+        allow(Hooks::CreateOrUpdateWebhook).to receive(:run).and_return(double(success?: false,
+                                                                               errors: double(message_list: ['Error message'])))
       end
 
       xit 'returns status :unprocessable_entity with errors' do
