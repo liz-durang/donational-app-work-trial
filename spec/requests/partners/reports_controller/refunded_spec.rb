@@ -30,7 +30,7 @@ RSpec.describe 'GET /partners/:partner_id/reports/refunds', type: :request do
     end
 
     it 'calls stream_sql_data_as_csv with the correct arguments' do
-      expected_filename = "#{partner.name.parameterize}-donations-#{start_date.to_date.iso8601}-to-#{end_date.to_date.iso8601}.csv"
+      expected_filename = "#{partner.name.parameterize}-refunded-#{start_date.to_date.iso8601}-to-#{end_date.to_date.iso8601}.csv"
       expect_any_instance_of(Partners::ReportsController).to receive(:stream_sql_data_as_csv).with(
         'SELECT 1',
         filename: expected_filename

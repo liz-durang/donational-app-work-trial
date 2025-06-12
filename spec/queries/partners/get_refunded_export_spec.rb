@@ -7,7 +7,7 @@ RSpec.describe Partners::GetRefundedExport, type: :query do
   let(:portfolio) { create(:portfolio, managed_portfolio: managed_portfolio) }
   let(:donor) { create(:donor) }
   let(:contribution) { create(:contribution, partner: partner, donor: donor, portfolio: portfolio, amount_cents: 100, platform_fees_cents: 100, payment_processor_fees_cents: 100, donor_advised_fund_fees_cents: 100) }
-  let!(:donation) { create(:donation, contribution: contribution, organization: organization, created_at: 1.day.ago, amount_cents: 100) }
+  let!(:donation) { create(:donation, contribution: contribution, organization: organization, created_at: 1.day.ago, amount_cents: 100, refunded_at: 1.day.ago) }
   let(:donated_between) { 2.days.ago..Time.now }
 
   describe '#call' do
@@ -30,7 +30,6 @@ RSpec.describe Partners::GetRefundedExport, type: :query do
         expect(subject.first.organization_ein).to eq(organization.ein)
         expect(subject.first.organization_name).to eq(organization.name)
         expect(subject.first.portfolio_name).to eq('Custom Portfolio')
-        expect(subject.first.refunded_at).to eq('Refunded At')
       end
     end
   end

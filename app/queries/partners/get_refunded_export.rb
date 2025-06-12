@@ -1,5 +1,5 @@
 module Partners
-  class GetDonationsExport < ApplicationQuery
+  class GetRefundedExport < ApplicationQuery
     def initialize(relation = Donation.all)
       @relation = relation
     end
@@ -29,7 +29,8 @@ module Partners
           :organization_ein,
           'organizations.name as organization_name',
           "COALESCE(managed_portfolios.name, 'Custom Portfolio') AS portfolio_name",
-          :created_at
+          :created_at,
+          :refunded_at
         )
     end
   end
