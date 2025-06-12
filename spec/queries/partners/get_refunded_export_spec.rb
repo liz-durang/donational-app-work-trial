@@ -21,6 +21,7 @@ RSpec.describe Partners::GetRefundedExport, type: :query do
         expect(subject.first.email).to eq(donor.email)
         expect(subject.first.contribution_id).to eq(contribution.id)
         expect(subject.first.contribution_amount).to eq('%.2f' % (contribution.amount_cents / 100.0))
+        expect(subject.first.refunded_at).to eq(contribution.refunded_at)
         expect(subject.first.currency).to eq(contribution.amount_currency)
         expect(subject.first.payment_processor_fees).to eq('%.2f' % (contribution.payment_processor_fees_cents / 100.0))
         expect(subject.first.platform_fees).to eq('%.2f' % (contribution.platform_fees_cents / 100.0))

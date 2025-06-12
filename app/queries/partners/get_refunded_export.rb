@@ -20,6 +20,7 @@ module Partners
           :email,
           'contributions.id as contribution_id',
           'CAST(CAST(contributions.amount_cents / 100.0 AS DECIMAL(10,2)) AS VARCHAR) AS contribution_amount',
+          :refunded_at,
           'contributions.amount_currency as currency',
           'CAST(CAST(contributions.payment_processor_fees_cents / 100.0 AS DECIMAL(10,2)) AS VARCHAR) AS payment_processor_fees',
           'CAST(CAST(contributions.platform_fees_cents / 100.0 AS DECIMAL(10,2)) AS VARCHAR) AS platform_fees',
@@ -29,8 +30,8 @@ module Partners
           :organization_ein,
           'organizations.name as organization_name',
           "COALESCE(managed_portfolios.name, 'Custom Portfolio') AS portfolio_name",
-          :created_at,
-          :refunded_at
+          :created_at
+          
         )
     end
   end
