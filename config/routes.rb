@@ -49,6 +49,7 @@ Rails.application.routes.draw do
         get 'donations', format: :csv
         get 'organizations', format: :csv
         get 'gift_aid', format: :csv
+        get 'refunded', format: :csv
       end
     end
     resources :donors, module: :partners, only: %i[index new edit create update destroy]
