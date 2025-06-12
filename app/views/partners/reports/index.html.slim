@@ -71,11 +71,11 @@ section.embossed.section
                     button.button type='submit' formaction=gift_aid_partner_reports_path(format: :csv)
                       = icon_tag('fa-download')
                       span Export for specified timeframe
-        .column
-            h2 Refunded Contributions
-            .field
-              .control
-                .field
-                  button.button type='submit' formaction=organizations_partner_reports_path(format: :csv)
-                    = icon_tag('fa-download')
-                    span Export for specified timeframe
+          .column
+              h2 Refunded Contributions
+              .field
+                .control
+                  .field
+                    button.button type='submit' formaction=donations_partner_reports_path(format: :csv)
+                      = icon_tag('fa-download')
+                      span Export for specified timeframe

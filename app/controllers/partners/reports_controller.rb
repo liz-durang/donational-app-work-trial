@@ -48,6 +48,18 @@ module Partners
       end
     end
 
+    def refunded
+      respond_to do |format|
+        format.csv do
+          donations = Partners::GetRefundedExport.call(
+            partner: partner,
+            donated_between: donated_between
+          )
+          stream_sql_data_as_csv(donations.to_sql, filename: filename_with_timeframe)
+        end
+      end
+    end
+
     def gift_aid
       return head :forbidden unless partner.supports_gift_aid?
 
