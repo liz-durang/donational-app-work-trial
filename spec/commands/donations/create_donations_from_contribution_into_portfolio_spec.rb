@@ -56,5 +56,24 @@ RSpec.describe Donations::CreateDonationsFromContributionIntoPortfolio do
           .to have_attributes(contribution: another_contribution, portfolio_id: portfolio.id, amount_cents: 336)
       end
     end
+
+    context 'when a donation has been refunded' do
+      it 'creates a donation with a refunded_at timestamp' do
+        refunded_time = Time.zone.now
+    
+        refunded_donation = create(
+          :donation,
+          contribution: contribution,
+          portfolio: portfolio,
+          organization: org_1,
+          amount_cents: 500,
+          refunded_at: refunded_time
+        )
+    
+        expect(refunded_donation.refunded_at).to eq(refunded_time)
+        expect(refunded_donation).to be_persisted
+      end
+    end
+    
   end
 end
